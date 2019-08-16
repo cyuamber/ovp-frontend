@@ -29,6 +29,7 @@
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "ghooks": "^2.0.4",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "validate-commit-msg": "^2.14.0",
@@ -37,6 +38,9 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
     }
   }
 }
