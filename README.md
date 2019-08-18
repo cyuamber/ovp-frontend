@@ -18,20 +18,11 @@ npm run start
 npm run build
 ```
 
-#### Run your tests
-```
-npm run test
-```
 
-#### Lints and fixes files
-```
-npm run lint
-```
+### Code rules
 
+Recommend to switch on the eslint. The css part obeys the BEM regulation.
 
-### Change log
-
-[See the milestones of the project](./CHANGELOG.md)
 
 ### Git commit message rules
 
@@ -85,11 +76,14 @@ When there is breaking changes in the project, please write the commit message i
 Also, run the script `npm run changelog` can generate all the `feat` and `fix` commits. Click [CHANGELOG.md](./CHANGELOG.md) shows all these commit histories. 
 
 
+### Change log
+
+[See the milestones of the project](./CHANGELOG.md)
+
 
 ### Contributor
 
 Copyright 2017 CMCC Corporation.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
