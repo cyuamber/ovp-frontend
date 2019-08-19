@@ -1,6 +1,6 @@
 <template>
   <div class="layout-siderbar">
-    <div class="logo">
+    <div class="layout-siderbar__logo">
       <img src="@/assets/logo.png" />
     </div>
     <a-menu
@@ -100,7 +100,7 @@ export default {
     },
     clickMenu(e) {
       this.currentMenu = [];
-      let routePath = e.keyPath;
+      let routePath = e.keyPath.reverse();
       let routeStr = util.transformUrlpathstr(e.key);
       this.currentMenu.push(e.key);
       this.$store.commit("setBreadcrumb", routePath);
@@ -113,7 +113,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .layout-siderbar {
-  .logo {
+  .layout-siderbar__logo {
     height: 32px;
     margin: 16px;
     text-align: center;

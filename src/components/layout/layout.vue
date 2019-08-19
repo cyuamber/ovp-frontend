@@ -3,16 +3,16 @@
     <a-layout-sider :style="siderStyle">
       <Siderbar />
     </a-layout-sider>
-    <a-layout :style="layoutStyle.container">
-      <a-layout-header :style="layoutStyle.header">
+    <a-layout :style="layoutStyle.layoutStyle__container">
+      <a-layout-header :style="layoutStyle.layoutStyle__header">
         <Header />
       </a-layout-header>
-      <a-layout-content :style="layoutStyle.content">
-        <div :style="layoutStyle.contentDiv">
+      <a-layout-content :style="layoutStyle.layoutStyle__content">
+        <div :style="layoutStyle.content__contentDiv">
           <router-view />
         </div>
       </a-layout-content>
-      <!-- <a-layout-footer :style="layoutStyle.footer">
+      <!-- <a-layout-footer :style="layoutStyle.layoutStyle__footer">
         <Footer />
       </a-layout-footer>-->
     </a-layout>
@@ -34,23 +34,23 @@ const siderStyle = {
   borderRight: "1px solid rgb(232, 232, 232)"
 };
 const layoutStyle = {
-  container: {
+  layoutStyle__container: {
     marginLeft: "220px"
   },
-  header: {
+  layoutStyle__header: {
     background: "#fff",
     padding: 0
   },
-  content: {
+  layoutStyle__content: {
     marginTop: "2px",
     overflow: "initial"
   },
-  contentDiv: {
+  content__contentDiv: {
     padding: "24px",
     background: "#fff",
     minHeight: "80vh"
   },
-  footer: {
+  layoutStyle__footer: {
     textAlign: "center",
     paddingTop: "0px"
   }

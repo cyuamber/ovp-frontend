@@ -34,7 +34,7 @@
       :loading="mocktableloading"
     >
       <div slot="avatar" slot-scope="text">
-        <img :src="text.avatar" />
+        <img :src="text.avatar" class="test-block__img" />
       </div>
     </a-table>
   </div>
@@ -118,3 +118,8 @@ export default {
 };
 </script>
 
+<style lang="less" scoped>
+.test-block__img {
+  width: 80px;
+}
+</style>

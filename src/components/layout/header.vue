@@ -1,12 +1,12 @@
 <template>
   <div class="layout-header">
-    <div class="layout-header-router">
+    <div class="layout-header__router">
       <a-breadcrumb separator="-">
         <a-breadcrumb-item>OVP</a-breadcrumb-item>
         <a-breadcrumb-item v-for="(route,index) in updateBread" :key="index">{{route}}</a-breadcrumb-item>
       </a-breadcrumb>
     </div>
-    <div class="layout-header-buttons">
+    <div>
       <a-button :style="headerbuttonStyle">Create Test Job</a-button>
       <a-dropdown>
         <a-menu slot="overlay" @click="handleMenuClick">
@@ -74,7 +74,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-left: 1px;
-  .layout-header-router {
+  .layout-header__router {
     padding: 0;
     margin-left: 32px;
     a {
