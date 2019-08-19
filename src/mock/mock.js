@@ -3,9 +3,9 @@ module.exports = function () {
     var faker = require("faker");
     var _ = require("lodash");
     faker.locale = "en";
-    var Address = require("./json/address.json");
+    var Address = require("./json/address.json");  // import local mock data
     return {
-        //this is mock data
+        //this is remote mock data created by faker.js
         home: _.times(20, function (n) {
             return {
                 id: n,
@@ -15,7 +15,7 @@ module.exports = function () {
                 avatar: faker.internet.avatar()
             }
         }),
-        //this is import data
+        //this is local mock data
         address: Address
     }
 }

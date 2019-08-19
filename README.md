@@ -22,10 +22,14 @@ npm run mock
 npm run build
 ```
 
+### Mock data
+
+This project allows developers to develop in mock data, which means FEers can develop independently in the beginning of the project developing period. Developers can set mock data in `mock/mock.js`, where supports two methods of creating mock data. The remote method relies on [faker.js](https://github.com/marak/Faker.js/).
+
 
 ### Code rules
 
-Recommend to switch on the eslint. The css part obeys the [BEM](http://getbem.com/) methodology.
+Recommend to switch on eslint. The css part obeys the [BEM](http://getbem.com/) methodology.
 
 
 ### Git commit message rules
