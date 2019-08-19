@@ -21,7 +21,7 @@
 <script>
 import Header from "./header";
 import Siderbar from "./sidebar";
-import Footer from "./footer";
+// import Footer from "./footer";
 
 const siderStyle = {
   background: "#ffffff",
@@ -59,8 +59,8 @@ export default {
   name: "Layout",
   components: {
     Header: Header,
-    Siderbar: Siderbar,
-    Footer: Footer
+    Siderbar: Siderbar
+    // Footer: Footer
   },
   data() {
     return {

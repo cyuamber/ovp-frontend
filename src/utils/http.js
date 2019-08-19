@@ -34,10 +34,9 @@ export default {
             reject(err);
         });
     }),
-    axiosmock: (url, param, data) => new Promise((resolve, reject) => {
+    axiosmock: (url, param, data) => new Promise((resolve) => {
         console.log('%ccurrenturl', 'padding: 3px; background: #009fff; color: #fff; border-radius: 3px;', url)
         console.log('%ccurrentparams', 'padding: 3px; background:#ff0024; color: #fff; border-radius: 3px;', param)
         resolve(data);
-        reject(err)
     })
 };
