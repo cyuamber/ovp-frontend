@@ -12,7 +12,7 @@ module.exports = {
         //proxy
         proxy: {
             '/api': {
-                target: 'https://api.apiopen.top',
+                target: 'http://localhost:3000',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': ''

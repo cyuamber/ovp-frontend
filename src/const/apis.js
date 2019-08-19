@@ -1,7 +1,8 @@
 
 export default {
-    //test api
-    test: {
-        testapi: '/todayVideo',
-    },
+    //mock api
+    mock: {
+        address: '/address',
+        home: '/home',
+    }
 }

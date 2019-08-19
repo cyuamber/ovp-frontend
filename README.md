@@ -12,6 +12,10 @@ npm install
 ```
 npm run start
 ```
+#### Compiles and develop with mock data
+```
+npm run mock
+```
 
 #### Compiles and minifies for production
 ```
@@ -21,7 +25,7 @@ npm run build
 
 ### Code rules
 
-Recommend to switch on the eslint. The css part obeys the BEM regulation.
+Recommend to switch on the eslint. The css part obeys the [BEM](http://getbem.com/) methodology.
 
 
 ### Git commit message rules
@@ -83,7 +87,8 @@ Also, run the script `npm run changelog` can generate all the `feat` and `fix` c
 
 ### Contributor
 
-Copyright 2017 CMCC Corporation.
+Copyright 2019 CMCC Corporation.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0

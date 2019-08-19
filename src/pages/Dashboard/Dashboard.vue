@@ -1,9 +1,16 @@
 <template>
-  <p>Dashboard</p>
+  <div>
+    <p>Dashboard</p>
+    <test-page></test-page>
+  </div>
 </template>
 
 <script>
+import TestPage from "../TestPage.vue";
 export default {
-  name: "Dashboard"
+  name: "Dashboard",
+  components: {
+    "test-page": TestPage
+  }
 };
 </script>

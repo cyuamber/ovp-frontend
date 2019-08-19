@@ -13,8 +13,8 @@
       @click="clickMenu"
     >
       <template v-for="menu in menus">
-        <a-menu-item v-if="!menu.isChildren && menu.auth.includes(getuserAuth) " :key="menu.name">
-          <a-icon :type="menu.iconType" />
+        <a-menu-item v-if="!menu.isChildren && menu.auth.includes(getuserAuth)" :key="menu.name">
+          <a-icon v-if="menu.iconType!==''" :type="menu.iconType" />
           <span>{{menu.name}}</span>
         </a-menu-item>
         <a-sub-menu :key="menu.name" v-else-if="menu.isChildren && menu.auth.includes(getuserAuth)">
@@ -22,7 +22,12 @@
             <a-icon :type="menu.iconType" />
             {{menu.name}}
           </span>
-          <a-menu-item :key="submenu" v-for="submenu in menu.children">{{submenu}}</a-menu-item>
+          <template v-for="submenu in menu.children">
+            <a-menu-item :key="submenu.name" v-if="submenu.auth.includes(getuserAuth)">
+              <a-icon v-if="submenu.iconType!==''" :type="submenu.iconType" />
+              <span>{{submenu.name}}</span>
+            </a-menu-item>
+          </template>
         </a-sub-menu>
       </template>
     </a-menu>
@@ -62,29 +67,36 @@ export default {
 
   methods: {
     setDefaultmenu() {
+      this.menus.map(item => {
+        if (item.isChildren) {
+          this.computedMenu(item.children, item);
+        } else {
+          this.computedMenu(null, item);
+        }
+      });
+    },
+    computedMenu(child, parent) {
       const re = /\/.*/g;
       let currentUrlstr = "";
       if (re.test(this.$route.path)) {
         currentUrlstr = this.$route.path.substr(1);
       }
-      this.menus.map(item => {
-        if (item.isChildren) {
-          item.children.map(children => {
-            if (currentUrlstr === util.transformUrlpathstr(children)) {
-              this.defaultOpenKeys.push(item.name);
-              this.defaultMenu.push(children);
-              this.currentMenu.push(children);
-              this.$store.commit("setBreadcrumb", [item.name, children]);
-            }
-          });
-        } else {
+      if (child) {
+        child.map(item => {
           if (currentUrlstr === util.transformUrlpathstr(item.name)) {
+            this.defaultOpenKeys.push(parent.name);
             this.defaultMenu.push(item.name);
             this.currentMenu.push(item.name);
-            this.$store.commit("setBreadcrumb", [item.name]);
+            this.$store.commit("setBreadcrumb", [parent.name, item.name]);
           }
+        });
+      } else {
+        if (currentUrlstr === util.transformUrlpathstr(parent.name)) {
+          this.defaultMenu.push(parent.name);
+          this.currentMenu.push(parent.name);
+          this.$store.commit("setBreadcrumb", [parent.name]);
         }
-      });
+      }
     },
     clickMenu(e) {
       this.currentMenu = [];

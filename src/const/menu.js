@@ -1,4 +1,3 @@
-
 export default {
     menuItems:
         [
@@ -14,21 +13,42 @@ export default {
                 name: 'Test Objects MG',
                 iconType: 'laptop',
                 isChildren: true,
-                children: ['VNF Type MGT', 'VNF Type Objects MGT']
+                children: [{
+                    auth: ['admin'],
+                    name: 'VNF Type MGT',
+                    iconType: '',
+                }, {
+                    auth: ['admin', 'customer'],
+                    name: 'VNF Type Objects MGT',
+                    iconType: '',
+                }]
             },
             {
                 auth: ['admin'],
                 name: 'Test ENV MGT',
                 iconType: 'upload',
                 isChildren: true,
-                children: ['VIM/VNFM ENV MGT']
+                children: [{
+                    auth: ['admin', 'customer'],
+                    name: 'VIM/VNFM ENV MGT',
+                    iconType: '',
+                }]
             },
             {
-                auth: ['admin'],
+                auth: ['admin', 'customer'],
                 name: 'Test MGT',
                 iconType: 'bar-chart',
                 isChildren: true,
-                children: ['Test Instrument MGT', 'VNF/PNF suite MGT']
+                children: [{
+                    auth: ['admin'],
+                    name: 'Test Instrument MGT',
+                    iconType: '',
+                },
+                {
+                    auth: ['admin', 'customer'],
+                    name: 'VNF/PNF suite MGT',
+                    iconType: '',
+                }]
             },
             {
                 auth: ['admin'],
@@ -45,7 +65,7 @@ export default {
                 children: null
             },
             {
-                auth: ['admin'],
+                auth: ['admin', 'customer'],
                 name: 'Test Standard MGT',
                 iconType: 'team',
                 isChildren: false,
