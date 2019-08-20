@@ -7,6 +7,7 @@
 
 <script>
 import TestPage from "../TestPage.vue";
+
 export default {
   name: "Dashboard",
   components: {

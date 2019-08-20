@@ -1,5 +1,6 @@
 <template>
   <div class="about">
+    <Loading :loadingMessage="loadingMessage" />
     <h3>This is a test page</h3>
     <a-button :loading="buttonloading" type="primary" @click="getMockData">Get data</a-button>
     <a-button
@@ -8,6 +9,12 @@
       type="primary"
       @click="getFakeData"
     >Mock data</a-button>
+    <a-button
+      style="marginLeft:10px"
+      :loading="mockbuttonloading"
+      type="primary"
+      @click="deleteFakeData"
+    >Delete data</a-button>
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
@@ -43,7 +50,10 @@
 <script>
 import http from "../utils/http";
 import API from "../const/apis";
+import MOCKDATA from "../mock/json/deleteAddress.json";
+import Loading from "../components/Loading/Loading";
 import CONSTANTS from "../const/constant";
+import { setTimeout } from "timers";
 
 const mockcolumns = CONSTANTS.columns.mockcolumns;
 const columns = [
@@ -68,9 +78,17 @@ const columns = [
 
 export default {
   name: "About",
+  components: {
+    Loading: Loading
+  },
   mounted() {},
   data() {
     return {
+      loadingMessage: {
+        show: false,
+        type: "",
+        toast: ""
+      },
       buttonloading: false,
       tableloading: false,
       mocktableloading: false,
@@ -83,6 +101,7 @@ export default {
   },
   methods: {
     getMockData() {
+      this.showLoading = true;
       this.buttonloading = true;
       this.tableloading = true;
       http
@@ -91,14 +110,55 @@ export default {
           this.metaData = res.data;
           this.buttonloading = false;
           this.tableloading = false;
+          this.loadingMessage = {
+            show: false,
+            type: "success",
+            toast: res.info
+          };
         })
         .catch(err => {
-          console.error(err);
           this.buttonloading = false;
           this.tableloading = false;
+          this.loadingMessage = {
+            show: false,
+            type: "error",
+            toast: err
+          };
+        });
+    },
+    deleteFakeData() {
+      this.loadingMessage = {
+        show: true,
+        type: "",
+        toast: ""
+      };
+      http
+        .axiosmock(API.mock.deletehome, { id: 1 }, MOCKDATA)
+        .then(res => {
+          if (+res.code === 200) {
+            this.loadingMessage = {
+              show: false,
+              type: "success",
+              toast: "Delete successfully"
+            };
+          } else {
+            this.loadingMessage = {
+              show: false,
+              type: "error",
+              toast: "Delete failed"
+            };
+          }
+        })
+        .catch(err => {
+          this.loadingMessage = {
+            show: false,
+            type: "error",
+            toast: "Delete failed"
+          };
         });
     },
     getFakeData() {
+      this.showLoading = true;
       this.mockbuttonloading = true;
       this.mocktableloading = true;
       http
@@ -107,11 +167,20 @@ export default {
           this.mockData = res;
           this.mockbuttonloading = false;
           this.mocktableloading = false;
+          this.loadingMessage = {
+            show: false,
+            type: "success",
+            toast: "Successfully!"
+          };
         })
         .catch(err => {
-          console.error(err);
           this.mockbuttonloading = false;
           this.mocktableloading = false;
+          this.loadingMessage = {
+            show: false,
+            type: "error",
+            toast: err
+          };
         });
     }
   }

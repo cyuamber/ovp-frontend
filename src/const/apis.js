@@ -4,5 +4,6 @@ export default {
     mock: {
         address: '/address',
         home: '/home',
+        deletehome: '/delete/home',
     }
 }

@@ -16,6 +16,6 @@ module.exports = function () {
             }
         }),
         //this is local mock data
-        address: Address
+        address: Address,
     }
 }
