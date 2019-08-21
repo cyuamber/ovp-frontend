@@ -2,6 +2,55 @@
 
 This project is the frontend part of OVP project. 
 
+### Project structure
+
+├── public
+│   ├── index.css                           
+│   ├── index.html                          
+│   ├── favicon.ico                     
+├── src
+│   ├── App.vue                           
+│   ├── main.js                           
+│   ├── assets                            # static assets
+│   │   ├── logo.png                    
+│   │   ├── image                         
+│   │   └── ... ...       
+│   ├── components                        
+│   │   ├── charts                 
+│   │   ├── Loading                   
+│   │   ├── ... ...
+│   │   └── layout                        # layout for the whole project
+│   ├── const                            
+│   │   ├── apis.js                       # all the apis 
+│   │   ├── constant.js                   
+│   │   ├── menu.js                       # menu items
+│   │   └── ... ...                    
+│   ├── mock                              # test data config  
+│   ├── pages
+│   │   ├── TestPage.vue                  # test module
+│   │   ├── Home.vue                      # home module
+│   │   └── ... ...                       # other functional modules
+│   ├── router                            
+│   │   └── router.js      
+│   ├── store                             # store for vuex
+│   │   ├── index.js    
+│   │   ├── modules
+│   │   │   ├── login.js               
+│   │   │   ├── router.js             
+│   │   │   └── ... ...                 
+│   ├── utils                             # general functions
+│   │   ├── http.js
+│   │   ├── utils.js
+│   │   └── ... ...
+├── .eslintrc.js 
+├── .vcmrc                                # config for git message validation
+├── babel.config.js    
+├── CHANGELOG.md                             
+├── package.json   
+├── postcss.config.js   
+├── READEME.md     
+└── vue.config.js                         # config for vue project    
+
 
 ### Project setup
 ```

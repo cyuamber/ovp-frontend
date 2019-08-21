@@ -9,7 +9,6 @@
       type="primary"
       @click="getFakeData"
     >Mock data</a-button>
-    <a-button style="marginLeft:10px" type="primary" @click="deleteFakeData">Delete data</a-button>
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
@@ -17,10 +16,10 @@
       :loading="tableloading"
       :dataSource="metaData"
     >
-      <div slot="action" slot-scope>
+      <div slot="action" slot-scope="row">
         <a href="javascript:;">Add</a>
         <a-divider type="vertical" />
-        <a href="javascript:;" @click="deleteFakeData">Delete</a>
+        <a href="javascript:;" @click="deleteFakeData(row.id)">Delete</a>
         <a-divider type="vertical" />
         <a href="javascript:;" class="ant-dropdown-link">
           More actions
@@ -121,20 +120,21 @@ export default {
           };
         });
     },
-    deleteFakeData() {
+    deleteFakeData(id) {
       this.loadingMessage = {
         show: true,
         type: "",
         toast: ""
       };
+      const param = { id: id };
       http
-        .axiosmock(API.mock.deletehome, { id: 1 }, MOCKDATA)
+        .axiosmock(API.mock.deletehome, param, MOCKDATA)
         .then(res => {
           if (+res.code === 200) {
             this.loadingMessage = {
               show: false,
               type: "success",
-              toast: "Delete successfully"
+              toast: `Item ${id} successfully deleted`
             };
           } else {
             this.loadingMessage = {
