@@ -4,6 +4,8 @@ This project is the frontend part of OVP project.
 
 ### Project structure
 
+```
+
 ├── public
 │   ├── index.css                           
 │   ├── index.html                          
@@ -55,6 +57,7 @@ This project is the frontend part of OVP project.
 ├── postcss.config.js   
 ├── READEME.md     
 └── vue.config.js                         # config for vue project    
+```
 
 
 ### Project setup
