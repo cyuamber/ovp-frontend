@@ -9,12 +9,7 @@
       type="primary"
       @click="getFakeData"
     >Mock data</a-button>
-    <a-button
-      style="marginLeft:10px"
-      :loading="mockbuttonloading"
-      type="primary"
-      @click="deleteFakeData"
-    >Delete data</a-button>
+    <a-button style="marginLeft:10px" type="primary" @click="deleteFakeData">Delete data</a-button>
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
@@ -25,7 +20,7 @@
       <div slot="action" slot-scope>
         <a href="javascript:;">Add</a>
         <a-divider type="vertical" />
-        <a href="javascript:;">Delete</a>
+        <a href="javascript:;" @click="deleteFakeData">Delete</a>
         <a-divider type="vertical" />
         <a href="javascript:;" class="ant-dropdown-link">
           More actions

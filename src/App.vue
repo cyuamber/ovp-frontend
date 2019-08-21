@@ -1,18 +1,23 @@
 <template>
-  <div id="app">
-    <RouterView />
+  <div>
+    <div id="app">
+      <RouterView />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  components: {},
-  created() {}
+  mounted() {
+    document.getElementById("app").style.display = "block";
+    document.getElementById("appLoading").style.display = "none";
+  }
 };
 </script>
 
-<style lang="less">
+<style>
 #app {
+  display: none;
   height: 100vh;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
