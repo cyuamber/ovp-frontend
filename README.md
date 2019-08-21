@@ -26,6 +26,11 @@ This project is the frontend part of OVP project.
 │   │   ├── menu.js                       # menu items
 │   │   └── ... ...                    
 │   ├── mock                              # test data config  
+│   │   ├── json                          # specific mock data
+│   │   │   ├── address.json                          
+│   │   │   └── ... ...    
+│   │   ├── mock.js                       # configuration of interface intercepting 
+│   │   └── post-to-get.js                # middleware of requesting mock data
 │   ├── pages
 │   │   ├── TestPage.vue                  # test module
 │   │   ├── Home.vue                      # home module
