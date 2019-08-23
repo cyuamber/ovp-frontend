@@ -5,7 +5,6 @@ This project is the frontend part of OVP project.
 ### Project structure
 
 ```
-
 ├── public
 │   ├── index.css                           
 │   ├── index.html                          

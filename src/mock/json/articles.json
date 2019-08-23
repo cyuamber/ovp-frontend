@@ -1,0 +1,21 @@
+{
+    "code": 200,
+    "info": "success",
+    "data": [
+        {
+            "id": "1",
+            "user": "John Brown",
+            "address": " New York No. 1 Lake Park"
+        },
+        {
+            "id": "2",
+            "user": "Jim Green",
+            "address": "London No. 1 Lake Park"
+        },
+        {
+            "id": "3",
+            "user": "Joe Black",
+            "address": "Sidney No. 1 Lake Park"
+        }
+    ]
+}

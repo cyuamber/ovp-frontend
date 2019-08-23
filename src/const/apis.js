@@ -3,7 +3,9 @@ export default {
     //mock api
     mock: {
         address: '/address',
+        customerinfo: '/customer/info',
         home: '/home',
-        deletehome: '/delete/home',
+        deleteaddress: '/delete/address',
+        putname: '/articles',
     }
 }

@@ -7,7 +7,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "mockconfig": "json-server --watch ./src/mock/mock.js --m ./src/mock/post-to-get.js",
+    "mockconfig": "node ./src/mock/server.js",
     "mock": "npm run mockconfig & npm run start",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
@@ -34,6 +34,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "ghooks": "^2.0.4",
+    "json-server": "^0.15.0",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "validate-commit-msg": "^2.14.0",

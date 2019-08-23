@@ -2,13 +2,13 @@
   <div class="about">
     <Loading :loadingMessage="loadingMessage" />
     <h3>This is a test page</h3>
-    <a-button :loading="buttonloading" type="primary" @click="getMockData">Get data</a-button>
+    <a-button :loading="buttonloading" type="primary" @click="getMockData">Get local data</a-button>
     <a-button
       style="marginLeft:10px"
       :loading="mockbuttonloading"
       type="primary"
       @click="getFakeData"
-    >Mock data</a-button>
+    >Get remote data</a-button>
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
@@ -17,7 +17,7 @@
       :dataSource="metaData"
     >
       <div slot="action" slot-scope="row">
-        <a href="javascript:;">Add</a>
+        <a href="javascript:;" @click="putMethods(row.user)">Add</a>
         <a-divider type="vertical" />
         <a href="javascript:;" @click="deleteFakeData(row.id)">Delete</a>
         <a-divider type="vertical" />
@@ -44,10 +44,8 @@
 <script>
 import http from "../utils/http";
 import API from "../const/apis";
-import MOCKDATA from "../mock/json/deleteAddress.json";
 import Loading from "../components/Loading/Loading";
 import CONSTANTS from "../const/constant";
-import { setTimeout } from "timers";
 
 const mockcolumns = CONSTANTS.columns.mockcolumns;
 const columns = [
@@ -120,44 +118,12 @@ export default {
           };
         });
     },
-    deleteFakeData(id) {
-      this.loadingMessage = {
-        show: true,
-        type: "",
-        toast: ""
-      };
-      const param = { id: id };
-      http
-        .axiosmock(API.mock.deletehome, param, MOCKDATA)
-        .then(res => {
-          if (+res.code === 200) {
-            this.loadingMessage = {
-              show: false,
-              type: "success",
-              toast: `Item ${id} successfully deleted`
-            };
-          } else {
-            this.loadingMessage = {
-              show: false,
-              type: "error",
-              toast: "Delete failed"
-            };
-          }
-        })
-        .catch(err => {
-          this.loadingMessage = {
-            show: false,
-            type: "error",
-            toast: "Delete failed"
-          };
-        });
-    },
     getFakeData() {
       this.showLoading = true;
       this.mockbuttonloading = true;
       this.mocktableloading = true;
       http
-        .axiospost(API.mock.home)
+        .axiosget(API.mock.home)
         .then(res => {
           this.mockData = res;
           this.mockbuttonloading = false;
@@ -175,6 +141,70 @@ export default {
             show: false,
             type: "error",
             toast: err
+          };
+        });
+    },
+    putMethods(name) {
+      this.loadingMessage = {
+        show: true,
+        type: "",
+        toast: ""
+      };
+      let url = `${API.mock.putname}/name`;
+      http
+        .axiosget(url)
+        .then(res => {
+          if (+res.code === 200 || +res.code === 201) {
+            this.loadingMessage = {
+              show: false,
+              type: "success",
+              toast: `Item ${name} successfully added`
+            };
+          } else {
+            this.loadingMessage = {
+              show: false,
+              type: "error",
+              toast: "Add failed"
+            };
+          }
+        })
+        .catch(err => {
+          this.loadingMessage = {
+            show: false,
+            type: "error",
+            toast: "Add failed" || err
+          };
+        });
+    },
+    deleteFakeData(id) {
+      this.loadingMessage = {
+        show: true,
+        type: "",
+        toast: ""
+      };
+      const param = { id: id };
+      http
+        .axiosget(API.mock.deleteaddress, param)
+        .then(res => {
+          if (+res.code === 200 || +res.code === 201) {
+            this.loadingMessage = {
+              show: false,
+              type: "success",
+              toast: `Item ${id} successfully deleted`
+            };
+          } else {
+            this.loadingMessage = {
+              show: false,
+              type: "error",
+              toast: "Delete failed"
+            };
+          }
+        })
+        .catch(err => {
+          this.loadingMessage = {
+            show: false,
+            type: "error",
+            toast: "Delete failed" || err
           };
         });
     }

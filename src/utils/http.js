@@ -6,7 +6,6 @@ axios.defaults.withCredentials = true; // set cross-origin
 const getHeaders = () => ({
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,POST",
     "Access-Control-Allow-Headers": "x-requested-with,content-type"
 });
 

@@ -1,0 +1,16 @@
+{
+    "code": 200,
+    "info": "success",
+    "data": [
+        {
+            "id": 1,
+            "user": "John Brown",
+            "address": " New York No. 1 Lake Park"
+        },
+        {
+            "id": 2,
+            "user": "Brown",
+            "address": " New York No. 1 Lake Park"
+        }
+    ]
+}
