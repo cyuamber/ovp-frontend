@@ -1,0 +1,11 @@
+{
+    "code": 200,
+    "info": "success",
+    "data": [
+        {
+            "id": 1,
+            "user": "John",
+            "address": " New York No. 1 Lake Park"
+        }
+    ]
+}

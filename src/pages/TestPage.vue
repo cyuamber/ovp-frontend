@@ -9,6 +9,7 @@
       type="primary"
       @click="getFakeData"
     >Get remote data</a-button>
+    <a-button style="marginLeft:10px" type="primary" @click="getTestData">Get test data</a-button>
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
@@ -142,6 +143,21 @@ export default {
             type: "error",
             toast: err
           };
+        });
+    },
+    getTestData() {
+      const url = API.mock.alarmformdata;
+      http
+        .axiosget(url)
+        .then(res => {
+          if (res) {
+            console.log(res, "=====> successfully get data");
+          } else {
+            console.error(res, "=====> oops...");
+          }
+        })
+        .catch(err => {
+          console.error(err);
         });
     },
     putMethods(name) {
