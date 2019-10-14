@@ -1,17 +1,18 @@
 <template>
-  <div>
-    <p>Dashboard</p>
-    <test-page></test-page>
+  <div class="dashboard-block">
+    <img src="@/assets/images/dashboard.png" class="dashboard-block__img" />
   </div>
 </template>
 
 <script>
-import TestPage from "../TestPage.vue";
-
 export default {
-  name: "Dashboard",
-  components: {
-    "test-page": TestPage
-  }
+  name: "Dashboard"
 };
 </script>
+<style lang="less" scoped>
+.dashboard-block {
+  .dashboard-block__img {
+    width: 100%;
+  }
+}
+</style>
