@@ -120,7 +120,7 @@ export default {
     return {
       showLoading: false,
       messageType: "", //success, error, warn
-      toastMessage: "" //message when toast disappear
+      toastMessage: "" //shown message when toast disappear
     };
   },
   methods: {
