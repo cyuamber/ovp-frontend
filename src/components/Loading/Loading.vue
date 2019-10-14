@@ -119,8 +119,8 @@ export default {
   data() {
     return {
       showLoading: false,
-      messageType: "",
-      toastMessage: ""
+      messageType: "", //success, error, warn
+      toastMessage: "" //message when toast disappear
     };
   },
   methods: {

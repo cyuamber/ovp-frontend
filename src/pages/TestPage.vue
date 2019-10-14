@@ -78,7 +78,6 @@ export default {
   data() {
     return {
       loadingMessage: {
-        show: false,
         type: "",
         toast: ""
       },
@@ -104,7 +103,6 @@ export default {
           this.buttonloading = false;
           this.tableloading = false;
           this.loadingMessage = {
-            show: false,
             type: "success",
             toast: res.info
           };
@@ -113,7 +111,6 @@ export default {
           this.buttonloading = false;
           this.tableloading = false;
           this.loadingMessage = {
-            show: false,
             type: "error",
             toast: err
           };
@@ -130,7 +127,6 @@ export default {
           this.mockbuttonloading = false;
           this.mocktableloading = false;
           this.loadingMessage = {
-            show: false,
             type: "success",
             toast: "Successfully!"
           };
@@ -139,7 +135,6 @@ export default {
           this.mockbuttonloading = false;
           this.mocktableloading = false;
           this.loadingMessage = {
-            show: false,
             type: "error",
             toast: err
           };
@@ -162,7 +157,6 @@ export default {
     },
     putMethods(name) {
       this.loadingMessage = {
-        show: true,
         type: "",
         toast: ""
       };
@@ -172,13 +166,11 @@ export default {
         .then(res => {
           if (+res.code === 200 || +res.code === 201) {
             this.loadingMessage = {
-              show: false,
               type: "success",
               toast: `Item ${name} successfully added`
             };
           } else {
             this.loadingMessage = {
-              show: false,
               type: "error",
               toast: "Add failed"
             };
@@ -186,7 +178,6 @@ export default {
         })
         .catch(err => {
           this.loadingMessage = {
-            show: false,
             type: "error",
             toast: "Add failed" || err
           };
