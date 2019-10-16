@@ -67,6 +67,12 @@ function runServer(db) {
     server.use(jsonServer.router(db));
 }
 
+server.post(`/*`,(req,res,next) =>{
+    console.log(req.url)
+    req.method = 'GET'
+    next();
+})
+
 server.listen(3004, () => {
     console.log('Mock Server is successfully running on port 3004 😁')
 });

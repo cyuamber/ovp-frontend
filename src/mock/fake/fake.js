@@ -21,4 +21,29 @@ module.exports = {
             avatar: faker.internet.avatar()
         }
     }),
+    createVNFType: {
+            code: 200,
+            message: 'SUCCESS',
+            body: {
+                id: faker.random.number(),
+                VNFTypeName: faker.random.words(),
+                createTime: faker.date.recent()
+        }
+    },
+    getVNFType: {
+        code: 200,
+        message: 'SUCCESS',
+        total:50,
+        body: _.times(10,function(n){
+            return {
+                id: n,
+                VNFTypeName: faker.random.words(),
+                createTime: faker.date.recent()
+            }
+        })
+    },
+    deleteVNFType: {
+        code: 200,
+        message: 'SUCCESS'
+    }
 }
