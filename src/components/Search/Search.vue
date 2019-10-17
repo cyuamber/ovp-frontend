@@ -7,22 +7,54 @@
 </template>
 
 <script type="text/ecmascript-6">
-import moment from 'moment'
 import http from '../../utils/http'
   export default {
+    props: ['currentPage'],
     data(){
       return {
-        keyword: ''
+        keyword: '',
+        url: '',
+        key: '',
+        event: '',
       }
     },
     methods: {
       searchTypeID(){
-        http.axiosget('/getVNFType',{id: this.keyword}).then(res => {
+        http.axiosget(this.url,{[this.key]: this.keyword}).then(res => {
           if(res.code === 200){
-            this.$emit('searchID',res)
+            this.$emit(this.event,res)
             this.keyword = ''
           }
         })
+      }
+    },
+    mounted () {
+      switch (this.currentPage){
+        case 'VNFTypeMGT':
+          this.url = '/getVNFType';
+          this.key = 'id';
+          this.event = 'searchVNFTypeID';
+          break;
+        case 'VNFTypeObjectsMGT':
+          this.url = '/getVNFTest';
+          this.key = 'VNFTestName';
+          this.event = 'SearchVNFTestName';
+          break;
+        case 'TestEnvMGT':
+          this.url = '/getVIM';
+          this.key = 'cloudRegionId';
+          this.event = 'testInsSearch'
+          break;
+        case 'TestInstrumentMGT':
+          this.url = '/getMeterSys';
+          this.key = 'meterSysName';
+          this.event = 'VNFSuiteSearch'
+          break;
+        case 'VNF/PNFSuiteMGT':
+          this.url = '/getTestMeter';
+          this.key = 'tesyMeterName';
+          this.event ='testStandardSearch';
+          break;
       }
     }
   }

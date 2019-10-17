@@ -2,7 +2,7 @@
   <div class="vnf-type__container">
     <div class="top">
       <a-button type="primary" @click="handleClick">Create VNF Type</a-button>
-      <Search class="search" @searchID="searchID"/>
+      <Search class="search" @searchVNFTypeID="searchVNFTypeID" :currentPage="currentPage"/>
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
     </div>
     <div class="table">
@@ -51,7 +51,8 @@ export default {
       loading: true,
       pagination: {},
       VnfTypeName: '',
-      isEdit: false
+      isEdit: false,
+      currentPage: 'vnfTypeMC'
     }
   },
   
@@ -90,7 +91,7 @@ export default {
         return item
       })
     },
-    searchID(data){
+    searchVNFTypeID(data){
       this.formatData(data)
     },
     close(){
