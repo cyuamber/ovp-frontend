@@ -3,10 +3,9 @@
       <template>
         <a-form :form="form" @submit="handleSubmit">
           <a-form-item label="VNF Type Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-            <!-- <a-input
-              v-decorator="['VNFTypeName', { rules: [{ required: true, message: 'Please input VNF Type Name!' }],initialValue: vnfName  }]" 
-            /> -->
-            <a-input v-model="vnfName"/>
+            <a-input
+              v-decorator="['VNFTypeName', { rules: [{ required: true, message: 'Please input VNF Type Name!' }],initialValue: VnfTypeName }]" 
+            />
           </a-form-item>
           <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
             <a-button type="primary" html-type="submit">
@@ -22,31 +21,36 @@
 import moment from 'moment';
 import http from '../../utils/http';
   export default {
-    props: ['visible','VnfTypeName','isEdit'],
+    props: ['VnfTypeName','isEdit'],
     data(){
       return {
         form: this.$form.createForm(this),
-        showModal: false,
-        vnfName: ''
+        showModal: true,
       }
     },
     methods: {
       handleCancel(){
-        this.vnfName = ''
         this.$emit('close')
       },
       handleSubmit(e){
-        console.log(111)
+        let url = this.isEdit ? 'updateVNFType' : '/createVNFType'
         e.preventDefault();
-        if(this.vnfName.trim()){
+        this.form.validateFields((err, values) => {
+        if (!err) { 
           let data = {
-            VNFTypeName: this.vnfName,
+            VNFTypeName: values.VNFTypeName,
             createTime: moment(new Date()).format('YYYY-MM-DD'),
             id: Math.ceil(Math.random()*1000)
           }
-          http.axiospost('/createVNFType', data)
+          if(this.isEdit && this.VnfTypeName === values.VNFTypeName){
+            this.$message.warning('Please modify and submit');
+            return
+          }
+          console.log(1111)
+          http.axiospost(url, data)
             .then((res) => {
               if(res.code === 200){
+                console.log(res)
                 this.$message.success('Has been added successfully');
                 this.$emit('getAllVnfType')
               }else this.$message.error('add failed');
@@ -54,22 +58,11 @@ import http from '../../utils/http';
             error => {
               this.$message.error('Network exception, please try again');
             })
-            this.vnfName = ''
             this.$emit('close')
-        }
+          }
+        });
       },
-    },
-    watch:{
-      visible(value){
-        this.showModal=value;
-        if(this.showModal && this.isEdit){
-          this.vnfName = this.VnfTypeName
-        }
-      },
-      VnfTypeName(val){
-        if(this.isEdit) this.vnfName = val
-      }
-    },
+    }
   }
 </script>
 

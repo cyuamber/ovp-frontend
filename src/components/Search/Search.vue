@@ -24,7 +24,8 @@ import http from '../../utils/http'
           if(res.code === 200){
             this.$emit(this.event,res)
             this.keyword = ''
-          }
+            this.$message.success('The operation has been successful')
+          }else this.$message.error('Network exception, please try again');
         })
       }
     },

@@ -13,7 +13,7 @@
       </span>
     </a-table>
     </div>
-    <CreateOrEdit :visible="visible" @close="close" @getAllVnfType="getAllVnfType" :VnfTypeName="VnfTypeName" :isEdit="isEdit"/>
+    <CreateOrEdit @close="close" @getAllVnfType="getAllVnfType" :VnfTypeName="VnfTypeName" :isEdit="isEdit" v-if="visible"/>
   </div>
 </template>
 
@@ -58,6 +58,7 @@ export default {
   
   methods: {
     handleClick(){
+      this.VnfTypeName = ''
       this.visible = true;
       this.isEdit = false
     },
@@ -146,11 +147,12 @@ export default {
   }
   .table{
     width: 70%;
+    .tag{
+      padding:0  8px;
+      border-radius: 12px;
+    }
   }
-  .tag{
-    padding:0  8px;
-    border-radius: 12px;
-  }
+  
 }
   
 </style>
