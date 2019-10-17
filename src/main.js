@@ -5,11 +5,13 @@ import App from './App.vue';
 import router from './router/router';
 import store from './store/index';
 import Axios from 'axios';
+import VueI18n from 'vue-i18n'
 
 Vue.prototype.$axios = Axios;
 Axios.defaults.baseURL = '/api';
 Axios.defaults.headers.post['Content-Type'] = 'application/json';
 
+Vue.use(VueI18n);
 Vue.use(antd);
 Vue.config.productionTip = false
 
