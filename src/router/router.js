@@ -31,18 +31,26 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/dashboard',
     },
     {
       path: '/home',
-      name: 'Home',
-      component: Home
+      redirect: '/dashboard',
     },
     {
       path: '/login',
-      name: 'Login',
-      component: Login
+      redirect: '/dashboard',
     },
+    // {
+    //   path: '/home',
+    //   name: 'Home',
+    //   component: Home
+    // },
+    // {
+    //   path: '/login',
+    //   name: 'Login',
+    //   component: Login
+    // },
     {
       path: '/dashboard',
       component: Layout,
