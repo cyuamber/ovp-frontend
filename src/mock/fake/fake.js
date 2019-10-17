@@ -64,7 +64,7 @@ module.exports = {
                 id: n,
                 VNFTestName: faker.name.firstName(),
                 VNFTestVendor:faker.random.word(),
-                VNFTestVersion:faker.random.word(),
+                VNFTestVersion: 'V' + faker.random.number(),
                 VNFTypeName: faker.name.lastName(),
                 createTime: faker.date.recent(),
                 VNFFileName: {}
@@ -74,5 +74,29 @@ module.exports = {
     deleteVNFTest: {
         code: 200,
         message: 'SUCCESS',
+    },
+    createVNFTest: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            id: faker.random.number(),
+            VNFTestName: faker.name.firstName(),
+            VNFTestVendor: faker.random.word(),
+            VNFTestVersion: 'V' + faker.random.word(),
+            VNFTypeName: faker.name.lastName(),
+            createTime: faker.date.recent(),
+        }
+    },
+    updateVNFTest: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            id: faker.random.number(),
+            VNFTestName: faker.name.firstName(),
+            VNFTestVendor: faker.random.word(),
+            VNFTestVersion: 'V' + faker.random.word(),
+            VNFTypeName: faker.name.lastName(),
+            createTime: faker.date.recent(),
+        }
     }
 }

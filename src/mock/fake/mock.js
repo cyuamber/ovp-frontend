@@ -8,5 +8,7 @@ module.exports = {
     'updateVNFType': fakeData.updateVNFType,
     'deleteVNFType': fakeData.deleteVNFType,
     'getVNFTest': fakeData.getVNFTest,
-    'deleteVNFTest': fakeData.deleteVNFTest 
+    'deleteVNFTest': fakeData.deleteVNFTest,
+    'createVNFTest': fakeData.createVNFTest,
+    'updateVNFTest': fakeData.updateVNFTest 
 }
