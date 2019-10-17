@@ -1,5 +1,5 @@
 <template>
-    <a-modal title="Rigister TTMS" v-model="showModal" :footer="null" @cancel="handleCancel">
+    <a-modal v-bind:title="title"  v-model="showModal" :footer="null" @cancel="handleCancel">
         <template>
             <a-form :form="form" @submit="handleSubmit">
                 <a-form-item label="Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
@@ -36,6 +36,7 @@
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
+                title: this.isEdit ? 'Edit TTMS':'Rigister TTMS'
             }
         },
         methods: {
