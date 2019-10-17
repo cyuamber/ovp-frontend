@@ -1,5 +1,5 @@
 <template>
-   <a-modal title="Create VNF Type" v-model="showModal" :footer="null" @cancel="handleCancel">
+   <a-modal :title="(isEdit ? 'Edit': 'Create') + ' VNF Type'" v-model="showModal" :footer="null" @cancel="handleCancel">
       <template>
         <a-form :form="form" @submit="handleSubmit">
           <a-form-item label="VNF Type Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -33,7 +33,7 @@ import http from '../../utils/http';
         this.$emit('close')
       },
       handleSubmit(e){
-        let url = this.isEdit ? 'updateVNFType' : '/createVNFType'
+        let url = this.isEdit ? '/updateVNFType' : '/createVNFType'
         e.preventDefault();
         this.form.validateFields((err, values) => {
         if (!err) { 
@@ -46,14 +46,13 @@ import http from '../../utils/http';
             this.$message.warning('Please modify and submit');
             return
           }
-          console.log(1111)
           http.axiospost(url, data)
             .then((res) => {
               if(res.code === 200){
                 console.log(res)
-                this.$message.success('Has been added successfully');
+                this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
                 this.$emit('getAllVnfType')
-              }else this.$message.error('add failed');
+              }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
             },
             error => {
               this.$message.error('Network exception, please try again');
