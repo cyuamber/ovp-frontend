@@ -53,14 +53,8 @@ export default {
             tableData: [],
             loading: true,
             pagination: {},
-            singleData:{
-                meterName: '',
-                meterSysVendor: '',
-                meterSysUrl: '',
-                username: '',
-                password: '',
-            },
-            currentPage:'TestInstrument',
+            singleData:{},
+            currentPage:'TestInstrumentMGT',
             isEdit: false,
         }
     },

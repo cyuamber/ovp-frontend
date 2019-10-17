@@ -13,4 +13,8 @@ module.exports = {
     'loginMeterSys':fakeData.loginMeterSys,
     'updateMeterSys':fakeData.updateMeterSys,
     'deleteMeterSys': fakeData.deleteMeterSys,
+    'getTestMeter': fakeData.getTestMeter,
+    'createTestMeter': fakeData.createTestMeter,
+    'updateTestMeter': fakeData.updateTestMeter,
+    'deleteTestMeter': fakeData.deleteTestMeter,
 }

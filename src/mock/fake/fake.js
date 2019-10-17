@@ -118,4 +118,48 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
+    getTestMeter:{
+        code: 200,
+        message: 'SUCCESS',
+        total:50,
+        body: _.times(10,function(n){
+            return {
+                tesyMeterName: n,
+                tesyMeterVendor: faker.company.companyName(),
+                tesyMeterVersion: faker.company.companySuffix(),
+                tesyMeterType: faker.database.type(),
+                createTime: faker.date.recent(),
+            }
+        })
+    },
+    createTestMeter:{
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10,function(n){
+            return {
+                tesyMeterName: n,
+                tesyMeterVendor: faker.company.companyName(),
+                tesyMeterVersion: faker.company.companySuffix(),
+                tesyMeterType: faker.database.type(),
+                createTime: faker.date.recent(),
+            }
+        })
+    },
+    updateTestMeter:{
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10,function(n){
+            return {
+                tesyMeterName: n,
+                tesyMeterVendor: faker.company.companyName(),
+                tesyMeterVersion: faker.company.companySuffix(),
+                tesyMeterType: faker.database.type(),
+                createTime: faker.date.recent(),
+            }
+        })
+    },
+    deleteTestMeter:{
+        code: 200,
+        message: 'SUCCESS'
+    },
 }

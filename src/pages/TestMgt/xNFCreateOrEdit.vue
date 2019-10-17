@@ -2,22 +2,30 @@
     <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
         <template>
             <a-form :form="form" @submit="handleSubmit">
-                <a-form-item label="Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
-                    <a-input v-decorator="['testInsName',{ rules: [{ required: true,}],initialValue:singleData.meterSysName }]"/>
+                <a-form-item label="XNF Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
+                    <a-input v-decorator="['meterName',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterName }]"/>
                 </a-form-item>
-                <a-form-item label="Vendor"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['testInsVendor',{ rules: [{ required: true,}],initialValue:singleData.meterSysVendor }]"/>
+                <a-form-item label="XNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                    <a-select v-decorator="['meterType',{ rules: [{ required: true, }],initialValue:this.isEdit ? singleData.tesyMeterType:types[0]}]"
+                    >
+                        <a-select-option v-for="type of types" :key="type" :value="type">
+                           {{type}}
+                        </a-select-option>
+                    </a-select>
                 </a-form-item>
-                <a-form-item label="Mnt Address"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['testInsMntAddress',{ rules: [{ required: true,}],initialValue:singleData.meterSysUrl }]"/>
+                <a-form-item label="XNF Vendor"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                    <a-input v-decorator="['meterVendor',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterVendor }]"/>
                 </a-form-item>
-                <a-form-item label="User"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['testInsUser',{ rules: [{ required: true,}],initialValue:singleData.username }]"/>
+                <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                    <a-input v-decorator="['meterVersion',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterVersion }]"/>
                 </a-form-item>
-                <a-form-item label="Password"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['testInsPassword',{ rules: [{ required: true,}],initialValue:singleData.password }]" type="password">
-                        <a-icon slot="prefix" type="eye" style="color:rgba(0,0,0,.25)" />
-                    </a-input>
+                <a-form-item label="Upload"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+                   <a-upload-dragger
+                        name="file"
+                        @change="handleChange"
+                   >
+                       <p class="ant-upload-text upload-test">Click or drag to upload</p>
+                   </a-upload-dragger>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
                     <a-button type="primary" html-type="submit">OK</a-button>
@@ -36,24 +44,28 @@
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
-                title: this.isEdit ? 'Edit TTMS':'Rigister TTMS'
+                title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
+                types:["VNF","PNF"]
             }
         },
         methods: {
+            handleChange(){
+
+            },
             handleCancel(){
                 Object.keys(this.singleData).map(key => this.singleData[key] = '');
                 this.$emit('close');
             },
             handleSubmit(e){
-                let url = this.isEdit ? '/updateMeterSys':'/loginMeterSys';
+                let url = this.isEdit ? '/updateTestMeter':'/createTestMeter';
                 this.form.validateFields((err, values) => {
                     if(!err){
                         let data = {
-                            meterSysName: values.testInsName,
-                            meterSysVendor: values.testInsVendor,
-                            meterSysUrl: values.testInsMntAddress,
-                            username: values.testInsUser,
-                            password: values.testInsPassword,
+                            tesyMeterName: values.meterName,
+                            tesyMeterType: values.meterType,
+                            tesyMeterVendor: values.meterVendor,
+                            tesyMeterVersion: values.meterVersion,
+                            VNFFileName:'',
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
                         console.log(data,"data");
@@ -61,7 +73,7 @@
                             .then((res) => {
                                     if(res.code === 200){
                                         this.$message.success('Has been added successfully');
-                                        this.$emit('getAllMeterSys')
+                                        this.$emit('getAllTestMeter')
                                     }else this.$message.error('add failed');
                                     this.$emit('close');
                                 },
