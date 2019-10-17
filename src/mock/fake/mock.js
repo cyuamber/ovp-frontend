@@ -3,4 +3,8 @@ module.exports = {
     //Mock json
     'customer_info': fakeData.customer,
     'home': fakeData.home,
+    'getMeterSys':fakeData.getMeterSys,
+    'loginMeterSys':fakeData.loginMeterSys,
+    'updateMeterSys':fakeData.updateMeterSys,
+    'deleteMeterSys': fakeData.deleteMeterSys,
 }

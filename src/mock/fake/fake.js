@@ -21,4 +21,47 @@ module.exports = {
             avatar: faker.internet.avatar()
         }
     }),
+    getMeterSys:{
+        code: 200,
+        message: 'SUCCESS',
+        total:50,
+        body: _.times(10,function(n){
+            return {
+                meterSysName: n,
+                meterSysVendor: faker.company.companyName(),
+                meterSysUrl: faker.internet.url(),
+                createTime: faker.date.recent(),
+                username:faker.name.findName(),
+                password:faker.internet.password()
+            }
+        })
+    },
+    loginMeterSys: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10,function(n){
+            return {
+                meterSysName: n,
+                meterSysVendor: faker.company.companyName(),
+                meterSysUrl: faker.internet.url(),
+                createTime: faker.date.recent()
+            }
+        })
+    },
+    updateMeterSys: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10,function(n){
+            return {
+                meterSysName: n,
+                meterSysVendor: faker.company.companyName(),
+                meterSysUrl: faker.internet.url(),
+                createTime: faker.date.recent()
+            }
+        })
+    },
+    deleteMeterSys: {
+        code: 200,
+        message: 'SUCCESS'
+    },
 }
