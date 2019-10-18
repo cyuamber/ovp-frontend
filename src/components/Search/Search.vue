@@ -20,9 +20,10 @@ import http from '../../utils/http'
     },
     methods: {
       searchTypeID(){
-        http.axiosget(this.url,{[this.key]: this.keyword}).then(res => {
+        let {url, key, event, keyword} = this
+        http.axiosget(url,{[key]: keyword}).then(res => {
           if(res.code === 200){
-            this.$emit(this.event,res)
+            this.$emit(event,res)
             this.keyword = ''
             this.$message.success('The operation has been successful')
           }else this.$message.error('Network exception, please try again');
@@ -41,19 +42,29 @@ import http from '../../utils/http'
           this.key = 'VNFTestName';
           this.event = 'SearchVNFTestName';
           break;
-        case 'TestEnvMGT':
+        case 'VIMTestEnvMGT':
           this.url = '/getVIM';
           this.key = 'cloudRegionId';
-          this.event = 'testInsSearch'
+          this.event = 'SearchVIMOrVNFM'
+          break;
+        case 'VNFMTestEnvMGT':
+          this.url = '/getVNFM';
+          this.key = 'VNFMname';
+          this.event = 'SearchVIMOrVNFM'
           break;
         case 'TestInstrumentMGT':
           this.url = '/getMeterSys';
           this.key = 'meterSysName';
-          this.event = 'VNFSuiteSearch'
+          this.event = 'testInsSearch'
           break;
         case 'VNF/PNFSuiteMGT':
-          this.url = '/getTestMeter';
-          this.key = 'tesyMeterName';
+          this.url = '/getTestTask';
+          this.key = 'testTaskId';
+          this.event ='VNFSuiteSearch';
+          break;
+        case 'TestStandardMGT':
+          this.url = '/GETTestSpec';
+          this.key = 'testSpecId';
           this.event ='testStandardSearch';
           break;
       }
