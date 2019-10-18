@@ -111,8 +111,8 @@ export default {
                 this.singleData = Object.assign({},data);
             }else {
                 this.$confirm({
-                    title: 'Are you sure delete this task?',
-                    content: 'Some descriptions',
+                    title: 'Are you sure delete this standard?',
+                    content: 'Id: '+data.testSpecId,
                     okText: 'Yes',
                     okType: 'danger',
                     cancelText: 'No',

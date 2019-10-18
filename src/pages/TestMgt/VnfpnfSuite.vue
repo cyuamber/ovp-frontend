@@ -112,8 +112,8 @@
                     this.singleData = Object.assign({},data);
                 }else {
                     this.$confirm({
-                        title: 'Are you sure delete this task?',
-                        content: 'Some descriptions',
+                        title: 'Are you sure delete this xNF TT?',
+                        content: 'Name: '+data.tesyMeterName,
                         okText: 'Yes',
                         okType: 'danger',
                         cancelText: 'No',
