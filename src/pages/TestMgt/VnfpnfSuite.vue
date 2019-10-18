@@ -21,7 +21,7 @@
     import moment from 'moment'
     import http from '../../utils/http'
     import Search from '../../components/Search/Search'
-    import xNFCreateOrEdit from './xNFCreateOrEdit'
+    import xNFCreateOrEdit from './VnfpnfCreateOrEdit'
     export default {
         name: "VnfpnfSuite",
         data(){

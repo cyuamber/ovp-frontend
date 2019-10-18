@@ -103,7 +103,7 @@
                                     }else this.$message.error('add failed');
                                     this.$emit('close');
                                 },
-                                error => {
+                                () => {
                                     this.$message.error('Network exception, please try again');
                                     this.$emit('close');
                                 });

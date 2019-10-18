@@ -21,7 +21,7 @@
     import moment from 'moment'
     import http from '../../utils/http'
     import Search from '../../components/Search/Search'
-    import RigisterOrEdit from './testInsrigisterOrEdit'
+    import RigisterOrEdit from './TestInsrigisterOrEdit'
 export default {
   name: "TestInstrument",
     data(){

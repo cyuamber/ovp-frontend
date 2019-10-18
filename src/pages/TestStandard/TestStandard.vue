@@ -20,7 +20,7 @@
     import moment from 'moment'
     import http from '../../utils/http'
     import Search from '../../components/Search/Search'
-    import StandardAddOrEdit from './standardAddOrEdit'
+    import StandardAddOrEdit from './TestStandardAddOrEdit'
 export default {
   name: "TestStandard",
     data(){
