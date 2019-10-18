@@ -126,7 +126,7 @@ module.exports = {
             return {
                 tesyMeterName: n,
                 tesyMeterVendor: faker.company.companyName(),
-                tesyMeterVersion: faker.company.companySuffix(),
+                tesyMeterVersion: faker.random.number(),
                 tesyMeterType: faker.database.type(),
                 createTime: faker.date.recent(),
             }
@@ -139,7 +139,7 @@ module.exports = {
             return {
                 tesyMeterName: n,
                 tesyMeterVendor: faker.company.companyName(),
-                tesyMeterVersion: faker.company.companySuffix(),
+                tesyMeterVersion: faker.random.number(),
                 tesyMeterType: faker.database.type(),
                 createTime: faker.date.recent(),
             }
@@ -152,7 +152,7 @@ module.exports = {
             return {
                 tesyMeterName: n,
                 tesyMeterVendor: faker.company.companyName(),
-                tesyMeterVersion: faker.company.companySuffix(),
+                tesyMeterVersion:faker.random.number(),
                 tesyMeterType: faker.database.type(),
                 createTime: faker.date.recent(),
             }
@@ -162,4 +162,48 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
+    getTestSpec:{
+        code: 200,
+        message: 'SUCCESS',
+        total:50,
+        body: _.times(10,function(n){
+            return {
+                testSpecId: n,
+                testSpecName: faker.commerce.productName(),
+                testSpecVersion: faker.random.number(),
+                VNFtype: faker.database.type(),
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
+    addTestSpec:{
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10,function(n){
+            return {
+                testSpecId: n,
+                testSpecName: faker.commerce.productName(),
+                testSpecVersion: faker.random.number(),
+                VNFtype: faker.database.type(),
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
+    updateTestSpec:{
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10,function(n){
+            return {
+                testSpecId: n,
+                testSpecName: faker.commerce.productName(),
+                testSpecVersion: faker.random.number(),
+                VNFtype: faker.database.type(),
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
+    deleteTestSpec:{
+        code: 200,
+        message: 'SUCCESS'
+    }
 }

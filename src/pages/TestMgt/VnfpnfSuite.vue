@@ -2,7 +2,7 @@
   <div class="test-ins__container">
     <div class="top">
       <a-button type="primary" @click="handleClick">Create xNF TT</a-button>
-      <Search class="search" @searchID="searchID" :currentPage="currentPage"/>
+      <Search class="search" @VNFSuiteSearch="VNFSuiteSearch" :currentPage="currentPage"/>
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
     </div>
     <div class="table">
@@ -98,7 +98,7 @@
                     return item
                 })
             },
-            searchID(data){
+            VNFSuiteSearch(data){
                 this.formatData(data)
             },
             close(){

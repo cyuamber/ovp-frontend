@@ -56,7 +56,7 @@
                 Object.keys(this.singleData).map(key => this.singleData[key] = '');
                 this.$emit('close');
             },
-            handleSubmit(e){
+            handleSubmit(){
                 let url = this.isEdit ? '/updateTestMeter':'/createTestMeter';
                 this.form.validateFields((err, values) => {
                     if(!err){

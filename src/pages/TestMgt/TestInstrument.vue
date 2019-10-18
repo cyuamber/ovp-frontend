@@ -2,7 +2,7 @@
   <div class="test-ins__container">
     <div class="top">
       <a-button type="primary" @click="handleClick">Rigister TTMS</a-button>
-      <Search class="search" @searchID="searchID" :currentPage="currentPage"/>
+      <Search class="search" @testInsSearch="testInsSearch" :currentPage="currentPage"/>
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
     </div>
     <div class="table">
@@ -94,7 +94,7 @@ export default {
                 return item
             })
         },
-        searchID(data){
+        testInsSearch(data){
             this.formatData(data)
         },
         close(){
