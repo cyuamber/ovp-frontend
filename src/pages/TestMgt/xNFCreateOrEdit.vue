@@ -21,8 +21,10 @@
                 </a-form-item>
                 <a-form-item label="Upload"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
                    <a-upload-dragger
-                        name="file"
-                        @change="handleChange"
+                           :fileList="fileList"
+                           :remove="handleRemove"
+                           :beforeUpload="beforeUpload"
+                           :disabled="fileList.length === 1"
                    >
                        <p class="ant-upload-text upload-test">Click or drag to upload</p>
                    </a-upload-dragger>
@@ -45,12 +47,31 @@
                 form: this.$form.createForm(this),
                 showModal: true,
                 title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
-                types:["VNF","PNF"]
+                types:["VNF","PNF"],
+                fileList: [],
             }
         },
         methods: {
-            handleChange(){
-
+            handleRemove(file) {
+                const index = this.fileList.indexOf(file);
+                const newFileList = this.fileList.slice();
+                newFileList.splice(index, 1);
+                this.fileList = newFileList;
+            },
+            beforeUpload(file) {
+                this.fileList = [...this.fileList, file];
+                console.log(this.fileList,"fileList");
+                return false;
+            },
+            handleUpload(formData) {
+                http.axiospost('/uploadVNFFile',{VNFFileName:formData}).then(res => {
+                    if(res.code === 200){
+                        this.fileList = [];
+                        this.$message.success('upload successfully.');
+                    }else {
+                        this.$message.error('upload failed.');
+                    }
+                });
             },
             handleCancel(){
                 Object.keys(this.singleData).map(key => this.singleData[key] = '');
@@ -58,6 +79,11 @@
             },
             handleSubmit(){
                 let url = this.isEdit ? '/updateTestMeter':'/createTestMeter';
+                const { fileList } = this;
+                const formData = new FormData();
+                fileList.forEach(file => {
+                    formData.append('files[]', file);
+                });
                 this.form.validateFields((err, values) => {
                     if(!err){
                         let data = {
@@ -65,10 +91,10 @@
                             tesyMeterType: values.meterType,
                             tesyMeterVendor: values.meterVendor,
                             tesyMeterVersion: values.meterVersion,
-                            VNFFileName:'',
+                            VNFFileName:formData,
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                        console.log(data,"data");
+                        this.handleUpload(formData);
                         http.axiospost(url, data)
                             .then((res) => {
                                     if(res.code === 200){
