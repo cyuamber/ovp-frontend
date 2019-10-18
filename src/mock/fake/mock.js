@@ -10,5 +10,13 @@ module.exports = {
     'getVNFTest': fakeData.getVNFTest,
     'deleteVNFTest': fakeData.deleteVNFTest,
     'createVNFTest': fakeData.createVNFTest,
-    'updateVNFTest': fakeData.updateVNFTest 
+    'updateVNFTest': fakeData.updateVNFTest,
+    'getVIM': fakeData.getVIM,
+    'getVNFM': fakeData.getVNFM,
+    'loginVIM': fakeData.loginVIM,
+    'updateVIM': fakeData.updateVIM,
+    'loginVNFM': fakeData.loginVNFM,
+    'updateVNFM': fakeData.updateVNFM,
+    'deleteVIM': fakeData.deleteVIM,
+    'deleteVNFM': fakeData.deleteVNFM 
 }
