@@ -81,7 +81,7 @@ module.exports = {
         total:50,
         body: _.times(10,function(n){
             return {
-                meterSysName: n,
+                meterSysName: n+1,
                 meterSysVendor: faker.company.companyName(),
                 meterSysUrl: faker.internet.url(),
                 createTime: faker.date.recent(),
@@ -124,7 +124,7 @@ module.exports = {
         total:50,
         body: _.times(10,function(n){
             return {
-                tesyMeterName: n,
+                tesyMeterName: n+1,
                 tesyMeterVendor: faker.company.companyName(),
                 tesyMeterVersion: faker.random.number(),
                 tesyMeterType: faker.database.type(),
@@ -162,13 +162,17 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
+    uploadVNFFile:{
+        code: 200,
+        message: 'SUCCESS'
+    },
     getTestSpec:{
         code: 200,
         message: 'SUCCESS',
         total:50,
         body: _.times(10,function(n){
             return {
-                testSpecId: n,
+                testSpecId: n+1,
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
                 VNFtype: faker.database.type(),

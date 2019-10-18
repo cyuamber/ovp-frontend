@@ -107,6 +107,7 @@
                                     this.$message.error('Network exception, please try again');
                                     this.$emit('close');
                                 });
+                        Object.keys(this.singleData).map(key => this.singleData[key] = '');
                     }
                 });
 

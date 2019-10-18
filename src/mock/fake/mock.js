@@ -17,6 +17,7 @@ module.exports = {
     'createTestMeter': fakeData.createTestMeter,
     'updateTestMeter': fakeData.updateTestMeter,
     'deleteTestMeter': fakeData.deleteTestMeter,
+    'uploadVNFFile':fakeData.uploadVNFFile,
     'getTestSpec': fakeData.getTestSpec,
     'addTestSpec': fakeData.addTestSpec,
     'updateTestSpec': fakeData.updateTestSpec,

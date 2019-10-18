@@ -8,7 +8,7 @@
     <div class="table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="tesyMeterName" size="default" :pagination="pagination">
       <span slot="action" slot-scope="action,record">
-        <a-tag v-for="item in action" :key="item" :color="item === 'edit'? 'blue' : 'red'" class="tag"
+        <a-tag v-for="item in action" :key="item" :color="item === 'EDIT'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
       </span>
       </a-table>
@@ -94,7 +94,7 @@
                 };
                 this.tableData = data.body.map( item => {
                     item.createTime = moment(item.createTime).format('YYYY-MM-DD');
-                    item.action = ['edit', 'delete'];
+                    item.action = ['EDIT', 'DELETE'];
                     return item
                 })
             },
@@ -149,11 +149,7 @@
       .calendar{
         float: right;
         width: 280px;
-        margin-right: 20px;
       }
-    }
-    .table{
-      width: 70%;
     }
     .tag{
       padding:0  8px;
