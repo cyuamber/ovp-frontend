@@ -5,7 +5,7 @@
                 <a-form-item label="XNF Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
                     <a-input v-decorator="['meterName',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterName }]"/>
                 </a-form-item>
-                <a-form-item label="XNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                <a-form-item label="XNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 5 }">
                     <a-select v-decorator="['meterType',{ rules: [{ required: true, }],initialValue:this.isEdit ? singleData.tesyMeterType:types[0]}]"
                     >
                         <a-select-option v-for="type of types" :key="type" :value="type">
@@ -117,6 +117,8 @@
 </script>
 
 <style scoped>
-
+    .upload-test{
+        font-size: 12px !important;
+    }
 
 </style>

@@ -104,8 +104,7 @@ export default {
             this.visible = false;
         },
         showEditOrDeleteModal(item,data){
-            console.log(item,"item")
-            if(item === 'edit') {
+            if(item === 'EDIT') {
                 this.visible = true;
                 this.isEdit = true;
                 this.singleData = Object.assign({},data);
