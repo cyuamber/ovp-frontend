@@ -18,11 +18,15 @@
 </template>
 <script>
     import moment from 'moment'
-    import http from '../../utils/http'
+    import {axiospost, axiosget} from '../../utils/http'
     import Search from '../../components/Search/Search'
     import StandardAddOrEdit from './TestStandardAddOrEdit'
 export default {
   name: "TestStandard",
+    components: {
+        Search,
+        StandardAddOrEdit
+    },
     data(){
         return{
             visible: false,
@@ -61,14 +65,16 @@ export default {
             isEdit: false,
         }
     },
-
+    mounted () {
+        this.getAllTestSpec()
+    },
     methods: {
         handleClick(){
             this.visible = true;
             this.isEdit = false
         },
         getAllTestSpec(){
-            http.axiosget('/getTestSpec').then(res => {
+            axiosget('/getTestSpec').then(res => {
                 if(res.code === 200){
                     this.formatData(res)
                 }else {
@@ -80,7 +86,7 @@ export default {
         // Filter by creating time
         onChange(date) {
             let selectDate = moment(date._d).format('YYYY-MM-DD');
-            http.axiosget('/getTestSpec',{createTime: selectDate}).then( res => {
+            axiosget('/getTestSpec',{createTime: selectDate}).then( res => {
                 if(res.code === 200) this.formatData(res);
                 else this.$message.error('Network exception, please try again');
             })
@@ -116,7 +122,7 @@ export default {
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        http.axiospost('/deleteTestSpec',{testSpecId:data.testSpecId}).then( res => {
+                        axiospost('/deleteTestSpec',{testSpecId:data.testSpecId}).then( res => {
                             if(res.code === 200){
                                 this.$message.success('Deleted successfully')
                             }else this.$message.error('Network exception, please try again');
@@ -125,14 +131,7 @@ export default {
                 });
             }
         }
-    },
-    mounted () {
-        this.getAllTestSpec()
-    },
-    components: {
-        Search,
-        StandardAddOrEdit
-    },
+    }
 };
 </script>
 
