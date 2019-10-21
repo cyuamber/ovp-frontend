@@ -21,6 +21,7 @@
     import moment from 'moment'
     import {axiospost, axiosget} from '../../utils/http'
     import Search from '../../components/Search/Search'
+    import {TestInsrigisterColumns} from '../../const/constant'
     import RigisterOrEdit from './TestInsrigisterOrEdit'
 export default {
     name: "TestInstrument",
@@ -31,29 +32,7 @@ export default {
     data(){
         return{
             visible: false,
-            columns: [
-                {
-                    title: 'Name',
-                    dataIndex: 'meterSysName'
-                },
-                {
-                    title: 'Vendor',
-                    dataIndex: 'meterSysVendor'
-                },
-                {
-                    title: 'Mnt Address',
-                    dataIndex: 'meterSysUrl'
-                },
-                {
-                    title: 'Create Time',
-                    dataIndex: 'createTime'
-                },
-                {
-                    title: 'Action',
-                    dataIndex: 'action',
-                    scopedSlots: { customRender: 'action' }
-                }
-            ],
+            columns: TestInsrigisterColumns,
             tableData: [],
             loading: true,
             pagination: {},

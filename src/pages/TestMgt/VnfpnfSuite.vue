@@ -24,6 +24,7 @@
     import moment from 'moment'
     import {axiospost, axiosget} from '../../utils/http'
     import Search from '../../components/Search/Search'
+    import {VnfpnfSuiteColumns} from '../../const/constant'
     import xNFCreateOrEdit from './VnfpnfCreateOrEdit'
 
     export default {
@@ -35,33 +36,7 @@
         data() {
             return {
                 visible: false,
-                columns: [
-                    {
-                        title: 'Name',
-                        dataIndex: 'tesyMeterName'
-                    },
-                    {
-                        title: 'Vendor',
-                        dataIndex: 'tesyMeterVendor'
-                    },
-                    {
-                        title: 'Version',
-                        dataIndex: 'tesyMeterVersion'
-                    },
-                    {
-                        title: 'Type',
-                        dataIndex: 'tesyMeterType'
-                    },
-                    {
-                        title: 'Create Time',
-                        dataIndex: 'createTime'
-                    },
-                    {
-                        title: 'Action',
-                        dataIndex: 'action',
-                        scopedSlots: { customRender: 'action' }
-                    }
-                ],
+                columns: VnfpnfSuiteColumns,
                 tableData: [],
                 loading: true,
                 pagination: {},

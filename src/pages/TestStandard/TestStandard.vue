@@ -20,6 +20,7 @@
     import moment from 'moment'
     import {axiospost, axiosget} from '../../utils/http'
     import Search from '../../components/Search/Search'
+    import {TestStandardColumns} from '../../const/constant'
     import StandardAddOrEdit from './TestStandardAddOrEdit'
 export default {
   name: "TestStandard",
@@ -30,33 +31,7 @@ export default {
     data(){
         return{
             visible: false,
-            columns: [
-                {
-                    title: 'ID',
-                    dataIndex: 'testSpecId'
-                },
-                {
-                    title: 'Name',
-                    dataIndex: 'testSpecName'
-                },
-                {
-                    title: 'Version',
-                    dataIndex: 'testSpecVersion'
-                },
-                {
-                    title: 'VNF Type',
-                    dataIndex: 'VNFtype'
-                },
-                {
-                    title: 'Publish Time',
-                    dataIndex: 'publishTime'
-                },
-                {
-                    title: 'Action',
-                    dataIndex: 'action',
-                    scopedSlots: { customRender: 'action' }
-                }
-            ],
+            columns: TestStandardColumns,
             tableData: [],
             loading: true,
             pagination: {},
