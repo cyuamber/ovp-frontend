@@ -13,7 +13,7 @@
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
-      :columns="mockcolumns"
+      :columns="columns"
       :loading="tableloading"
       :dataSource="metaData"
     >
@@ -31,7 +31,7 @@
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
-      :columns="mockcolumns"
+      :columns="mockColumns"
       :dataSource="mockData"
       :loading="mocktableloading"
     >
@@ -46,9 +46,9 @@
 import {axiosget} from "../utils/http";
 import API from "../const/apis";
 import Loading from "../components/Loading/Loading";
-import CONSTANTS from "../const/constant";
+import {mockcolumns} from "../const/constant";
 
-const mockcolumns = CONSTANTS.columns.mockcolumns;
+const mockColumns = mockcolumns;
 const columns = [
   {
     title: "Id",

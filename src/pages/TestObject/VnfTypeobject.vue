@@ -6,7 +6,7 @@
         <div class="top">
           <a-button type="primary" @click="handleClick">Create {{tab}} SUT</a-button>
           <Search class="search" @SearchVNFTestName="SearchVNFTestName" :currentPage="currentPage"/>
-          <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
+          <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false"/>
         </div>
         <div class="table">
           <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination">
@@ -26,6 +26,7 @@
 import Search from '../../components/Search/Search'
 import CreateOrEditModal from './VnfTypeObjectsModal'
 import {axiosget, axiospost} from '../../utils/http';
+import {VNFTypeObjectsColumns} from '../../const/constant'
 import moment from 'moment';
 
 export default {
@@ -37,33 +38,7 @@ export default {
       isEdit: false,
       visible: false,
       currentPage: 'VNFTypeObjectsMGT',
-      columns: [
-        {
-          title: 'Name',
-          dataIndex: 'VNFTestName'
-        },
-        {
-          title: 'Type',
-          dataIndex: 'VNFTypeName'
-        },
-        { 
-          title: 'Vendor',
-          dataIndex: 'VNFTestVersion'
-        },
-        { 
-          title: 'Suit',
-          dataIndex: 'VNFTestVendor'
-        },
-        { 
-          title: 'Create Time',
-          dataIndex: 'createTime'
-        },
-        {
-          title: 'Action',
-          dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
+      columns: VNFTypeObjectsColumns,
       tableData: [],
       loading: false,
       pagination: {},

@@ -3,7 +3,7 @@
     <div class="top">
       <a-button type="primary" @click="handleClick">Create VNF Type</a-button>
       <Search class="search" @searchVNFTypeID="searchVNFTypeID" :currentPage="currentPage"/>
-      <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
+      <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false"/>
     </div>
     <div class="table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination">
@@ -21,6 +21,7 @@
 import moment from 'moment'
 import {axiospost, axiosget} from '../../utils/http'
 import Search from '../../components/Search/Search'
+import {VNFTypeColumns} from '../../const/constant'
 import CreateOrEdit from './VnfTypeCreateOrEdit'
 
 export default {
@@ -28,25 +29,7 @@ export default {
   data(){
     return{
       visible: false,
-      columns: [
-        {
-          title: 'ID',
-          dataIndex: 'id'
-        },
-        {
-          title: 'VNF Type',
-          dataIndex: 'VNFTypeName'
-        },
-        { 
-          title: 'Create Time',
-          dataIndex: 'createTime'
-        },
-        {
-          title: 'Action',
-          dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
+      columns: VNFTypeColumns,
       tableData: [],
       loading: true,
       pagination: {},
@@ -72,11 +55,12 @@ export default {
         this.loading = false
       })
     },
-    // Filter by creating time
     onChange(date) {
         let selectDate = moment(date._d).format('YYYY-MM-DD')
-        http.axiosget('/getVNFType',{createTime: selectDate}).then( res => {
-        if(res.code === 200) this.formatData(res);
+        axiosget('/getVNFType',{createTime: selectDate}).then( res => {
+          if(res.code === 200) {
+            this.$message.success('The operation has been successful')
+          }
           else this.$message.error('Network exception, please try again');
         })
       }, 
