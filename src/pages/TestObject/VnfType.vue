@@ -8,7 +8,7 @@
     <div class="table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination">
       <span slot="action" slot-scope="action,record">
-        <a-tag v-for="item in action" :key="item" :color="item === 'edit'? 'blue' : 'red'" class="tag" 
+        <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag" 
         @click="(() => showEditOrDeleteModal(item,record.VNFTypeName,record.id))">{{item}}</a-tag>
       </span>
     </a-table>
@@ -19,7 +19,7 @@
 
 <script>
 import moment from 'moment'
-import http from '../../utils/http'
+import {axiospost, axiosget} from '../../utils/http'
 import Search from '../../components/Search/Search'
 import CreateOrEdit from './VnfTypeCreateOrEdit'
 
@@ -63,7 +63,7 @@ export default {
       this.isEdit = false
     },
     getAllVnfType(){
-      http.axiosget('/getVNFType').then(res => {
+      axiosget('/getVNFType').then(res => {
         if(res.code === 200){
           this.formatData(res)
         }else {
@@ -74,12 +74,12 @@ export default {
     },
     // Filter by creating time
     onChange(date) {
-      let selectDate = moment(date._d).format('YYYY-MM-DD')
-      http.axiosget('/getVNFType',{createTime: selectDate}).then( res => {
+        let selectDate = moment(date._d).format('YYYY-MM-DD')
+        http.axiosget('/getVNFType',{createTime: selectDate}).then( res => {
         if(res.code === 200) this.formatData(res);
-        else this.$message.error('Network exception, please try again');
-      })
-    }, 
+          else this.$message.error('Network exception, please try again');
+        })
+      }, 
     // Format response table data
     formatData(data){
       this.pagination = {
@@ -88,7 +88,7 @@ export default {
       }
       this.tableData = data.body.map( item => {
         item.createTime = moment(item.createTime).format('YYYY-MM-DD') 
-        item.action = ['edit', 'delete']
+        item.action = ['Edit', 'Delete']
         return item
       })
     },
@@ -111,7 +111,7 @@ export default {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            http.axiospost('/deleteVNFType',{id}).then( res => {
+            axiospost('/deleteVNFType',{id}).then( res => {
               if(res.code === 200){
                 this.$message.success('Deleted successfully')
               }else this.$message.error('Network exception, please try again');
@@ -146,7 +146,7 @@ export default {
     }
   }
   .table{
-    width: 70%;
+    // width: 70%;
     .tag{
       padding:0  8px;
       border-radius: 12px;

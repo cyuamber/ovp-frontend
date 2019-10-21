@@ -11,7 +11,7 @@
         <div class="table">
           <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination">
             <span slot="action" slot-scope="action,record">
-              <a-tag v-for="item in action" :key="item" :color="item === 'edit'? 'blue' : 'red'" class="tag" 
+              <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag" 
               @click="(() => showEditOrDeleteModal(item,tab,record))">{{item}}</a-tag>
             </span>
           </a-table>
@@ -25,7 +25,7 @@
 <script>
 import Search from '../../components/Search/Search'
 import CreateOrEditModal from './VnfTypeObjectsModal'
-import http from '../../utils/http'
+import {axiosget, axiospost} from '../../utils/http';
 import moment from 'moment';
 
 export default {
@@ -89,7 +89,7 @@ export default {
       }
       this.tableData = data.body.map( item => {
         item.createTime = moment(item.createTime).format('YYYY-MM-DD') 
-        item.action = ['edit', 'delete']
+        item.action = ['Edit', 'Delete']
         return item
       })
     },
@@ -99,7 +99,7 @@ export default {
      // Filter by creating time
     onChange(date) {
       let selectDate = moment(date._d).format('YYYY-MM-DD')
-      http.axiosget('/getVNFTest',{createTime: selectDate}).then( res => {
+      axiosget('/getVNFTest',{createTime: selectDate}).then( res => {
         if(res.code === 200) {
           this.formatData(res);
           this.$message.success('The operation has been successful')
@@ -108,7 +108,8 @@ export default {
       })
     }, 
     getAllVnfTest(){
-      http.axiosget('/getVNFTest').then(res => {
+      this.loading = true
+      axiosget('/getVNFTest').then(res => {
         if(res.code === 200){
           this.formatData(res)
         }else {
@@ -131,7 +132,7 @@ export default {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            http.axiospost('/deleteVNFTest',{VNFFileName: VNFTest.VNFFileName}).then( res => {
+            axiospost('/deleteVNFTest',{VNFFileName: VNFTest.VNFFileName}).then( res => {
               if(res.code === 200){
                 this.$message.success('Deleted successfully')
               }else this.$message.error('Network exception, please try again');
@@ -167,7 +168,7 @@ export default {
   }
 }
 .table{
-    width: 80%;
+    // width: 80%;
     .tag{
       padding:0  8px;
       border-radius: 12px;

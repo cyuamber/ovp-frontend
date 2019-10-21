@@ -13,7 +13,7 @@
     <a-table
       style="marginTop:10px"
       :rowKey="(row,index)=>index"
-      :columns="columns"
+      :columns="mockcolumns"
       :loading="tableloading"
       :dataSource="metaData"
     >
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import http from "../utils/http";
+import {axiosget} from "../utils/http";
 import API from "../const/apis";
 import Loading from "../components/Loading/Loading";
 import CONSTANTS from "../const/constant";
@@ -96,8 +96,7 @@ export default {
       this.showLoading = true;
       this.buttonloading = true;
       this.tableloading = true;
-      http
-        .axiosget(API.mock.address)
+      axiosget(API.mock.address)
         .then(res => {
           this.metaData = res.data;
           this.buttonloading = false;
@@ -120,8 +119,7 @@ export default {
       this.showLoading = true;
       this.mockbuttonloading = true;
       this.mocktableloading = true;
-      http
-        .axiosget(API.mock.home)
+      axiosget(API.mock.home)
         .then(res => {
           this.mockData = res;
           this.mockbuttonloading = false;
@@ -142,8 +140,7 @@ export default {
     },
     getTestData() {
       const url = API.mock.alarmformdata;
-      http
-        .axiosget(url)
+      axiosget(url)
         .then(res => {
           if (res) {
             console.log(res, "=====> successfully get data");
@@ -161,8 +158,7 @@ export default {
         toast: ""
       };
       let url = `${API.mock.putname}/name`;
-      http
-        .axiosget(url)
+      axiosget(url)
         .then(res => {
           if (+res.code === 200 || +res.code === 201) {
             this.loadingMessage = {
@@ -190,8 +186,7 @@ export default {
         toast: ""
       };
       const param = { id: id };
-      http
-        .axiosget(API.mock.deleteaddress, param)
+      axiosget(API.mock.deleteaddress, param)
         .then(res => {
           if (+res.code === 200 || +res.code === 201) {
             this.loadingMessage = {

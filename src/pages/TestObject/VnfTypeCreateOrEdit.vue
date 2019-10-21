@@ -19,7 +19,7 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment';
-import http from '../../utils/http';
+import {axiospost} from '../../utils/http';
   export default {
     props: ['VnfTypeName','isEdit'],
     data(){
@@ -46,18 +46,19 @@ import http from '../../utils/http';
             this.$message.warning('Please modify and submit');
             return
           }
-          http.axiospost(url, data)
+          axiospost(url, data)
             .then((res) => {
               if(res.code === 200){
                 console.log(res)
                 this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
                 this.$emit('getAllVnfType')
               }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
+              this.$emit('close')
             },
             error => {
               this.$message.error('Network exception, please try again');
+              this.$emit('close')
             })
-            this.$emit('close')
           }
         });
       },

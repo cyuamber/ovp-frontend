@@ -25,7 +25,7 @@
 <script>
 import Search from '../../components/Search/Search';
 import CreateOrEditModal from './CreateOrEditModal'
-import http from '../../utils/http';
+import {axiospost, axiosget} from '../../utils/http';
 import moment from 'moment';
 
 export default {
@@ -126,7 +126,7 @@ export default {
     onChange(date){
       let selectDate = moment(date._d).format('YYYY-MM-DD')
       let url = this.currentTab === 'VIM ENV' ? '/getVIM': '/getVNFM' 
-      http.axiosget(url,{createTime: selectDate}).then( res => {
+      axiosget(url,{createTime: selectDate}).then( res => {
         if(res.code === 200) {
           this.formatData(res);
           this.$message.success('The operation has been successful')
@@ -140,7 +140,7 @@ export default {
     getAllTableData(){
       this.loading = true
       let url = this.currentTab === 'VIM ENV' ? '/getVIM': '/getVNFM'
-      http.axiosget(url).then(res => {
+      axiosget(url).then(res => {
         if(res.code === 200){
           this.formatData(res)
         }else {
@@ -194,7 +194,7 @@ export default {
                 VNFMtype: record.VNFMtype
               }
             }
-            http.axiospost(url,data).then( res => {
+            axiospost(url,data).then( res => {
               if(res.code === 200){
                 this.$message.success('Deleted successfully')
                 this.getAllTableData()
@@ -226,12 +226,11 @@ export default {
   .calendar{
     float: right;
     width: 280px;
-    margin-right: 20px;
+    // margin-right: 20px;
   }
 }
 .table{
     // width: 80%;
-
     .tag{
       padding:0  8px;
       border-radius: 12px;

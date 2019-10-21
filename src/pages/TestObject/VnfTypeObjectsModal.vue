@@ -43,7 +43,7 @@
 
 <script type="text/ecmascript-6">
 import moment from 'moment';
-import http from '../../utils/http';
+import {axiospost} from '../../utils/http';
   export default {
     props: ['isEdit', 'currentTab', 'VNFTest'],
     data(){
@@ -72,7 +72,7 @@ import http from '../../utils/http';
               createTime: this.isEdit ? this.VNFTest.createTime : moment(new Date()).format('YYYY-MM-DD'),
               VNFFileName: {}
             }
-            http.axiospost(url, data)
+            axiospost(url, data)
               .then((res) => {
                 if(res.code === 200){
                   this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
