@@ -5,11 +5,11 @@
         <div class="top">
           <a-button type="primary" @click="handleClick">Rigister {{tab}}</a-button>
           <Search class="search" @SearchVIMOrVNFM="SearchVIMOrVNFM" :currentPage="tab === 'VIM ENV' ? currentPage[0] : currentPage[1]"/>
-          <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
+          <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false"/>
         </div>
         <div class="table">
           <a-table :columns="tab === 'VIM ENV'? VIMColumns : VNFMColumns" :dataSource="tab === 'VIM ENV' ? VIMTableData : VNFMTableData" bordered :loading="loading" 
-          rowKey="userName" size="default" :pagination="pagination" :scroll="{ x: 1400 }">
+          rowKey="userName" size="default" :pagination="pagination" :scroll="{x: 1630}">
             <span slot="action" slot-scope="action,record">
               <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag" 
               @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -25,7 +25,8 @@
 <script>
 import Search from '../../components/Search/Search';
 import CreateOrEditModal from './CreateOrEditModal'
-import http from '../../utils/http';
+import {axiospost, axiosget} from '../../utils/http';
+import {testEnvVIMColumns, testEvnVNFMColumns} from '../../const/constant'
 import moment from 'moment';
 
 export default {
@@ -37,72 +38,8 @@ export default {
       isEdit: false,
       currentTab: 'VIM ENV',
       visible: false,
-      VIMColumns: [
-        {
-          title: 'State',
-          dataIndex: 'state',
-          fixed: 'left'
-        },
-        {
-          title: 'CloudOwner',
-          dataIndex: 'cloudOwner'
-        },
-        {
-          title: 'Cloud Region ID',
-          dataIndex: 'cloudRegionId',
-        },
-        {
-          title: 'Cloud Version',
-          dataIndex: 'cloudVersion',
-        },
-        {
-          title: 'Owner Defined Type',
-          dataIndex: 'ownerDefinedType',
-        },
-        {
-          title: 'Cloud Zone',
-          dataIndex: 'cloudZone'
-        },
-        {
-          title: 'User Name',
-          dataIndex: 'userName'
-        },
-        {
-          title: 'Password',
-          dataIndex: 'passwd'
-        },
-        {
-          title: 'Auth URL',
-          dataIndex: 'authUrl'
-        },
-        {
-          title: 'Tenant',
-          dataIndex: 'tenant'
-        },
-        {
-          title: 'Action',
-          dataIndex: 'action',
-          scopedSlots: { customRender: 'action' },
-          fixed: 'right'
-        }
-      ],
-      VNFMColumns: [
-        {title: 'Name', dataIndex: 'VNFMname',fixed: 'left'},
-        {title: 'Type', dataIndex: 'VNFMtype'},
-        {title: 'Vendor', dataIndex: 'VNFMvendor'},
-        {title: 'Vension', dataIndex: 'VNFMversion'},
-        {title: 'URL', dataIndex: 'url'},
-        {title: 'VIM', dataIndex: 'vim'},
-        {title: 'Certificate URL', dataIndex: 'authUrl'},
-        {title: 'User Name', dataIndex: 'userName'},
-        {title: 'Password', dataIndex: 'passwd'},
-         {
-          title: 'Action',
-          dataIndex: 'action',
-          scopedSlots: { customRender: 'action' },
-          fixed: 'right'
-        }
-      ],
+      VIMColumns: testEnvVIMColumns,
+      VNFMColumns: testEvnVNFMColumns,
       loading: false,
       VIMTableData: [],
       VNFMTableData: [],
@@ -126,7 +63,7 @@ export default {
     onChange(date){
       let selectDate = moment(date._d).format('YYYY-MM-DD')
       let url = this.currentTab === 'VIM ENV' ? '/getVIM': '/getVNFM' 
-      http.axiosget(url,{createTime: selectDate}).then( res => {
+      axiosget(url,{createTime: selectDate}).then( res => {
         if(res.code === 200) {
           this.formatData(res);
           this.$message.success('The operation has been successful')
@@ -140,7 +77,7 @@ export default {
     getAllTableData(){
       this.loading = true
       let url = this.currentTab === 'VIM ENV' ? '/getVIM': '/getVNFM'
-      http.axiosget(url).then(res => {
+      axiosget(url).then(res => {
         if(res.code === 200){
           this.formatData(res)
         }else {
@@ -194,7 +131,7 @@ export default {
                 VNFMtype: record.VNFMtype
               }
             }
-            http.axiospost(url,data).then( res => {
+            axiospost(url,data).then( res => {
               if(res.code === 200){
                 this.$message.success('Deleted successfully')
                 this.getAllTableData()
@@ -226,12 +163,11 @@ export default {
   .calendar{
     float: right;
     width: 280px;
-    margin-right: 20px;
+    // margin-right: 20px;
   }
 }
 .table{
     // width: 80%;
-
     .tag{
       padding:0  8px;
       border-radius: 12px;

@@ -60,17 +60,18 @@
 </template>
 
 <script type="text/ecmascript-6">
-import moment from "moment";
-import http from "../../utils/http";
+
+import moment from 'moment';
+import {axiospost} from '../../utils/http';
 export default {
-  props: ["isEdit", "currentTab", "VNFTest"],
-  data() {
+  props: ['isEdit', 'currentTab', 'VNFTest'],
+  data(){
     return {
       showModal: true,
       form: this.$form.createForm(this),
-      types: ["VNF", "PNF"],
-      selected: ""
-    };
+      types: ['VNF','PNF'],
+      selected: ''
+    }
   },
   methods: {
     handleCancel() {
@@ -92,34 +93,25 @@ export default {
               : moment(new Date()).format("YYYY-MM-DD"),
             VNFFileName: {}
           };
-          http.axiospost(url, data).then(
-            res => {
-              if (res.code === 200) {
-                this.$message.success(
-                  this.isEdit
-                    ? "Successfully updated"
-                    : "Has been added successfully"
-                );
-                this.$emit("getAllVnfType");
-              } else
-                this.$message.error(
-                  this.isEdit ? "Update failed" : "add failed"
-                );
+          axiospost(url, data)
+            .then((res) => {
+              if(res.code === 200){
+                this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
+                this.$emit('getAllVnfType')
+              }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
             },
             error => {
-              console.log(error);
-              this.$message.error("Network exception, please try again");
-            }
-          );
-          this.$emit("close");
+              this.$message.error('Network exception, please try again');
+            })
+            this.$emit('close')
         }
-      });
+      })
     },
-    handleSelect(val) {
+    handleSelect(val){
       this.selected = val;
     },
-    handleChange() {
-      console.log(111);
+    handleChange(){
+      console.log(111)
     }
   }
 };

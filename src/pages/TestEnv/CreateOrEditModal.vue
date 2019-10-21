@@ -33,7 +33,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import http from '../../utils/http'
+import {axiospost} from '../../utils/http'
   export default {
     props: ['currentTab', 'isEdit', 'initValues'],
     data(){
@@ -75,7 +75,7 @@ import http from '../../utils/http'
                 password: values.password
               }
             }
-            http.axiospost(url, data)
+            axiospost(url, data)
               .then((res) => {
                 if(res.code === 200){
                   this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
