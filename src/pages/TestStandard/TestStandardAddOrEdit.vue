@@ -24,7 +24,7 @@
 
 <script type="text/ecmascript-6">
     import moment from 'moment';
-    import http from '../../utils/http';
+    import {axiospost} from '../../utils/http'
     export default {
         props: ['singleData','isEdit'],
         data(){
@@ -51,7 +51,7 @@
                             publishTime: moment(new Date()).format('YYYY-MM-DD')
                         };
                         console.log(data,"data");
-                        http.axiospost(url, data)
+                        axiospost(url, data)
                             .then((res) => {
                                     if(res.code === 200){
                                         this.$message.success('Has been added successfully');
@@ -71,8 +71,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-
-</style>

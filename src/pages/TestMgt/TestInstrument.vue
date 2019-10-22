@@ -19,37 +19,20 @@
 
 <script>
     import moment from 'moment'
-    import http from '../../utils/http'
+    import {axiospost, axiosget} from '../../utils/http'
     import Search from '../../components/Search/Search'
+    import {TestInsrigisterColumns} from '../../const/constant'
     import RigisterOrEdit from './TestInsrigisterOrEdit'
 export default {
-  name: "TestInstrument",
+    name: "TestInstrument",
+    components: {
+        Search,
+        RigisterOrEdit
+    },
     data(){
         return{
             visible: false,
-            columns: [
-                {
-                    title: 'Name',
-                    dataIndex: 'meterSysName'
-                },
-                {
-                    title: 'Vendor',
-                    dataIndex: 'meterSysVendor'
-                },
-                {
-                    title: 'Mnt Address',
-                    dataIndex: 'meterSysUrl'
-                },
-                {
-                    title: 'Create Time',
-                    dataIndex: 'createTime'
-                },
-                {
-                    title: 'Action',
-                    dataIndex: 'action',
-                    scopedSlots: { customRender: 'action' }
-                }
-            ],
+            columns: TestInsrigisterColumns,
             tableData: [],
             loading: true,
             pagination: {},
@@ -58,14 +41,16 @@ export default {
             isEdit: false,
         }
     },
-
+    mounted () {
+        this.getAllMeterSys()
+    },
     methods: {
         handleClick(){
             this.visible = true;
             this.isEdit = false
         },
         getAllMeterSys(){
-            http.axiosget('/getMeterSys').then(res => {
+            axiosget('/getMeterSys').then(res => {
                 if(res.code === 200){
                     this.formatData(res)
                 }else {
@@ -77,7 +62,7 @@ export default {
         // Filter by creating time
         onChange(date) {
             let selectDate = moment(date._d).format('YYYY-MM-DD');
-            http.axiosget('/getMeterSys',{createTime: selectDate}).then( res => {
+            axiosget('/getMeterSys',{createTime: selectDate}).then( res => {
                 if(res.code === 200) this.formatData(res);
                 else this.$message.error('Network exception, please try again');
             })
@@ -101,8 +86,7 @@ export default {
             this.visible = false;
         },
         showEditOrDeleteModal(item,data){
-            console.log(item,"item")
-            if(item === 'edit') {
+            if(item === 'EDIT') {
                 this.visible = true;
                 this.isEdit = true;
                 this.singleData = Object.assign({},data);
@@ -114,7 +98,7 @@ export default {
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        http.axiospost('/deleteMeterSys',{meterSysName:data.meterSysName}).then( res => {
+                        axiospost('/deleteMeterSys',{meterSysName:data.meterSysName}).then( res => {
                             if(res.code === 200){
                                 this.$message.success('Deleted successfully')
                             }else this.$message.error('Network exception, please try again');
@@ -123,14 +107,7 @@ export default {
                 });
             }
         }
-    },
-    mounted () {
-        this.getAllMeterSys()
-    },
-    components: {
-        Search,
-        RigisterOrEdit
-    },
+    }
 };
 </script>
 

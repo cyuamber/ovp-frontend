@@ -5,7 +5,7 @@
                 <a-form-item label="XNF Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
                     <a-input v-decorator="['meterName',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterName }]"/>
                 </a-form-item>
-                <a-form-item label="XNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                <a-form-item label="XNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 5 }">
                     <a-select v-decorator="['meterType',{ rules: [{ required: true, }],initialValue:this.isEdit ? singleData.tesyMeterType:types[0]}]"
                     >
                         <a-select-option v-for="type of types" :key="type" :value="type">
@@ -39,7 +39,7 @@
 
 <script type="text/ecmascript-6">
     import moment from 'moment';
-    import http from '../../utils/http';
+    import {axiospost} from '../../utils/http'
     export default {
         props: ['singleData','isEdit'],
         data(){
@@ -64,7 +64,7 @@
                 return false;
             },
             handleUpload(formData) {
-                http.axiospost('/uploadVNFFile',{VNFFileName:formData}).then(res => {
+                axiospost('/uploadVNFFile',{VNFFileName:formData}).then(res => {
                     if(res.code === 200){
                         this.fileList = [];
                         this.$message.success('upload successfully.');
@@ -95,7 +95,7 @@
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
                         this.handleUpload(formData);
-                        http.axiospost(url, data)
+                        axiospost(url, data)
                             .then((res) => {
                                     if(res.code === 200){
                                         this.$message.success('Has been added successfully');
@@ -117,6 +117,8 @@
 </script>
 
 <style scoped>
-
+    .upload-test{
+        font-size: 12px !important;
+    }
 
 </style>

@@ -166,10 +166,90 @@ const testEvnVNFMColumns = [{
         fixed: 'right'
     }
 ]
+const TestInsrigisterColumns = [
+    {
+        title: 'Name',
+        dataIndex: 'meterSysName'
+    },
+    {
+        title: 'Vendor',
+        dataIndex: 'meterSysVendor'
+    },
+    {
+        title: 'Mnt Address',
+        dataIndex: 'meterSysUrl'
+    },
+    {
+        title: 'Create Time',
+        dataIndex: 'createTime'
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        scopedSlots: { customRender: 'action' }
+    }
+]
+const VnfpnfSuiteColumns = [
+    {
+        title: 'Name',
+        dataIndex: 'tesyMeterName'
+    },
+    {
+        title: 'Vendor',
+        dataIndex: 'tesyMeterVendor'
+    },
+    {
+        title: 'Version',
+        dataIndex: 'tesyMeterVersion'
+    },
+    {
+        title: 'Type',
+        dataIndex: 'tesyMeterType'
+    },
+    {
+        title: 'Create Time',
+        dataIndex: 'createTime'
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        scopedSlots: {customRender: 'action'}
+    }
+]
+const TestStandardColumns = [
+    {
+        title: 'ID',
+        dataIndex: 'testSpecId'
+    },
+    {
+        title: 'Name',
+        dataIndex: 'testSpecName'
+    },
+    {
+        title: 'Version',
+        dataIndex: 'testSpecVersion'
+    },
+    {
+        title: 'VNF Type',
+        dataIndex: 'VNFtype'
+    },
+    {
+        title: 'Publish Time',
+        dataIndex: 'publishTime'
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        scopedSlots: { customRender: 'action' }
+    }
+]
 export {
     mockcolumns,
     VNFTypeColumns,
     VNFTypeObjectsColumns,
     testEnvVIMColumns,
-    testEvnVNFMColumns
+    testEvnVNFMColumns,
+    TestInsrigisterColumns,
+    VnfpnfSuiteColumns,
+    TestStandardColumns
 }
