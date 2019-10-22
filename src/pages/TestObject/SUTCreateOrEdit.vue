@@ -8,10 +8,14 @@
           { rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.VNFTestName },
         ]" />
         </a-form-item>
-        <a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 5 }">
-          <a-select :defaultValue="isEdit ? VNFTest.VNFTypeName : 'VNF'" @change="handleSelect">
-            <a-select-option v-for="type in types" :key="type" :value="type"> {{type}} </a-select-option>
+        <a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+          <a-select :disabled="VNFOptions.length === 0" class="select"
+            v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]">
+            <a-select-option v-for="type in VNFOptions" :key="type" :value="type"> {{type}} </a-select-option>
           </a-select>
+          <a-spin :spinning="VNFOptions.length === 0" class='skip-size'>
+            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
+          </a-spin>
         </a-form-item>
         <a-form-item :label="currentTab + ' Vendor'" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input v-decorator="[
@@ -23,7 +27,7 @@
           'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.VNFTestVersion},
         ]"/>
         </a-form-item>
-        <a-form-item label="Upload" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+        <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
            <a-upload-dragger
             name="file"
             @change="handleChange"
@@ -38,21 +42,37 @@
         </a-form-item>
       </a-form>
     </template>
+    
   </a-modal>
 </template>
 
 <script type="text/ecmascript-6">
 import moment from 'moment';
+import {mapState} from 'vuex'
 import {axiospost} from '../../utils/http';
   export default {
-    props: ['isEdit', 'currentTab', 'VNFTest'],
+    props: ['isEdit', 'currentTab'],
     data(){
       return {
         showModal: true,
         form: this.$form.createForm(this),
-        types: ['VNF','PNF'],
-        selected: ''
+        selected: '',
       }
+    },
+    computed: {
+      ...mapState({
+        VNFOptions: state => state.testSUT.VNFOptions,
+        VNFTest: state => state.testSUT.VNFTest 
+      })
+    },
+    watch: {
+      showModal(val){
+        if(!val) this.$store.dispatch('testSUT/clearOptions')
+      }
+    },
+    destroyed () {
+      this.$store.dispatch('testSUT/clearOptions')
+      this.$store.dispatch('testSUT/getVNFTest', {})
     },
     methods: {
       handleCancel(){
@@ -79,7 +99,7 @@ import {axiospost} from '../../utils/http';
                   this.$emit('getAllVnfType')
                 }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
               },
-              error => {
+              () => {
                 this.$message.error('Network exception, please try again');
               })
             this.$emit('close')
@@ -97,6 +117,10 @@ import {axiospost} from '../../utils/http';
 </script>
 
 <style lang="less" scoped>
+.select{
+  width: 70%;
+  margin-right: 5%;
+}
 .upload-text{
   font-size: 12px !important;
 }

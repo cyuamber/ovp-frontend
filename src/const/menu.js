@@ -15,7 +15,7 @@ export default {
                 isChildren: true,
                 children: [{
                     auth: ['admin', 'customer'],
-                    name: 'VNF Type Objects MGT',
+                    name: 'Test SUT MGT',
                     iconType: '',
                 }]
             },
