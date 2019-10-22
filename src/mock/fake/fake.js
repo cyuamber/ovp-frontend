@@ -132,6 +132,12 @@ module.exports = {
             }
         })
     },
+    getTestMeterVNFType: {
+        code: 200,
+        message: 'SUCCESS',
+        total: 50,
+        body: ['VNF','PNF','XNF','NFVI']
+    },
     createTestMeter: {
         code: 200,
         message: 'SUCCESS',
@@ -176,9 +182,16 @@ module.exports = {
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
                 VNFtype: faker.database.type(),
+                PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),
             }
         })
+    },
+    getTestSpecVNFType: {
+        code: 200,
+        message: 'SUCCESS',
+        total: 50,
+        body: ['VNF','PNF','XNF','NFVI']
     },
     addTestSpec: {
         code: 200,
@@ -189,6 +202,7 @@ module.exports = {
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
                 VNFtype: faker.database.type(),
+                PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),
             }
         })
@@ -202,6 +216,7 @@ module.exports = {
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
                 VNFtype: faker.database.type(),
+                PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),
             }
         })

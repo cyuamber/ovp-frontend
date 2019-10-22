@@ -1,43 +1,45 @@
 <template>
-  <div class="test-ins__container">
-    <div class="top">
-      <a-button type="primary" @click="handleClick">Add Standard</a-button>
-      <Search class="search" @testStandardSearch="testStandardSearch" :currentPage="currentPage"/>
-      <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
+  <div class="test-spec">
+    <div class="test-spec__top">
+      <a-button type="primary" @click="handleClick">Add Spec</a-button>
+      <Search class="search test-spec__search" @testSpecSearch="testSpecSearch" :currentPage="currentPage"/>
+      <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
     </div>
-    <div class="table">
+    <div class="test-spec__table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination">
       <span slot="action" slot-scope="action,record">
-        <a-tag v-for="item in action" :key="item" :color="item === 'EDIT'? 'blue' : 'red'" class="tag"
+        <a-tag v-for="item in action" :key="item" :color="item === 'EDIT'? 'blue' : 'red'" class="test-spec__tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
       </span>
       </a-table>
     </div>
-    <StandardAddOrEdit v-if="visible" @close="close" @getAllTestSpec="getAllTestSpec" :singleData="singleData" :isEdit="isEdit"/>
+    <TestSpecMGTAddOrEdit v-if="visible" @close="close" @getAllTestSpec="getAllTestSpec" :singleData="singleData" :spinning="spinning" :VNFtypes="VNFtypes" :isEdit="isEdit"/>
   </div>
 </template>
 <script>
     import moment from 'moment'
     import {axiospost, axiosget} from '../../utils/http'
     import Search from '../../components/Search/Search'
-    import {TestStandardColumns} from '../../const/constant'
-    import StandardAddOrEdit from './TestStandardAddOrEdit'
+    import {TestSpecColumns} from '../../const/constant'
+    import TestSpecMGTAddOrEdit from './TestSpecMGTAddOrEdit'
 export default {
-  name: "TestStandard",
+  name: "TestSpecMGT",
     components: {
         Search,
-        StandardAddOrEdit
+        TestSpecMGTAddOrEdit
     },
     data(){
         return{
             visible: false,
-            columns: TestStandardColumns,
+            columns: TestSpecColumns,
             tableData: [],
             loading: true,
             pagination: {},
             singleData:{},
-            currentPage:'TestInstrumentMGT',
+            currentPage:'TestSpecMGT',
             isEdit: false,
+            VNFtypes: [],
+            spinning: true
         }
     },
     mounted () {
@@ -46,7 +48,18 @@ export default {
     methods: {
         handleClick(){
             this.visible = true;
-            this.isEdit = false
+            this.isEdit = false;
+            this.getVNFTypes()
+        },
+        getVNFTypes(){
+            axiosget('/getTestSpecVNFType').then(res => {
+                this.spinning = false;
+                if(res.code === 200){
+                    this.VNFtypes = res.body;
+                }else {
+                    this.$message.error('Network exception, please try again');
+                }
+            })
         },
         getAllTestSpec(){
             axiosget('/getTestSpec').then(res => {
@@ -78,7 +91,7 @@ export default {
                 return item
             })
         },
-        testStandardSearch(data){
+        testSpecSearch(data){
             this.formatData(data)
         },
         close(){
@@ -91,7 +104,7 @@ export default {
                 this.singleData = Object.assign({},data);
             }else {
                 this.$confirm({
-                    title: 'Are you sure delete this standard?',
+                    title: 'Are you sure delete this Spec?',
                     content: 'Id: '+data.testSpecId,
                     okText: 'Yes',
                     okType: 'danger',
@@ -111,19 +124,19 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .test-ins__container{
-    .top{
+  .test-spec{
+    .test-spec__top{
       margin-bottom: 30px;
-      .search{
+      .test-spec__search{
         display: inline-block;
         margin-left: 40px;
       }
-      .calendar{
+      .test-spec__calendar{
         float: right;
         width: 280px;
       }
     }
-    .tag{
+    .test-spec__tag{
       padding:0  8px;
       border-radius: 12px;
     }

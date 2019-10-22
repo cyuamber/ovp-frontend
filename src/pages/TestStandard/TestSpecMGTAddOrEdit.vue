@@ -11,8 +11,18 @@
                 <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['testVersion',{ rules: [{ required: true,}],initialValue:singleData.testSpecVersion }]"/>
                 </a-form-item>
-                <a-form-item label="VNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['testVNFtype',{ rules: [{ required: true,}],initialValue:singleData.VNFtype }]"/>
+                <a-form-item label="VNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+                    <a-select class="select" v-decorator="['VNFtype',{ rules: [{ required: true, }],initialValue:this.isEdit ? singleData.VNFtype:VNFtypes[0]}]">
+                        <a-select-option v-for="type of VNFtypes" :key="type" :value="type">
+                            {{type}}
+                        </a-select-option>
+                    </a-select>
+                    <a-spin  size="small" :spinning="spinning">
+                        <a-icon slot="indicator"  type="loading-3-quarters" style="font-size: 24px" spin />
+                    </a-spin>
+                </a-form-item>
+                <a-form-item label="Publish ORG"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                    <a-input v-decorator="['PublishORG',{ rules: [{ required: true,}],initialValue:singleData.PublishORG }]"/>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
                     <a-button type="primary" html-type="submit">OK</a-button>
@@ -26,12 +36,12 @@
     import moment from 'moment';
     import {axiospost} from '../../utils/http'
     export default {
-        props: ['singleData','isEdit'],
+        props: ['singleData','VNFtypes','spinning','isEdit'],
         data(){
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
-                title: this.isEdit ? 'Edit Standard':'Add Standard'
+                title: this.isEdit ? 'Edit Spec':'Add Spec',
             }
         },
         methods: {
@@ -47,7 +57,8 @@
                             testSpecId: values.testId,
                             testSpecName: values.testName,
                             testSpecVersion: values.testVersion,
-                            VNFtype: values.testVNFtype,
+                            VNFtype: values.VNFtype,
+                            PublishORG: values.PublishORG,
                             publishTime: moment(new Date()).format('YYYY-MM-DD')
                         };
                         console.log(data,"data");
@@ -71,3 +82,11 @@
         }
     }
 </script>
+
+<style lang="less" scoped>
+    .select{
+        width: 70%;
+        margin-right: 5%;
+    }
+
+</style>

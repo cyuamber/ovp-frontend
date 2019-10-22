@@ -62,10 +62,10 @@ import http from '../../utils/http'
           this.key = 'testTaskId';
           this.event ='VNFSuiteSearch';
           break;
-        case 'TestStandardMGT':
+        case 'TestSpecMGT':
           this.url = '/GETTestSpec';
           this.key = 'testSpecId';
-          this.event ='testStandardSearch';
+          this.event ='testSpecSearch';
           break;
       }
     }

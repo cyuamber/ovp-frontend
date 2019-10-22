@@ -22,8 +22,8 @@ import VnfpnfSuite from '../pages/TestMgt/VnfpnfSuite.vue';
 import TestJob from '../pages/TestJob/TestJob.vue';
 //TestCase
 import TestCase from '../pages/TestCase/TestCase.vue';
-//TestStandard
-import TestStandard from '../pages/TestStandard/TestStandard.vue';
+//TestSpecMGT
+import TestSpecMGT from '../pages/TestStandard/TestSpecMGT.vue';
 
 Vue.use(Router);
 
@@ -140,8 +140,8 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'TestStandard',
-          component: TestStandard
+          name: 'TestSpecMGT',
+          component: TestSpecMGT
         },
       ]
     },

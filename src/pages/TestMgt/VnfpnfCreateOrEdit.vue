@@ -5,13 +5,16 @@
                 <a-form-item label="XNF Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
                     <a-input v-decorator="['meterName',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterName }]"/>
                 </a-form-item>
-                <a-form-item label="XNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 5 }">
-                    <a-select v-decorator="['meterType',{ rules: [{ required: true, }],initialValue:this.isEdit ? singleData.tesyMeterType:types[0]}]"
+                <a-form-item label="XNF Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+                    <a-select  class="select"  v-decorator="['meterType',{ rules: [{ required: true, }],initialValue:this.isEdit ? singleData.tesyMeterType:VNFtypes[0]}]"
                     >
-                        <a-select-option v-for="type of types" :key="type" :value="type">
+                        <a-select-option v-for="type of VNFtypes" :key="type" :value="type">
                            {{type}}
                         </a-select-option>
                     </a-select>
+                    <a-spin  size="small" :spinning="spinning">
+                        <a-icon slot="indicator"  type="loading-3-quarters" style="font-size: 24px" spin />
+                    </a-spin>
                 </a-form-item>
                 <a-form-item label="XNF Vendor"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['meterVendor',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterVendor }]"/>
@@ -19,7 +22,7 @@
                 <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['meterVersion',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterVersion }]"/>
                 </a-form-item>
-                <a-form-item label="Upload"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+                <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
                    <a-upload-dragger
                            :fileList="fileList"
                            :remove="handleRemove"
@@ -41,13 +44,12 @@
     import moment from 'moment';
     import {axiospost} from '../../utils/http'
     export default {
-        props: ['singleData','isEdit'],
+        props: ['singleData','VNFtypes','spinning','isEdit'],
         data(){
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
                 title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
-                types:["VNF","PNF"],
                 fileList: [],
             }
         },
@@ -119,6 +121,10 @@
 <style scoped>
     .upload-test{
         font-size: 12px !important;
+    }
+    .select{
+        width: 70%;
+        margin-right: 5%;
     }
 
 </style>

@@ -15,8 +15,7 @@
       </span>
             </a-table>
         </div>
-        <xNFCreateOrEdit v-if="visible" @close="close" @getAllTestMeter="getAllTestMeter" :singleData="singleData"
-                         :isEdit="isEdit"/>
+        <xNFCreateOrEdit v-if="visible" @close="close" @getAllTestMeter="getAllTestMeter" :singleData="singleData" :spinning="spinning" :VNFtypes="VNFtypes" :isEdit="isEdit"/>
     </div>
 </template>
 
@@ -43,6 +42,8 @@
                 singleData:{},
                 currentPage:'VNF/PNFSuiteMGT',
                 isEdit: false,
+                VNFtypes: [],
+                spinning: true
             }
         },
         mounted() {
@@ -51,7 +52,18 @@
         methods: {
             handleClick(){
                 this.visible = true;
-                this.isEdit = false
+                this.isEdit = false;
+                this.getVNFTypes()
+            },
+            getVNFTypes(){
+                axiosget('/getTestMeterVNFType').then(res => {
+                    this.spinning = false;
+                    if(res.code === 200){
+                        this.VNFtypes = res.body;
+                    }else {
+                        this.$message.error('Network exception, please try again');
+                    }
+                })
             },
             getAllTestMeter() {
                 axiosget('/getTestMeter').then(res => {

@@ -216,7 +216,7 @@ const VnfpnfSuiteColumns = [
         scopedSlots: {customRender: 'action'}
     }
 ]
-const TestStandardColumns = [
+const TestSpecColumns = [
     {
         title: 'ID',
         dataIndex: 'testSpecId'
@@ -232,6 +232,10 @@ const TestStandardColumns = [
     {
         title: 'VNF Type',
         dataIndex: 'VNFtype'
+    },
+    {
+        title: 'Publish ORG',
+        dataIndex: 'PublishORG'
     },
     {
         title: 'Publish Time',
@@ -251,5 +255,5 @@ export {
     testEvnVNFMColumns,
     TestInsrigisterColumns,
     VnfpnfSuiteColumns,
-    TestStandardColumns
+    TestSpecColumns
 }
