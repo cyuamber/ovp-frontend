@@ -1,12 +1,23 @@
 <template>
-  <a-modal :title="(isEdit === true ? 'Edit ': 'Create ') + currentTab + ' SUT'" v-model="showModal" :footer="null" @cancel="handleCancel">
+  <a-modal
+    :title="(isEdit === true ? 'Edit ': 'Create ') + currentTab + ' SUT'"
+    v-model="showModal"
+    :footer="null"
+    @cancel="handleCancel"
+  >
     <template>
       <a-form :form="form" @submit="handleSubmit">
-        <a-form-item :label=" currentTab +' Name'" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-          <a-input v-decorator="[
+        <a-form-item
+          :label=" currentTab +' Name'"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="[
           'TestName',
           { rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.VNFTestName },
-        ]" />
+        ]"
+          />
         </a-form-item>
         <a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
           <a-select :disabled="VNFOptions.length === 0" class="select"
@@ -17,15 +28,23 @@
             <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
           </a-spin>
         </a-form-item>
-        <a-form-item :label="currentTab + ' Vendor'" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-          <a-input v-decorator="[
+        <a-form-item
+          :label="currentTab + ' Vendor'"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="[
           'vendor', { rules: [{ required: true, message: 'Vendor is required' }], initialValue: VNFTest.VNFTestVendor},
-        ]"/>
+        ]"
+          />
         </a-form-item>
         <a-form-item label="Vension" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-          <a-input  v-decorator="[
+          <a-input
+            v-decorator="[
           'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.VNFTestVersion},
-        ]"/>
+        ]"
+          />
         </a-form-item>
         <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
            <a-upload-dragger
@@ -36,9 +55,7 @@
           </a-upload-dragger>
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-          <a-button type="primary" html-type="submit">
-            Submit
-          </a-button>
+          <a-button type="primary" html-type="submit">Submit</a-button>
         </a-form-item>
       </a-form>
     </template>
@@ -47,6 +64,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+
 import moment from 'moment';
 import {mapState} from 'vuex'
 import {axiospost} from '../../utils/http';
@@ -103,17 +121,17 @@ import {axiospost} from '../../utils/http';
                 this.$message.error('Network exception, please try again');
               })
             this.$emit('close')
-          }
-        })
-      },
-      handleSelect(val){
-        this.selected = val;
-      },
-      handleChange(){
-        console.log(111)
-      }
+        }
+      })
+    },
+    handleSelect(val){
+      this.selected = val;
+    },
+    handleChange(){
+      console.log(111)
     }
   }
+};
 </script>
 
 <style lang="less" scoped>
@@ -124,5 +142,4 @@ import {axiospost} from '../../utils/http';
 .upload-text{
   font-size: 12px !important;
 }
- 
 </style>

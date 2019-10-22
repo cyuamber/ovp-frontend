@@ -9,6 +9,19 @@ module.exports = {
     'deleteVNFType': fakeData.deleteVNFType,
     'getVNFTest': fakeData.getVNFTest,
     'deleteVNFTest': fakeData.deleteVNFTest,
+    'getMeterSys': fakeData.getMeterSys,
+    'loginMeterSys': fakeData.loginMeterSys,
+    'updateMeterSys': fakeData.updateMeterSys,
+    'deleteMeterSys': fakeData.deleteMeterSys,
+    'getTestMeter': fakeData.getTestMeter,
+    'createTestMeter': fakeData.createTestMeter,
+    'updateTestMeter': fakeData.updateTestMeter,
+    'deleteTestMeter': fakeData.deleteTestMeter,
+    'uploadVNFFile': fakeData.uploadVNFFile,
+    'getTestSpec': fakeData.getTestSpec,
+    'addTestSpec': fakeData.addTestSpec,
+    'updateTestSpec': fakeData.updateTestSpec,
+    'deleteTestSpec': fakeData.deleteTestSpec,
     'createVNFTest': fakeData.createVNFTest,
     'updateVNFTest': fakeData.updateVNFTest,
     'getVIM': fakeData.getVIM,
@@ -18,5 +31,5 @@ module.exports = {
     'loginVNFM': fakeData.loginVNFM,
     'updateVNFM': fakeData.updateVNFM,
     'deleteVIM': fakeData.deleteVIM,
-    'deleteVNFM': fakeData.deleteVNFM 
+    'deleteVNFM': fakeData.deleteVNFM
 }

@@ -5,9 +5,9 @@ import Router from 'vue-router';
 //layout
 import Layout from '../components/layout/layout.vue';
 //login
-import Login from '../pages/Login/Login.vue';
+// import Login from '../pages/Login/Login.vue';
 //home
-import Home from '../pages/Home.vue';
+// import Home from '../pages/Home.vue';
 //Dashboard
 import Dashboard from '../pages/Dashboard/Dashboard.vue';
 //Test Objects MGT
@@ -30,18 +30,26 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/dashboard',
     },
     {
       path: '/home',
-      name: 'Home',
-      component: Home
+      redirect: '/dashboard',
     },
     {
       path: '/login',
-      name: 'Login',
-      component: Login
+      redirect: '/dashboard',
     },
+    // {
+    //   path: '/home',
+    //   name: 'Home',
+    //   component: Home
+    // },
+    // {
+    //   path: '/login',
+    //   name: 'Login',
+    //   component: Login
+    // },
     {
       path: '/dashboard',
       component: Layout,

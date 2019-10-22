@@ -22,12 +22,12 @@ module.exports = {
         }
     }),
     createVNFType: {
-            code: 200,
-            message: 'SUCCESS',
-            body: {
-                id: faker.random.number(),
-                VNFTypeName: faker.random.words(),
-                createTime: faker.date.recent()
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            id: faker.random.number(),
+            VNFTypeName: faker.random.words(),
+            createTime: faker.date.recent()
         }
     },
     updateVNFType: {
@@ -42,8 +42,8 @@ module.exports = {
     getVNFType: {
         code: 200,
         message: 'SUCCESS',
-        total:50,
-        body: _.times(10,function(n){
+        total: 50,
+        body: _.times(10, function (n) {
             return {
                 id: n,
                 VNFTypeName: faker.random.words(),
@@ -58,12 +58,12 @@ module.exports = {
     getVNFTest: {
         code: 200,
         message: 'SUCCESS',
-        total:50,
-        body:  _.times(10,function(n){
+        total: 50,
+        body: _.times(10, function (n) {
             return {
                 id: n,
                 VNFTestName: faker.name.firstName(),
-                VNFTestVendor:faker.random.word(),
+                VNFTestVendor: faker.random.word(),
                 VNFTestVersion: 'V' + faker.random.number(),
                 VNFTypeName: faker.name.lastName(),
                 createTime: faker.date.recent(),
@@ -74,6 +74,141 @@ module.exports = {
     deleteVNFTest: {
         code: 200,
         message: 'SUCCESS',
+    },
+    getMeterSys: {
+        code: 200,
+        message: 'SUCCESS',
+        total: 50,
+        body: _.times(10, function (n) {
+            return {
+                meterSysName: n + 1,
+                meterSysVendor: faker.company.companyName(),
+                meterSysUrl: faker.internet.url(),
+                createTime: faker.date.recent(),
+                username: faker.name.findName(),
+                password: faker.internet.password()
+            }
+        })
+    },
+    loginMeterSys: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10, function (n) {
+            return {
+                meterSysName: n,
+                meterSysVendor: faker.company.companyName(),
+                meterSysUrl: faker.internet.url(),
+                createTime: faker.date.recent()
+            }
+        })
+    },
+    updateMeterSys: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10, function (n) {
+            return {
+                meterSysName: n,
+                meterSysVendor: faker.company.companyName(),
+                meterSysUrl: faker.internet.url(),
+                createTime: faker.date.recent()
+            }
+        })
+    },
+    deleteMeterSys: {
+        code: 200,
+        message: 'SUCCESS'
+    },
+    getTestMeter: {
+        code: 200,
+        message: 'SUCCESS',
+        total: 50,
+        body: _.times(10, function (n) {
+            return {
+                tesyMeterName: n + 1,
+                tesyMeterVendor: faker.company.companyName(),
+                tesyMeterVersion: faker.random.number(),
+                tesyMeterType: faker.database.type(),
+                createTime: faker.date.recent(),
+            }
+        })
+    },
+    createTestMeter: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10, function (n) {
+            return {
+                tesyMeterName: n,
+                tesyMeterVendor: faker.company.companyName(),
+                tesyMeterVersion: faker.random.number(),
+                tesyMeterType: faker.database.type(),
+                createTime: faker.date.recent(),
+            }
+        })
+    },
+    updateTestMeter: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10, function (n) {
+            return {
+                tesyMeterName: n,
+                tesyMeterVendor: faker.company.companyName(),
+                tesyMeterVersion: faker.random.number(),
+                tesyMeterType: faker.database.type(),
+                createTime: faker.date.recent(),
+            }
+        })
+    },
+    deleteTestMeter: {
+        code: 200,
+        message: 'SUCCESS'
+    },
+    uploadVNFFile: {
+        code: 200,
+        message: 'SUCCESS'
+    },
+    getTestSpec: {
+        code: 200,
+        message: 'SUCCESS',
+        total: 50,
+        body: _.times(10, function (n) {
+            return {
+                testSpecId: n + 1,
+                testSpecName: faker.commerce.productName(),
+                testSpecVersion: faker.random.number(),
+                VNFtype: faker.database.type(),
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
+    addTestSpec: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10, function (n) {
+            return {
+                testSpecId: n,
+                testSpecName: faker.commerce.productName(),
+                testSpecVersion: faker.random.number(),
+                VNFtype: faker.database.type(),
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
+    updateTestSpec: {
+        code: 200,
+        message: 'SUCCESS',
+        body: _.times(10, function (n) {
+            return {
+                testSpecId: n,
+                testSpecName: faker.commerce.productName(),
+                testSpecVersion: faker.random.number(),
+                VNFtype: faker.database.type(),
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
+    deleteTestSpec: {
+        code: 200,
+        message: 'SUCCESS'
     },
     createVNFTest: {
         code: 200,
@@ -102,8 +237,8 @@ module.exports = {
     getVIM: {
         code: 200,
         message: 'SUCCESS',
-        total:50,
-        body:  _.times(10,function(n){
+        total: 50,
+        body: _.times(10, function (n) {
             return {
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),
@@ -112,7 +247,7 @@ module.exports = {
                 ownerDefinedType: faker.random.word(),
                 cloudZone: faker.random.word(),
                 userName: faker.internet.userName(),
-                passwd: faker.internet.password(), 
+                passwd: faker.internet.password(),
                 authUrl: faker.internet.url(),
                 tenant: faker.internet.userName()
             }
@@ -121,7 +256,7 @@ module.exports = {
     loginVIM: {
         code: 200,
         message: 'SUCCESS',
-        body:  _.times(10,function(n){
+        body: _.times(10, function (n) {
             return {
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),
@@ -130,7 +265,7 @@ module.exports = {
                 ownerDefinedType: faker.random.word(),
                 cloudZone: faker.random.word(),
                 userName: faker.internet.userName(),
-                passwd: faker.internet.password(), 
+                passwd: faker.internet.password(),
                 authUrl: faker.internet.url(),
                 tenant: faker.internet.userName(),
             }
@@ -139,7 +274,7 @@ module.exports = {
     updateVIM: {
         code: 200,
         message: 'SUCCESS',
-        body:  _.times(10,function(n){
+        body: _.times(10, function (n) {
             return {
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),
@@ -148,7 +283,7 @@ module.exports = {
                 ownerDefinedType: faker.random.word(),
                 cloudZone: faker.random.word(),
                 userName: faker.internet.userName(),
-                passwd: faker.internet.password(), 
+                passwd: faker.internet.password(),
                 authUrl: faker.internet.url(),
                 tenant: faker.internet.userName(),
             }
@@ -161,8 +296,8 @@ module.exports = {
     getVNFM: {
         code: 200,
         message: 'SUCCESS',
-        total:50,
-        body:  _.times(10,function(n){
+        total: 50,
+        body: _.times(10, function (n) {
             return {
                 VNFMname: faker.name.firstName(),
                 VNFMtype: faker.random.word(),
