@@ -14,10 +14,6 @@ export default {
                 iconType: 'laptop',
                 isChildren: true,
                 children: [{
-                    auth: ['admin'],
-                    name: 'VNF Type MGT',
-                    iconType: '',
-                }, {
                     auth: ['admin', 'customer'],
                     name: 'VNF Type Objects MGT',
                     iconType: '',

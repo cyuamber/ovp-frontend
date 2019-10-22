@@ -11,7 +11,6 @@ import Home from '../pages/Home.vue';
 //Dashboard
 import Dashboard from '../pages/Dashboard/Dashboard.vue';
 //Test Objects MGT
-import VnfType from '../pages/TestObject/VnfType.vue';
 import VnfTypeobject from '../pages/TestObject/VnfTypeobject.vue';
 //Test ENV MGT
 import VimEnv from '../pages/TestEnv/VimEnv.vue';
@@ -51,17 +50,6 @@ export default new Router({
           path: '',
           name: 'Dashboard',
           component: Dashboard
-        },
-      ]
-    },
-    {
-      path: '/vnftypemgt',
-      component: Layout,
-      children: [
-        {
-          path: '',
-          name: 'VnfType',
-          component: VnfType
         },
       ]
     },
