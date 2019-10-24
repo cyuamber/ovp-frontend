@@ -1,28 +1,28 @@
 <template>
   <div class="test-ins__container">
     <div class="top">
-      <a-button type="primary" @click="handleClick">Rigister TTMS</a-button>
+      <a-button type="primary" @click="handleCreateClick">Rigister TTMS</a-button>
       <Search class="search" @testInsSearch="testInsSearch" :currentPage="currentPage"/>
-      <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
+      <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
     </div>
     <div class="table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="meterSysName" size="default" :pagination="pagination">
       <span slot="action" slot-scope="action,record">
-        <a-tag v-for="item in action" :key="item" :color="item === 'EDIT'? 'blue' : 'red'" class="tag"
+        <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
       </span>
       </a-table>
     </div>
-    <RigisterOrEdit v-if="visible" @close="close" @getAllMeterSys="getAllMeterSys" :singleData="singleData" :isEdit="isEdit"/>
+    <RigisterOrEdit v-if="visible" @close="close" :isEdit="isEdit" @getAllMeterSys="getAllMeterSys"/>
   </div>
 </template>
 
 <script>
-    import moment from 'moment'
-    import {axiospost, axiosget} from '../../utils/http'
+    import {axiospost} from '../../utils/http'
     import Search from '../../components/Search/Search'
     import {TestInsrigisterColumns} from '../../const/constant'
     import RigisterOrEdit from './TestInsrigisterOrEdit'
+    import {mapState} from 'vuex'
 export default {
     name: "TestInstrument",
     components: {
@@ -33,72 +33,68 @@ export default {
         return{
             visible: false,
             columns: TestInsrigisterColumns,
-            tableData: [],
-            loading: true,
-            pagination: {},
-            singleData:{},
+            loading: false,
             currentPage:'TestInstrumentMGT',
             isEdit: false,
+            createTime: '',
+            keyword: ''
         }
     },
+    computed: {
+        ...mapState ({
+            tableData: state => state.testInstrument.tableData,
+            pagination: state => state.testInstrument.pagination,
+            singleData: state => state.testInstrument.singleData,
+        }),
+    },
     mounted () {
-        this.getAllMeterSys()
+        this.loading = true;
+        this.$store.dispatch('testInstrument/getTableData',{}).then(() => this.loading = false);
+        console.log(this.tableData)
     },
     methods: {
-        handleClick(){
+        handleCreateClick(){
+            this.$store.dispatch('testInstrument/getMeterSys','');
             this.visible = true;
-            this.isEdit = false
-        },
-        getAllMeterSys(){
-            axiosget('/getMeterSys').then(res => {
-                if(res.code === 200){
-                    this.formatData(res)
-                }else {
-                    this.$message.error('Network exception, please try again');
-                }
-                this.loading = false
-            })
+            this.isEdit = false;
         },
         // Filter by creating time
-        onChange(date) {
-            let selectDate = moment(date._d).format('YYYY-MM-DD');
-            axiosget('/getMeterSys',{createTime: selectDate}).then( res => {
-                if(res.code === 200) this.formatData(res);
-                else this.$message.error('Network exception, please try again');
-            })
+        onChange(date,d) {
+            this.createTime = d;
+            this.testInsSearch()
         },
-        // Format response table data
-        formatData(data){
-            this.pagination = {
-                current: 1,
-                total: data.total
-            };
-            this.tableData = data.body.map( item => {
-                item.createTime = moment(item.createTime).format('YYYY-MM-DD');
-                item.action = ['EDIT', 'DELETE'];
-                return item
-            })
-        },
-        testInsSearch(data){
-            this.formatData(data)
+        testInsSearch(keyword, isSearch){
+            this.loading = true;
+            console.log(keyword,isSearch);
+            if(isSearch) this.keyword = keyword;
+            if(keyword === '' && this.createTime === '') {
+                this.$message.warning('Please enter valid search information');
+                return
+            }
+            let obj = {keyword: this.keyword, createTime: this.createTime};
+            // Simulation request
+            console.log(obj,"obj")
+            this.$store.dispatch('testInstrument/getTableData',obj).then(() => setTimeout(() => {
+                this.loading = false
+            },2000))
         },
         close(){
             this.visible = false;
         },
-        showEditOrDeleteModal(item,data){
-            if(item === 'EDIT') {
+        showEditOrDeleteModal(item,singleData){
+            if(item === 'Edit') {
                 this.visible = true;
                 this.isEdit = true;
-                this.singleData = Object.assign({},data);
+                this.$store.dispatch('testInstrument/getMeterSys',singleData)
             }else {
                 this.$confirm({
                     title: 'Are you sure delete this TTMS?',
-                    content: 'Name: '+data.meterSysName,
+                    content: 'Name: '+singleData.meterSysName,
                     okText: 'Yes',
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        axiospost('/deleteMeterSys',{meterSysName:data.meterSysName}).then( res => {
+                        axiospost('/deleteMeterSys',{meterSysName:singleData.meterSysName}).then( res => {
                             if(res.code === 200){
                                 this.$message.success('Deleted successfully')
                             }else this.$message.error('Network exception, please try again');
@@ -106,6 +102,9 @@ export default {
                     }
                 });
             }
+        },
+        getAllMeterSys(){
+            this.$store.dispatch('testInstrument/getTableData',{}).then(() => this.loading = false);
         }
     }
 };
