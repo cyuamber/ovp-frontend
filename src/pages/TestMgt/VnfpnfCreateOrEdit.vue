@@ -3,24 +3,24 @@
         <template>
             <a-form :form="form" @submit="handleSubmit">
                 <a-form-item label="XNF Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
-                    <a-input v-decorator="['meterName',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterName }]"/>
+                    <a-input v-decorator="['XNFName',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterName }]"/>
                 </a-form-item>
                 <a-form-item label="XNF Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-                    <a-select  class="select"  v-decorator="['meterType',{ rules: [{ required: true, }],initialValue:this.isEdit ? singleData.tesyMeterType:VNFtypes[0]}]"
+                    <a-select :disabled="VNFOptions.length === 0" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]"
                     >
-                        <a-select-option v-for="type of VNFtypes" :key="type" :value="type">
+                        <a-select-option v-for="type of VNFOptions" :key="type" :value="type">
                            {{type}}
                         </a-select-option>
                     </a-select>
-                    <a-spin  size="small" :spinning="spinning">
-                        <a-icon slot="indicator"  type="loading-3-quarters" style="font-size: 24px" spin />
+                    <a-spin  :spinning="VNFOptions.length === 0" class='skip-size'>
+                        <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
                     </a-spin>
                 </a-form-item>
                 <a-form-item label="XNF Vendor"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['meterVendor',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterVendor }]"/>
+                    <a-input v-decorator="['XNFVendor',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVendor }]"/>
                 </a-form-item>
                 <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['meterVersion',{ rules: [{ required: true,}],initialValue:singleData.tesyMeterVersion }]"/>
+                    <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
                 </a-form-item>
                 <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
                    <a-upload-dragger
@@ -42,9 +42,10 @@
 
 <script type="text/ecmascript-6">
     import moment from 'moment';
+    import {mapState} from 'vuex'
     import {axiospost} from '../../utils/http'
     export default {
-        props: ['singleData','VNFtypes','spinning','isEdit'],
+        props: ['isEdit'],
         data(){
             return {
                 form: this.$form.createForm(this),
@@ -52,6 +53,21 @@
                 title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
                 fileList: [],
             }
+        },
+        computed: {
+            ...mapState({
+                VNFOptions: state => state.VnfpnfSuite.VNFOptions,
+                SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData
+            })
+        },
+        watch: {
+            showModal(val){
+                if(!val) this.$store.dispatch('VnfpnfSuite/clearOptions')
+            }
+        },
+        destroyed () {
+            this.$store.dispatch('VnfpnfSuite/clearOptions');
+            this.$store.dispatch('VnfpnfSuite/getTestMeter', {})
         },
         methods: {
             handleRemove(file) {
@@ -76,7 +92,6 @@
                 });
             },
             handleCancel(){
-                Object.keys(this.singleData).map(key => this.singleData[key] = '');
                 this.$emit('close');
             },
             handleSubmit(){
@@ -89,10 +104,10 @@
                 this.form.validateFields((err, values) => {
                     if(!err){
                         let data = {
-                            tesyMeterName: values.meterName,
-                            tesyMeterType: values.meterType,
-                            tesyMeterVendor: values.meterVendor,
-                            tesyMeterVersion: values.meterVersion,
+                            tesyMeterName: values.XNFName,
+                            tesyMeterType: values.XNFType,
+                            tesyMeterVendor: values.XNFVendor,
+                            tesyMeterVersion: values.Version,
                             VNFFileName:formData,
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
@@ -100,17 +115,15 @@
                         axiospost(url, data)
                             .then((res) => {
                                     if(res.code === 200){
-                                        this.$message.success('Has been added successfully');
+                                        this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
                                         this.$emit('getAllTestMeter')
-                                    }else this.$message.error('add failed');
+                                    }else this.$message.error(this.isEdit ? 'updated failed' : 'Has been added failed');
                                     this.$emit('close');
                                 },
                                 () => {
                                     this.$message.error('Network exception, please try again');
                                     this.$emit('close');
-                                });
-                        Object.keys(this.singleData).map(key => this.singleData[key] = '');
-                    }
+                                });}
                 });
 
             },

@@ -3,7 +3,7 @@
     <div class="test-spec__top">
       <a-button type="primary" @click="handleCreateClick">Add Spec</a-button>
       <Search class="search test-spec__search" @testSpecSearch="testSpecSearch" :currentPage="currentPage"/>
-      <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" :allowClear="false" format="DD-MM-YYYY"/>
+      <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" />
     </div>
     <div class="test-spec__table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination">
