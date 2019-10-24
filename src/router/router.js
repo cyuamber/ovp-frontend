@@ -135,7 +135,7 @@ export default new Router({
         },
       ]
     }, {
-      path: '/teststandardmgt',
+      path: '/TestSpecMGT',
       component: Layout,
       children: [
         {

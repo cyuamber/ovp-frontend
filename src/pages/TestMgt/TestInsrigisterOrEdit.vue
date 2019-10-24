@@ -70,9 +70,9 @@
                         axiospost(url, data)
                             .then((res) => {
                                     if(res.code === 200){
-                                        this.$message.success('Has been added successfully');
+                                        this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
                                         this.$emit('getAllMeterSys')
-                                    }else this.$message.error('add failed');
+                                    }else this.$message.error(this.isEdit ? 'updated failed' : 'Has been added failed');
                                     this.$emit('close');
                                 },
                                 () => {

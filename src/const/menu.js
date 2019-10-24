@@ -66,7 +66,7 @@ export default {
             },
             {
                 auth: ['admin', 'customer'],
-                name: 'Test Standard MGT',
+                name: 'Test Spec MGT',
                 iconType: 'team',
                 isChildren: false,
                 children: null
