@@ -240,6 +240,7 @@ module.exports = {
         total: 50,
         body: _.times(10, function (n) {
             return {
+                isOnline: true,
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),
                 cloudType: faker.random.word(),
@@ -249,7 +250,10 @@ module.exports = {
                 userName: faker.internet.userName(),
                 passwd: faker.internet.password(),
                 authUrl: faker.internet.url(),
-                tenant: faker.internet.userName()
+                tenant: faker.internet.userName(),
+                createTime: faker.date.recent(),
+                defaultTenant: faker.random.word(),
+
             }
         })
     },
@@ -306,8 +310,9 @@ module.exports = {
                 url: faker.internet.url(),
                 vim: faker.name.firstName(),
                 authUrl: faker.internet.url(),
-                userName: faker.internet.userName(),
-                passwd: faker.internet.password()
+                username: faker.internet.userName(),
+                password: faker.internet.password(),
+                createTime: faker.date.recent(),
             }
         })
     },
@@ -345,4 +350,22 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
+    getTestJob: {
+        code: 200,
+        message: 'SUCCESS',
+        total: 20,
+        body: _.times(10, function (n){
+            if(n>3){
+                n = 0
+            }
+            return {
+                VNFName: faker.name.lastName(),
+                jobName: faker.name.firstName(),
+                createrTime: faker.date.recent(),
+                status: n,
+                speciflcation: faker.random.word(),
+                description: faker.random.word(),
+            }
+        })
+    }
 }
