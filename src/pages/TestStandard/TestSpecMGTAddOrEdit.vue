@@ -25,7 +25,7 @@
                     <a-input v-decorator="['PublishORG',{ rules: [{ required: true,}],initialValue:testSpecSingleData.PublishORG }]"/>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-                    <a-button type="primary" html-type="submit">OK</a-button>
+                    <a-button type="primary" html-type="submit">Submit</a-button>
                 </a-form-item>
             </a-form>
         </template>

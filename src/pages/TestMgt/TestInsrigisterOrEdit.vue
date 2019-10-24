@@ -20,7 +20,7 @@
                     </a-input>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-                    <a-button type="primary" html-type="submit">OK</a-button>
+                    <a-button type="primary" html-type="submit">Submit</a-button>
                 </a-form-item>
             </a-form>
         </template>
@@ -50,7 +50,6 @@
         },
         methods: {
             handleCancel(){
-                Object.keys(this.singleData).map(key => this.singleData[key] = '');
                 this.$emit('close');
             },
             handleSubmit(e){
@@ -79,7 +78,6 @@
                                     this.$message.error('Network exception, please try again');
                                     this.$emit('close');
                                 });
-                        Object.keys(this.singleData).map(key => this.singleData[key] = '');
                     }
                 });
 

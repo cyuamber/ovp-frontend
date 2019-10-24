@@ -22,18 +22,27 @@
                 <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
                 </a-form-item>
-                <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+                <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 7 }">
                    <a-upload-dragger
-                           :fileList="fileList"
                            :remove="handleRemove"
                            :beforeUpload="beforeUpload"
-                           :disabled="fileList.length === 1"
+                           name="files"
+                           v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: true,}]}]"
                    >
                        <p class="ant-upload-text upload-test">Click or drag to upload</p>
                    </a-upload-dragger>
+                    <a-button
+                            type="primary"
+                            @click="handleUpload"
+                            :disabled="disabled"
+                            :loading="uploading"
+                            style="margin-top: 16px"
+                    >
+                        {{uploading ? 'Uploading' : 'Start Upload' }}
+                    </a-button>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-                    <a-button type="primary" html-type="submit">OK</a-button>
+                    <a-button type="primary" html-type="submit">Submit</a-button>
                 </a-form-item>
             </a-form>
         </template>
@@ -51,7 +60,8 @@
                 form: this.$form.createForm(this),
                 showModal: true,
                 title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
-                fileList: [],
+                disabled: true,
+                uploading: false
             }
         },
         computed: {
@@ -70,21 +80,30 @@
             this.$store.dispatch('VnfpnfSuite/getTestMeter', {})
         },
         methods: {
-            handleRemove(file) {
-                const index = this.fileList.indexOf(file);
-                const newFileList = this.fileList.slice();
-                newFileList.splice(index, 1);
-                this.fileList = newFileList;
+            normFile(e) {
+                if (Array.isArray(e)) {
+                    return e;
+                }
+                if(e.fileList.length >1){
+                    e.fileList.splice(e.fileList.length-1, 1)
+                }
+                return e && e.fileList;
             },
-            beforeUpload(file) {
-                this.fileList = [...this.fileList, file];
-                console.log(this.fileList,"fileList");
+            handleRemove(e) {
+                this.disabled = true;
+            },
+            beforeUpload() {
+                this.disabled = false;
                 return false;
             },
-            handleUpload(formData) {
+            handleUpload() {
+                let fileList = this.form.getFieldValue("upload");
+                const formData = new FormData();
+                formData.append('files[]', fileList[0]);
+                this.uploading = true;
                 axiospost('/uploadVNFFile',{VNFFileName:formData}).then(res => {
+                    this.uploading = false;
                     if(res.code === 200){
-                        this.fileList = [];
                         this.$message.success('upload successfully.');
                     }else {
                         this.$message.error('upload failed.');
@@ -96,13 +115,10 @@
             },
             handleSubmit(){
                 let url = this.isEdit ? '/updateTestMeter':'/createTestMeter';
-                const { fileList } = this;
-                const formData = new FormData();
-                fileList.forEach(file => {
-                    formData.append('files[]', file);
-                });
                 this.form.validateFields((err, values) => {
                     if(!err){
+                        const formData = new FormData();
+                        formData.append('files[]', values.upload[0]);
                         let data = {
                             tesyMeterName: values.XNFName,
                             tesyMeterType: values.XNFType,
@@ -111,7 +127,7 @@
                             VNFFileName:formData,
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                        this.handleUpload(formData);
+                 
                         axiospost(url, data)
                             .then((res) => {
                                     if(res.code === 200){
