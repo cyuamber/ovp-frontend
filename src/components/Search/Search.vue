@@ -20,7 +20,7 @@ import {axiosget} from '../../utils/http'
     },
     methods: {
       searchTypeID(){
-        if(this.currentPage === 'TestSUT'){
+        if(this.currentPage === 'TestSUT' || this.currentPage === 'TestInstrumentMGT' || this.currentPage === 'VNF/PNFSuiteMGT' || this.currentPage === 'TestSpecMGT'){
           this.$emit(this.event,this.keyword.trim(), true)
         }else {
           let {url, key, event, keyword} = this
