@@ -11,8 +11,7 @@ import Layout from '../components/layout/layout.vue';
 //Dashboard
 import Dashboard from '../pages/Dashboard/Dashboard.vue';
 //Test Objects MGT
-import VnfType from '../pages/TestObject/VnfType.vue';
-import VnfTypeobject from '../pages/TestObject/VnfTypeobject.vue';
+import TestSUT from '../pages/TestObject/TestSUT.vue';
 //Test ENV MGT
 import VimEnv from '../pages/TestEnv/VimEnv.vue';
 //Test MGT
@@ -63,24 +62,13 @@ export default new Router({
       ]
     },
     {
-      path: '/vnftypemgt',
+      path: '/testsutmgt',
       component: Layout,
       children: [
         {
           path: '',
-          name: 'VnfType',
-          component: VnfType
-        },
-      ]
-    },
-    {
-      path: '/vnftypeobjectsmgt',
-      component: Layout,
-      children: [
-        {
-          path: '',
-          name: 'VnfTypeobject',
-          component: VnfTypeobject
+          name: 'testsut',
+          component: TestSUT
         },
       ]
     }, {

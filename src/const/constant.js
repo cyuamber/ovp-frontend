@@ -18,27 +18,11 @@ const mockcolumns = [{
         dataIndex: "phone"
     }
 ]
-const VNFTypeColumns = [{
+const TestSUTColumns = [{
         title: 'ID',
-        dataIndex: 'id'
+        dataIndex: 'index'
     },
     {
-        title: 'VNF Type',
-        dataIndex: 'VNFTypeName'
-    },
-    {
-        title: 'Create Time',
-        dataIndex: 'createTime'
-    },
-    {
-        title: 'Action',
-        dataIndex: 'action',
-        scopedSlots: {
-            customRender: 'action'
-        }
-    }
-]
-const VNFTypeObjectsColumns = [{
         title: 'Name',
         dataIndex: 'VNFTestName'
     },
@@ -49,10 +33,6 @@ const VNFTypeObjectsColumns = [{
     {
         title: 'Vendor',
         dataIndex: 'VNFTestVersion'
-    },
-    {
-        title: 'Suit',
-        dataIndex: 'VNFTestVendor'
     },
     {
         title: 'Create Time',
@@ -249,8 +229,7 @@ const TestSpecColumns = [
 ]
 export {
     mockcolumns,
-    VNFTypeColumns,
-    VNFTypeObjectsColumns,
+    TestSUTColumns,
     testEnvVIMColumns,
     testEvnVNFMColumns,
     TestInsrigisterColumns,
