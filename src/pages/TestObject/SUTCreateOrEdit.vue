@@ -14,17 +14,17 @@
         >
           <a-input
             v-decorator="[
-          'TestName',
+          'testName',
           { rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.VNFTestName },
         ]"
           />
         </a-form-item>
         <a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-          <a-select :disabled="VNFOptions.length === 0" class="select"
+          <a-select :disabled="spin" class="select" @dropdownVisibleChange="handleExpand"
             v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]">
             <a-select-option v-for="type in VNFOptions" :key="type" :value="type"> {{type}} </a-select-option>
           </a-select>
-          <a-spin :spinning="VNFOptions.length === 0" class='skip-size'>
+          <a-spin :spinning="spin" class='skip-size'>
             <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
           </a-spin>
         </a-form-item>
@@ -69,12 +69,14 @@ import moment from 'moment';
 import {mapState} from 'vuex'
 import {axiospost} from '../../utils/http';
   export default {
-    props: ['isEdit', 'currentTab'],
+    props: ['isEdit', 'currentTab','visible'],
     data(){
       return {
-        showModal: true,
+        showModal: false,
         form: this.$form.createForm(this),
         selected: '',
+        count: 0,
+        spin: false
       }
     },
     computed: {
@@ -84,26 +86,48 @@ import {axiospost} from '../../utils/http';
       })
     },
     watch: {
+      visible(val){
+        this.count ++
+        if(val) {
+          this.showModal = val;
+          if(!val.length && this.isEdit && this.count !== 1){
+            this.form.setFieldsValue({
+              testName: this.VNFTest.VNFTestName,
+              typeName: this.VNFTest.VNFTypeName,
+              vendor: this.VNFTest.VNFTestVendor,
+              version: this.VNFTest.VNFTestVersion
+            })
+          } 
+        }
+      },
       showModal(val){
-        if(!val) this.$store.dispatch('testSUT/clearOptions')
+        if(!val) {
+          this.$emit('close')
+          this.$store.dispatch('testSUT/clearOptions')
+          this.$store.dispatch('testSUT/getVNFTest', {})
+          this.form.setFieldsValue({testName: '', version: '', vendor: '', typeName: '', })
+        }
+      },
+      VNFOptions(val){
+        if(val.length) this.spin = false      
+        if(val.length && !this.isEdit){
+          this.form.setFieldsValue({typeName: val[0]})
+          this.spin = true
+        }
       }
-    },
-    destroyed () {
-      this.$store.dispatch('testSUT/clearOptions')
-      this.$store.dispatch('testSUT/getVNFTest', {})
     },
     methods: {
       handleCancel(){
         this.$emit('close')
       },
       handleSubmit(e){
-        let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest'
+        let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest';
         e.preventDefault();
         this.form.validateFields((err, values) => {
           if(!err){
             // Did not implement the check if there is a change
             let data = {
-              VNFTestName: values.TestName,
+              VNFTestName: values.testName,
               VNFTestVendor: values.vendor,
               VNFTestVersion: values.version,
               VNFTypeName: this.selected,
@@ -116,20 +140,27 @@ import {axiospost} from '../../utils/http';
                   this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
                   this.$emit('getAllVnfType')
                 }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
+                this.showModal = false
               },
               () => {
                 this.$message.error('Network exception, please try again');
+                this.showModal = false
               })
-            this.$emit('close')
+            
+          }
+        })
+      },
+      handleExpand(){
+        if(!this.VNFOptions.length) {
+          this.spin = true
+          this.$store.dispatch('testSUT/getVNFOptions').then(() => {this.spin = true})
+          
         }
-      })
-    },
-    handleSelect(val){
-      this.selected = val;
-    },
-    handleChange(){
-      console.log(111)
-    }
+      },
+      handleChange(){
+        console.log('上传')
+      }
+    
   }
 };
 </script>

@@ -31,7 +31,7 @@ const actions = {
     }else if(createTime !== '' && createTime !== undefined ){
       req = {createTime}
     }else if(keyword !== ''&& keyword !== undefined){
-      req = {keyword}
+      req = {VNFTestName: keyword}
     }
     axiosget('/getVNFTest', req).then(res => {
       if(res.code === 200){
