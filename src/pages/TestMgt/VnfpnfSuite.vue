@@ -1,5 +1,6 @@
 <template>
     <div class="test-ins__container">
+        <Loading :loadingMessage="loadingMessage" />
         <div class="top">
             <a-button type="primary" @click="handleClick">Create xNF TT</a-button>
             <Search class="search" @VNFSuiteSearch="VNFSuiteSearch" :currentPage="currentPage"/>
@@ -23,13 +24,15 @@
     import Search from '../../components/Search/Search'
     import {VnfpnfSuiteColumns} from '../../const/constant'
     import {mapState} from 'vuex'
+    import Loading from "../../components/Loading/Loading";
     import xNFCreateOrEdit from './VnfpnfCreateOrEdit'
 
     export default {
         name: "VnfpnfSuite",
         components: {
             Search,
-            xNFCreateOrEdit
+            xNFCreateOrEdit,
+            Loading
         },
         data() {
             return {
@@ -39,7 +42,12 @@
                 currentPage:'VNF/PNFSuiteMGT',
                 isEdit: false,
                 createTime: '',
-                keyword: ''
+                keyword: '',
+                loadingMessage: {
+                    type: "",
+                    toast: "",
+                    show:true
+                }
             }
         },
         computed: {
@@ -51,7 +59,11 @@
         },
         mounted() {
             this.loading = true;
-            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => this.loading = false)
+            this.handleLoadingMessage("","",true);
+            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() =>
+                this.loading = false,
+                this.loadingMessage.show = false
+            )
         },
         methods: {
             handleClick(){
@@ -59,6 +71,13 @@
                 this.isEdit = false;
                 this.$store.dispatch('VnfpnfSuite/getTestMeter','');
                 this.$store.dispatch('VnfpnfSuite/getVNFOptions')
+            },
+            handleLoadingMessage(type,toast,show){
+                this.loadingMessage = {
+                    type: type,
+                    toast: toast,
+                    show:show
+                };
             },
             // Filter by creating time
             onChange(date,d) {
@@ -72,11 +91,13 @@
                     this.$message.warning('Please enter valid search information');
                     return
                 }
+                this.handleLoadingMessage("","",true);
                 let obj = {keyword: this.keyword, createTime: this.createTime};
                 // Simulation request
-                this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() => setTimeout(() => {
-                    this.loading = false
-                },2000))
+                this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() =>
+                    this.loading = false,
+                    this.loadingMessage.show = false
+                )
             },
             close(){
                 this.visible = false;
@@ -96,8 +117,8 @@
                         onOk: () => {
                             axiospost('/deleteTestMeter', {tesyMeterName: SuiteSingleData.tesyMeterName}).then(res => {
                                 if (res.code === 200) {
-                                    this.$message.success('Deleted successfully')
-                                }else this.$message.error('Network exception, please try again');
+                                    this.handleLoadingMessage("success","Deleted successfully",false);
+                                }else  this.handleLoadingMessage("error","Network exception, please try again",false);
                             })
                         }
                     });
