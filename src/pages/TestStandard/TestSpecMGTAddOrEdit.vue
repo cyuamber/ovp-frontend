@@ -1,6 +1,7 @@
 <template>
     <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
         <template>
+            <Loading :loadingMessage="loadingMessage" />
             <a-form :form="form" @submit="handleSubmit">
                 <a-form-item label="ID"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
                     <a-input v-decorator="['ID',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecId }]"/>
@@ -35,14 +36,23 @@
 <script type="text/ecmascript-6">
     import moment from 'moment';
     import {mapState} from 'vuex'
+    import Loading from "../../components/Loading/Loading";
     import {axiospost} from '../../utils/http'
     export default {
         props: ['isEdit'],
+        components: {
+            Loading
+        },
         data(){
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
                 title: this.isEdit ? 'Edit Spec':'Add Spec',
+                loadingMessage : {
+                    type: '',
+                    toast: '',
+                    show: true
+                }
             }
         },
         computed: {
@@ -61,6 +71,13 @@
             this.$store.dispatch('testSpecMGT/getTestSpec', {})
         },
         methods: {
+            handleLoadingMessage(type,toast,show){
+                this.loadingMessage = {
+                    type: type,
+                    toast: toast,
+                    show:show
+                };
+            },
             handleCancel(){
                 this.$emit('close');
             },
@@ -76,18 +93,22 @@
                             PublishORG: values.PublishORG,
                             publishTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                        console.log(data,"data");
+                        this.handleLoadingMessage("","",true);
                         axiospost(url, data)
                             .then((res) => {
                                     if(res.code === 200){
-                                        this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
+                                        this.handleLoadingMessage("success",this.isEdit ? 'Successfully updated' : 'successfully added ',false);
                                         this.$emit('getAllTestSpec')
-                                    }else this.$message.error(this.isEdit ? 'updated failed' : 'Has been added failed');
-                                    this.$emit('close');
+                                    }else this.handleLoadingMessage("error",this.isEdit ? 'updated failed' : 'added failed',false);
+                                    setTimeout(() => {
+                                        this.$emit('close');
+                                    },1000)
                                 },
                                 () => {
-                                    this.$message.error('Network exception, please try again');
-                                    this.$emit('close');
+                                    this.handleLoadingMessage("error","Network exception, please try again",false);
+                                    setTimeout(() => {
+                                        this.$emit('close');
+                                    },1000)
                                 });
                     }
                 });

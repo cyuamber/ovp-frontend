@@ -1,6 +1,7 @@
 <template>
   <div class="test-spec">
     <div class="test-spec__top">
+      <Loading :loadingMessage="loadingMessage" />
       <a-button type="primary" @click="handleCreateClick">Add Spec</a-button>
       <Search class="search test-spec__search" @testSpecSearch="testSpecSearch" :currentPage="currentPage"/>
       <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" />
@@ -21,12 +22,14 @@
     import Search from '../../components/Search/Search'
     import {TestSpecColumns} from '../../const/constant'
     import {mapState} from 'vuex'
+    import Loading from "../../components/Loading/Loading";
     import TestSpecMGTAddOrEdit from './TestSpecMGTAddOrEdit'
 export default {
   name: "TestSpecMGT",
     components: {
         Search,
-        TestSpecMGTAddOrEdit
+        TestSpecMGTAddOrEdit,
+        Loading
     },
     data(){
         return{
@@ -36,7 +39,12 @@ export default {
             currentPage:'TestSpecMGT',
             isEdit: false,
             createTime: '',
-            keyword: ''
+            keyword: '',
+            loadingMessage: {
+                type: "",
+                toast: "",
+                show:true
+            }
         }
     },
     computed: {
@@ -48,9 +56,20 @@ export default {
     },
     mounted () {
         this.loading = true;
-        this.$store.dispatch('testSpecMGT/getTableData',{}).then(() => this.loading = false)
+        this.handleLoadingMessage("","",true);
+        this.$store.dispatch('testSpecMGT/getTableData',{}).then(() =>
+            this.loading = false,
+            this.loadingMessage.show = false
+        )
     },
     methods: {
+        handleLoadingMessage(type,toast,show){
+            this.loadingMessage = {
+                type: type,
+                toast: toast,
+                show:show
+            };
+        },
         handleCreateClick(){
             this.visible = true;
             this.isEdit = false;
@@ -72,11 +91,13 @@ export default {
                 this.$message.warning('Please enter valid search information');
                 return
             }
+            this.handleLoadingMessage("","",true);
             let obj = {keyword: this.keyword, createTime: this.createTime};
             // Simulation request
-            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => setTimeout(() => {
-                this.loading = false
-            },2000))
+            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() =>
+                this.loading = false,
+                this.loadingMessage.show = false
+            )
         },
         showEditOrDeleteModal(item,testSpecSingleData){
             if(item === 'Edit') {
@@ -93,8 +114,8 @@ export default {
                     onOk: () => {
                         axiospost('/deleteTestSpec',{testSpecId:testSpecSingleData.testSpecId}).then( res => {
                             if(res.code === 200){
-                                this.$message.success('Deleted successfully')
-                            }else this.$message.error('Network exception, please try again');
+                                this.handleLoadingMessage("success","Deleted successfully",false);
+                            }else  this.handleLoadingMessage("error","Network exception, please try again",false);
                         })
                     }
                 });
