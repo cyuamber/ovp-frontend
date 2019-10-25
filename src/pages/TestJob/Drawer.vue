@@ -47,12 +47,10 @@
               <a-select v-decorator="['case'+index+'VNFM']" style="width: 120px" class="select-margin" :id="'case'+index+'VNFM'">
                 <a-select-option  v-for="type in VNFMOption" :key="type" :value="type"> {{type}} </a-select-option>
               </a-select>
-            </a-form-item>
             <label :for="'case'+index+'VNFM'">Test VIM ENV:</label>
               <a-select v-decorator="['case'+index+'VNFM']" style="width: 120px"  class="select-margin" :id="'case'+index+'VNFM'" >
                 <a-select-option  v-for="type in VIMOption" :key="type" :value="type"> {{type}} </a-select-option>
               </a-select>
-            </a-form-item>
           </div>
           <p class="wain" v-show="isShowWain">Select at least one test case！</p>
         </div>

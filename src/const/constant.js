@@ -189,6 +189,7 @@ const testJobColumns = [
     {
         title: 'State',
         dataIndex: 'state',
+        width: 70,
         scopedSlots: {
             customRender: 'state'
         },

@@ -6,7 +6,7 @@
     </div>
     <div class="test-job__table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" 
-        rowKey="index" size="default" :pagination="pagination">
+        rowKey="index" size="default" :pagination="pagination" :scroll="{x: 1630}">
         <span slot="state" slot-scope="state,record">
           <span class="test-job__showState" :style="{backgroundColor: record.status === 0? '#979797': (record.status === 1? '#F5A623':(record.status === 2? '#7ED321':'#D0021B'))}" 
           :title="record.status === 0? '待执行': (record.status === 1? '执行中':(record.status === 2? '执行成功':'执行失败'))"></span>
