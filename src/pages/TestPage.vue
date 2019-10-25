@@ -46,9 +46,7 @@
 import {axiosget} from "../utils/http";
 import API from "../const/apis";
 import Loading from "../components/Loading/Loading";
-import {mockcolumns} from "../const/constant";
 
-const mockColumns = mockcolumns;
 const columns = [
   {
     title: "Id",
@@ -87,8 +85,7 @@ export default {
       mockbuttonloading: false,
       metaData: null,
       mockData: [],
-      columns,
-      mockcolumns
+      columns
     };
   },
   methods: {

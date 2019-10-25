@@ -89,7 +89,7 @@
                 }
                 return e && e.fileList;
             },
-            handleRemove(e) {
+            handleRemove() {
                 this.disabled = true;
             },
             beforeUpload() {

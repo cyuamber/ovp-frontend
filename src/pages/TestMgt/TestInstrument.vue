@@ -1,5 +1,6 @@
 <template>
   <div class="test-ins__container">
+    <Loading :loadingMessage="loadingMessage" />
     <div class="top">
       <a-button type="primary" @click="handleCreateClick">Rigister TTMS</a-button>
       <Search class="search" @testInsSearch="testInsSearch" :currentPage="currentPage"/>
@@ -13,7 +14,7 @@
       </span>
       </a-table>
     </div>
-    <RigisterOrEdit v-if="visible" @close="close" :isEdit="isEdit" @getAllMeterSys="getAllMeterSys"/>
+    <RigisterOrEdit v-if="visible" @close="close" :isEdit="isEdit"  @getAllMeterSys="getAllMeterSys"/>
   </div>
 </template>
 
@@ -22,12 +23,14 @@
     import Search from '../../components/Search/Search'
     import {TestInsrigisterColumns} from '../../const/constant'
     import RigisterOrEdit from './TestInsrigisterOrEdit'
+    import Loading from "../../components/Loading/Loading";
     import {mapState} from 'vuex'
 export default {
     name: "TestInstrument",
     components: {
         Search,
-        RigisterOrEdit
+        RigisterOrEdit,
+        Loading
     },
     data(){
         return{
@@ -37,7 +40,12 @@ export default {
             currentPage:'TestInstrumentMGT',
             isEdit: false,
             createTime: '',
-            keyword: ''
+            keyword: '',
+            loadingMessage: {
+                type: "",
+                toast: "",
+                show:true
+            }
         }
     },
     computed: {
@@ -49,14 +57,24 @@ export default {
     },
     mounted () {
         this.loading = true;
-        this.$store.dispatch('testInstrument/getTableData',{}).then(() => this.loading = false);
-        console.log(this.tableData)
+        this.handleLoadingMessage("","",true);
+        this.$store.dispatch('testInstrument/getTableData',{}).then(() =>
+            this.loading = false,
+            this.loadingMessage.show = false
+        )
     },
     methods: {
         handleCreateClick(){
             this.$store.dispatch('testInstrument/getMeterSys','');
             this.visible = true;
             this.isEdit = false;
+        },
+        handleLoadingMessage(type,toast,show){
+            this.loadingMessage = {
+                type: type,
+                toast: toast,
+                show:show
+            };
         },
         // Filter by creating time
         onChange(date,d) {
@@ -65,7 +83,7 @@ export default {
         },
         testInsSearch(keyword, isSearch){
             this.loading = true;
-            console.log(keyword,isSearch);
+            this.handleLoadingMessage("","",true);
             if(isSearch) this.keyword = keyword;
             if(keyword === '' && this.createTime === '') {
                 this.$message.warning('Please enter valid search information');
@@ -73,10 +91,10 @@ export default {
             }
             let obj = {keyword: this.keyword, createTime: this.createTime};
             // Simulation request
-            console.log(obj,"obj")
-            this.$store.dispatch('testInstrument/getTableData',obj).then(() => setTimeout(() => {
-                this.loading = false
-            },2000))
+            this.$store.dispatch('testInstrument/getTableData',obj).then(() =>
+                this.loading = false,
+                this.loadingMessage.show = false
+            )
         },
         close(){
             this.visible = false;
@@ -96,8 +114,10 @@ export default {
                     onOk: () => {
                         axiospost('/deleteMeterSys',{meterSysName:singleData.meterSysName}).then( res => {
                             if(res.code === 200){
-                                this.$message.success('Deleted successfully')
-                            }else this.$message.error('Network exception, please try again');
+                                this.handleLoadingMessage("success","Deleted successfully",false);
+                            }else {
+                                this.handleLoadingMessage("error","Network exception, please try again",false);
+                            }
                         })
                     }
                 });
