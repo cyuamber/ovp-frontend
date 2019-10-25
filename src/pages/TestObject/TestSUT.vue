@@ -17,7 +17,7 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <SUTCreateOrEdit :isEdit="isEdit" :currentTab="currentTab" v-if="visible" @close="close"/>
+    <SUTCreateOrEdit :isEdit="isEdit" :currentTab="currentTab" :visible="visible" @close="close"/>
   </div>
 </template>
 
@@ -57,7 +57,6 @@ export default {
   mounted () {
     this.loading = true;
     this.$store.dispatch('testSUT/getTableData',{}).then(() => this.loading = false)
-    console.log(this.tableData)
   },
   methods: {
     handleCreate() {
