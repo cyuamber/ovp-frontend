@@ -1,5 +1,6 @@
 <template>
   <div>
+     <Loading :loadingMessage="loadingMessage" />
     <a-tabs @change="handleTabsChange">
       <a-tab-pane v-for="tab in tabs" :key="tab" :tab="tab">
         <div class="top">
@@ -26,6 +27,7 @@ import Search from '../../components/Search/Search'
 import SUTCreateOrEdit from './SUTCreateOrEdit'
 import {axiospost} from '../../utils/http';
 import {TestSUTColumns} from '../../const/constant'
+import Loading from '../../components/Loading/Loading'
 import {mapState} from 'vuex'
 
 export default {
@@ -40,7 +42,7 @@ export default {
       columns: TestSUTColumns,
       loading: false,
       createTime: '',
-      keyword: ''
+      keyword: '',
     }
   },
   computed: {
@@ -48,11 +50,13 @@ export default {
       tableData: state => state.testSUT.tableData,
       pagination: state => state.testSUT.pagination,
       VNFTest: state => state.testSUT.VNFTest,
+      loadingMessage: state => state.testSUT.loadingMessage
     }),
   },
   components: {
     SUTCreateOrEdit,
-    Search
+    Search,
+    Loading
   },
   mounted () {
     this.loading = true;
@@ -70,12 +74,12 @@ export default {
     },
     // Get table data by entering information or selecting time
     serchTestSUT(keyword, isSearch){
-      this.loading = true;
       if(isSearch) this.keyword = keyword; 
       if(keyword === '' && this.createTime === '') {
         this.$message.warning('Please enter valid search information')
         return
       }
+      this.loading = true;
       let obj = {keyword: this.keyword, createTime: this.createTime}
       // Simulation request
       this.$store.dispatch('testSUT/getTableData',obj).then(() => setTimeout(() => {
@@ -104,11 +108,7 @@ export default {
           okType: 'danger',
           cancelText: 'No',
           onOk: () => {
-            axiospost('/deleteVNFTest',{VNFFileName: VNFTest.VNFFileName}).then( res => {
-              if(res.code === 200){
-                this.$message.success('Deleted successfully')
-              }else this.$message.error('Network exception, please try again');
-            })
+            this.$store.dispatch('testSUT/deleteVNFTest',{VNFFileName: VNFTest.VNFFileName})
           }
         });
       }

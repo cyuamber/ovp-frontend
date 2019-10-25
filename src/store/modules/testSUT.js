@@ -1,10 +1,11 @@
-import {axiosget} from '../../utils/http';
+import {axiosget, axiospost} from '../../utils/http';
 import moment from 'moment';
 
 const state = {
   tableData: [],
   VNFOptions: [],
-  VNFTest: {}
+  VNFTest: [],
+  loadingMessage: {type: '', toast: ''}
 }
 const mutations = {
   updateTableData (state,tableData) {
@@ -21,7 +22,19 @@ const mutations = {
   },
   updateVNFOptions(state, Options){
     state.VNFOptions = Options;
-  }
+  },
+  updateFailedMessage(state,toast){
+    state.loadingMessage = {
+      type: 'failed',
+      toast
+    }
+  },
+  updateSuccessMessage(state,toast){
+    state.loadingMessage = {
+      type: 'success',
+      toast
+    }
+  },
 }
 const actions = {
   getTableData ({commit}, {createTime,keyword}){
@@ -36,11 +49,18 @@ const actions = {
     axiosget('/getVNFTest', req).then(res => {
       if(res.code === 200){
         commit('updateTableData',res)
+        if(req.createTime || req.VNFTestName ) commit('updateSuccessMessage','Successfully get table data')
+        // this.$message.success('Successfully get table data');
       }else {
-        this.$message.error('Network exception, please try again');
+        if(req.createTime || req.VNFTestName ) commit('updateFailedMessage','Network exception, please try again')
+        // this.$message.error('Network exception, please try again')
       }
-    })
-  },
+    },() => {
+      if(req.createTime || req.VNFTestName ) commit('updateFailedMessage','Network exception, please try again')
+      // this.$message.error('Network exception, please try again')
+    }
+    
+  )},
   getVNFTest({commit},data){
     commit('updateVNFTest',data)
   },
@@ -53,6 +73,26 @@ const actions = {
   clearOptions({commit}){ 
     commit('updateVNFOptions', [])
   },
+  createOrEditVNFTest({commit,dispatch},{data, isEdit}){  
+    let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest';
+    axiospost(url, data)
+      .then((res) => {
+        if(res.code === 200){
+          commit('updateSuccessMessage',isEdit ? 'Successfully updated' : 'Has been added successfully')
+          dispatch('getTableData',{})
+        }else commit('updateFailedMessage',isEdit ? 'Update failed' : 'add failed')
+      },
+      () => {
+        commit('updateFailedMessage','Network exception, please try again')
+      })
+  },
+  deleteVNFTest({commit},data){
+    axiospost('/deleteVNFTest',data).then( res => {
+      if(res.code === 200){
+        commit('updateSuccessMessage','Deleted successfully')
+      }else commit('updateFailedMessage','Network exception, please try again')
+    })
+  }
    
 }
 const getters = {

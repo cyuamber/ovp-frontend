@@ -123,7 +123,6 @@ import {axiospost} from '../../utils/http';
         this.$emit('close')
       },
       handleSubmit(e){
-        let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest';
         e.preventDefault();
         this.form.validateFields((err, values) => {
           if(!err){
@@ -136,19 +135,8 @@ import {axiospost} from '../../utils/http';
               createTime: this.isEdit ? this.VNFTest.createTime : moment(new Date()).format('YYYY-MM-DD'),
               VNFFileName: {}
             }
-            axiospost(url, data)
-              .then((res) => {
-                if(res.code === 200){
-                  this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
-                  this.$emit('getAllVnfType')
-                }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
-                this.showModal = false
-              },
-              () => {
-                this.$message.error('Network exception, please try again');
-                this.showModal = false
-              })
-            
+            let {isEdit} = this
+            this.$store.dispatch('testSUT/createOrEditVNFTest',{isEdit,data}).then(()=>{this.showModal = false},()=>{this.showModal = false})
           }
         })
       },
@@ -156,7 +144,6 @@ import {axiospost} from '../../utils/http';
         if(!this.VNFOptions.length) {
           this.spin = true
           this.$store.dispatch('testSUT/getVNFOptions').then(() => {this.spin = true})
-          
         }
       },
       handleChange(){
