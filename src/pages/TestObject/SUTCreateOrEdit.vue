@@ -87,10 +87,10 @@ import {axiospost} from '../../utils/http';
     },
     watch: {
       visible(val){
-        this.count ++
         if(val) {
           this.showModal = val;
-          if(!val.length && this.isEdit && this.count !== 1){
+          this.count ++
+          if(!this.showModal.length && this.isEdit && this.count !== 1){
             this.form.setFieldsValue({
               testName: this.VNFTest.VNFTestName,
               typeName: this.VNFTest.VNFTypeName,
@@ -98,6 +98,7 @@ import {axiospost} from '../../utils/http';
               version: this.VNFTest.VNFTestVersion
             })
           } 
+          if(!this.showModal.length && !this.isEdit) this.spin = true
         }
       },
       showModal(val){
@@ -109,10 +110,11 @@ import {axiospost} from '../../utils/http';
         }
       },
       VNFOptions(val){
-        if(val.length) this.spin = false      
+        if(val.length) {
+          this.spin = false
+        }      
         if(val.length && !this.isEdit){
           this.form.setFieldsValue({typeName: val[0]})
-          this.spin = true
         }
       }
     },
