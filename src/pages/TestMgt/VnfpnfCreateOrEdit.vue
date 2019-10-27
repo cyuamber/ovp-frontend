@@ -7,13 +7,13 @@
                     <a-input v-decorator="['XNFName',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterName }]"/>
                 </a-form-item>
                 <a-form-item label="XNF Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-                    <a-select :disabled="VNFOptions.length === 0" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]"
+                    <a-select :disabled="spin" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange"
                     >
                         <a-select-option v-for="type of VNFOptions" :key="type" :value="type">
                            {{type}}
                         </a-select-option>
                     </a-select>
-                    <a-spin  :spinning="VNFOptions.length === 0" class='skip-size'>
+                    <a-spin  :spinning="spin" class='skip-size'>
                         <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
                     </a-spin>
                 </a-form-item>
@@ -23,7 +23,7 @@
                 <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
                 </a-form-item>
-                <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 7 }">
+                <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                    <a-upload-dragger
                            :remove="handleRemove"
                            :beforeUpload="beforeUpload"
@@ -67,6 +67,7 @@
                 title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
                 disabled: true,
                 uploading: false,
+                spin: false,
                 loadingMessage : {
                     type: '',
                     toast: '',
@@ -81,8 +82,37 @@
             })
         },
         watch: {
+            visible(val){
+                if(val) {
+                    this.showModal = val;
+                    this.count ++;
+                    if(!this.showModal.length && this.isEdit && this.count !== 1){
+                        this.form.setFieldsValue({
+                            tesyMeterName: this.SuiteSingleData.tesyMeterName,
+                            tesyMeterType: this.SuiteSingleData.tesyMeterType,
+                            tesyMeterVendor: this.SuiteSingleData.tesyMeterVendor,
+                            tesyMeterVersion: this.SuiteSingleData.tesyMeterVersion
+                        })
+                    }
+                    if(!this.showModal.length && !this.isEdit) this.spin = true
+                }
+            },
             showModal(val){
-                if(!val) this.$store.dispatch('VnfpnfSuite/clearOptions')
+                if(!val) {
+                    this.$emit('close')
+                    this.$store.dispatch('VnfpnfSuite/clearOptions');
+                    this.$store.dispatch('VnfpnfSuite/getTestMeter', {});
+                    this.form.setFieldsValue({tesyMeterName: '', tesyMeterType: '', tesyMeterVendor: '', tesyMeterVersion: ''})
+                }
+            },
+            VNFOptions(val){
+                console.log(val)
+                if(val.length) {
+                    this.spin = false
+                }
+                if(val.length && !this.isEdit){
+                    this.form.setFieldsValue({tesyMeterType: val[0]})
+                }
             }
         },
         destroyed () {
@@ -96,6 +126,12 @@
                     toast: toast,
                     show:show
                 };
+            },
+            dropdownVisibleChange(){
+                if(!this.VNFOptions.length) {
+                    this.spin = true;
+                    this.$store.dispatch('VnfpnfSuite/getVNFOptions').then(() => {this.spin = true})
+                }
             },
             normFile(e) {
                 if (Array.isArray(e)) {
