@@ -13,12 +13,12 @@
                     <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecVersion }]"/>
                 </a-form-item>
                 <a-form-item label="VNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-                    <a-select class="select" :disabled="VNFOptions.length === 0" v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? testSpecSingleData.VNFtype:VNFOptions[0]}]">
+                    <a-select class="select" :disabled="spin" v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? testSpecSingleData.VNFtype:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange">
                         <a-select-option v-for="type of VNFOptions" :key="type" :value="type">
                             {{type}}
                         </a-select-option>
                     </a-select>
-                    <a-spin :spinning="VNFOptions.length === 0">
+                    <a-spin :spinning="spin">
                         <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
                     </a-spin>
                 </a-form-item>
@@ -48,6 +48,8 @@
                 form: this.$form.createForm(this),
                 showModal: true,
                 title: this.isEdit ? 'Edit Spec':'Add Spec',
+                spin: false,
+                count: 0,
                 loadingMessage : {
                     type: '',
                     toast: '',
@@ -62,8 +64,37 @@
             })
         },
         watch: {
+            visible(val){
+                if(val) {
+                    this.showModal = val;
+                    this.count ++;
+                    if(!this.showModal.length && this.isEdit && this.count !== 1){
+                        this.form.setFieldsValue({
+                            testSpecId: this.testSpecSingleData.testSpecId,
+                            testSpecName: this.testSpecSingleData.testSpecName,
+                            testSpecVersion: this.testSpecSingleData.testSpecVersion,
+                            VNFtype: this.testSpecSingleData.VNFtype,
+                            PublishORG: this.testSpecSingleData.PublishORG
+                        })
+                    }
+                    if(!this.showModal.length && !this.isEdit) this.spin = true
+                }
+            },
             showModal(val){
-                if(!val) this.$store.dispatch('testSpecMGT/clearOptions')
+                if(!val) {
+                    this.$emit('close');
+                    this.$store.dispatch('testSpecMGT/clearOptions');
+                    this.$store.dispatch('testSpecMGT/getTestSpec', {});
+                    this.form.setFieldsValue({testSpecId: '', testSpecName: '', testSpecVersion: '', VNFtype: '',PublishORG:''})
+                }
+            },
+            VNFOptions(val){
+                if(val.length) {
+                    this.spin = false
+                }
+                if(val.length && !this.isEdit){
+                    this.form.setFieldsValue({VNFtype: val[0]})
+                }
             }
         },
         destroyed () {
@@ -77,6 +108,12 @@
                     toast: toast,
                     show:show
                 };
+            },
+            dropdownVisibleChange(){
+                if(!this.VNFOptions.length) {
+                    this.spin = true;
+                    this.$store.dispatch('testSpecMGT/getVNFOptions').then(() => {this.spin = true})
+                }
             },
             handleCancel(){
                 this.$emit('close');

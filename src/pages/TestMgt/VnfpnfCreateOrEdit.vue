@@ -68,6 +68,7 @@
                 disabled: true,
                 uploading: false,
                 spin: false,
+                count: 0,
                 loadingMessage : {
                     type: '',
                     toast: '',
@@ -99,14 +100,13 @@
             },
             showModal(val){
                 if(!val) {
-                    this.$emit('close')
+                    this.$emit('close');
                     this.$store.dispatch('VnfpnfSuite/clearOptions');
                     this.$store.dispatch('VnfpnfSuite/getTestMeter', {});
                     this.form.setFieldsValue({tesyMeterName: '', tesyMeterType: '', tesyMeterVendor: '', tesyMeterVersion: ''})
                 }
             },
             VNFOptions(val){
-                console.log(val)
                 if(val.length) {
                     this.spin = false
                 }
