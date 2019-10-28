@@ -20,7 +20,7 @@ import {axiosget} from '../../utils/http'
     },
     methods: {
       searchTypeID(){
-        if(this.currentPage === 'TestSUT'){
+        if(this.currentPage === 'TestSUT' || this.currentPage === 'TestInstrumentMGT' || this.currentPage === 'VNF/PNFSuiteMGT' || this.currentPage === 'TestSpecMGT'){
           this.$emit(this.event,this.keyword.trim(), true)
         }else {
           let {url, key, event, keyword} = this
@@ -60,10 +60,10 @@ import {axiosget} from '../../utils/http'
           this.key = 'testTaskId';
           this.event ='VNFSuiteSearch';
           break;
-        case 'TestStandardMGT':
+        case 'TestSpecMGT':
           this.url = '/GETTestSpec';
           this.key = 'testSpecId';
-          this.event ='testStandardSearch';
+          this.event ='testSpecSearch';
           break;
       }
     }

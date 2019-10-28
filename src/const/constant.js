@@ -204,10 +204,97 @@ const testJobColumns = [
         },
     }
 ]
+const TestInsrigisterColumns = [
+    {
+        title: 'Name',
+        dataIndex: 'meterSysName'
+    },
+    {
+        title: 'Vendor',
+        dataIndex: 'meterSysVendor'
+    },
+    {
+        title: 'Mnt Address',
+        dataIndex: 'meterSysUrl'
+    },
+    {
+        title: 'Create Time',
+        dataIndex: 'createTime'
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+	width:180,
+        scopedSlots: { customRender: 'action' }
+    }
+]
+const VnfpnfSuiteColumns = [
+    {
+        title: 'Name',
+        dataIndex: 'tesyMeterName'
+    },
+    {
+        title: 'Vendor',
+        dataIndex: 'tesyMeterVendor'
+    },
+    {
+        title: 'Version',
+        dataIndex: 'tesyMeterVersion'
+    },
+    {
+        title: 'Type',
+        dataIndex: 'tesyMeterType'
+    },
+    {
+        title: 'Create Time',
+        dataIndex: 'createTime'
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+	width:180,
+        scopedSlots: {customRender: 'action'}
+    }
+]
+const TestSpecColumns = [
+    {
+        title: 'ID',
+        dataIndex: 'testSpecId'
+    },
+    {
+        title: 'Name',
+        dataIndex: 'testSpecName'
+    },
+    {
+        title: 'Version',
+        dataIndex: 'testSpecVersion'
+    },
+    {
+        title: 'VNF Type',
+        dataIndex: 'VNFtype'
+    },
+    {
+        title: 'Publish ORG',
+        dataIndex: 'PublishORG'
+    },
+    {
+        title: 'Publish Time',
+        dataIndex: 'publishTime'
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        width:180,
+        scopedSlots: { customRender: 'action' }
+    }
+]
 export {
     mockcolumns,
     TestSUTColumns,
     testEnvVIMColumns,
     testEvnVNFMColumns,
+    TestInsrigisterColumns,
+    VnfpnfSuiteColumns,
+    TestSpecColumns,
     testJobColumns
 }
