@@ -18,27 +18,11 @@ const mockcolumns = [{
         dataIndex: "phone"
     }
 ]
-const VNFTypeColumns = [{
+const TestSUTColumns = [{
         title: 'ID',
-        dataIndex: 'id'
+        dataIndex: 'index'
     },
     {
-        title: 'VNF Type',
-        dataIndex: 'VNFTypeName'
-    },
-    {
-        title: 'Create Time',
-        dataIndex: 'createTime'
-    },
-    {
-        title: 'Action',
-        dataIndex: 'action',
-        scopedSlots: {
-            customRender: 'action'
-        }
-    }
-]
-const VNFTypeObjectsColumns = [{
         title: 'Name',
         dataIndex: 'VNFTestName'
     },
@@ -51,10 +35,6 @@ const VNFTypeObjectsColumns = [{
         dataIndex: 'VNFTestVersion'
     },
     {
-        title: 'Suit',
-        dataIndex: 'VNFTestVendor'
-    },
-    {
         title: 'Create Time',
         dataIndex: 'createTime'
     },
@@ -66,11 +46,19 @@ const VNFTypeObjectsColumns = [{
         }
     }
 ]
-const testEnvVIMColumns = [{
+const testEnvVIMColumns = [
+    {
+        title: 'NO.',
+        dataIndex: 'index',
+        fixed: 'left',
+        width: 50,
+    },
+    {
         title: 'State',
         dataIndex: 'state',
-        fixed: 'left',
-        width: 100
+        scopedSlots: {
+            customRender: 'state'
+        },
     },
     {
         title: 'CloudOwner',
@@ -81,24 +69,24 @@ const testEnvVIMColumns = [{
         dataIndex: 'cloudRegionId',
     },
     {
+        title: 'Cloud Type',
+        dataIndex: 'cloudType',
+    },
+    {
         title: 'Cloud Version',
         dataIndex: 'cloudVersion',
-    },
-    {
-        title: 'Owner Defined Type',
-        dataIndex: 'ownerDefinedType',
-    },
-    {
-        title: 'Cloud Zone',
-        dataIndex: 'cloudZone'
     },
     {
         title: 'User Name',
         dataIndex: 'userName'
     },
     {
-        title: 'Password',
-        dataIndex: 'passwd'
+        title: 'Default Tenant',
+        dataIndex: 'defaultTenant'
+    },
+    {
+        title: 'Create Time',
+        dataIndex: 'createTime'
     },
     {
         title: 'Auth URL',
@@ -118,11 +106,16 @@ const testEnvVIMColumns = [{
         width: 180
     }
 ]
-const testEvnVNFMColumns = [{
+const testEvnVNFMColumns = [
+    {
+        title: 'NO.',
+        dataIndex: 'index',
+        fixed: 'left',
+        width: 50,
+    },
+    {
         title: 'Name',
         dataIndex: 'VNFMname',
-        width: 100,
-        fixed: 'left'
     },
     {
         title: 'Type',
@@ -145,16 +138,16 @@ const testEvnVNFMColumns = [{
         dataIndex: 'vim'
     },
     {
-        title: 'Certificate URL',
-        dataIndex: 'authUrl'
+        title: 'Create Time',
+        dataIndex: 'createTime'
     },
     {
         title: 'User Name',
-        dataIndex: 'userName'
+        dataIndex: 'username'
     },
     {
         title: 'Password',
-        dataIndex: 'passwd'
+        dataIndex: 'password'
     },
     {
         title: 'Action',
@@ -164,6 +157,51 @@ const testEvnVNFMColumns = [{
         },
         width: 180,
         fixed: 'right'
+    }
+];
+const testJobColumns = [
+    {
+        title: 'No.',
+        dataIndex: 'index',
+        fixed: 'left',
+        width: 50
+    },
+    {
+        title: 'VNF Name',
+        dataIndex: 'VNFName',
+    },
+    {
+        title: 'Job Name',
+        dataIndex: 'jobName'
+    },
+    {
+        title: 'Job Description',
+        dataIndex: 'description'
+    },
+    {
+        title: 'Test Speciflcation',
+        dataIndex: 'speciflcation'
+    },
+    {
+        title: 'Created Time',
+        dataIndex: 'createTime'
+    },
+    {
+        title: 'State',
+        dataIndex: 'state',
+        width: 70,
+        scopedSlots: {
+            customRender: 'state'
+        },
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        fixed: 'right',
+        width: 350,
+        scopedSlots: {
+            customRender: 'action'
+        },
     }
 ]
 const TestInsrigisterColumns = [
@@ -186,6 +224,7 @@ const TestInsrigisterColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
+	width:180,
         scopedSlots: { customRender: 'action' }
     }
 ]
@@ -213,10 +252,11 @@ const VnfpnfSuiteColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
+	width:180,
         scopedSlots: {customRender: 'action'}
     }
 ]
-const TestStandardColumns = [
+const TestSpecColumns = [
     {
         title: 'ID',
         dataIndex: 'testSpecId'
@@ -234,22 +274,27 @@ const TestStandardColumns = [
         dataIndex: 'VNFtype'
     },
     {
+        title: 'Publish ORG',
+        dataIndex: 'PublishORG'
+    },
+    {
         title: 'Publish Time',
         dataIndex: 'publishTime'
     },
     {
         title: 'Action',
         dataIndex: 'action',
+        width:180,
         scopedSlots: { customRender: 'action' }
     }
 ]
 export {
     mockcolumns,
-    VNFTypeColumns,
-    VNFTypeObjectsColumns,
+    TestSUTColumns,
     testEnvVIMColumns,
     testEvnVNFMColumns,
     TestInsrigisterColumns,
     VnfpnfSuiteColumns,
-    TestStandardColumns
+    TestSpecColumns,
+    testJobColumns
 }

@@ -9,7 +9,10 @@
         </div>
         <div class="table">
           <a-table :columns="tab === 'VIM ENV'? VIMColumns : VNFMColumns" :dataSource="tab === 'VIM ENV' ? VIMTableData : VNFMTableData" bordered :loading="loading" 
-          rowKey="userName" size="default" :pagination="pagination" :scroll="{x: 1630}">
+          rowKey="index" size="default" :pagination="pagination" :scroll="{x: 1630}">
+            <span slot="state" slot-scope="state,record">
+              <span class="showState" :style="{backgroundColor: record.isOnline? '#52C41A': '#F5222D'}" :title="record.isOnline? 'online': 'offline'"></span>
+            </span>
             <span slot="action" slot-scope="action,record">
               <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag" 
               @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -18,7 +21,7 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <CreateOrEditModal :isEdit="isEdit" :currentTab="currentTab" v-if="visible" @close="close" :initValues="initValues" @getAllTableData="getAllTableData"/>
+    <CreateOrEditModal :isEdit="isEdit" :currentTab="currentTab" v-if="visible" @close="close" :initValues="initValues" @getAllTableData="getAllTableData" :cloudTypeOptions="cloudTypeOptions" :regionIdOptions="regionIdOptions"/>
   </div>
 </template>
 
@@ -44,7 +47,9 @@ export default {
       VIMTableData: [],
       VNFMTableData: [],
       pagination: {},
-      initValues: {}
+      initValues: {},
+      cloudTypeOptions: [],
+      regionIdOptions: []
     }
   },
   methods: {
@@ -53,6 +58,13 @@ export default {
       this.getAllTableData()
     },
     handleClick(){
+      // Simulation request
+      setTimeout(()=> {
+        if(this.currentTab === 'VIM ENV'){
+          this.CloudTypeOptions = ['VNF', 'PNF', 'FNF'];
+          this.regionIdOptions = ['VNF', 'PNF', 'FNF'];
+        } 
+      },5000)
       this.visible = true;
       this.isEdit = false;
       this.initValues = {}
@@ -84,7 +96,7 @@ export default {
           this.$message.error('Failed to get form data');
         }
         this.loading = false
-      },error => this.$message.error('Network exception, please try again')
+      },() => this.$message.error('Network exception, please try again')
       )
     },
     formatData(data){
@@ -92,6 +104,7 @@ export default {
         current: 1,
         total: data.total
       }
+      console.log(data)
       if (this.currentTab === 'VIM ENV'){
         this.VIMTableData = this.formatTable(data.body)
       }else {
@@ -99,8 +112,11 @@ export default {
       }
     },
     formatTable(list){
-      return list.map( item => {
+      
+      return list.map( (item, index) => {
         item.action = ['Edit', 'Delete']
+        item.index = list.length * (this.pagination.current -1) + index+1;
+        item.createTime = moment(item.createTime).format('YYYY-MM-DD');
         return item
       })
     },
@@ -163,14 +179,23 @@ export default {
   .calendar{
     float: right;
     width: 280px;
-    // margin-right: 20px;
   }
 }
 .table{
-    // width: 80%;
-    .tag{
-      padding:0  8px;
-      border-radius: 12px;
-    }
+  .tag{
+    padding:0  8px;
+    border-radius: 12px;
   }
-</style>>
+  .showState{
+    display: block;
+    margin: 0 auto;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
+}
+/deep/ .ant-table-thead > tr > th {
+  text-align: center;
+  white-space: nowrap;
+}
+</style>

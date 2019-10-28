@@ -7,7 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import http from '../../utils/http'
+import {axiosget} from '../../utils/http'
   export default {
     props: ['currentPage'],
     data(){
@@ -20,27 +20,25 @@ import http from '../../utils/http'
     },
     methods: {
       searchTypeID(){
-        let {url, key, event, keyword} = this
-        http.axiosget(url,{[key]: keyword}).then(res => {
-          if(res.code === 200){
-            this.$emit(event,res)
-            this.keyword = ''
-            this.$message.success('The operation has been successful')
-          }else this.$message.error('Network exception, please try again');
-        })
+        if(this.currentPage === 'TestSUT' || this.currentPage === 'TestInstrumentMGT' || this.currentPage === 'VNF/PNFSuiteMGT' || this.currentPage === 'TestSpecMGT'){
+          this.$emit(this.event,this.keyword.trim(), true)
+        }else {
+          let {url, key, event, keyword} = this
+          axiosget(url,{[key]: keyword}).then(res => {
+            if(res.code === 200){
+              this.$emit(event,res)
+              this.keyword = ''
+              this.$message.success('The operation has been successful')
+            }else this.$message.error('Network exception, please try again');
+          })
+        }
+        
       }
     },
     mounted () {
       switch (this.currentPage){
-        case 'VNFTypeMGT':
-          this.url = '/getVNFType';
-          this.key = 'id';
-          this.event = 'searchVNFTypeID';
-          break;
-        case 'VNFTypeObjectsMGT':
-          this.url = '/getVNFTest';
-          this.key = 'VNFTestName';
-          this.event = 'SearchVNFTestName';
+        case 'TestSUT':
+          this.event = 'serchTestSUT';
           break;
         case 'VIMTestEnvMGT':
           this.url = '/getVIM';
@@ -62,10 +60,10 @@ import http from '../../utils/http'
           this.key = 'testTaskId';
           this.event ='VNFSuiteSearch';
           break;
-        case 'TestStandardMGT':
+        case 'TestSpecMGT':
           this.url = '/GETTestSpec';
           this.key = 'testSpecId';
-          this.event ='testStandardSearch';
+          this.event ='testSpecSearch';
           break;
       }
     }

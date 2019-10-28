@@ -1,17 +1,26 @@
 <template>
-  <a-modal :title="(isEdit ? 'Edit ': 'Rigister ') + currentTab" v-model="showModal" :footer="null" @cancel="handleCancel">
+  <a-modal :title="(isEdit ? 'Edit ': 'Rigister ') + currentTab" v-model="showModal" :footer="null" @cancel="handleCancel" centered>
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <div v-if="currentTab === 'VIM ENV'">
           <a-form-item v-for="(item,i) in VIMForm" :key="i" :label="item" :label-col="{ span: 8 }" 
-          :wrapper-col="{ span: (item === 'Cloud Type' || item === 'Cloud Version')? 5:12 }">
-            <a-input v-if="item !== 'Cloud Type' && item !== 'Cloud Version'" v-decorator="[
+          :wrapper-col="{ span: (item === 'Cloud Type' || item === 'Cloud Region ID')? 8:12 }">
+            <a-input v-if="item !== 'Cloud Type' && item !== 'Cloud Region ID'" v-decorator="[
               VIMformList[i],
               { rules: [{ required: true, message: item +' is required' }], initialValue: initValues[i] },
             ]" />
-            <a-select v-else v-decorator="[VIMformList[i],{ rules: [{ required: true, }],initialValue:isEdit ? initValues[i]:selectOption[0]}]" >
-              <a-select-option v-for="type in selectOption" :key="type" :value="type"> {{type}} </a-select-option>
+            <a-select v-if="item === 'Cloud Region ID'" v-decorator="[VIMformList[i],{ rules: [{ required: true }]}]" :disabled="regionId.length === 0" class="select">
+              <a-select-option v-for="type in regionId" :key="type" :value="type"> {{type}} </a-select-option>
             </a-select>
+            <a-select v-if="item === 'Cloud Type'" v-decorator="[VIMformList[i],{ rules: [{ required: true }]}]" :disabled="cloudType.length ===0" class="select">
+              <a-select-option v-for="type in cloudType" :key="type" :value="type"> {{type}} </a-select-option>
+            </a-select>
+            <a-spin :spinning="regionId.length === 0" v-if="item === 'Cloud Region ID'">
+              <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
+            </a-spin>
+            <a-spin :spinning="cloudType.length ===0" v-if="item === 'Cloud Type'">
+              <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
+            </a-spin>
           </a-form-item>
         </div>
         <div v-else>
@@ -34,17 +43,27 @@
 
 <script type="text/ecmascript-6">
 import {axiospost} from '../../utils/http'
+import {VIMForm, VNFMForm} from '../../const/TestEnvConst.js'
   export default {
-    props: ['currentTab', 'isEdit', 'initValues'],
+    props: ['currentTab', 'isEdit', 'initValues','cloudTypeOptions','regionIdOptions'],
     data(){
       return {
         showModal: true,
         form: this.$form.createForm(this),
-        VIMForm: ['CloudOwner', 'Cloud Region ID', 'Cloud Type', 'Cloud Version', 'Owner Defined Type', 'Cloud Zone', 'User Name', 'Password', 'Auth URL', 'Tenant'],
+        VIMForm: VIMForm,
         VIMformList: [],
-        VNFMForm: ['Name', 'Type', 'Vendor', 'Version', 'URL', 'VIM', 'Certificate URL', 'User Name', 'Password'],
+        VNFMForm: VNFMForm,
         VNFMformList: [],
-        selectOption: ['VNF', 'PNF']
+        cloudType: this.cloudTypeOptions,
+        regionId: this.regionIdOptions
+      }
+    },
+    watch: {
+      cloudTypeOptions(val){
+        this.cloudType = val
+      },
+      regionIdOptions(val){
+        this.regionId = val
       }
     },
     methods: {
@@ -106,6 +125,9 @@ import {axiospost} from '../../utils/http'
 </script>
 
 <style scoped>
-
+.select{
+  width: 70%;
+  margin-right: 10%;
+}
  
 </style>

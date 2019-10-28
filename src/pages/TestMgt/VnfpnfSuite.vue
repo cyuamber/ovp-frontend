@@ -1,115 +1,132 @@
 <template>
     <div class="test-ins__container">
+        <Loading :loadingMessage="loadingMessage" />
         <div class="top">
             <a-button type="primary" @click="handleClick">Create xNF TT</a-button>
             <Search class="search" @VNFSuiteSearch="VNFSuiteSearch" :currentPage="currentPage"/>
-            <a-date-picker class="calendar" @change="onChange" placeholder="Select date" :allowClear="false"
-                           format="DD-MM-YYYY"/>
+            <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
         </div>
         <div class="table">
             <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="tesyMeterName"
                      size="default" :pagination="pagination">
       <span slot="action" slot-scope="action,record">
-        <a-tag v-for="item in action" :key="item" :color="item === 'EDIT'? 'blue' : 'red'" class="tag"
+        <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
       </span>
             </a-table>
         </div>
-        <xNFCreateOrEdit v-if="visible" @close="close" @getAllTestMeter="getAllTestMeter" :singleData="singleData"
-                         :isEdit="isEdit"/>
+        <xNFCreateOrEdit v-if="visible" @close="close" @getAllTestMeter="getAllTestMeter" :isEdit="isEdit"/>
     </div>
 </template>
 
 <script>
-    import moment from 'moment'
-    import {axiospost, axiosget} from '../../utils/http'
+    import {axiospost} from '../../utils/http'
     import Search from '../../components/Search/Search'
     import {VnfpnfSuiteColumns} from '../../const/constant'
+    import {mapState} from 'vuex'
+    import Loading from "../../components/Loading/Loading";
     import xNFCreateOrEdit from './VnfpnfCreateOrEdit'
 
     export default {
         name: "VnfpnfSuite",
         components: {
             Search,
-            xNFCreateOrEdit
+            xNFCreateOrEdit,
+            Loading
         },
         data() {
             return {
                 visible: false,
                 columns: VnfpnfSuiteColumns,
-                tableData: [],
                 loading: true,
-                pagination: {},
-                singleData:{},
                 currentPage:'VNF/PNFSuiteMGT',
                 isEdit: false,
+                createTime: '',
+                keyword: '',
+                loadingMessage: {
+                    type: "",
+                    toast: "",
+                    show:true
+                }
             }
         },
+        computed: {
+            ...mapState ({
+                tableData: state => state.VnfpnfSuite.tableData,
+                pagination: state => state.VnfpnfSuite.pagination,
+                SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
+            }),
+        },
         mounted() {
-            this.getAllTestMeter()
+            this.loading = true;
+            this.handleLoadingMessage("","",true);
+            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() =>
+                this.loading = false,
+                this.loadingMessage.show = false
+            )
         },
         methods: {
             handleClick(){
                 this.visible = true;
-                this.isEdit = false
+                this.isEdit = false;
+                this.$store.dispatch('VnfpnfSuite/getTestMeter','');
+                this.$store.dispatch('VnfpnfSuite/getVNFOptions')
             },
-            getAllTestMeter() {
-                axiosget('/getTestMeter').then(res => {
-                    if (res.code === 200) {
-                        this.formatData(res)
-                    }else {
-                        this.$message.error('Network exception, please try again');
-                    }
-                    this.loading = false
-                })
+            handleLoadingMessage(type,toast,show){
+                this.loadingMessage = {
+                    type: type,
+                    toast: toast,
+                    show:show
+                };
             },
             // Filter by creating time
-            onChange(date) {
-                let selectDate = moment(date._d).format('YYYY-MM-DD');
-                axiosget('/getTestMeter', {createTime: selectDate}).then(res => {
-                    if (res.code === 200) this.formatData(res);
-                    else this.$message.error('Network exception, please try again');
-                })
+            onChange(date,d) {
+                this.createTime = d;
+                this.serchTestSUT()
             },
-            // Format response table data
-            formatData(data){
-                this.pagination = {
-                    current: 1,
-                    total: data.total
-                };
-                this.tableData = data.body.map( item => {
-                    item.createTime = moment(item.createTime).format('YYYY-MM-DD');
-                    item.action = ['EDIT', 'DELETE'];
-                    return item
-                })
-            },
-            VNFSuiteSearch(data){
-                this.formatData(data)
+            VNFSuiteSearch(keyword, isSearch){
+                this.loading = true;
+                if(isSearch) this.keyword = keyword;
+                if(keyword === '' && this.createTime === '') {
+                    this.$message.warning('Please enter valid search information');
+                    return
+                }
+                this.handleLoadingMessage("","",true);
+                let obj = {keyword: this.keyword, createTime: this.createTime};
+                // Simulation request
+                this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() =>
+                    this.loading = false,
+                    this.loadingMessage.show = false
+                )
             },
             close(){
                 this.visible = false;
             },
-            showEditOrDeleteModal(item,data){
-                if(item === 'EDIT') {
+            showEditOrDeleteModal(item,SuiteSingleData){
+                if(item === 'Edit') {
                     this.visible = true;
                     this.isEdit = true;
-                    this.singleData = Object.assign({},data);
+                    this.$store.dispatch('VnfpnfSuite/getTestMeter',SuiteSingleData)
                 }else {
                     this.$confirm({
                         title: 'Are you sure delete this xNF TT?',
-                        content: 'Name: '+data.tesyMeterName,
+                        content: 'Name: '+SuiteSingleData.tesyMeterName,
                         okText: 'Yes',
                         okType: 'danger',
                         cancelText: 'No',
                         onOk: () => {
-                            axiospost('/deleteTestMeter', {tesyMeterName: data.tesyMeterName}).then(res => {
+                            axiospost('/deleteTestMeter', {tesyMeterName: SuiteSingleData.tesyMeterName}).then(res => {
                                 if (res.code === 200) {
-                                    this.$message.success('Deleted successfully')
-                                }else this.$message.error('Network exception, please try again');
+                                    this.handleLoadingMessage("success","Deleted successfully",false);
+                                }else  this.handleLoadingMessage("error","Network exception, please try again",false);
                             })
                         }
                     });
                 }
+            },
+            getAllTestMeter(){
+                this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => this.loading = false);
+
             }
         }
     };
