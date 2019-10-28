@@ -70,10 +70,10 @@
                     this.count ++;
                     if(!this.showModal.length && this.isEdit && this.count !== 1){
                         this.form.setFieldsValue({
-                            testSpecId: this.testSpecSingleData.testSpecId,
-                            testSpecName: this.testSpecSingleData.testSpecName,
-                            testSpecVersion: this.testSpecSingleData.testSpecVersion,
-                            VNFtype: this.testSpecSingleData.VNFtype,
+                            ID: this.testSpecSingleData.testSpecId,
+                            Name: this.testSpecSingleData.testSpecName,
+                            Version: this.testSpecSingleData.testSpecVersion,
+                            VNFType: this.testSpecSingleData.VNFtype,
                             PublishORG: this.testSpecSingleData.PublishORG
                         })
                     }
@@ -85,7 +85,7 @@
                     this.$emit('close');
                     this.$store.dispatch('testSpecMGT/clearOptions');
                     this.$store.dispatch('testSpecMGT/getTestSpec', {});
-                    this.form.setFieldsValue({testSpecId: '', testSpecName: '', testSpecVersion: '', VNFtype: '',PublishORG:''})
+                    this.form.setFieldsValue({ID: '', Name: '', Version: '', VNFType: '',PublishORG:''})
                 }
             },
             VNFOptions(val){
@@ -93,13 +93,9 @@
                     this.spin = false
                 }
                 if(val.length && !this.isEdit){
-                    this.form.setFieldsValue({VNFtype: val[0]})
+                    this.form.setFieldsValue({VNFType: val[0]})
                 }
             }
-        },
-        destroyed () {
-            this.$store.dispatch('testSpecMGT/clearOptions');
-            this.$store.dispatch('testSpecMGT/getTestSpec', {})
         },
         methods: {
             handleLoadingMessage(type,toast,show){

@@ -89,10 +89,10 @@
                     this.count ++;
                     if(!this.showModal.length && this.isEdit && this.count !== 1){
                         this.form.setFieldsValue({
-                            tesyMeterName: this.SuiteSingleData.tesyMeterName,
-                            tesyMeterType: this.SuiteSingleData.tesyMeterType,
-                            tesyMeterVendor: this.SuiteSingleData.tesyMeterVendor,
-                            tesyMeterVersion: this.SuiteSingleData.tesyMeterVersion
+                            XNFName: this.SuiteSingleData.tesyMeterName,
+                            XNFType: this.SuiteSingleData.tesyMeterType,
+                            XNFVendor: this.SuiteSingleData.tesyMeterVendor,
+                            Version: this.SuiteSingleData.tesyMeterVersion
                         })
                     }
                     if(!this.showModal.length && !this.isEdit) this.spin = true
@@ -103,7 +103,7 @@
                     this.$emit('close');
                     this.$store.dispatch('VnfpnfSuite/clearOptions');
                     this.$store.dispatch('VnfpnfSuite/getTestMeter', {});
-                    this.form.setFieldsValue({tesyMeterName: '', tesyMeterType: '', tesyMeterVendor: '', tesyMeterVersion: ''})
+                    this.form.setFieldsValue({XNFName: '', XNFType: '', XNFVendor: '', Version: ''})
                 }
             },
             VNFOptions(val){
@@ -111,13 +111,9 @@
                     this.spin = false
                 }
                 if(val.length && !this.isEdit){
-                    this.form.setFieldsValue({tesyMeterType: val[0]})
+                    this.form.setFieldsValue({XNFType: val[0]})
                 }
             }
-        },
-        destroyed () {
-            this.$store.dispatch('VnfpnfSuite/clearOptions');
-            this.$store.dispatch('VnfpnfSuite/getTestMeter', {})
         },
         methods: {
             handleLoadingMessage(type,toast,show){
