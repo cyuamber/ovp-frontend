@@ -3,9 +3,6 @@
         <template>
             <Loading :loadingMessage="loadingMessage" />
             <a-form :form="form" @submit="handleSubmit">
-                <a-form-item label="ID"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
-                    <a-input v-decorator="['ID',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecId }]"/>
-                </a-form-item>
                 <a-form-item label="Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['Name',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecName }]"/>
                 </a-form-item>
@@ -70,7 +67,6 @@
                     this.count ++;
                     if(!this.showModal.length && this.isEdit && this.count !== 1){
                         this.form.setFieldsValue({
-                            ID: this.testSpecSingleData.testSpecId,
                             Name: this.testSpecSingleData.testSpecName,
                             Version: this.testSpecSingleData.testSpecVersion,
                             VNFType: this.testSpecSingleData.VNFtype,
@@ -85,7 +81,7 @@
                     this.$emit('close');
                     this.$store.dispatch('testSpecMGT/clearOptions');
                     this.$store.dispatch('testSpecMGT/getTestSpec', {});
-                    this.form.setFieldsValue({ID: '', Name: '', Version: '', VNFType: '',PublishORG:''})
+                    this.form.setFieldsValue({Name: '', Version: '', VNFType: '',PublishORG:''})
                 }
             },
             VNFOptions(val){
@@ -119,7 +115,6 @@
                 this.form.validateFields((err, values) => {
                     if(!err){
                         let data = {
-                            testSpecId: values.ID,
                             testSpecName: values.Name,
                             testSpecVersion: values.Version,
                             VNFtype: values.VNFType,

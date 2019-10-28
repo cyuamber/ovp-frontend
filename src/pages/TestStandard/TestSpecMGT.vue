@@ -56,7 +56,6 @@ export default {
     },
     mounted () {
         this.loading = true;
-        this.handleLoadingMessage("","",true);
         this.$store.dispatch('testSpecMGT/getTableData',{}).then(() =>
             this.loading = false,
             this.loadingMessage.show = false
@@ -91,13 +90,11 @@ export default {
                 this.$message.warning('Please enter valid search information');
                 return
             }
-            this.handleLoadingMessage("","",true);
             let obj = {keyword: this.keyword, createTime: this.createTime};
             // Simulation request
-            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() =>
-                this.loading = false,
-                this.loadingMessage.show = false
-            )
+            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => setTimeout(() => {
+                this.loading = false
+            },2000))
         },
         showEditOrDeleteModal(item,testSpecSingleData){
             if(item === 'Edit') {

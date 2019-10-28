@@ -82,7 +82,7 @@
             // Filter by creating time
             onChange(date,d) {
                 this.createTime = d;
-                this.serchTestSUT()
+                this.VNFSuiteSearch()
             },
             VNFSuiteSearch(keyword, isSearch){
                 this.loading = true;
