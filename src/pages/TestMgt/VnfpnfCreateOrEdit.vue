@@ -3,10 +3,10 @@
         <template>
             <Loading :loadingMessage="loadingMessage" />
             <a-form :form="form" @submit="handleSubmit">
-                <a-form-item label="XNF Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
+                <a-form-item :label="currentTab+' Name'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
                     <a-input v-decorator="['XNFName',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterName }]"/>
                 </a-form-item>
-                <a-form-item label="XNF Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+                <a-form-item :label="currentTab+'  Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
                     <a-select :disabled="spin" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange"
                     >
                         <a-select-option v-for="type of VNFOptions" :key="type" :value="type">
@@ -17,10 +17,10 @@
                         <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
                     </a-spin>
                 </a-form-item>
-                <a-form-item label="XNF Vendor"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                <a-form-item :label="currentTab+' Vendor'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['XNFVendor',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVendor }]"/>
                 </a-form-item>
-                <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                <a-form-item :label="currentTab+' Version'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
                 </a-form-item>
                 <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -51,7 +51,7 @@
     import Loading from "../../components/Loading/Loading";
     import {axiospost, axiosCancelToken} from '../../utils/http'
     export default {
-        props: ['isEdit'],
+        props: ['isEdit', 'currentTab'],
         components: {
             Loading
         },

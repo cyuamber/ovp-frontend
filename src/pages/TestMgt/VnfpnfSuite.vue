@@ -1,21 +1,25 @@
 <template>
     <div class="test-ins__container">
         <Loading :loadingMessage="loadingMessage" />
-        <div class="top">
-            <a-button type="primary" @click="handleClick">Create xNF TT</a-button>
-            <Search class="search" @VNFSuiteSearch="VNFSuiteSearch" :currentPage="currentPage"/>
-            <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
-        </div>
-        <div class="table">
-            <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="tesyMeterName"
-                     size="default" :pagination="pagination">
-      <span slot="action" slot-scope="action,record">
-        <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
-               @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
-      </span>
-            </a-table>
-        </div>
-        <xNFCreateOrEdit v-if="visible" @close="close" @getAllTestMeter="getAllTestMeter" :isEdit="isEdit"/>
+        <a-tabs @change="handleTabsChange">
+            <a-tab-pane v-for="tab in tabs" :key="tab" :tab="tab">
+                <div class="top">
+                    <a-button type="primary" @click="handleClick">Create {{tab}} TT</a-button>
+                    <Search class="search" @VNFSuiteSearch="VNFSuiteSearch" :currentPage="currentPage"/>
+                    <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
+                </div>
+                <div class="table">
+                    <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="tesyMeterName"
+                             size="default" :pagination="pagination">
+              <span slot="action" slot-scope="action,record">
+                <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
+                       @click="(() => showEditOrDeleteModal(item,tab,record))">{{item}}</a-tag>
+              </span>
+                    </a-table>
+                </div>
+            </a-tab-pane>
+        </a-tabs>
+        <xNFCreateOrEdit v-if="visible" :currentTab="currentTab" @close="close" @getAllTestMeter="getAllTestMeter" :isEdit="isEdit"/>
     </div>
 </template>
 
@@ -36,6 +40,8 @@
         },
         data() {
             return {
+                tabs: ['VNF', 'PNF'],
+                currentTab: 'VNF',
                 visible: false,
                 columns: VnfpnfSuiteColumns,
                 loading: true,
@@ -70,6 +76,13 @@
                 this.$store.dispatch('VnfpnfSuite/getTestMeter','');
                 this.$store.dispatch('VnfpnfSuite/getVNFOptions')
             },
+            handleTabsChange(key){
+                this.currentTab = key;
+                this.loading = true;
+                this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => setTimeout(() => {
+                    this.loading = false
+                },2000))
+            },
             handleLoadingMessage(type,toast,show){
                 this.loadingMessage = {
                     type: type,
@@ -98,9 +111,10 @@
             close(){
                 this.visible = false;
             },
-            showEditOrDeleteModal(item,SuiteSingleData){
+            showEditOrDeleteModal(item,tab,SuiteSingleData){
                 if(item === 'Edit') {
                     this.visible = true;
+                    this.currentTab = tab;
                     this.isEdit = true;
                     this.$store.dispatch('VnfpnfSuite/getTestMeter',SuiteSingleData)
                 }else {
