@@ -82,7 +82,7 @@ export default new Router({
         },
       ]
     }, {
-      path: '/testinstrumentmgt',
+      path: '/instrumentmanagesystemmgt',
       component: Layout,
       children: [
         {
@@ -93,7 +93,7 @@ export default new Router({
       ]
     },
     {
-      path: '/vnfpnfsuitemgt',
+      path: '/instrumentpackagemgt',
       component: Layout,
       children: [
         {
