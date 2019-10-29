@@ -1,33 +1,43 @@
 <template>
   <a-drawer
     title="Create Test Job"
-    :width="550"
+    :width="450"
     @close="onClose"
     :visible="visible"
     :closable="false"
+    class="drawer"
   >
     <a-form :form="form" class="form">
-      <a-form-item v-for="(item,i) in inputs" :key="item" :label="item"  :label-col="{ span: 8 }" 
-       :wrapper-col="{ span: (item === 'SUT Name' || item === 'Job Specification'|| item === 'SUT Type')? 9:14 }" 
+      <a-form-item v-for="(item,i) in formList" :key="item" :label="item"  :label-col="{ span: 8 }" 
+       :wrapper-col="{ span: 14 }" 
       >
-        <a-input v-if="item !== 'SUT Name' && item !=='Job Specification' && item !== 'SUT Type'" v-decorator="[formList[i],{ rules: [{ required: true, message: item +' is required'}]}]"/>
-        <a-select v-if="item === 'SUT Type'" v-decorator="[formList[i],{ rules: [{ required: true, }], initialValue: SUTTypes[0]}]" 
-          @select="((key) => selectSUTType(key))" class="select"
+        <a-input v-if="item === formList[0]" v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}]}]" /> 
+        <a-textarea v-if="item === formList[1]"  v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}]}]" :autosize="{minRows: 3}"/>
+        <a-select v-else-if="item === 'SUT Type'" v-decorator="[keyList[i],{ rules: [{ required: true, }]}]" 
+          @select="((key) => selectSUTType(key))" class="form__select--width"
         >
           <a-select-option  v-for="type in SUTTypes" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
-        <a-select v-if="item === 'SUT Name'" :disabled="!getSUTName" class="select"
-         v-decorator="[formList[i],{ rules: [{ required: true }], initialValue: getSUTName ? SUTNames[0]: ''}]"
+        <a-select v-else-if="item === 'SUT Name'" :disabled="!getSUTName" class="form__select--width"
+         v-decorator="[keyList[i],{ rules: [{ required: true }]}]" :title="!getSUTName ? 'Please select SUT Type first' : ''"
          @select="((key) => selectSUTName(key))"
         >
           <a-select-option  v-for="type in SUTNames" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
-        <a-select v-if="item === 'Job Specification'" :disabled="!getSpecification" class="select"
-         v-decorator="[formList[i],{ rules: [{ required: true }], initialValue: getSpecification ? specifications[0]: ''}]" 
-         @select="((key)=> selectSpecification(key))"
+        <a-select v-else-if="item === 'Job Specification'" :disabled="!getSpecification" class="form__select--width"
+         v-decorator="[keyList[i],{ rules: [{ required: true }]}]" @select="((key)=> selectSpecification(key))"
+         :title="!getSUTName ? 'Please select SUT Type and SUT Name first' : (!getSpecification ? 'Please select SUT Name first': '')"
         >
           <a-select-option  v-for="type in specifications" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
+        <!-- Test VNFM/VIM  -->
+        <a-select v-else-if="item === 'Test VNFM ENV'" v-decorator="[keyList[i]]" class="form__select--width">
+          <a-select-option  v-for="type in VNFMOption" :key="type" :value="type"> {{type}} </a-select-option>
+        </a-select>
+        <a-select v-else-if="item === 'Test VIM ENV'" v-decorator="[keyList[i]]" class="form__select--width">
+          <a-select-option  v-for="type in VNFMOption" :key="type" :value="type"> {{type}} </a-select-option>
+        </a-select>
+        <!-- loading -->
         <a-spin :spinning="nameSpin" v-if="item === 'SUT Name'">
           <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
         </a-spin>
@@ -35,33 +45,25 @@
           <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
         </a-spin>
       </a-form-item>
-      <a-spin size="large" :spinning="testCaseSpin" tip="loading...">
-        <div class="testCases spin-content">
-          <div class="testCase" v-for="(item,index) in testCases" :key="item">
-            <a-form-item :wrapper-col="{span: 7}" >
-              <a-checkbox-group v-decorator="['checkboxGroup', { initialValue: ['case1'] }]">
-                <a-checkbox :value="'case'+index" @change="onChange">{{item}}</a-checkbox>
-              </a-checkbox-group>
-            </a-form-item>
-              <label :for="'case'+index+'VNFM'">Test VNFM ENV:</label> 
-              <a-select v-decorator="['case'+index+'VNFM']" style="width: 120px" class="select-margin" :id="'case'+index+'VNFM'">
-                <a-select-option  v-for="type in VNFMOption" :key="type" :value="type"> {{type}} </a-select-option>
-              </a-select>
-            <label :for="'case'+index+'VNFM'">Test VIM ENV:</label>
-              <a-select v-decorator="['case'+index+'VNFM']" style="width: 120px"  class="select-margin" :id="'case'+index+'VNFM'" >
-                <a-select-option  v-for="type in VIMOption" :key="type" :value="type"> {{type}} </a-select-option>
-              </a-select>
-          </div>
-          <p class="wain" v-show="isShowWain">Select at least one test case！</p>
+      <!-- Test Case -->
+      <a-spin :spinning="testCaseSpin" tip="loading...">
+        <div  class="form__spin-content">
+          <a-form-item v-if="testCases.length !== 0">
+          <h3>Test Case List:</h3>
+            <a-checkbox-group v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}]}]" @change="onChange">
+              <a-card-grid v-for="(item,index) in testCases" :key="item"  class="form__card--padding">
+                <a-checkbox :value="'case'+index" class="form__checkbox--size"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item}}
+              </a-card-grid>
+              <!-- <a-checkbox v-for="(item,index) in testCases" :key="item" :value="'case'+index" class="form__checkbox--size"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item}} -->
+            </a-checkbox-group>
+          </a-form-item>  
         </div>
-      </a-spin>     
+      </a-spin>
     </a-form>
-     <div class="footer">
-        <a-button @click="onClose" size="large" class="btn-color">
-          Cancel
-        </a-button>
-        <a-button type="primary" size="large" @click="handleSubmit">Submit</a-button>
-      </div>
+    <div class="footer">
+      <a-button @click="onClose" size="large"> Cancel </a-button>
+      <a-button type="primary" size="large" @click="handleSubmit">Submit</a-button>
+    </div>
   </a-drawer>
 </template>
 
@@ -70,9 +72,9 @@
     props: ['isShow'],
     data(){
       return {
-        visible: false,
-        inputs: ['Job Name', 'Job Description', 'SUT Type', 'SUT Name', 'Job Specification'],
-        formList: [],
+        visible: this.isShow,
+        formList: ['Job Name', 'Job Description', 'SUT Type', 'SUT Name', 'Job Specification', 'Test VNFM ENV', 'Test VIM ENV'],
+        keyList: [],
         form: this.$form.createForm(this),
         SUTTypes: ['VNF','PNF', 'NFVI'],
         getSUTName: false,
@@ -86,7 +88,6 @@
         selectedSpecification: '',
         testCases: [],
         testCaseSpin: false,
-        isShowWain: false,
         VNFMOption: ['111','ssss','sss'],
         VIMOption: ['111','ssss','sss'],
       }
@@ -109,12 +110,12 @@
           this.selectedSpecification = ''
           this.testCases =  []
           this.testCaseSpin = false
-          this.form.setFieldsValue({SUTType: 'VNF', SUTName: '', JobSpecification: ''})
+          this.form.setFieldsValue({SUTType: '', SUTName: '', JobSpecification: ''})
         }
       }
     },
     created(){
-      this.formList = this.inputs.map(item => {
+      this.keyList = this.formList.map(item => {
         item = item.replace(' ','')
         return item
       })
@@ -129,7 +130,6 @@
         this.form.validateFields((error,values) => {
           if(!error){
             if(values.checkboxGroup.length === 0){
-              this.isShowWain = true
               return
             }
             this.visible = false;
@@ -171,7 +171,6 @@
         },2000)
       },
       onChange(e){
-        this.isShowWain = false
         console.log(e.target,e)
       }
 
@@ -183,16 +182,24 @@
 <style lang="less" scope>
 
   .form{
-    
-    .select{
-      width: 70%;
+    .ant-form-item-label {
+      text-align: left;
+    }
+    .form__select--width{
+      width: 55%;
       margin-right: 10%;
     }
-    .select-margin{
-      margin: 0 20px 24px 10px;
+    .form__checkbox--size{
+      font-size: 20px;
     }
-    .wain{
-      color: red;
+    .form__spin-content{
+      width: 100%;
+      height: 80px;
+    }
+    .form__card--padding{
+      width: 50%;
+      padding: 14px;
+      text-indent: .5em;
     }
   }
   .footer{
@@ -202,12 +209,6 @@
     width: 100%;
     .ant-btn{
       width: 50%;
-      border: none;
-      border-radius: 0;
-    }
-    .btn-color{
-      background-color: #7A7A86;
-
     }
   }
 
