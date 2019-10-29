@@ -59,11 +59,9 @@
         },
         mounted() {
             this.loading = true;
-            this.handleLoadingMessage("","",true);
-            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() =>
-                this.loading = false,
-                this.loadingMessage.show = false
-            )
+            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => setTimeout(() => {
+                this.loading = false
+            },2000))
         },
         methods: {
             handleClick(){
@@ -91,12 +89,10 @@
                     this.$message.warning('Please enter valid search information');
                     return
                 }
-                this.handleLoadingMessage("","",true);
                 let obj = {keyword: this.keyword, createTime: this.createTime};
                 // Simulation request
                 this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() =>
-                    this.loading = false,
-                    this.loadingMessage.show = false
+                    this.loading = false
                 )
             },
             close(){

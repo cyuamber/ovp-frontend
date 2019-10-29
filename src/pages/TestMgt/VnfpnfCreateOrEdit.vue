@@ -25,6 +25,7 @@
                 </a-form-item>
                 <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                    <a-upload-dragger
+                           class="upload-float"
                            :remove="handleRemove"
                            :beforeUpload="beforeUpload"
                            name="files"
@@ -32,18 +33,12 @@
                    >
                        <p class="ant-upload-text upload-test">Click or drag to upload</p>
                    </a-upload-dragger>
-                    <a-button
-                            type="primary"
-                            @click="handleUpload"
-                            :disabled="disabled"
-                            :loading="uploading"
-                            style="margin-top: 16px"
-                    >
-                        {{uploading ? 'Uploading' : 'Start Upload' }}
-                    </a-button>
+                    <a-spin  :spinning="disabled" class='skip-size skip-float'>
+                        <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
+                    </a-spin>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-                    <a-button type="primary" html-type="submit">Submit</a-button>
+                    <a-button type="primary" html-type="submit" :disabled="disabled">Submit</a-button>
                 </a-form-item>
             </a-form>
         </template>
@@ -54,7 +49,7 @@
     import moment from 'moment';
     import {mapState} from 'vuex'
     import Loading from "../../components/Loading/Loading";
-    import {axiospost} from '../../utils/http'
+    import {axiospost, axiosCancelToken} from '../../utils/http'
     export default {
         props: ['isEdit'],
         components: {
@@ -65,10 +60,9 @@
                 form: this.$form.createForm(this),
                 showModal: true,
                 title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
-                disabled: true,
-                uploading: false,
                 spin: false,
                 count: 0,
+                disabled: false,
                 loadingMessage : {
                     type: '',
                     toast: '',
@@ -139,27 +133,39 @@
                 return e && e.fileList;
             },
             handleRemove() {
-                this.disabled = true;
+                if(this.disabled){
+                    axiosCancelToken("/uploadVNFFile").then(res => {
+                        if(res.code === 200){
+                            this.disabled = false;
+                            this.$message.success('cancel upload successfully.');
+                        }else {
+                            this.$message.error('cancel upload failed.');
+                        }
+                    });
+                }
             },
             beforeUpload() {
-                this.disabled = false;
                 return false;
             },
-            handleUpload() {
+            handleUpload(url,data) {
                 let fileList = this.form.getFieldValue("upload");
                 const formData = new FormData();
-                formData.append('files[]', fileList[0]);
-                this.uploading = true;
+                formData.append('files', fileList[0]);
+                this.disabled = true;
                 axiospost('/uploadVNFFile',{VNFFileName:formData}).then(res => {
-                    this.uploading = false;
                     if(res.code === 200){
                         this.$message.success('upload successfully.');
+                        this.submitFormData(url,data)
                     }else {
+                        this.disabled = false;
                         this.$message.error('upload failed.');
                     }
                 });
             },
             handleCancel(){
+                if(!this.disabled){
+                    this.handleRemove();
+                }
                 this.$emit('close');
             },
             handleSubmit(){
@@ -167,7 +173,7 @@
                 this.form.validateFields((err, values) => {
                     if(!err){
                         const formData = new FormData();
-                        formData.append('files[]', values.upload[0]);
+                        formData.append('files', values.upload[0]);
                         let data = {
                             tesyMeterName: values.XNFName,
                             tesyMeterType: values.XNFType,
@@ -176,26 +182,25 @@
                             VNFFileName:formData,
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                        this.handleLoadingMessage("","",true);
-                        axiospost(url, data)
-                            .then((res) => {
-                                    if(res.code === 200){
-                                        this.handleLoadingMessage("success",this.isEdit ? 'Successfully updated' : 'successfully added ',false);
-                                        this.$emit('getAllTestMeter')
-                                    }else this.handleLoadingMessage("error",this.isEdit ? 'updated failed' : 'added failed',false);
-                                    setTimeout(() => {
-                                        this.$emit('close');
-                                    },1000)
-                                },
-                                () => {
-                                    this.handleLoadingMessage("error","Network exception, please try again",false);
-                                    setTimeout(() => {
-                                        this.$emit('close');
-                                    },1000)
-                                });}
+                       this.handleUpload(url,data);
+                    }
                 });
 
             },
+            submitFormData(url,data){
+                axiospost(url, data)
+                    .then((res) => {
+                            if(res.code === 200){
+                                this.$message.success(this.isEdit ? 'Successfully updated' : 'successfully added');
+                                this.$emit('getAllTestMeter')
+                            }else this.$message.error(this.isEdit ? 'updated failed' : 'updated failed');
+                            this.$emit('close');
+                        },
+                        () => {
+                            this.$message.error('Network exception, please try again');
+                            this.$emit('close');
+                        });
+            }
         }
     }
 </script>
@@ -207,6 +212,15 @@
     .select{
         width: 70%;
         margin-right: 5%;
+    }
+    .upload-float{
+        width: 85%;
+        margin-right: 5%;
+        float: left;
+    }
+    .skip-float{
+        float: left;
+        line-height: 3.5;
     }
 
 </style>
