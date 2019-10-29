@@ -7,7 +7,7 @@
       </a-breadcrumb>
     </div>
     <div>
-      <a-button :style="headerbuttonStyle">Create Test Job</a-button>
+      <a-button :style="headerbuttonStyle" @click="handleCreateTestJob">Create Test Job</a-button>
       <a-dropdown>
         <a-menu slot="overlay" @click="handleMenuClick">
           <a-menu-item key="1">
@@ -64,6 +64,15 @@ export default {
       this.$router.push({
         path: "/login"
       });
+    },
+    handleCreateTestJob(){
+      if(this.$route.path !== '/testjobmgt'){
+        this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
+        this.$store.commit("setBreadcrumb", ["Test Job MGT"])
+        this.$router.push({path: 'testjobmgt'})
+        
+      }
+      this.$store.commit('testJob/setIsShow', true)
     }
   }
 };

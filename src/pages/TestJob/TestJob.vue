@@ -30,6 +30,8 @@ import { testJobColumns} from '../../const/constant.js'
 import {axiosget} from '../../utils/http.js'
 import Drawer from './Drawer'
 import moment from 'moment'
+import { mapState } from 'vuex'
+
 export default {
   name: "TestJob",
   
@@ -39,9 +41,13 @@ export default {
       tableData: [],
       loading: false,
       pagination: {},
-      tags: [{name: 'Start', method: this.handleStart}, {name: 'Retry', method: this.handleRetry},{name: 'Edit', method: this.handleEdit},{name: 'Delete', method: this.handleDelete},{name: 'Download',method: this.handleDownload}],
-      isShow: false,
+      tags: [{name: 'Start', method: this.handleStart}, {name: 'Delete', method: this.handleDelete},{name: 'Download',method: this.handleDownload},{name: 'More', method: this.handleOpenDetail}],
     }
+  },
+  computed: {
+    ...mapState({
+      isShow: state => state.testJob.isShow
+    })
   },
   components: {Drawer},
   mounted () {
@@ -49,8 +55,7 @@ export default {
   },
   methods: {
     handleCreate(){
-      this.isShow = true
-      console.log(this.isShow)
+      this.$store.commit('testJob/setIsShow', true)
     },
     handleSelectCreateTime(date){
       console.log(date._d)
@@ -72,13 +77,7 @@ export default {
       })
     },
     handleStart(){
-      this.isShow = true
-    },
-    handleRetry(){
-      console.log(222)
-    },
-    handleEdit(){
-      console.log(3333)
+      console.log(111)
     },
     handleDelete(){
       console.log(444)
@@ -86,8 +85,11 @@ export default {
     handleDownload(){
       console.log(555)
     },
+    handleOpenDetail(){
+      console.log(333)
+    },
     close(){
-      this.isShow = false
+      this.$store.commit('testJob/setIsShow', false)
     }
   }
 };
