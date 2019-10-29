@@ -123,7 +123,7 @@ export default new Router({
         },
       ]
     }, {
-      path: '/TestSpecMGT',
+      path: '/testspecmgt',
       component: Layout,
       children: [
         {

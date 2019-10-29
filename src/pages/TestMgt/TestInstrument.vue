@@ -57,11 +57,9 @@ export default {
     },
     mounted () {
         this.loading = true;
-        this.handleLoadingMessage("","",true);
-        this.$store.dispatch('testInstrument/getTableData',{}).then(() =>
-            this.loading = false,
-            this.loadingMessage.show = false
-        )
+        this.$store.dispatch('testInstrument/getTableData',{}).then(() => setTimeout(() => {
+            this.loading = false
+        },2000))
     },
     methods: {
         handleCreateClick(){
@@ -83,7 +81,6 @@ export default {
         },
         testInsSearch(keyword, isSearch){
             this.loading = true;
-            this.handleLoadingMessage("","",true);
             if(isSearch) this.keyword = keyword;
             if(keyword === '' && this.createTime === '') {
                 this.$message.warning('Please enter valid search information');
@@ -92,8 +89,7 @@ export default {
             let obj = {keyword: this.keyword, createTime: this.createTime};
             // Simulation request
             this.$store.dispatch('testInstrument/getTableData',obj).then(() =>
-                this.loading = false,
-                this.loadingMessage.show = false
+                this.loading = false
             )
         },
         close(){
