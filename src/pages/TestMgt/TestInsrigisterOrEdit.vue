@@ -17,7 +17,6 @@
                 </a-form-item>
                 <a-form-item label="Password"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['Password',{ rules: [{ required: true,}],initialValue:singleData.password }]" type="password">
-                        <a-icon slot="prefix" type="eye" style="color:rgba(0,0,0,.25)" />
                     </a-input>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">

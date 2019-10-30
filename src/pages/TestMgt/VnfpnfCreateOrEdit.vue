@@ -128,7 +128,7 @@
                     return e;
                 }
                 if(e.fileList.length >1){
-                    e.fileList.splice(e.fileList.length-1, 1)
+                    e.fileList.splice(0,e.fileList.length-1)
                 }
                 return e && e.fileList;
             },
