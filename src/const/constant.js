@@ -54,8 +54,8 @@ const testEnvVIMColumns = [
         width: 50,
     },
     {
-        title: 'State',
-        dataIndex: 'state',
+        title: 'Status',
+        dataIndex: 'status',
         scopedSlots: {
             customRender: 'state'
         },
@@ -187,7 +187,7 @@ const testJobColumns = [
         dataIndex: 'createTime'
     },
     {
-        title: 'State',
+        title: 'Status',
         dataIndex: 'state',
         width: 70,
         scopedSlots: {
