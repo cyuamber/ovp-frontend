@@ -20,7 +20,7 @@
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="index" size="default" :pagination="pagination">
         <span slot="testCaseState" slot-scope="state,record">
           <span class="test-case__showState" :style="{backgroundColor: record.testCaseState === 0? '#979797': '#7ED321'}"
-                :title="record.testCaseState === 0? '可用': '不可用'"></span>
+                :title="record.testCaseState === 0? 'Available': 'unavailable'"></span>
         </span>
       </a-table>
     </div>
@@ -29,9 +29,7 @@
 
 <script>
     import { TestCaseColumns} from '../../const/constant.js'
-    import {axiosget} from '../../utils/http.js'
     import {mapState} from 'vuex'
-    import moment from 'moment'
 export default {
   name: "TestCase",
     data(){
