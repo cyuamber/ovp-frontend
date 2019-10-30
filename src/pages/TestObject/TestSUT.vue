@@ -1,17 +1,17 @@
 <template>
   <div>
-     <Loading :loadingMessage="loadingMessage" />
+    <Loading :loadingMessage="loadingMessage" />
     <a-tabs @change="handleTabsChange">
       <a-tab-pane v-for="tab in tabs" :key="tab" :tab="tab">
-        <div class="top">
+        <div class="tab-content tab-content--margin">
           <a-button type="primary" @click="handleCreate">Create {{tab}} SUT</a-button>
-          <Search class="search" @serchTestSUT="serchTestSUT" :currentPage="currentPage"/>
-          <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
+          <Search class="tab-content__button" @serchTestSUT="serchTestSUT" :currentPage="currentPage"/>
+          <a-date-picker class="tab-content__calendar" @change="onChange" placeholder="Select date"/>
         </div>
         <div class="table">
           <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination">
             <span slot="action" slot-scope="action,record">
-              <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag" 
+              <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="table__tag" 
               @click="(() => showEditOrDeleteModal(item,tab,record))">{{item}}</a-tag>
             </span>
           </a-table>
@@ -25,7 +25,6 @@
 <script>
 import Search from '../../components/Search/Search'
 import SUTCreateOrEdit from './SUTCreateOrEdit'
-import {axiospost} from '../../utils/http';
 import {TestSUTColumns} from '../../const/constant'
 import Loading from '../../components/Loading/Loading'
 import {mapState} from 'vuex'
@@ -74,11 +73,18 @@ export default {
     },
     // Get table data by entering information or selecting time
     serchTestSUT(keyword, isSearch){
-      if(isSearch) this.keyword = keyword; 
       if(keyword === '' && this.createTime === '') {
-        this.$message.warning('Please enter valid search information')
+        if(isSearch) {
+          if(!this.keyword){
+            this.$message.warning('Please enter valid search information')
+          }else {
+            this.$store.dispatch('testSUT/getTableData',{}).then(() => this.loading = false)
+            this.keyword = ''
+          }
+        }       
         return
       }
+      this.keyword = keyword
       this.loading = true;
       let obj = {keyword: this.keyword, createTime: this.createTime}
       // Simulation request
@@ -120,20 +126,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.top{
+.tab-content--margin{
   margin-top: 10px;
   margin-bottom: 30px;
-  .search{
+  .tab-content__button{
     display: inline-block;
     margin-left: 40px;
   }
-  .calendar{
+  .tab-content__calendar{
     float: right;
     width: 280px;
   }
 }
 .table{
-    .tag{
+    .table__tag{
       padding:0  8px;
       border-radius: 12px;
     }
