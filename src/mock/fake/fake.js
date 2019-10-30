@@ -249,6 +249,10 @@ module.exports = {
             createTime: faker.date.recent(),
         }
     },
+    uploadVNFFile: {
+        code: 200,
+        message: 'SUCCESS',
+    },
     getVIM: {
         code: 200,
         message: 'SUCCESS',
@@ -376,11 +380,41 @@ module.exports = {
             return {
                 VNFName: faker.name.lastName(),
                 jobName: faker.name.firstName(),
-                createrTime: faker.date.recent(),
+                createTime: faker.date.recent(),
                 status: n,
                 speciflcation: faker.random.word(),
                 description: faker.random.word(),
             }
         })
-    }
+    },
+    createrTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            jobId: faker.random.uuid(),
+            VNFName: faker.name.firstName(),
+            jobName: faker.name.lastName(),
+        }
+    },
+    getSUTName: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            SUTName:  [faker.name.lastName(),faker.name.firstName(),]
+        }
+    },
+    getJobSpecification: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            JobSpecification:  [faker.name.lastName(),faker.name.firstName()]
+        }
+    },
+    getTestCaseList: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            testCaseList: [{name: 'Test Case01'}, {name: 'Test Case02'}, {name: 'Test Case03'}]
+        }
+    },
 }

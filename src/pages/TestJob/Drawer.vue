@@ -16,19 +16,19 @@
         <a-select v-else-if="item === 'SUT Type'" v-decorator="[keyList[i],{ rules: [{ required: true, }]}]" 
           @select="((key) => selectSUTType(key))" class="form__select--width"
         >
-          <a-select-option  v-for="type in SUTTypes" :key="type" :value="type"> {{type}} </a-select-option>
+          <a-select-option  v-for="type in SUTTypeList" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
         <a-select v-else-if="item === 'SUT Name'" :disabled="!getSUTName" class="form__select--width"
          v-decorator="[keyList[i],{ rules: [{ required: true }]}]" :title="!getSUTName ? 'Please select SUT Type first' : ''"
          @select="((key) => selectSUTName(key))"
         >
-          <a-select-option  v-for="type in SUTNames" :key="type" :value="type"> {{type}} </a-select-option>
+          <a-select-option  v-for="type in SUTNameList" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
         <a-select v-else-if="item === 'Job Specification'" :disabled="!getSpecification" class="form__select--width"
          v-decorator="[keyList[i],{ rules: [{ required: true }]}]" @select="((key)=> selectSpecification(key))"
          :title="!getSUTName ? 'Please select SUT Type and SUT Name first' : (!getSpecification ? 'Please select SUT Name first': '')"
         >
-          <a-select-option  v-for="type in specifications" :key="type" :value="type"> {{type}} </a-select-option>
+          <a-select-option  v-for="type in specificationList" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
         <!-- Test VNFM/VIM  -->
         <a-select v-else-if="item === 'Test VNFM ENV'" v-decorator="[keyList[i]]" class="form__select--width">
@@ -48,13 +48,12 @@
       <!-- Test Case -->
       <a-spin :spinning="testCaseSpin" tip="loading...">
         <div  class="form__spin-content">
-          <a-form-item v-if="testCases.length !== 0">
+          <a-form-item v-if="testCaseList.length !== 0">
           <h3>Test Case List:</h3>
             <a-checkbox-group v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}]}]" @change="onChange">
-              <a-card-grid v-for="(item,index) in testCases" :key="item"  class="form__card--padding">
-                <a-checkbox :value="'case'+index" class="form__checkbox--size"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item}}
+              <a-card-grid v-for="(item,index) in testCaseList" :key="index "  class="form__card--padding">
+                <a-checkbox :value="'case'+index" class="form__checkbox--size"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
               </a-card-grid>
-              <!-- <a-checkbox v-for="(item,index) in testCases" :key="item" :value="'case'+index" class="form__checkbox--size"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item}} -->
             </a-checkbox-group>
           </a-form-item>  
         </div>
@@ -68,29 +67,37 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { mapState } from 'vuex'
+
+import { formList, SUTTypeList } from './constants'
+
   export default {
     props: ['isShow'],
     data(){
       return {
         visible: this.isShow,
-        formList: ['Job Name', 'Job Description', 'SUT Type', 'SUT Name', 'Job Specification', 'Test VNFM ENV', 'Test VIM ENV'],
+        formList,
         keyList: [],
         form: this.$form.createForm(this),
-        SUTTypes: ['VNF','PNF', 'NFVI'],
-        getSUTName: false,
-        SUTNames: [],
-        nameSpin: false,
+        SUTTypeList, 
         selectedSUTType: '',
-        specifications: [],
-        getSpecification: false,
-        specificationSpin: false,
         selectedSUTName: '',
         selectedSpecification: '',
-        testCases: [],
-        testCaseSpin: false,
         VNFMOption: ['111','ssss','sss'],
         VIMOption: ['111','ssss','sss'],
       }
+    },
+    computed: {
+      ...mapState({
+        SUTNameList: store => store.testJob.SUTNameList,
+        nameSpin: store => store.testJob.nameSpin,
+        getSUTName: store => store.testJob.getSUTName,
+        specificationSpin: store => store.testJob.specificationSpin,
+        getSpecification: store => store.testJob.getSpecification,
+        specificationList: store => store.testJob.specificationList,
+        testCaseSpin: store => store.testJob.testCaseSpin,
+        testCaseList: store => store.testJob.testCaseList,
+      })
     },
     watch: {
       isShow(val){
@@ -100,23 +107,19 @@
       },
       visible(val){
         if(!val){
-          this.getSUTName = false
-          this.SUTNames = []
+          this.$store.commit('testJob/clean')
           this.selectedSUTType = ''
-          this.specifications = []
-          this.getSpecification = false
-          this.specificationSpin = false
           this.selectedSUTName = ''
           this.selectedSpecification = ''
-          this.testCases =  []
-          this.testCaseSpin = false
-          this.form.setFieldsValue({SUTType: '', SUTName: '', JobSpecification: ''})
+          this.keyList.forEach((item) => {
+            this.form.setFieldsValue({[item]: ''})
+          })
         }
       }
     },
     created(){
       this.keyList = this.formList.map(item => {
-        item = item.replace(' ','')
+        item = item.replace(' ','').replace(' ','')
         return item
       })
     },
@@ -124,51 +127,34 @@
       onClose(){
         this.visible = false;
         this.$emit('close')
-        
       },
       handleSubmit(){
         this.form.validateFields((error,values) => {
           if(!error){
-            if(values.checkboxGroup.length === 0){
-              return
-            }
+            this.$store.dispatch('testJob/createrTestJobMGT',values)
             this.visible = false;
+            this.$emit('close')
           }
         })
       },
       selectSUTType(key){
         if(key === this.selectedSUTType) return
-        this.selectedSUTType = key
-        // Simulation request
-        this.nameSpin = true
-        this.getSUTName = false
-        setTimeout(() => {
-          this.getSUTName = true;
-          this.SUTNames = ['name1', 'name2', 'name3']
-          this.nameSpin = false
-        },1000)
+        this.selectedSUTName = ''
+        this.selectedSpecification = ''
+        this.$store.dispatch('testJob/getSUTName',{SUTType: key,message: this.$message})
+        this.form.setFieldsValue({SUTName: '', JobSpecification: ''})
       },
       selectSUTName(key){
         if(key === this.selectedSUTName) return
         this.selectedSUTName = key
-        // Simulation request
-        this.specificationSpin = true
-        this.getSpecification = false
-        setTimeout(() => {
-          this.getSpecification = true;
-          this.specifications = ['name1', 'name2', 'name3']
-          this.specificationSpin = false
-        },1000)
+        this.selectedSpecification = ''
+        this.$store.dispatch('testJob/getSpecification',{SUTName: key, message: this.$message})
+        this.form.setFieldsValue({JobSpecification: ''})
       },
       selectSpecification(key){
         if(key === this.selectedSpecification) return
         this.selectedSpecification = key
-        this.testCaseSpin = true
-        this.testCases = []
-        setTimeout(() => {
-          this.testCaseSpin = false
-          this.testCases = ['Test Case01', 'Test Case02', 'Test Case03']
-        },2000)
+        this.$store.dispatch('testJob/getTestCase',{JobSpecification: key, message: this.$message})
       },
       onChange(e){
         console.log(e.target,e)

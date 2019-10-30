@@ -9,6 +9,7 @@ module.exports = {
     'deleteVNFType': fakeData.deleteVNFType,
     'getVNFTest': fakeData.getVNFTest,
     'deleteVNFTest': fakeData.deleteVNFTest,
+    'uploadVNFFile': fakeData.uploadVNFFile,
     'getMeterSys': fakeData.getMeterSys,
     'loginMeterSys': fakeData.loginMeterSys,
     'updateMeterSys': fakeData.updateMeterSys,
@@ -34,5 +35,9 @@ module.exports = {
     'updateVNFM': fakeData.updateVNFM,
     'deleteVIM': fakeData.deleteVIM,
     'deleteVNFM': fakeData.deleteVNFM,
-    'getTestJob': fakeData.getTestJob
+    'getTestJob': fakeData.getTestJob,
+    'createrTestJobMGT': fakeData.createrTestJobMGT,
+    'getSUTName': fakeData.getSUTName,
+    'getJobSpecification': fakeData.getJobSpecification,
+    'getTestCaseList': fakeData.getTestCaseList
 }
