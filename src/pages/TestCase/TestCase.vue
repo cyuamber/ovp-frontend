@@ -59,17 +59,15 @@ export default {
             if(this.inputVersion)this.inputVersion = ''
         },
         handleSelectCreateTime(date,d){
-            console.log(d,"d");
             this.publishTime = d;
             this.testCaseSearch()
         },
         testCaseSearch(){
-            if(this.inputName === '' && this.inputVersion === '' && this.publishTime === '') {
-                this.$message.warning('Please enter valid search information');
-                return
-            }
             this.loading = true;
-            let obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
+            let obj = {};
+            if(!(this.inputName === '' && this.inputVersion === '' && this.publishTime === '')) {
+                obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
+            }
             this.$store.dispatch('testCase/getTableData',obj).then(() => setTimeout(() => {
                 this.loading = false
             },2000))

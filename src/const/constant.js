@@ -289,7 +289,7 @@ const TestSpecColumns = [
 ]
 const TestCaseColumns = [
     {
-        title: 'NO',
+        title: 'Number',
         dataIndex: 'testCaseNm'
     },
     {
@@ -297,12 +297,12 @@ const TestCaseColumns = [
         dataIndex: 'testCaseName'
     },
     {
-        title: 'Version',
-        dataIndex: 'testCaseVersion'
-    },
-    {
         title: 'Description',
         dataIndex: 'testCaseDes'
+    },
+    {
+        title: 'Version',
+        dataIndex: 'testCaseVersion'
     },
     {
         title: 'Status',

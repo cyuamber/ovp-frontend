@@ -392,7 +392,7 @@ module.exports = {
                 n = 0
             }else n = 1;
             return {
-                testCaseNm: n+1,
+                testCaseNm: faker.random.number(),
                 testCaseName: faker.name.firstName(),
                 testCaseVersion: faker.random.number(),
                 testCaseDes: faker.random.word(),

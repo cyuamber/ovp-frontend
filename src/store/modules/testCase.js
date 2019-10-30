@@ -3,7 +3,7 @@ import moment from 'moment';
 
 const state = {
     tableData: []
-}
+};
 const mutations = {
     updateTableData (state,tableData) {
         state.pagination = { current: 1, total: tableData.total };
@@ -13,18 +13,15 @@ const mutations = {
             return item
         })
     }
-}
+};
 const actions = {
     getTableData ({commit}, obj){
-        console.log(obj,"obj")
         let req = {};
         Object.keys(obj).forEach(item =>{
-            console.log(item)
             if(obj[item] !== '' &&obj[item] !== undefined ){
                 req[item]=obj[item];
             }
-        })
-        console.log(req,"req")
+        });
         axiosget('/getTestCaseMGTs', req).then(res => {
             if(res.code === 200){
                 commit('updateTableData',res)
@@ -33,10 +30,10 @@ const actions = {
             }
         })
     }
-}
+};
 const getters = {
 
-}
+};
 export default {
     state, mutations, actions, getters, namespaced: true,
 }
