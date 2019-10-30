@@ -287,6 +287,32 @@ const TestSpecColumns = [
         scopedSlots: { customRender: 'action' }
     }
 ]
+const TestCaseColumns = [
+    {
+        title: 'NO',
+        dataIndex: 'testCaseNm'
+    },
+    {
+        title: 'Name',
+        dataIndex: 'testCaseName'
+    },
+    {
+        title: 'Version',
+        dataIndex: 'testCaseVersion'
+    },
+    {
+        title: 'Description',
+        dataIndex: 'testCaseDes'
+    },
+    {
+        title: 'Status',
+        dataIndex: 'testCaseState',
+        width: 120,
+        scopedSlots: {
+            customRender: 'testCaseState'
+        },
+    },
+]
 export {
     mockcolumns,
     TestSUTColumns,
@@ -295,5 +321,6 @@ export {
     TestInsrigisterColumns,
     VnfpnfSuiteColumns,
     TestSpecColumns,
-    testJobColumns
+    testJobColumns,
+    TestCaseColumns
 }

@@ -56,10 +56,7 @@ export default {
     },
     mounted () {
         this.loading = true;
-        this.$store.dispatch('testSpecMGT/getTableData',{}).then(() =>
-            this.loading = false,
-            this.loadingMessage.show = false
-        )
+        this.$store.dispatch('testSpecMGT/getTableData',{}).then(() => this.loading = false)
     },
     methods: {
         handleLoadingMessage(type,toast,show){

@@ -382,5 +382,23 @@ module.exports = {
                 description: faker.random.word(),
             }
         })
-    }
+    },
+    getTestCaseMGTs:{
+        code: 200,
+        message: 'SUCCESS',
+        total: 25,
+        body: _.times(10, function (n){
+            if(n%2 === 0){
+                n = 0
+            }else n = 1;
+            return {
+                testCaseNm: n+1,
+                testCaseName: faker.name.firstName(),
+                testCaseVersion: faker.random.number(),
+                testCaseDes: faker.random.word(),
+                testCaseState: n,
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
 }

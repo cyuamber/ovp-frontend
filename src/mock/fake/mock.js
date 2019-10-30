@@ -34,5 +34,6 @@ module.exports = {
     'updateVNFM': fakeData.updateVNFM,
     'deleteVIM': fakeData.deleteVIM,
     'deleteVNFM': fakeData.deleteVNFM,
-    'getTestJob': fakeData.getTestJob
+    'getTestJob': fakeData.getTestJob,
+    'getTestCaseMGTs': fakeData.getTestCaseMGTs
 }
