@@ -28,11 +28,9 @@
 
 <script>
 import {testJobColumns} from '../../const/constant.js'
-import {axiosget} from '../../utils/http.js'
 import Loading from '../../components/Loading/Loading'
 import Drawer from './Drawer'
 import { mapState } from 'vuex'
-import moment from 'moment'
 
 export default {
   name: "TestJob",
@@ -71,6 +69,9 @@ export default {
     },
     handleStart(data){
       data.currentAction = 'start'
+      this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
+      this.$store.commit("setBreadcrumb", ["Test Job MGT"])
+        // this.$router.push({path: 'testjobmgt'})
       this.$router.push({name: 'JobDetail', params: data})
     },
     handleDelete(data){

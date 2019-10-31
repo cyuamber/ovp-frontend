@@ -172,11 +172,12 @@ const actions = {
       }
     })
   },
-  runTestJobMGT({commit},data){
+  runTestJobMGT({dispatch},data){
     let {jobId, VNFName, jobName, status} = data;
     axiospost('runTestJobMGT',{jobId, VNFName, jobName, status}).then(res => {
       if(res.code === 200){
         console.log('成功开始测试')
+        dispatch('getProgress')
       }
     })
   },

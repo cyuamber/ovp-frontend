@@ -56,18 +56,21 @@ import { mapState } from 'vuex'
       },
       currentJob(){
         return this.$route.params
+      },     
+    },
+    created(){
+      if(!this.$store.state.router.breadcrumbArr.length){
+        this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
+        this.$store.commit("setBreadcrumb", ["Test Job MGT"])
       }
-      
     },
     mounted () {
       // If not executed, start the test first.
       let {currentAction, status} = this.$route.params;
       if(currentAction === 'start' && !status){
-        this.$store.dispatch('testJob/runTestJobMGT',this.$route.params).then(()=> {
-          this.getProgress()
-        })
+        this.$store.dispatch('testJob/runTestJobMGT',this.$route.params)
       }else if(status === 1 && currentAction === 'more'){
-        this.getProgress()
+        this.$store.dispatch('testJob/getProgress')
       }
     },
     methods: {

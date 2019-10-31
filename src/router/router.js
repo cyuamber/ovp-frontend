@@ -112,11 +112,11 @@ export default new Router({
           name: 'TestJob',
           component: TestJob
         },
-        // {
-        //   path: '/jobDetail',
-        //   name: 'JobDetail',
-        //   component: JobDetail
-        // }
+        {
+          path: '/jobDetail',
+          name: 'JobDetail',
+          component: JobDetail
+        }
       ]
     }, {
       path: '/testcasemgt',
@@ -144,15 +144,15 @@ export default new Router({
     //   name: 'TestResult',
     //   component: () => import('../pages/TestResult/TestResult.vue')
     // }
-    {
-      path: '/jobDetail',
-      component: Layout,
-      children: [{
-        path: '',
-        name: 'JobDetail',
-        component: JobDetail
-      }]
+    // {
+    //   path: '/jobDetail',
+    //   component: Layout,
+    //   children: [{
+    //     path: '',
+    //     name: 'JobDetail',
+    //     component: JobDetail
+    //   }]
       
-    }
+    // }
   ]
 })
