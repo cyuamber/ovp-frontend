@@ -19,7 +19,6 @@
 </template>
 
 <script>
-    import {axiospost} from '../../utils/http'
     import Search from '../../components/Search/Search'
     import {TestInsrigisterColumns} from '../../const/constant'
     import RigisterOrEdit from './TestInsrigisterOrEdit'
@@ -40,12 +39,7 @@ export default {
             currentPage:'TestInstrumentMGT',
             isEdit: false,
             createTime: '',
-            keyword: '',
-            loadingMessage: {
-                type: "",
-                toast: "",
-                show:true
-            }
+            keyword: ''
         }
     },
     computed: {
@@ -53,6 +47,7 @@ export default {
             tableData: state => state.testInstrument.tableData,
             pagination: state => state.testInstrument.pagination,
             singleData: state => state.testInstrument.singleData,
+            loadingMessage: state => state.testInstrument.loadingMessage
         }),
     },
     mounted () {
@@ -66,13 +61,6 @@ export default {
             this.$store.dispatch('testInstrument/getMeterSys','');
             this.visible = true;
             this.isEdit = false;
-        },
-        handleLoadingMessage(type,toast,show){
-            this.loadingMessage = {
-                type: type,
-                toast: toast,
-                show:show
-            };
         },
         handleTableChange(pagination){
             this.loading = true;
@@ -116,13 +104,7 @@ export default {
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        axiospost('/deleteMeterSys',{meterSysName:singleData.meterSysName}).then( res => {
-                            if(res.code === 200){
-                                this.handleLoadingMessage("success","Deleted successfully",false);
-                            }else {
-                                this.handleLoadingMessage("error","Network exception, please try again",false);
-                            }
-                        })
+                        this.$store.dispatch('testInstrument/deleteMeterSys',{meterSysName: singleData.meterSysName})
                     }
                 });
             }
