@@ -82,12 +82,11 @@ export default {
         },
         testSpecSearch(keyword, isSearch){
             this.loading = true;
+            let obj = {};
             if(isSearch) this.keyword = keyword;
-            if(keyword === '' && this.createTime === '') {
-                this.$message.warning('Please enter valid search information');
-                return
+            if(!(keyword === '' && this.createTime === '')) {
+                obj = {keyword: this.keyword, createTime: this.createTime};
             }
-            let obj = {keyword: this.keyword, createTime: this.createTime};
             // Simulation request
             this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => setTimeout(() => {
                 this.loading = false
