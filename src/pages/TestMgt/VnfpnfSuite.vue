@@ -10,7 +10,7 @@
                 </div>
                 <div class="table">
                     <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="tesyMeterName"
-                             size="default" :pagination="pagination">
+                             size="default" :pagination="pagination" @change="handleTableChange">
               <span slot="action" slot-scope="action,record">
                 <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                        @click="(() => showEditOrDeleteModal(item,tab,record))">{{item}}</a-tag>
@@ -90,6 +90,14 @@
                     show:show
                 };
             },
+            handleTableChange(pagination){
+                this.loading = true;
+                this.$store.dispatch('VnfpnfSuite/getPagination',{pagination});
+                let current = pagination.current,
+                    pageSize = pagination.pageSize,
+                    obj = {VNFTestName: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
+                this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() => this.loading = false)
+            },
             // Filter by creating time
             onChange(date,d) {
                 this.createTime = d;
@@ -100,8 +108,9 @@
                 let obj = {};
                 if(isSearch) this.keyword = keyword;
                 if(!(keyword === '' && this.createTime === '')) {
-                    obj = {keyword: this.keyword, createTime: this.createTime};
+                    obj = {VNFTestName: this.keyword, createTime: this.createTime};
                 }
+                this.$store.dispatch('VnfpnfSuite/clearPagination');
                 // Simulation request
                 this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() =>
                     this.loading = false
