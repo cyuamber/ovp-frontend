@@ -5,13 +5,13 @@
         <a-row :gutter="6">
           <a-col :span="9">
             <a-input placeholder="Input Name" v-model="inputName" allowClear/>
-            <a-icon type="close-circle" :class="[{'ant-calendar-picker-clear':inputName.length === 0},{'ant-calendar-picker-icon':inputName.length !== 0}]" @click="clearInputName()"/>
+            <a-icon type="close-circle" :class="[{'ant-calendar-picker-clear':inputName.length === 0},{'ant-calendar-picker-icon':inputName.length !== 0}]" @click="(() => clearInput('name'))"/>
           </a-col>
           <a-col :span="9">
             <a-input placeholder="Input Version" v-model="inputVersion" allowClear />
-            <a-icon type="close-circle" :class="[{'ant-calendar-picker-clear':inputVersion.length === 0},{'ant-calendar-picker-icon':inputVersion.length !== 0}]" @click="clearInputVersion()"/>
+            <a-icon type="close-circle" :class="[{'ant-calendar-picker-clear':inputVersion.length === 0},{'ant-calendar-picker-icon':inputVersion.length !== 0}]" @click="(() => clearInput('version'))"/>
           </a-col>
-          <a-button type="primary" icon="search" @click="testCaseSearch">Search</a-button>
+          <a-button type="primary" icon="search" :loading="searchLoading" @click="(() =>testCaseSearch('SearchClick'))">Search</a-button>
         </a-row>
       </a-input-group>
       <a-date-picker class="calendar" @change="handleSelectCreateTime"  placeholder="Select date"/>
@@ -39,6 +39,7 @@ export default {
             publishTime: '',
             inputName:"",
             inputVersion:"",
+            searchLoading: false
         }
     },
     computed: {
@@ -52,33 +53,38 @@ export default {
         this.$store.dispatch('testCase/getTableData',{}).then(() => this.loading = false)
     },
     methods: {
-        clearInputName(){
-            if(this.inputName)this.inputName = ''
-        },
-        clearInputVersion(){
-            if(this.inputVersion)this.inputVersion = ''
+        clearInput(val){
+            if(val === 'name'){this.inputName = ''}
+            else {this.inputVersion = ''}
+            let obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
+            this.$store.dispatch('testCase/clearPagination');
+            this.$store.dispatch('testCase/getTableData',obj).then(() => setTimeout(() => {
+                this.loading = false
+            },2000))
         },
         handleTableChange(pagination){
             this.loading = true;
             this.$store.dispatch('testCase/getPagination',{pagination});
             let current = pagination.current,
                 pageSize = pagination.pageSize,
-                obj = {testCaseName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
+                obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, pageNum:current,pageSize:pageSize};
             this.$store.dispatch('testCase/getTableData',obj).then(() => this.loading = false)
         },
         handleSelectCreateTime(date,d){
             this.publishTime = d;
-            this.testCaseSearch()
+            this.testCaseSearch();
         },
-        testCaseSearch(){
+        testCaseSearch(SearchClick){
+            if(SearchClick === 'SearchClick')this.searchLoading =true;
             this.loading = true;
             let obj = {};
             if(!(this.inputName === '' && this.inputVersion === '' && this.publishTime === '')) {
                 obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
             }
-            this.$store.dispatch('VnfpnfSuite/clearPagination');
+            this.$store.dispatch('testCase/clearPagination');
             this.$store.dispatch('testCase/getTableData',obj).then(() => setTimeout(() => {
-                this.loading = false
+                this.loading = false;
+                this.searchLoading =false;
             },2000))
         }
     }
