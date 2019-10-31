@@ -12,8 +12,8 @@ const state = {
   pagination: {},
   createTime: '',
   keyword: '',
-  pageNum: '',
-  pageSize: ''
+  pageNum: 1,
+  pageSize: 10
 }
 const mutations = {
   updateTableData (state,tableData) {
@@ -56,13 +56,23 @@ const mutations = {
         return
       }    
     }
-    if(time !== undefined)  state.createTime = time
-    else if(key !== undefined) state.keyword = key
+    if(time !== undefined) {
+      state.createTime = time
+      // Jump to the first page after adding search criteria
+      if(state.pageNum !== 1){
+        state.pageNum = 1
+      }
+    }else if(key !== undefined) {
+      state.keyword = key
+      // Jump to the first page after adding search criteria
+      if(state.pageNum !== 1){
+        state.pageNum = 1
+      }
+    }
     else if(pageObj !== undefined) {
       state.pageNum = pageObj.current
       state.pageSize = pageObj.pageSize
     }
-    
   }
 }
 const actions = {
