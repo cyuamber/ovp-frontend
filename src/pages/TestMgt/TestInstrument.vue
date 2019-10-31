@@ -7,7 +7,7 @@
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
     </div>
     <div class="table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="meterSysName" size="default" :pagination="pagination">
+      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="meterSysName" size="default" :pagination="pagination" @change="handleTableChange">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -74,6 +74,14 @@ export default {
                 show:show
             };
         },
+        handleTableChange(pagination){
+            this.loading = true;
+            this.$store.dispatch('testInstrument/getPagination',{pagination});
+            let current = pagination.current,
+                pageSize = pagination.pageSize,
+                obj = {meterSysName: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
+            this.$store.dispatch('testInstrument/getTableData',obj).then(() => this.loading = false)
+        },
         // Filter by creating time
         onChange(date,d) {
             this.createTime = d;
@@ -84,8 +92,9 @@ export default {
             let obj = {};
             if(isSearch) this.keyword = keyword;
             if(!(keyword === '' && this.createTime === '')) {
-                obj = {keyword: this.keyword, createTime: this.createTime};
+                obj = {meterSysName: this.keyword, createTime: this.createTime};
             }
+            this.$store.dispatch('testInstrument/clearPagination');
             // Simulation request
             this.$store.dispatch('testInstrument/getTableData',obj).then(() =>
                 this.loading = false
