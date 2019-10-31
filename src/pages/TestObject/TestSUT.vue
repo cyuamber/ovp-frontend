@@ -9,7 +9,7 @@
           <a-date-picker class="tab-content__calendar" @change="onChange" placeholder="Select date"/>
         </div>
         <div class="table">
-          <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination">
+          <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination" @change="pageChange">
             <span slot="action" slot-scope="action,record">
               <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="table__tag" 
               @click="(() => showEditOrDeleteModal(item,tab,record))">{{item}}</a-tag>
@@ -18,7 +18,7 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <SUTCreateOrEdit :isEdit="isEdit" :currentTab="currentTab" :visible="visible" @close="close"/>
+    <SUTCreateOrEdit :isEdit="isEdit" :currentTab="currentTab"/>
   </div>
 </template>
 
@@ -36,12 +36,11 @@ export default {
       tabs: ['VNF', 'PNF', 'NFVI'],
       currentTab: 'VNF',
       isEdit: false,
-      visible: false,
       currentPage: 'TestSUT',
       columns: TestSUTColumns,
       loading: false,
-      createTime: '',
-      keyword: '',
+      // createTime: '',
+      // keyword: '',
     }
   },
   computed: {
@@ -49,7 +48,10 @@ export default {
       tableData: state => state.testSUT.tableData,
       pagination: state => state.testSUT.pagination,
       VNFTest: state => state.testSUT.VNFTest,
-      loadingMessage: state => state.testSUT.loadingMessage
+      loadingMessage: state => state.testSUT.loadingMessage,
+      visible: state => state.testSUT.visible,
+      createTime: state => state.testSUT.createTime,
+      keyword: state => state.testSUT.keyword,
     }),
   },
   components: {
@@ -63,49 +65,29 @@ export default {
   },
   methods: {
     handleCreate() {
-      this.$store.dispatch('testSUT/getVNFTest','')
+      this.$store.commit('testSUT/updateVisible', true)
       this.$store.dispatch('testSUT/getVNFOptions')
       this.isEdit = false;
-      this.visible = true;
     },
     handleTabsChange(key){
       this.currentTab = key
     },
     // Get table data by entering information or selecting time
-    serchTestSUT(keyword, isSearch){
-      if(keyword === '' && this.createTime === '') {
-        if(isSearch) {
-          if(!this.keyword){
-            this.$message.warning('Please enter valid search information')
-          }else {
-            this.$store.dispatch('testSUT/getTableData',{}).then(() => this.loading = false)
-            this.keyword = ''
-          }
-        }       
-        return
-      }
-      this.keyword = keyword
-      this.loading = true;
-      let obj = {keyword: this.keyword, createTime: this.createTime}
-      // Simulation request
-      this.$store.dispatch('testSUT/getTableData',obj).then(() => setTimeout(() => {
-        this.loading = false
-      },2000))
-    },
-    close(){
-      this.visible = false;
+    serchTestSUT(keyword){
+      this.$store.commit('testSUT/setFilterItem',{key: keyword, isSearch: true, message: this.$message})
+      this.$store.dispatch('testSUT/setParams')
     },
      // Filter by creating time
     onChange(date,d) {
-      this.createTime = d
-      this.serchTestSUT()
+      this.$store.commit('testSUT/setFilterItem',{time: d})
+      this.$store.dispatch('testSUT/setParams')
     }, 
     showEditOrDeleteModal(item,tab,VNFTest){
       if(item === 'Edit'){
         this.isEdit = true;
         this.currentTab = tab
-        this.visible = true;
-        this.$store.dispatch('testSUT/getVNFTest',VNFTest)
+        this.$store.commit('testSUT/updateVNFTest',VNFTest)
+        this.$store.commit('testSUT/updateVisible',true)
       }else{
         this.$confirm({
           title: 'Are you sure delete this task?',
@@ -118,6 +100,11 @@ export default {
           }
         });
       }
+    },
+    pageChange(pageObj){
+      // this.$store.dispatch('getTableData',pageObj)
+      this.$store.commit('testSUT/setFilterItem',{pageObj})
+      this.$store.dispatch('testSUT/setParams')
     }
   },
   
