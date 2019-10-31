@@ -17,7 +17,7 @@
       <a-date-picker class="calendar" @change="handleSelectCreateTime"  placeholder="Select date"/>
     </div>
     <div class="test-case__table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="index" size="default" :pagination="pagination">
+      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="index" size="default" :pagination="pagination" @change="handleTableChange">
         <span slot="testCaseState" slot-scope="state,record">
           <span class="test-case__showState" :style="{backgroundColor: record.testCaseState === 0? '#979797': '#7ED321'}"
                 :title="record.testCaseState === 0? 'Available': 'unavailable'"></span>
@@ -58,6 +58,14 @@ export default {
         clearInputVersion(){
             if(this.inputVersion)this.inputVersion = ''
         },
+        handleTableChange(pagination){
+            this.loading = true;
+            this.$store.dispatch('testCase/getPagination',{pagination});
+            let current = pagination.current,
+                pageSize = pagination.pageSize,
+                obj = {testCaseName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
+            this.$store.dispatch('testCase/getTableData',obj).then(() => this.loading = false)
+        },
         handleSelectCreateTime(date,d){
             this.publishTime = d;
             this.testCaseSearch()
@@ -68,6 +76,7 @@ export default {
             if(!(this.inputName === '' && this.inputVersion === '' && this.publishTime === '')) {
                 obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
             }
+            this.$store.dispatch('VnfpnfSuite/clearPagination');
             this.$store.dispatch('testCase/getTableData',obj).then(() => setTimeout(() => {
                 this.loading = false
             },2000))
