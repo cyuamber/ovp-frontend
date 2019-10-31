@@ -7,7 +7,7 @@
       <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" />
     </div>
     <div class="test-spec__table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination">
+      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination" @change="handleTableChange">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="test-spec__tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -38,7 +38,7 @@ export default {
             loading: true,
             currentPage:'TestSpecMGT',
             isEdit: false,
-            createTime: '',
+            publishTime: '',
             keyword: '',
             loadingMessage: {
                 type: "",
@@ -72,21 +72,30 @@ export default {
             this.$store.dispatch('testSpecMGT/getTestSpec','');
             this.$store.dispatch('testSpecMGT/getVNFOptions')
         },
+        handleTableChange(pagination){
+            this.loading = true;
+            this.$store.dispatch('testSpecMGT/getPagination',{pagination});
+            let current = pagination.current,
+                pageSize = pagination.pageSize,
+                obj = {VNFTestName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
+            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => this.loading = false)
+        },
         close(){
             this.visible = false;
         },
         // Filter by creating time
         onChange(date,d) {
-            this.createTime = d;
+            this.publishTime = d;
             this.testSpecSearch()
         },
         testSpecSearch(keyword, isSearch){
             this.loading = true;
             let obj = {};
             if(isSearch) this.keyword = keyword;
-            if(!(keyword === '' && this.createTime === '')) {
-                obj = {keyword: this.keyword, createTime: this.createTime};
+            if(!(keyword === '' && this.publishTime === '')) {
+                obj = {VNFTestName: this.keyword, publishTime: this.publishTime};
             }
+            this.$store.dispatch('testSpecMGT/clearPagination');
             // Simulation request
             this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => setTimeout(() => {
                 this.loading = false
