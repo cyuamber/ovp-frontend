@@ -176,11 +176,11 @@ const testJobColumns = [
     },
     {
         title: 'Job Description',
-        dataIndex: 'description'
+        dataIndex: 'jobDescription'
     },
     {
         title: 'Test Speciflcation',
-        dataIndex: 'speciflcation'
+        dataIndex: 'testSpeciflcation'
     },
     {
         title: 'Created Time',
@@ -188,10 +188,10 @@ const testJobColumns = [
     },
     {
         title: 'Status',
-        dataIndex: 'state',
+        dataIndex: 'status',
         width: 70,
         scopedSlots: {
-            customRender: 'state'
+            customRender: 'status'
         },
     },
     {

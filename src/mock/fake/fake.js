@@ -369,7 +369,7 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
-    getTestJob: {
+    getTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
         total: 20,
@@ -378,12 +378,15 @@ module.exports = {
                 n = 0
             }
             return {
+                jobId: faker.random.uuid(),
                 VNFName: faker.name.lastName(),
                 jobName: faker.name.firstName(),
                 createTime: faker.date.recent(),
                 status: n,
-                speciflcation: faker.random.word(),
-                description: faker.random.word(),
+                testSpeciflcation: faker.random.word(),
+                jobDescription: faker.random.word(),
+                testENV: [{title: 'Test VIM ENV', text: 'name'},{title: 'Test VNFM ENV', text: 'name'}],
+                testCase: ['Test Case01', 'Test Case02', 'Test Case03']
             }
         })
     },
@@ -417,4 +420,19 @@ module.exports = {
             testCaseList: [{name: 'Test Case01'}, {name: 'Test Case02'}, {name: 'Test Case03'}]
         }
     },
+    deleteTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS'
+    },
+    runTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS'
+    },
+    getProgress: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            progress: 99,
+        }
+    }
 }
