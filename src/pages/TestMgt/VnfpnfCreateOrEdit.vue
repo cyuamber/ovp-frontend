@@ -4,10 +4,10 @@
             <Loading :loadingMessage="loadingMessage" />
             <a-form :form="form" @submit="handleSubmit">
                 <a-form-item :label="currentTab+' Name'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
-                    <a-input v-decorator="['XNFName',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterName }]"/>
+                    <a-input v-decorator="['XNFName',{ rules: [{ required: true,message: currentTab +' Name is required' }],initialValue:SuiteSingleData.tesyMeterName }]"/>
                 </a-form-item>
                 <a-form-item :label="currentTab+'  Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-                    <a-select :disabled="spin" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange"
+                    <a-select :disabled="spin" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, message: currentTab +' Type is required' }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange"
                     >
                         <a-select-option v-for="type of VNFOptions" :key="type" :value="type">
                            {{type}}
@@ -18,10 +18,10 @@
                     </a-spin>
                 </a-form-item>
                 <a-form-item :label="currentTab+' Vendor'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['XNFVendor',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVendor }]"/>
+                    <a-input v-decorator="['XNFVendor',{ rules: [{ required: true, message: currentTab +' Vendor is required' }],initialValue:SuiteSingleData.tesyMeterVendor }]"/>
                 </a-form-item>
                 <a-form-item :label="currentTab+' Version'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
+                    <a-input v-decorator="['Version',{ rules: [{ required: true, message: currentTab +' Version is required' }],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
                 </a-form-item>
                 <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                    <a-upload-dragger
@@ -59,7 +59,7 @@
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
-                title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
+                title: this.isEdit ? 'Edit '+this.currentTab+' TT':'Create '+this.currentTab+'TT',
                 spin: false,
                 count: 0,
                 disabled: false,
