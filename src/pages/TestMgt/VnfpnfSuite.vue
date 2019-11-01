@@ -19,12 +19,11 @@
                 </div>
             </a-tab-pane>
         </a-tabs>
-        <xNFCreateOrEdit v-if="visible" :currentTab="currentTab" @close="close" @getAllTestMeter="getAllTestMeter" :isEdit="isEdit"/>
+        <xNFCreateOrEdit v-if="visible" :currentTab="currentTab" @close="close" @getAllTestMeter="getAllTestMeter" :isEdit="isEdit" :visible="visible"/>
     </div>
 </template>
 
 <script>
-    import {axiospost} from '../../utils/http'
     import Search from '../../components/Search/Search'
     import {VnfpnfSuiteColumns} from '../../const/constant'
     import {mapState} from 'vuex'
@@ -48,12 +47,7 @@
                 currentPage:'VNF/PNFSuiteMGT',
                 isEdit: false,
                 createTime: '',
-                keyword: '',
-                loadingMessage: {
-                    type: "",
-                    toast: "",
-                    show:true
-                }
+                keyword: ''
             }
         },
         computed: {
@@ -61,6 +55,7 @@
                 tableData: state => state.VnfpnfSuite.tableData,
                 pagination: state => state.VnfpnfSuite.pagination,
                 SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
+                loadingMessage: state => state.VnfpnfSuite.loadingMessage
             }),
         },
         mounted() {
@@ -82,13 +77,6 @@
                 this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => setTimeout(() => {
                     this.loading = false
                 },2000))
-            },
-            handleLoadingMessage(type,toast,show){
-                this.loadingMessage = {
-                    type: type,
-                    toast: toast,
-                    show:show
-                };
             },
             handleTableChange(pagination){
                 this.loading = true;
@@ -132,19 +120,12 @@
                         okText: 'Yes',
                         okType: 'danger',
                         cancelText: 'No',
-                        onOk: () => {
-                            axiospost('/deleteTestMeter', {tesyMeterName: SuiteSingleData.tesyMeterName}).then(res => {
-                                if (res.code === 200) {
-                                    this.handleLoadingMessage("success","Deleted successfully",false);
-                                }else  this.handleLoadingMessage("error","Network exception, please try again",false);
-                            })
-                        }
+                        onOk: () => {  this.$store.dispatch('VnfpnfSuite/deleteTestMeter',{tesyMeterName: SuiteSingleData.tesyMeterName}) }
                     });
                 }
             },
             getAllTestMeter(){
                 this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => this.loading = false);
-
             }
         }
     };

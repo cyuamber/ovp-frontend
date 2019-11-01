@@ -1,7 +1,6 @@
 <template>
     <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
         <template>
-            <Loading :loadingMessage="loadingMessage" />
             <a-form :form="form" @submit="handleSubmit">
                 <a-form-item :label="currentTab+' Name'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
                     <a-input v-decorator="['XNFName',{ rules: [{ required: true,message: currentTab +' Name is required' }],initialValue:SuiteSingleData.tesyMeterName }]"/>
@@ -48,13 +47,9 @@
 <script type="text/ecmascript-6">
     import moment from 'moment';
     import {mapState} from 'vuex'
-    import Loading from "../../components/Loading/Loading";
-    import {axiospost, axiosCancelToken} from '../../utils/http'
+    import {axiosCancelToken} from '../../utils/http'
     export default {
-        props: ['isEdit', 'currentTab'],
-        components: {
-            Loading
-        },
+        props: ['isEdit', 'currentTab','visible'],
         data(){
             return {
                 form: this.$form.createForm(this),
@@ -62,12 +57,7 @@
                 title: this.isEdit ? 'Edit '+this.currentTab+' TT':'Create '+this.currentTab+'TT',
                 spin: false,
                 count: 0,
-                disabled: false,
-                loadingMessage : {
-                    type: '',
-                    toast: '',
-                    show: true
-                }
+                disabled: false
             }
         },
         computed: {
@@ -110,13 +100,6 @@
             }
         },
         methods: {
-            handleLoadingMessage(type,toast,show){
-                this.loadingMessage = {
-                    type: type,
-                    toast: toast,
-                    show:show
-                };
-            },
             dropdownVisibleChange(){
                 if(!this.VNFOptions.length) {
                     this.spin = true;
@@ -147,20 +130,15 @@
             beforeUpload() {
                 return false;
             },
-            handleUpload(url,data) {
+            handleUpload(data) {
                 let fileList = this.form.getFieldValue("upload");
                 const formData = new FormData();
                 formData.append('files', fileList[0]);
                 this.disabled = true;
-                axiospost('/uploadVNFFile',{VNFFileName:formData}).then(res => {
-                    if(res.code === 200){
-                        this.$message.success('upload successfully.');
-                        this.submitFormData(url,data)
-                    }else {
-                        this.disabled = false;
-                        this.$message.error('upload failed.');
-                    }
-                });
+                this.$store.dispatch('VnfpnfSuite/uploadVNFFile', {formData, message: this.$message}).then(
+                    () => { this.submitFormData(data)},
+                    () => { this.disabled = false;}
+                    );
             },
             handleCancel(){
                 if(!this.disabled){
@@ -169,7 +147,6 @@
                 this.$emit('close');
             },
             handleSubmit(){
-                let url = this.isEdit ? '/updateTestMeter':'/createTestMeter';
                 this.form.validateFields((err, values) => {
                     if(!err){
                         const formData = new FormData();
@@ -182,24 +159,15 @@
                             VNFFileName:formData,
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                       this.handleUpload(url,data);
+                       this.handleUpload(data);
                     }
                 });
 
             },
-            submitFormData(url,data){
-                axiospost(url, data)
-                    .then((res) => {
-                            if(res.code === 200){
-                                this.$message.success(this.isEdit ? 'Successfully updated' : 'successfully added');
-                                this.$emit('getAllTestMeter')
-                            }else this.$message.error(this.isEdit ? 'updated failed' : 'updated failed');
-                            this.$emit('close');
-                        },
-                        () => {
-                            this.$message.error('Network exception, please try again');
-                            this.$emit('close');
-                        });
+            submitFormData(data){
+                this.$store.dispatch('VnfpnfSuite/createOrEditTestMeter',{isEdit:this.isEdit,data}).then(()=>{this.$emit('close');
+                },()=>{ this.$emit('close');})
+
             }
         }
     }
