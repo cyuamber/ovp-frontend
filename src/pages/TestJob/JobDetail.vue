@@ -3,7 +3,7 @@
     <div>
       <p  class="job-detail__back-btn" @click="handleBack"><a-icon type="left" />&nbsp;Back</p>
     </div>
-    <div class="job-detail__progress-container" v-if="!(currentJob.currentAction === 'more' && !currentJob.status)">
+    <div class="job-detail__progress-container">
       <a-progress :percent="percent" :status="status" :showInfo="false" class="job-detail__progress"/>
       <a-button class="job-detail__refresh-btn" @click="handleRefresh"><a-icon type="sync" />Refresh</a-button>
     </div>
@@ -18,14 +18,14 @@
         </a-card>
       </div>
       <div class="job-detail__detail">
-        <a-card>
-          <a-card-grid style="width: 100%">
+        <a-card :hoverable="false">
+          <a-card-grid style="width: 100%" :hoverable="false">
             <h2 >Test Job Detail</h2>
             <div class="job-detail__test-env">
               <p v-for="item in currentJob.testENV" :key="item.title"><span>{{item.title}}: </span><span>{{item.text}}</span></p>
             </div>
           </a-card-grid>
-          <a-card-grid style="width: 100%" v-for="item in currentJob.testCase" :key="item">
+          <a-card-grid style="width: 100%" v-for="item in currentJob.testCase" :key="item"  :hoverable="false">
             {{item}} 
           </a-card-grid>
         </a-card>
@@ -59,19 +59,18 @@ import { mapState } from 'vuex'
       },     
     },
     created(){
+      this.$store.commit('testJob/changeComponent',true)
       if(!this.$store.state.router.breadcrumbArr.length){
         this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
         this.$store.commit("setBreadcrumb", ["Test Job MGT"])
       }
     },
     mounted () {
-      // If not executed, start the test first.
-      let {currentAction, status} = this.$route.params;
-      if(currentAction === 'start' && !status){
-        this.$store.dispatch('testJob/runTestJobMGT',this.$route.params)
-      }else if(status === 1 && currentAction === 'more'){
-        this.$store.dispatch('testJob/getProgress')
-      }
+      this.getProgress()
+    },
+    destroyed () {
+      this.$store.commit('testJob/changeComponent',false)
+      this.$store.commit('testJob/updateProgress',{percent: 0, status: 'normal'})
     },
     methods: {
       handleBack(){
@@ -79,10 +78,30 @@ import { mapState } from 'vuex'
         this.$router.push('/testjobmgt')
       },
       getProgress(){
-        this.$store.dispatch('testJob/getProgress')
+        let {currentAction, status} = this.$route.params;
+        // If not executed, start the test first.
+        if(currentAction === 'Start') this.$store.dispatch('testJob/runTestJobMGT',this.$route.params) 
+        else if(status === 0 && currentAction === 'More') this.showConfim()
+        else if(status === 1) this.$store.dispatch('testJob/getProgress')
+        else if(status === 2) this.$store.commit('testJob/updateProgress',{percent: 100, status: 'success'})
+        else this.$store.commit('testJob/updateProgress',{percent: 90, status: 'exception'})
       },
       handleRefresh(){
-        this.$store.dispatch('testJob/getProgress')
+        let {currentAction, status} = this.$route.params;
+        if(status === 0 && currentAction === 'More') this.showConfim()
+        else if(status === 2)this.$store.commit('testJob/updateProgress',{percent: 100, status: 'success'})
+        else this.$store.dispatch('testJob/getProgress')
+      },
+      showConfim(){
+        this.$confirm({
+            title: 'Whether to start the test task?',
+            onOk:()=>{
+              this.$store.dispatch('testJob/runTestJobMGT',this.$route.params)
+            },
+            onCancel() {
+              console.log(111)
+            },
+          });
       }
     }
     

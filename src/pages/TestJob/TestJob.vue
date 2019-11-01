@@ -62,16 +62,14 @@ export default {
       console.log(date._d)
     },
     handleActions(action, data){
-      if(action === 'Start') this.handleStart(data)
-       /* this.$router.push({name: 'JobDetail', params: data}) */
+      if(action === 'Start' || action === 'Pause' || action === 'Success' || action === 'Fail') this.handleStart(action,data)
       else if(action === 'Delete') this.handleDelete(data)
       else if(action === 'More') this.handleOpenDetail(data)
     },
-    handleStart(data){
-      data.currentAction = 'start'
+    handleStart(action,data){
+      data.currentAction = action
       this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
       this.$store.commit("setBreadcrumb", ["Test Job MGT"])
-        // this.$router.push({path: 'testjobmgt'})
       this.$router.push({name: 'JobDetail', params: data})
     },
     handleDelete(data){
@@ -92,7 +90,7 @@ export default {
       console.log(555)
     },
     handleOpenDetail(data){
-      data.currentAction = 'more'
+      data.currentAction = 'More'
       this.$router.push({name: 'JobDetail', params: data})
     },
     close(){

@@ -15,7 +15,8 @@ const state = {
   tableData: [],
   pagination: {},
   percent: 0,
-  status: 'active'
+  status: 'normal',
+  isJobDetail: false
 }
 
 const mutations = {
@@ -74,6 +75,9 @@ const mutations = {
   updateProgress(state, {percent, status}){
     if(state.percent !== percent)state.percent = percent
     if(state.status !== status)state.status = status
+  },
+  changeComponent(state,bool){
+    state.isJobDetail = bool
   }
 }
 
@@ -88,7 +92,7 @@ const actions = {
         let tableData = res.body.map((item,index) => {
           item.createTime = moment(item.createTime).format('YYYY-MM-DD');
           item.index =  res.body.length * (state.pagination.current -1) + index+1;
-          item.actions = [item.status?'Pause': 'Start', 'Delete', 'Download', 'More']
+          item.actions = [item.status === 0?'Start':(item.status === 1?'Pause':(item.status ===2?'Success':'Fail')), 'Delete', 'Download', 'More']
           return item
         })
         commit('updateTableData',tableData)
@@ -181,7 +185,7 @@ const actions = {
       }
     })
   },
-  getProgress({commit,dispatch}){
+  getProgress({commit,dispatch,state}){
     /* const socket = new WebSocket('ws://localhost:8080/getProgress');
     // WebSocket.onopen     Triggered after successful connection
     socket.addEventListener('open', function (event) {
@@ -195,7 +199,9 @@ const actions = {
         socket.close()  
       }
     }); */
+    
     axiosget('/getProgress').then((res) => {
+      if(!state.isJobDetail) return
       if(res.code === 200){
         if(res.body.progress === 100){
           commit('updateProgress',{percent: 100, status: 'success'})
