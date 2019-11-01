@@ -44,8 +44,10 @@
 <script type="text/ecmascript-6">
 import {axiospost} from '../../utils/http'
 import {VIMForm, VNFMForm} from '../../const/TestEnvConst.js'
+import { mapState } from 'vuex'
+
   export default {
-    props: ['currentTab', 'isEdit', 'initValues','cloudTypeOptions','regionIdOptions'],
+    props: [ 'isEdit', 'initValues','cloudTypeOptions','regionIdOptions'],
     data(){
       return {
         showModal: true,
@@ -57,6 +59,11 @@ import {VIMForm, VNFMForm} from '../../const/TestEnvConst.js'
         cloudType: this.cloudTypeOptions,
         regionId: this.regionIdOptions
       }
+    },
+    computed: {
+      ...mapState({
+        currentTab: state => state.testENV.currentTab
+      })
     },
     watch: {
       cloudTypeOptions(val){
@@ -98,7 +105,7 @@ import {VIMForm, VNFMForm} from '../../const/TestEnvConst.js'
               .then((res) => {
                 if(res.code === 200){
                   this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
-                  this.$emit('getAllTableData')
+                  this.$store.dispatch('testENV/getTableData', {})
                 }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
                 this.$emit('close')
               },
