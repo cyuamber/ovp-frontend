@@ -20,8 +20,8 @@
         <span slot="status" slot-scope="status,record">
           <span
             class="test-job__showState"
-            :style="{backgroundColor: record.status === 0? '#979797': (record.status === 1? '#F5A623':(record.status === 2? '#7ED321':'#D0021B'))}"
-            :title="record.status === 0? '待执行': (record.status === 1? '执行中':(record.status === 2? '执行成功':'执行失败'))"
+            :style="getStatusStyle(record.status)"
+            :title="getStatusTitle(record.status)"
           ></span>
         </span>
         <span slot="action" slot-scope="action,record">
@@ -29,7 +29,7 @@
             v-for="item in record.actions"
             :key="item"
             class="test-job__tag"
-            :style="{backgroundColor: item === record.actions[0]? '#7416EB': (item === record.actions[1]? '#C109DE':(item === record.actions[2]? '#588091':(item === record.actions[3]? '#916858':'#486593')))}"
+            :color="getActionsColor(record.actions,item)"
             @click="(()=> handleActions(item,record))"
           >{{item}}</a-tag>
         </span>
@@ -52,7 +52,6 @@ export default {
     return {
       columns: testJobColumns,
       loading: false
-      // tags: [{name: 'Start', method: this.handleStart}, {name: 'Delete', method: this.handleDelete},{name: 'Download',method: this.handleDownload},{name: 'More', method: this.handleOpenDetail}],
     };
   },
   computed: {
@@ -61,19 +60,19 @@ export default {
       loadingMessage: state => state.testJob.loadingMessage,
       tableData: state => state.testJob.tableData,
       pagination: state => state.testJob.pagination
-    })
+	}),
   },
   components: { Drawer, Loading },
   mounted() {
-	this.$store.dispatch("testJob/getTableData");
+    this.$store.dispatch("testJob/getTableData");
   },
   methods: {
     handleCreate() {
       this.$store.commit("testJob/setIsShow", true);
     },
     handleSelectCreateTime(date, d) {
-		this.$store.commit("testJob/setFilter", {time: d});
-		this.$store.dispatch('testJob/getTableData')
+      this.$store.commit("testJob/setFilter", { time: d });
+      this.$store.dispatch("testJob/getTableData");
     },
     handleActions(action, data) {
       if (
@@ -117,9 +116,19 @@ export default {
       this.$store.commit("testJob/setIsShow", false);
     },
     handlePageChange(pageObj) {
-	  this.$store.commit('testJob/setFilter',{pageObj})
-	  this.$store.dispatch('testJob/getTableData')
-    }
+      this.$store.commit("testJob/setFilter", { pageObj });
+      this.$store.dispatch("testJob/getTableData");
+	},
+	getStatusTitle(status){
+		return status === 0? 'Pending execution': (status === 1? 'Executing':(status === 2? 'Execution completed':'Execution failed'))
+	},
+	getStatusStyle(status){
+		let color = status === 0? '#979797': (status === 1? '#F5A623':(status === 2? '#7ED321':'#D0021B'))
+		return {backgroundColor: color}
+	},
+	getActionsColor(actions, item){
+		return item === actions[0]? 'blue': (item === actions[1]? 'red':(item === actions[2]? 'green': 'purple'))
+	}
   }
 };
 </script>
@@ -144,7 +153,6 @@ export default {
       line-height: 20px;
       padding: 0 8px;
       border-radius: 12px;
-      color: white;
       font-size: 14px;
     }
   }

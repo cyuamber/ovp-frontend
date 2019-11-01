@@ -41,11 +41,7 @@ const mutations = {
 			toast
 		}
 	},
-	updataSUTName(state, {
-		get,
-		spin,
-		list
-	}) {
+	updataSUTName(state, { get, spin, list }) {
 		state.getSUTName = get
 		state.nameSpin = spin
 		if (list) {
@@ -57,11 +53,7 @@ const mutations = {
 			state.testCaseList = []
 		}
 	},
-	updateSpecification(state, {
-		get,
-		spin,
-		list
-	}) {
+	updateSpecification(state, { get, spin, list }) {
 		state.getSpecification = get
 		state.specificationSpin = spin
 		if (list) {
@@ -89,10 +81,7 @@ const mutations = {
 	updateTableData(state, tableData) {
 		state.tableData = tableData
 	},
-	updateProgress(state, {
-		percent,
-		status
-	}) {
+	updateProgress(state, { percent, status }) {
 		if (state.percent !== percent) state.percent = percent
 		if (state.status !== status) state.status = status
 	},
@@ -121,7 +110,7 @@ const actions = {
 				let tableData = res.body.map((item, index) => {
 					item.createTime = moment(item.createTime).format('YYYY-MM-DD');
 					item.index = res.body.length * (state.pagination.current - 1) + index + 1;
-					item.actions = [item.status === 0 ? 'Start' : (item.status === 1 ? 'Pause' : (item.status === 2 ? 'Success' : 'Fail')), 'Delete', 'Download', 'More']
+					item.actions = [item.status === 0 ? 'Start' : 'Stop', 'Delete', 'Download', 'More']
 					return item
 				})
 				commit('updateTableData', tableData)
