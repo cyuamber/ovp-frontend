@@ -3,7 +3,10 @@ import moment from 'moment';
 
 const state = {
     tableData: [],
-    pagination: {current: 1 , total: 0}
+    pagination: {current: 1 , total: 0},
+    loadingMessage: {type: '', toast: ''},
+    searchLoading: false,
+    clearFilter: false
 };
 const mutations = {
     updateTableData (state,tableData) {
@@ -16,30 +19,58 @@ const mutations = {
     },
     updatePagination(state, Options){
         state.pagination = Options;
+    },
+    updateFailedMessage(state,toast){
+        state.loadingMessage = {
+            type: 'failed',
+            toast
+        }
+    },
+    updateSuccessMessage(state,toast){
+        state.loadingMessage = {
+            type: 'success',
+            toast
+        }
+    },
+    updateSearchLoading(state,searchLoading){
+        state.searchLoading = searchLoading
+    },
+    updateclearFilter(state,clearFilter){
+        state.clearFilter = clearFilter
     }
 };
 const actions = {
     getTableData ({commit}, obj){
         let req = {};
+
         Object.keys(obj).forEach(item =>{
             if(obj[item] !== '' &&obj[item] !== undefined ){
                 req[item]=obj[item];
             }
         });
         axiosget('/getTestCaseMGTs', req).then(res => {
-            if(res.code === 200){
-                commit('updateTableData',res)
-            }else {
-                this.$message.error('Network exception, please try again');
+                if(res.code === 200){
+                    commit('updateTableData',res);
+                    if(req.publishTime || req.testCaseName  || req.testCaseVersion || state.clearFilter){
+
+                        commit('updateSuccessMessage','Successfully get table data')
+                    }
+                }else {
+                    if(req.publishTime || req.testCaseName  || req.testCaseVersion || state.clearFilter) commit('updateFailedMessage','Network exception, please try again')
+                }
+               commit('updateSearchLoading', false);
+            },
+            () => {
+                if(req.publishTime || req.testCaseName  || req.testCaseVersion || state.clearFilter) commit('updateFailedMessage','Network exception, please try again')
             }
-        })
+        )
     },
     getPagination({commit},{pagination}){
         commit('updatePagination',pagination)
     },
     clearPagination({commit}){
         commit('updatePagination', {current: 1 , total: 0})
-    },
+    }
 };
 const getters = {
 

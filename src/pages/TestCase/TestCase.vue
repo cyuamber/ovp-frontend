@@ -1,5 +1,6 @@
 <template>
   <div class="test-case">
+    <Loading :loadingMessage="loadingMessage" />
     <div class="test-case__top">
       <a-input-group class="test-case__inputgroup">
         <a-row :gutter="6">
@@ -29,9 +30,13 @@
 
 <script>
     import { TestCaseColumns} from '../../const/constant.js'
+    import Loading from "../../components/Loading/Loading";
     import {mapState} from 'vuex'
 export default {
   name: "TestCase",
+    components: {
+        Loading
+    },
     data(){
         return {
             columns: TestCaseColumns,
@@ -39,28 +44,29 @@ export default {
             publishTime: '',
             inputName:"",
             inputVersion:"",
-            searchLoading: false
         }
     },
     computed: {
         ...mapState ({
             tableData: state => state.testCase.tableData,
             pagination: state => state.testCase.pagination,
+            loadingMessage: state => state.testCase.loadingMessage,
+            searchLoading: state => state.testCase.searchLoading,
         }),
     },
     mounted () {
         this.loading = true;
-        this.$store.dispatch('testCase/getTableData',{}).then(() => this.loading = false)
+        this.$store.dispatch('testCase/getTableData',{}).then(() => setTimeout(() => {
+            this.loading = false
+        },2000))
     },
     methods: {
         clearInput(val){
-            if(val === 'name'){this.inputName = ''}
-            else {this.inputVersion = ''}
+            if(val === 'name'){this.inputName = ''}else {this.inputVersion = ''}
             let obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
+            if(!(this.inputName === '' && this.inputVersion === '' && this.publishTime === ''))this.$store.commit('testCase/updateclearFilter', true);
             this.$store.dispatch('testCase/clearPagination');
-            this.$store.dispatch('testCase/getTableData',obj).then(() => setTimeout(() => {
-                this.loading = false
-            },2000))
+            this.$store.dispatch('testCase/getTableData',obj)
         },
         handleTableChange(pagination){
             this.loading = true;
@@ -75,17 +81,16 @@ export default {
             this.testCaseSearch();
         },
         testCaseSearch(SearchClick){
-            if(SearchClick === 'SearchClick')this.searchLoading =true;
             this.loading = true;
+            if(SearchClick === 'SearchClick'){
+                this.$store.commit('testCase/updateSearchLoading', true)
+            }
             let obj = {};
             if(!(this.inputName === '' && this.inputVersion === '' && this.publishTime === '')) {
                 obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
             }
             this.$store.dispatch('testCase/clearPagination');
-            this.$store.dispatch('testCase/getTableData',obj).then(() => setTimeout(() => {
-                this.loading = false;
-                this.searchLoading =false;
-            },2000))
+            this.$store.dispatch('testCase/getTableData',obj).then(() => this.loading = false)
         }
     }
 };
