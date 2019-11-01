@@ -4,7 +4,7 @@
     <a-tabs @change="handleTabsChange">
       <a-tab-pane v-for="tab in tabs" :key="tab" :tab="tab">
         <div class="tab-content tab-content--margin">
-          <a-button type="primary" @click="handleRigister">Rigister {{tab}}</a-button>
+          <a-button type="primary" @click="handleRigister">Register {{tab}}</a-button>
            <a-input class="tab-content__button" placeholder="Input ID" @keyup.enter="searchTypeID" v-model="keyword">
              <a-icon slot="prefix" type="search"/>
           </a-input>
@@ -24,7 +24,7 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <CreateOrEditModal :isEdit="isEdit" v-if="visible" @close="close" :initValues="initValues" :cloudTypeOptions="cloudTypeOptions" :regionIdOptions="regionIdOptions"/>
+    <CreateOrEditModal :isEdit="isEdit" :initValues="initValues"/>
   </div>
 </template>
 
@@ -45,16 +45,10 @@ export default {
       keyword: '',
       VIMColumns: testEnvVIMColumns,
       VNFMColumns: testEvnVNFMColumns,
-
-
-      currentPage: ['VIMTestEnvMGT', 'VNFMTestEnvMGT'],
       isEdit: false,
-      visible: false,
-      
+
       loading: false,
       initValues: {},
-      cloudTypeOptions: [],
-      regionIdOptions: []
     }
   },
   computed: {
@@ -65,7 +59,7 @@ export default {
       pagination: state => state.testENV.pagination,
       searchKeyword: state => state.testENV.searchKeyword,
       currentTab: state => state.testENV.currentTab,
-      // visible: state => state.testENV.visible,
+      visible: state => state.testENV.visible,
     })
   },
   components: {
@@ -83,14 +77,8 @@ export default {
       this.$store.dispatch('testENV/getTableData', {}).then(() => this.loading = false, () => this.loading = false)
     },
     handleRigister(){
-      // Simulation request
-      setTimeout(()=> {
-        if(this.currentTab === 'VIM ENV'){
-          this.CloudTypeOptions = ['VNF', 'PNF', 'FNF'];
-          this.regionIdOptions = ['VNF', 'PNF', 'FNF'];
-        } 
-      },5000)
-      this.visible = true;
+      this.$store.dispatch('testENV/getOptionList')
+      this.$store.commit('testENV/updateVisible', true)
       this.isEdit = false;
       this.initValues = {}
     },
@@ -102,9 +90,6 @@ export default {
       this.$store.commit('testENV/setFilterItem',{time: d})
       this.$store.dispatch('testENV/setParams')
     },
-    close(){
-      this.visible = false
-    },
     showEditOrDeleteModal(item,record){
       if(item === 'Edit'){
         let arr = []
@@ -112,7 +97,7 @@ export default {
           if(i !== 'state') arr.push(record[i])
         }
         this.initValues = arr
-        this.visible = true;
+        this.$store.commit('testENV/updateVisible', true)
         this.isEdit = true;
       }else {
         this.$confirm({

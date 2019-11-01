@@ -11,7 +11,9 @@ const state = {
   pageNum: 1,
   pageSize: 10,
   currentTab: 'VIM ENV',
-  visible: false
+  visible: false,
+  cloudTypeOptions: [],
+  regionIdOptions: [],
 }
 
 const mutations = {
@@ -71,6 +73,13 @@ const mutations = {
       toast
     }
   },
+  updateVisible(state, bool){
+    state.visible = bool
+  },
+  updateOptionList(state,{ CloudTypeList, regionIdList }){
+    state.cloudTypeOptions = CloudTypeList
+    state.regionIdOptions = regionIdList
+  }
 }
 
 const actions = {
@@ -122,6 +131,29 @@ const actions = {
     }).catch(() => {
       commit('updateFailedMessage','Network exception, please try again')
     })
+  },
+  getOptionList({commit}){
+    let CloudTypeList =  ['VNF', 'PNF', 'FNF']
+    let regionIdList =  ['VNF', 'PNF', 'FNF']
+    // Simulation request
+    setTimeout(() => {
+      commit('updateOptionList',{ CloudTypeList, regionIdList })
+    },2000)
+  },
+  loginVIN({state,commit, dispatch},{isEdit, data}){
+    let url = (isEdit ? '/update' : '/login') + (state.currentTab === 'VIM ENV'? 'VIM': 'VNFM');
+    axiospost(url, data)
+      .then((res) => {
+        if(res.code === 200){
+          commit('updateSuccessMessage',this.isEdit ? 'Successfully updated' : 'Has been added successfully')
+          dispatch('getTableData', {})
+        }else {
+          commit('updateFailedMessage',this.isEdit ? 'Update failed' : 'add failed')
+        }
+      },
+      error => {
+        commit('updateFailedMessage','Network exception, please try again')
+      })
   }
 
 }
