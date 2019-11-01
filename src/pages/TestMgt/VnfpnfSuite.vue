@@ -60,9 +60,7 @@
         },
         mounted() {
             this.loading = true;
-            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => setTimeout(() => {
-                this.loading = false
-            },2000))
+            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() =>this.loading = false)
         },
         methods: {
             handleClick(){
@@ -74,9 +72,7 @@
             handleTabsChange(key){
                 this.currentTab = key;
                 this.loading = true;
-                this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => setTimeout(() => {
-                    this.loading = false
-                },2000))
+                this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() =>this.loading = false)
             },
             handleTableChange(pagination){
                 this.loading = true;

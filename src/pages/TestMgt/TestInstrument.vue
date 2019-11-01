@@ -52,9 +52,7 @@ export default {
     },
     mounted () {
         this.loading = true;
-        this.$store.dispatch('testInstrument/getTableData',{}).then(() => setTimeout(() => {
-            this.loading = false
-        },2000))
+        this.$store.dispatch('testInstrument/getTableData',{}).then(() => this.loading = false)
     },
     methods: {
         handleCreateClick(){

@@ -20,7 +20,7 @@
     <div class="test-case__table">
       <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="index" size="default" :pagination="pagination" @change="handleTableChange">
         <span slot="testCaseState" slot-scope="state,record">
-          <span class="test-case__showState" :style="{backgroundColor: record.testCaseState === 0? '#979797': '#7ED321'}"
+          <span class="test-case__showState" :style="{backgroundColor: record.testCaseState === 0? '#d0021b': '#7ED321'}"
                 :title="record.testCaseState === 0? 'Available': 'unavailable'"></span>
         </span>
       </a-table>
@@ -64,7 +64,7 @@ export default {
         clearInput(val){
             if(val === 'name'){this.inputName = ''}else {this.inputVersion = ''}
             let obj = {testCaseName: this.inputName, testCaseVersion:this.inputVersion, publishTime: this.publishTime};
-            if(!(this.inputName === '' && this.inputVersion === '' && this.publishTime === ''))this.$store.commit('testCase/updateclearFilter', true);
+            if((this.inputName === '' || this.inputVersion === '') && this.publishTime === '')this.$store.commit('testCase/updateclearFilter', true);
             this.$store.dispatch('testCase/clearPagination');
             this.$store.dispatch('testCase/getTableData',obj)
         },

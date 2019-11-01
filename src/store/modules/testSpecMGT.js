@@ -12,7 +12,7 @@ const mutations = {
   updateTableData (state,tableData) {
     state.pagination.total = tableData.total;
     state.tableData = tableData.body.map( (item, index) => {
-      item.createTime = moment(item.createTime).format('YYYY-MM-DD');
+      item.publishTime = moment(item.publishTime).format('YYYY-MM-DD');
       item.index = tableData.body.length * (state.pagination.current -1) + index+1;
       item.action = ['Edit', 'Delete'];
       return item
@@ -49,12 +49,17 @@ const actions = {
           }
       });
     axiosget('/getTestSpec', req).then(res => {
-      if(res.code === 200){
-        commit('updateTableData',res)
-      }else {
-        this.$message.error('Network exception, please try again');
-      }
-    })
+            if(res.code === 200){
+                commit('updateTableData',res);
+                if(req.publishTime || req.testSpecName ) commit('updateSuccessMessage','Successfully get table data')
+            }else {
+                if(req.publishTime || req.testSpecName ) commit('updateFailedMessage','Network exception, please try again')
+            }
+        },
+        () => {
+            if(req.publishTime || req.testSpecName ) commit('updateFailedMessage','Network exception, please try again')
+        }
+    )
   },
   getTestSpec({commit},data){
     commit('updateVNFTest',data)
@@ -84,10 +89,11 @@ const actions = {
                     commit('updateFailedMessage','Network exception, please try again')
                 })
     },
-    deleteTestSpec({commit},data){
+    deleteTestSpec({commit,dispatch},data){
         axiospost('/deleteTestSpec',data).then( res => {
             if(res.code === 200){
-                commit('updateSuccessMessage','Deleted successfully')
+                commit('updateSuccessMessage','Deleted successfully');
+                dispatch('getTableData',{})
             }else commit('updateFailedMessage','Network exception, please try again')
         })
     }

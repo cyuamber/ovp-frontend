@@ -79,10 +79,11 @@ const actions = {
                     commit('updateFailedMessage','Network exception, please try again')
                 })
     },
-    deleteMeterSys({commit},data){
+    deleteMeterSys({commit,dispatch},data){
         axiospost('/deleteMeterSys',data).then( res => {
             if(res.code === 200){
                 commit('updateSuccessMessage','Deleted successfully')
+                dispatch('getTableData',{})
             }else commit('updateFailedMessage','Network exception, please try again')
         })
     }

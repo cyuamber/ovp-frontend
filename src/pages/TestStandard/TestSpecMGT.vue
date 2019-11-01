@@ -85,9 +85,7 @@ export default {
             }
             this.$store.dispatch('testSpecMGT/clearPagination');
             // Simulation request
-            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => setTimeout(() => {
-                this.loading = false
-            },2000))
+            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() =>this.loading = false)
         },
         showEditOrDeleteModal(item,testSpecSingleData){
             if(item === 'Edit') {
