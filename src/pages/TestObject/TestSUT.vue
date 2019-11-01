@@ -11,7 +11,7 @@
         <div class="table">
           <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination" @change="pageChange">
             <span slot="action" slot-scope="action,record">
-              <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="table__tag" 
+              <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue': (item === 'Delete'?'red': 'green')" class="table__tag" 
               @click="(() => showEditOrDeleteModal(item,tab,record))">{{item}}</a-tag>
             </span>
           </a-table>
@@ -88,18 +88,21 @@ export default {
         this.currentTab = tab
         this.$store.commit('testSUT/updateVNFTest',VNFTest)
         this.$store.commit('testSUT/updateVisible',true)
-      }else{
-        this.$confirm({
-          title: 'Are you sure delete this task?',
-          content: 'Some descriptions',
-          okText: 'Yes',
-          okType: 'danger',
-          cancelText: 'No',
-          onOk: () => {
-            this.$store.dispatch('testSUT/deleteVNFTest',{VNFFileName: VNFTest.VNFFileName})
-          }
-        });
-      }
+      }else if(item === 'Delete') this.showConfirm(item,'Are you sure delete this task?')
+      else this.showConfirm(item,'Whether to confirm the download？')
+    },
+    showConfirm(item,title){
+      this.$confirm({
+        title,
+        content: 'Some descriptions',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk: () => {
+          if(item === 'Delete') this.$store.dispatch('testSUT/deleteVNFTest',{VNFFileName: VNFTest.VNFFileName})
+          else console.log('下载')
+        }
+      });
     },
     pageChange(pageObj){
       // this.$store.dispatch('getTableData',pageObj)
