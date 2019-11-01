@@ -75,23 +75,24 @@ export default {
     // Get table data by entering information or selecting time
     serchTestSUT(keyword){
       this.$store.commit('testSUT/setFilterItem',{key: keyword, isSearch: true, message: this.$message})
-      this.$store.dispatch('testSUT/setParams')
+      this.$store.dispatch('testSUT/setParams',true)
     },
      // Filter by creating time
     onChange(date,d) {
       this.$store.commit('testSUT/setFilterItem',{time: d})
-      this.$store.dispatch('testSUT/setParams')
+      this.$store.dispatch('testSUT/setParams',true)
     }, 
     showEditOrDeleteModal(item,tab,VNFTest){
+      console.log(VNFTest)
       if(item === 'Edit'){
         this.isEdit = true;
         this.currentTab = tab
         this.$store.commit('testSUT/updateVNFTest',VNFTest)
         this.$store.commit('testSUT/updateVisible',true)
-      }else if(item === 'Delete') this.showConfirm(item,'Are you sure delete this task?')
-      else this.showConfirm(item,'Whether to confirm the download？')
+      }else if(item === 'Delete') this.showConfirm(item,'Are you sure delete this task?', VNFTest)
+      else this.showConfirm(item,'Whether to confirm the download？',VNT)
     },
-    showConfirm(item,title){
+    showConfirm(item,title,VNFTest){
       this.$confirm({
         title,
         content: 'Some descriptions',
@@ -107,7 +108,7 @@ export default {
     pageChange(pageObj){
       // this.$store.dispatch('getTableData',pageObj)
       this.$store.commit('testSUT/setFilterItem',{pageObj})
-      this.$store.dispatch('testSUT/setParams')
+      this.$store.dispatch('testSUT/setParams',true)
     }
   },
   

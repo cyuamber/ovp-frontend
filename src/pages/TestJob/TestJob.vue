@@ -3,44 +3,57 @@
     <Loading :loadingMessage="loadingMessage" />
     <div class="test-job__top">
       <a-button type="primary" @click="handleCreate">Create Test Job</a-button>
-      <a-date-picker class="calendar" @change="handleSelectCreateTime" placeholder="Select date" :allowClear="false"/>
+      <a-date-picker class="calendar" @change="handleSelectCreateTime" placeholder="Select date" />
     </div>
     <div class="test-job__table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" 
-        rowKey="index" size="default" :pagination="pagination" :scroll="{x: 1630}">
+      <a-table
+        :columns="columns"
+        :dataSource="tableData"
+        bordered
+        :loading="loading"
+        rowKey="index"
+        size="default"
+        :pagination="pagination"
+        :scroll="{x: 1630}"
+        @change="handlePageChange"
+      >
         <span slot="status" slot-scope="status,record">
-          <span class="test-job__showState" :style="{backgroundColor: record.status === 0? '#979797': (record.status === 1? '#F5A623':(record.status === 2? '#7ED321':'#D0021B'))}" 
-          :title="record.status === 0? '待执行': (record.status === 1? '执行中':(record.status === 2? '执行成功':'执行失败'))"></span>
+          <span
+            class="test-job__showState"
+            :style="{backgroundColor: record.status === 0? '#979797': (record.status === 1? '#F5A623':(record.status === 2? '#7ED321':'#D0021B'))}"
+            :title="record.status === 0? '待执行': (record.status === 1? '执行中':(record.status === 2? '执行成功':'执行失败'))"
+          ></span>
         </span>
         <span slot="action" slot-scope="action,record">
-          <a-tag v-for="item in record.actions" :key="item" class='test-job__tag'
+          <a-tag
+            v-for="item in record.actions"
+            :key="item"
+            class="test-job__tag"
             :style="{backgroundColor: item === record.actions[0]? '#7416EB': (item === record.actions[1]? '#C109DE':(item === record.actions[2]? '#588091':(item === record.actions[3]? '#916858':'#486593')))}"
             @click="(()=> handleActions(item,record))"
-          >
-            {{item}}
-          </a-tag>
+          >{{item}}</a-tag>
         </span>
       </a-table>
     </div>
-    <Drawer :isShow="isShow" @close="close"/>
+    <Drawer :isShow="isShow" @close="close" />
   </div>
 </template>
 
 <script>
-import {testJobColumns} from '../../const/constant.js'
-import Loading from '../../components/Loading/Loading'
-import Drawer from './Drawer'
-import { mapState } from 'vuex'
+import { testJobColumns } from "../../const/constant.js";
+import Loading from "../../components/Loading/Loading";
+import Drawer from "./Drawer";
+import { mapState } from "vuex";
 
 export default {
   name: "TestJob",
-  
-  data(){
+
+  data() {
     return {
       columns: testJobColumns,
-      loading: false,
+      loading: false
       // tags: [{name: 'Start', method: this.handleStart}, {name: 'Delete', method: this.handleDelete},{name: 'Download',method: this.handleDownload},{name: 'More', method: this.handleOpenDetail}],
-    }
+    };
   },
   computed: {
     ...mapState({
@@ -48,82 +61,92 @@ export default {
       loadingMessage: state => state.testJob.loadingMessage,
       tableData: state => state.testJob.tableData,
       pagination: state => state.testJob.pagination
-    }),
+    })
   },
-  components: {Drawer, Loading},
-  mounted () {
-    this.$store.dispatch('testJob/getTableData')
+  components: { Drawer, Loading },
+  mounted() {
+	this.$store.dispatch("testJob/getTableData");
   },
   methods: {
-    handleCreate(){
-      this.$store.commit('testJob/setIsShow', true)
+    handleCreate() {
+      this.$store.commit("testJob/setIsShow", true);
     },
-    handleSelectCreateTime(date){
-      console.log(date._d)
+    handleSelectCreateTime(date, d) {
+		this.$store.commit("testJob/setFilter", {time: d});
+		this.$store.dispatch('testJob/getTableData')
     },
-    handleActions(action, data){
-      if(action === 'Start' || action === 'Pause' || action === 'Success' || action === 'Fail') this.handleStart(action,data)
-      else if(action === 'Delete') this.handleDelete(data)
-      else if(action === 'More') this.handleOpenDetail(data)
+    handleActions(action, data) {
+      if (
+        action === "Start" ||
+        action === "Pause" ||
+        action === "Success" ||
+        action === "Fail"
+      )
+        this.handleStart(action, data);
+      else if (action === "Delete") this.handleDelete(data);
+      else if (action === "More") this.handleOpenDetail(data);
     },
-    handleStart(action,data){
-      data.currentAction = action
+    handleStart(action, data) {
+      data.currentAction = action;
       this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
-      this.$store.commit("setBreadcrumb", ["Test Job MGT"])
-      this.$router.push({name: 'JobDetail', params: data})
+      this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+      this.$router.push({ name: "JobDetail", params: data });
     },
-    handleDelete(data){
+    handleDelete(data) {
       this.$confirm({
-        title: 'Are you sure delete this task?',
-        okText: 'Yes',
-        okType: 'danger',
-        cancelText: 'No',
-        onOk:() => {
-          this.$store.dispatch('testJob/delete',data)
+        title: "Are you sure delete this task?",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: () => {
+          this.$store.dispatch("testJob/delete", data);
         },
         onCancel() {
-          console.log('Cancel');
-        },
+          console.log("Cancel");
+        }
       });
     },
-    handleDownload(){
-      console.log(555)
+    handleDownload() {
+      console.log(555);
     },
-    handleOpenDetail(data){
-      data.currentAction = 'More'
-      this.$router.push({name: 'JobDetail', params: data})
+    handleOpenDetail(data) {
+      data.currentAction = "More";
+      this.$router.push({ name: "JobDetail", params: data });
     },
-    close(){
-      this.$store.commit('testJob/setIsShow', false)
+    close() {
+      this.$store.commit("testJob/setIsShow", false);
+    },
+    handlePageChange(pageObj) {
+	  this.$store.commit('testJob/setFilter',{pageObj})
+	  this.$store.dispatch('testJob/getTableData')
     }
   }
 };
 </script>
 <style lang="less" scope>
-.test-job__container{
-  .test-job__top{
+.test-job__container {
+  .test-job__top {
     margin-bottom: 30px;
-    .calendar{
+    .calendar {
       float: right;
       width: 280px;
     }
   }
-  .test-job__table{
-    .test-job__showState{
+  .test-job__table {
+    .test-job__showState {
       display: block;
       margin: 0 auto;
       width: 15px;
       height: 15px;
       border-radius: 50%;
     }
-    .test-job__tag{
-      line-height: 20px;  
-      padding:0  8px;
+    .test-job__tag {
+      line-height: 20px;
+      padding: 0 8px;
       border-radius: 12px;
       color: white;
       font-size: 14px;
     }
   }
 }
-
 </style>
