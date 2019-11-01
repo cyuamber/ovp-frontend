@@ -7,7 +7,7 @@
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
     </div>
     <div class="table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="meterSysName" size="default" :pagination="pagination">
+      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="meterSysName" size="default" :pagination="pagination" @change="handleTableChange">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -19,7 +19,6 @@
 </template>
 
 <script>
-    import {axiospost} from '../../utils/http'
     import Search from '../../components/Search/Search'
     import {TestInsrigisterColumns} from '../../const/constant'
     import RigisterOrEdit from './TestInsrigisterOrEdit'
@@ -40,12 +39,7 @@ export default {
             currentPage:'TestInstrumentMGT',
             isEdit: false,
             createTime: '',
-            keyword: '',
-            loadingMessage: {
-                type: "",
-                toast: "",
-                show:true
-            }
+            keyword: ''
         }
     },
     computed: {
@@ -53,15 +47,14 @@ export default {
             tableData: state => state.testInstrument.tableData,
             pagination: state => state.testInstrument.pagination,
             singleData: state => state.testInstrument.singleData,
+            loadingMessage: state => state.testInstrument.loadingMessage
         }),
     },
     mounted () {
         this.loading = true;
-        this.handleLoadingMessage("","",true);
-        this.$store.dispatch('testInstrument/getTableData',{}).then(() =>
-            this.loading = false,
-            this.loadingMessage.show = false
-        )
+        this.$store.dispatch('testInstrument/getTableData',{}).then(() => setTimeout(() => {
+            this.loading = false
+        },2000))
     },
     methods: {
         handleCreateClick(){
@@ -69,12 +62,13 @@ export default {
             this.visible = true;
             this.isEdit = false;
         },
-        handleLoadingMessage(type,toast,show){
-            this.loadingMessage = {
-                type: type,
-                toast: toast,
-                show:show
-            };
+        handleTableChange(pagination){
+            this.loading = true;
+            this.$store.dispatch('testInstrument/getPagination',{pagination});
+            let current = pagination.current,
+                pageSize = pagination.pageSize,
+                obj = {meterSysName: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
+            this.$store.dispatch('testInstrument/getTableData',obj).then(() => this.loading = false)
         },
         // Filter by creating time
         onChange(date,d) {
@@ -83,17 +77,15 @@ export default {
         },
         testInsSearch(keyword, isSearch){
             this.loading = true;
-            this.handleLoadingMessage("","",true);
+            let obj = {};
             if(isSearch) this.keyword = keyword;
-            if(keyword === '' && this.createTime === '') {
-                this.$message.warning('Please enter valid search information');
-                return
+            if(!(keyword === '' && this.createTime === '')) {
+                obj = {meterSysName: this.keyword, createTime: this.createTime};
             }
-            let obj = {keyword: this.keyword, createTime: this.createTime};
+            this.$store.dispatch('testInstrument/clearPagination');
             // Simulation request
             this.$store.dispatch('testInstrument/getTableData',obj).then(() =>
-                this.loading = false,
-                this.loadingMessage.show = false
+                this.loading = false
             )
         },
         close(){
@@ -112,13 +104,7 @@ export default {
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        axiospost('/deleteMeterSys',{meterSysName:singleData.meterSysName}).then( res => {
-                            if(res.code === 200){
-                                this.handleLoadingMessage("success","Deleted successfully",false);
-                            }else {
-                                this.handleLoadingMessage("error","Network exception, please try again",false);
-                            }
-                        })
+                        this.$store.dispatch('testInstrument/deleteMeterSys',{meterSysName: singleData.meterSysName})
                     }
                 });
             }

@@ -54,8 +54,8 @@ const testEnvVIMColumns = [
         width: 50,
     },
     {
-        title: 'State',
-        dataIndex: 'state',
+        title: 'Status',
+        dataIndex: 'status',
         scopedSlots: {
             customRender: 'state'
         },
@@ -176,22 +176,22 @@ const testJobColumns = [
     },
     {
         title: 'Job Description',
-        dataIndex: 'description'
+        dataIndex: 'jobDescription'
     },
     {
         title: 'Test Speciflcation',
-        dataIndex: 'speciflcation'
+        dataIndex: 'testSpeciflcation'
     },
     {
         title: 'Created Time',
         dataIndex: 'createTime'
     },
     {
-        title: 'State',
-        dataIndex: 'state',
+        title: 'Status',
+        dataIndex: 'status',
         width: 70,
         scopedSlots: {
-            customRender: 'state'
+            customRender: 'status'
         },
     },
     {
@@ -288,6 +288,32 @@ const TestSpecColumns = [
         scopedSlots: { customRender: 'action' }
     }
 ]
+const TestCaseColumns = [
+    {
+        title: 'Number',
+        dataIndex: 'testCaseNm'
+    },
+    {
+        title: 'Name',
+        dataIndex: 'testCaseName'
+    },
+    {
+        title: 'Description',
+        dataIndex: 'testCaseDes'
+    },
+    {
+        title: 'Version',
+        dataIndex: 'testCaseVersion'
+    },
+    {
+        title: 'Status',
+        dataIndex: 'testCaseState',
+        width: 120,
+        scopedSlots: {
+            customRender: 'testCaseState'
+        },
+    },
+]
 export {
     mockcolumns,
     TestSUTColumns,
@@ -296,5 +322,6 @@ export {
     TestInsrigisterColumns,
     VnfpnfSuiteColumns,
     TestSpecColumns,
-    testJobColumns
+    testJobColumns,
+    TestCaseColumns
 }

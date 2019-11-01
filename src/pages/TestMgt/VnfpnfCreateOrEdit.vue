@@ -1,13 +1,12 @@
 <template>
     <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
         <template>
-            <Loading :loadingMessage="loadingMessage" />
             <a-form :form="form" @submit="handleSubmit">
-                <a-form-item label="XNF Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
-                    <a-input v-decorator="['XNFName',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterName }]"/>
+                <a-form-item :label="currentTab+' Name'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
+                    <a-input v-decorator="['XNFName',{ rules: [{ required: true,message: currentTab +' Name is required' }],initialValue:SuiteSingleData.tesyMeterName }]"/>
                 </a-form-item>
-                <a-form-item label="XNF Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-                    <a-select :disabled="spin" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange"
+                <a-form-item :label="currentTab+'  Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+                    <a-select :disabled="spin" class="select"  v-decorator="['XNFType',{ rules: [{ required: true, message: currentTab +' Type is required' }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange"
                     >
                         <a-select-option v-for="type of VNFOptions" :key="type" :value="type">
                            {{type}}
@@ -17,14 +16,15 @@
                         <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
                     </a-spin>
                 </a-form-item>
-                <a-form-item label="XNF Vendor"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['XNFVendor',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVendor }]"/>
+                <a-form-item :label="currentTab+' Vendor'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                    <a-input v-decorator="['XNFVendor',{ rules: [{ required: true, message: currentTab +' Vendor is required' }],initialValue:SuiteSingleData.tesyMeterVendor }]"/>
                 </a-form-item>
-                <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
+                <a-form-item :label="currentTab+' Version'"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+                    <a-input v-decorator="['Version',{ rules: [{ required: true, message: currentTab +' Version is required' }],initialValue:SuiteSingleData.tesyMeterVersion }]"/>
                 </a-form-item>
                 <a-form-item label="Upload CSAR File"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                    <a-upload-dragger
+                           class="upload-float"
                            :remove="handleRemove"
                            :beforeUpload="beforeUpload"
                            name="files"
@@ -32,18 +32,12 @@
                    >
                        <p class="ant-upload-text upload-test">Click or drag to upload</p>
                    </a-upload-dragger>
-                    <a-button
-                            type="primary"
-                            @click="handleUpload"
-                            :disabled="disabled"
-                            :loading="uploading"
-                            style="margin-top: 16px"
-                    >
-                        {{uploading ? 'Uploading' : 'Start Upload' }}
-                    </a-button>
+                    <a-spin  :spinning="disabled" class='skip-size skip-float'>
+                        <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
+                    </a-spin>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-                    <a-button type="primary" html-type="submit">Submit</a-button>
+                    <a-button type="primary" html-type="submit" :disabled="disabled">Submit</a-button>
                 </a-form-item>
             </a-form>
         </template>
@@ -53,27 +47,17 @@
 <script type="text/ecmascript-6">
     import moment from 'moment';
     import {mapState} from 'vuex'
-    import Loading from "../../components/Loading/Loading";
-    import {axiospost} from '../../utils/http'
+    import {axiosCancelToken} from '../../utils/http'
     export default {
-        props: ['isEdit'],
-        components: {
-            Loading
-        },
+        props: ['isEdit', 'currentTab','visible'],
         data(){
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
-                title: this.isEdit ? 'Edit XNF Type':'Create XNF Type',
-                disabled: true,
-                uploading: false,
+                title: this.isEdit ? 'Edit '+this.currentTab+' TT':'Create '+this.currentTab+'TT',
                 spin: false,
                 count: 0,
-                loadingMessage : {
-                    type: '',
-                    toast: '',
-                    show: true
-                }
+                disabled: false
             }
         },
         computed: {
@@ -116,13 +100,6 @@
             }
         },
         methods: {
-            handleLoadingMessage(type,toast,show){
-                this.loadingMessage = {
-                    type: type,
-                    toast: toast,
-                    show:show
-                };
-            },
             dropdownVisibleChange(){
                 if(!this.VNFOptions.length) {
                     this.spin = true;
@@ -134,40 +111,46 @@
                     return e;
                 }
                 if(e.fileList.length >1){
-                    e.fileList.splice(e.fileList.length-1, 1)
+                    e.fileList.splice(0,e.fileList.length-1)
                 }
                 return e && e.fileList;
             },
             handleRemove() {
-                this.disabled = true;
+                if(this.disabled){
+                    axiosCancelToken("/uploadVNFFile").then(res => {
+                        if(res.code === 200){
+                            this.disabled = false;
+                            this.$message.success('cancel upload successfully.');
+                        }else {
+                            this.$message.error('cancel upload failed.');
+                        }
+                    });
+                }
             },
             beforeUpload() {
-                this.disabled = false;
                 return false;
             },
-            handleUpload() {
+            handleUpload(data) {
                 let fileList = this.form.getFieldValue("upload");
                 const formData = new FormData();
-                formData.append('files[]', fileList[0]);
-                this.uploading = true;
-                axiospost('/uploadVNFFile',{VNFFileName:formData}).then(res => {
-                    this.uploading = false;
-                    if(res.code === 200){
-                        this.$message.success('upload successfully.');
-                    }else {
-                        this.$message.error('upload failed.');
-                    }
-                });
+                formData.append('files', fileList[0]);
+                this.disabled = true;
+                this.$store.dispatch('VnfpnfSuite/uploadVNFFile', {formData, message: this.$message}).then(
+                    () => { this.submitFormData(data)},
+                    () => { this.disabled = false;}
+                    );
             },
             handleCancel(){
+                if(!this.disabled){
+                    this.handleRemove();
+                }
                 this.$emit('close');
             },
             handleSubmit(){
-                let url = this.isEdit ? '/updateTestMeter':'/createTestMeter';
                 this.form.validateFields((err, values) => {
                     if(!err){
                         const formData = new FormData();
-                        formData.append('files[]', values.upload[0]);
+                        formData.append('files', values.upload[0]);
                         let data = {
                             tesyMeterName: values.XNFName,
                             tesyMeterType: values.XNFType,
@@ -176,26 +159,16 @@
                             VNFFileName:formData,
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                        this.handleLoadingMessage("","",true);
-                        axiospost(url, data)
-                            .then((res) => {
-                                    if(res.code === 200){
-                                        this.handleLoadingMessage("success",this.isEdit ? 'Successfully updated' : 'successfully added ',false);
-                                        this.$emit('getAllTestMeter')
-                                    }else this.handleLoadingMessage("error",this.isEdit ? 'updated failed' : 'added failed',false);
-                                    setTimeout(() => {
-                                        this.$emit('close');
-                                    },1000)
-                                },
-                                () => {
-                                    this.handleLoadingMessage("error","Network exception, please try again",false);
-                                    setTimeout(() => {
-                                        this.$emit('close');
-                                    },1000)
-                                });}
+                       this.handleUpload(data);
+                    }
                 });
 
             },
+            submitFormData(data){
+                this.$store.dispatch('VnfpnfSuite/createOrEditTestMeter',{isEdit:this.isEdit,data}).then(()=>{this.$emit('close');
+                },()=>{ this.$emit('close');})
+
+            }
         }
     }
 </script>
@@ -207,6 +180,15 @@
     .select{
         width: 70%;
         margin-right: 5%;
+    }
+    .upload-float{
+        width: 85%;
+        margin-right: 5%;
+        float: left;
+    }
+    .skip-float{
+        float: left;
+        line-height: 3.5;
     }
 
 </style>

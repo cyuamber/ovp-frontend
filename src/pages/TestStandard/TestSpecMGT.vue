@@ -7,7 +7,7 @@
       <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" />
     </div>
     <div class="test-spec__table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination">
+      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination" @change="handleTableChange">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="test-spec__tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -38,13 +38,8 @@ export default {
             loading: true,
             currentPage:'TestSpecMGT',
             isEdit: false,
-            createTime: '',
-            keyword: '',
-            loadingMessage: {
-                type: "",
-                toast: "",
-                show:true
-            }
+            publishTime: '',
+            keyword: ''
         }
     },
     computed: {
@@ -52,52 +47,48 @@ export default {
             tableData: state => state.testSpecMGT.tableData,
             pagination: state => state.testSpecMGT.pagination,
             testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
+            loadingMessage: state => state.testSpecMGT.loadingMessage
         }),
     },
     mounted () {
         this.loading = true;
-        this.handleLoadingMessage("","",true);
-        this.$store.dispatch('testSpecMGT/getTableData',{}).then(() =>
-            this.loading = false,
-            this.loadingMessage.show = false
-        )
+        this.$store.dispatch('testSpecMGT/getTableData',{}).then(() => this.loading = false)
     },
     methods: {
-        handleLoadingMessage(type,toast,show){
-            this.loadingMessage = {
-                type: type,
-                toast: toast,
-                show:show
-            };
-        },
         handleCreateClick(){
             this.visible = true;
             this.isEdit = false;
             this.$store.dispatch('testSpecMGT/getTestSpec','');
             this.$store.dispatch('testSpecMGT/getVNFOptions')
         },
+        handleTableChange(pagination){
+            this.loading = true;
+            this.$store.dispatch('testSpecMGT/getPagination',{pagination});
+            let current = pagination.current,
+                pageSize = pagination.pageSize,
+                obj = {testSpecName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
+            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => this.loading = false)
+        },
         close(){
             this.visible = false;
         },
         // Filter by creating time
         onChange(date,d) {
-            this.createTime = d;
+            this.publishTime = d;
             this.testSpecSearch()
         },
         testSpecSearch(keyword, isSearch){
             this.loading = true;
+            let obj = {};
             if(isSearch) this.keyword = keyword;
-            if(keyword === '' && this.createTime === '') {
-                this.$message.warning('Please enter valid search information');
-                return
+            if(!(keyword === '' && this.publishTime === '')) {
+                obj = {testSpecName: this.keyword, publishTime: this.publishTime};
             }
-            this.handleLoadingMessage("","",true);
-            let obj = {keyword: this.keyword, createTime: this.createTime};
+            this.$store.dispatch('testSpecMGT/clearPagination');
             // Simulation request
-            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() =>
-                this.loading = false,
-                this.loadingMessage.show = false
-            )
+            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => setTimeout(() => {
+                this.loading = false
+            },2000))
         },
         showEditOrDeleteModal(item,testSpecSingleData){
             if(item === 'Edit') {
@@ -112,11 +103,7 @@ export default {
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        axiospost('/deleteTestSpec',{testSpecId:testSpecSingleData.testSpecId}).then( res => {
-                            if(res.code === 200){
-                                this.handleLoadingMessage("success","Deleted successfully",false);
-                            }else  this.handleLoadingMessage("error","Network exception, please try again",false);
-                        })
+                        this.$store.dispatch('testSpecMGT/deleteTestSpec',{testSpecId: testSpecSingleData.testSpecId})
                     }
                 });
             }

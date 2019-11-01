@@ -34,6 +34,19 @@ export function axiosget (url, data) {
         });
     })
 }
+export function axiosCancelToken (url) {
+    let CancelToken = axios.CancelToken;
+    let source = CancelToken.source();
+    return new Promise((resolve, reject) => {
+        axios.get(url,{
+            cancelToken: source.token
+        }).then((res) => {
+            resolve(res.data);
+        }).catch((err) => {
+            if(axios.isCancel(err))reject(err);
+        });
+    })
+}
 export function axiosmock (url, param, data) {
     return new Promise((resolve) => {
         console.log('%ccurrenturl', 'padding: 3px; background: #009fff; color: #fff; border-radius: 3px;', url)

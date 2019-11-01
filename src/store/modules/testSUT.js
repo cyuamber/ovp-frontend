@@ -1,11 +1,19 @@
 import {axiosget, axiospost} from '../../utils/http';
 import moment from 'moment';
+import axios from 'axios'
 
 const state = {
   tableData: [],
   VNFOptions: [],
-  VNFTest: [],
-  loadingMessage: {type: '', toast: ''}
+  VNFTest: {},
+  loadingMessage: {type: '', toast: ''},
+  source: null,
+  visible: false,
+  pagination: {},
+  createTime: '',
+  keyword: '',
+  pageNum: 1,
+  pageSize: 10
 }
 const mutations = {
   updateTableData (state,tableData) {
@@ -17,11 +25,14 @@ const mutations = {
       return item
     })
   },
+  updateVisible(state, bool){
+    state.visible = bool
+  },
   updateVNFTest (state, VNFTest){
     state.VNFTest = VNFTest
   },
-  updateVNFOptions(state, Options){
-    state.VNFOptions = Options;
+  updateVNFOptions(state, options){
+    state.VNFOptions = options;
   },
   updateFailedMessage(state,toast){
     state.loadingMessage = {
@@ -35,43 +46,69 @@ const mutations = {
       toast
     }
   },
+  updateToken(state,source){
+    state.source = source
+  },
+  setFilterItem(state,{time, key, pageObj, isSearch, message}){
+    if(isSearch){
+      if(key === '' && state.createTime === '' && state.keyword === '') {
+        message.warning('Please enter valid search information')
+        return
+      }    
+    }
+    if(time !== undefined) {
+      state.createTime = time
+      // Jump to the first page after adding search criteria
+      if(state.pageNum !== 1){
+        state.pageNum = 1
+      }
+    }else if(key !== undefined) {
+      state.keyword = key
+      // Jump to the first page after adding search criteria
+      if(state.pageNum !== 1){
+        state.pageNum = 1
+      }
+    }
+    else if(pageObj !== undefined) {
+      state.pageNum = pageObj.current
+      state.pageSize = pageObj.pageSize
+    }
+  }
 }
 const actions = {
-  getTableData ({commit}, {createTime,keyword}){
-    let req = {};
-    if(createTime !== '' && createTime !== undefined && keyword !== '' && keyword !== undefined){
-      req = {createTime, VNFTestName: keyword}
-    }else if(createTime !== '' && createTime !== undefined ){
-      req = {createTime}
-    }else if(keyword !== ''&& keyword !== undefined){
-      req = {VNFTestName: keyword}
+  setParams({state, dispatch}){
+    let paramsObj = {}
+    if(state.createTime !== '') paramsObj.createTime = state.createTime
+    if(state.keyword !== '') paramsObj.VNFTestName = state.keyword
+    if(state.pageNum !== '') {
+      paramsObj.pageNum = state.pageNum
+      paramsObj.pageSize = state.pageSize
     }
-    axiosget('/getVNFTest', req).then(res => {
+    console.log(paramsObj)
+    dispatch('getTableData',{paramsObj,isFilter: true})
+  },
+  getTableData ({commit}, {paramsObj,isFilter}){
+    axiosget('/getVNFTest', paramsObj).then(res => {
       if(res.code === 200){
         commit('updateTableData',res)
-        if(req.createTime || req.VNFTestName ) commit('updateSuccessMessage','Successfully get table data')
-        // this.$message.success('Successfully get table data');
+        if(isFilter) commit('updateSuccessMessage','Successfully get table data')
       }else {
-        if(req.createTime || req.VNFTestName ) commit('updateFailedMessage','Network exception, please try again')
-        // this.$message.error('Network exception, please try again')
+        if(isFilter) commit('updateFailedMessage','Network exception, please try again')
       }
     },() => {
-      if(req.createTime || req.VNFTestName ) commit('updateFailedMessage','Network exception, please try again')
-      // this.$message.error('Network exception, please try again')
+      if(isFilter) commit('updateFailedMessage','Network exception, please try again')
     }
     
   )},
-  getVNFTest({commit},data){
-    commit('updateVNFTest',data)
-  },
-  getVNFOptions({commit}){
+  getVNFOptions({commit, state}, fn){
     let Options = ['VNF', 'PNF', 'NFVI']
     setTimeout(() => {
-      commit('updateVNFOptions',Options)
+      if(state.visible) {
+        console.log(111)
+        commit('updateVNFOptions',Options)
+        fn && typeof fn === 'function' && fn()
+      }
     },5000)
-  },
-  clearOptions({commit}){ 
-    commit('updateVNFOptions', [])
   },
   createOrEditVNFTest({commit,dispatch},{data, isEdit}){  
     let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest';
@@ -92,7 +129,24 @@ const actions = {
         commit('updateSuccessMessage','Deleted successfully')
       }else commit('updateFailedMessage','Network exception, please try again')
     })
-  }
+  },
+  upload({commit},{data, message}){
+    let source = axios.CancelToken.source(
+    commit('updateToken',source))
+    let body = {...data};
+    body.cancelToken = source.token;
+    axiospost('/uploadVNFFile',body).then( res => {
+      commit('updateToken',null)
+      if(res.code === 200) message.success('Upload successfully')
+      else message.error('Upload failed')
+    },() => {
+      message.error('Network exception, please try again')
+      commit('updateToken',null)
+    })
+  },
+  // inerrupt({commit,state}){
+  //   axiosget
+  // }
    
 }
 const getters = {

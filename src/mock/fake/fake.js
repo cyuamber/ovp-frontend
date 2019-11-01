@@ -168,10 +168,6 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
-    uploadVNFFile: {
-        code: 200,
-        message: 'SUCCESS'
-    },
     getTestSpec: {
         code: 200,
         message: 'SUCCESS',
@@ -248,6 +244,10 @@ module.exports = {
             VNFTypeName: faker.name.lastName(),
             createTime: faker.date.recent(),
         }
+    },
+    uploadVNFFile: {
+        code: 200,
+        message: 'SUCCESS',
     },
     getVIM: {
         code: 200,
@@ -365,7 +365,7 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
-    getTestJob: {
+    getTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
         total: 20,
@@ -374,13 +374,79 @@ module.exports = {
                 n = 0
             }
             return {
+                jobId: faker.random.uuid(),
                 VNFName: faker.name.lastName(),
                 jobName: faker.name.firstName(),
-                createrTime: faker.date.recent(),
+                createTime: faker.date.recent(),
                 status: n,
-                speciflcation: faker.random.word(),
-                description: faker.random.word(),
+                testSpeciflcation: faker.random.word(),
+                jobDescription: faker.random.word(),
+                testENV: [{title: 'Test VIM ENV', text: 'name'},{title: 'Test VNFM ENV', text: 'name'}],
+                testCase: ['Test Case01', 'Test Case02', 'Test Case03']
             }
         })
+    },
+    getTestCaseMGTs:{
+        code: 200,
+        message: 'SUCCESS',
+        total: 25,
+        body: _.times(10, function (n){
+            if(n%2 === 0){
+                n = 0
+            }else n = 1;
+            return {
+                testCaseNm: faker.random.number(),
+                testCaseName: faker.name.firstName(),
+                testCaseVersion: faker.random.number(),
+                testCaseDes: faker.random.word(),
+                testCaseState: n,
+                publishTime: faker.date.recent(),
+            }
+        })
+    },
+    createrTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            jobId: faker.random.uuid(),
+            VNFName: faker.name.firstName(),
+            jobName: faker.name.lastName(),
+        }
+    },
+    getSUTName: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            SUTName:  [faker.name.lastName(),faker.name.firstName(),]
+        }
+    },
+    getJobSpecification: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            JobSpecification:  [faker.name.lastName(),faker.name.firstName()]
+        }
+    },
+    getTestCaseList: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            testCaseList: [{name: 'Test Case01'}, {name: 'Test Case02'}, {name: 'Test Case03'}]
+        }
+    },
+    deleteTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS'
+    },
+    runTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS'
+    },
+    getProgress: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            progress: 99,
+        }
     }
 }

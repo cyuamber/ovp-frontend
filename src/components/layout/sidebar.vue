@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import util from "../../utils/utils";
 import MENUITEM from "../../const/menu";
 
@@ -50,12 +50,16 @@ export default {
     return {
       menuStyle,
       defaultMenu: [],
-      currentMenu: [],
       defaultOpenKeys: [],
       menus: []
     };
   },
-  computed: mapGetters(["getuserAuth"]),
+  computed: {
+    ...mapGetters(["getuserAuth"]),
+    ...mapState({
+      currentMenu: state => state.router.currentMenu
+    })
+  },
   created() {
     this.menus = MENUITEM.menuItems;
     this.setDefaultmenu();
@@ -86,23 +90,23 @@ export default {
           if (currentUrlstr === util.transformUrlpathstr(item.name)) {
             this.defaultOpenKeys.push(parent.name);
             this.defaultMenu.push(item.name);
-            this.currentMenu.push(item.name);
+            this.$store.commit("setCurrentMenu", [item.name]);
             this.$store.commit("setBreadcrumb", [parent.name, item.name]);
           }
         });
       } else {
         if (currentUrlstr === util.transformUrlpathstr(parent.name)) {
           this.defaultMenu.push(parent.name);
-          this.currentMenu.push(parent.name);
+          this.$store.commit("setCurrentMenu", [parent.name]);
           this.$store.commit("setBreadcrumb", [parent.name]);
         }
       }
     },
     clickMenu(e) {
-      this.currentMenu = [];
+      this.$store.commit("setCurrentMenu");
       let routePath = e.keyPath.reverse();
       let routeStr = util.transformUrlpathstr(e.key);
-      this.currentMenu.push(e.key);
+      this.$store.commit("setCurrentMenu", [e.key]);
       this.$store.commit("setBreadcrumb", routePath);
       this.$router.push({
         path: routeStr

@@ -1,14 +1,16 @@
-import {axiosget} from '../../utils/http';
+import {axiosget, axiospost} from '../../utils/http';
 import moment from 'moment';
 
 const state = {
   tableData: [],
   VNFOptions: [],
-  testSpecSingleData: {}
+  testSpecSingleData: {},
+  pagination: {current: 1 , total: 0},
+    loadingMessage: {type: '', toast: ''}
 }
 const mutations = {
   updateTableData (state,tableData) {
-    state.pagination = { current: 1, total: tableData.total };
+    state.pagination.total = tableData.total;
     state.tableData = tableData.body.map( (item, index) => {
       item.createTime = moment(item.createTime).format('YYYY-MM-DD');
       item.index = tableData.body.length * (state.pagination.current -1) + index+1;
@@ -21,18 +23,31 @@ const mutations = {
   },
   updateVNFOptions(state, Options){
     state.VNFOptions = Options;
-  }
+  },
+  updatePagination(state, Options){
+      state.pagination = Options;
+  },
+    updateFailedMessage(state,toast){
+        state.loadingMessage = {
+            type: 'failed',
+            toast
+        }
+    },
+    updateSuccessMessage(state,toast){
+        state.loadingMessage = {
+            type: 'success',
+            toast
+        }
+    },
 }
 const actions = {
-  getTableData ({commit}, {createTime,keyword}){
+  getTableData ({commit}, obj){
     let req = {};
-    if(createTime !== '' && createTime !== undefined && keyword !== '' && keyword !== undefined){
-      req = {createTime, VNFTestName: keyword}
-    }else if(createTime !== '' && createTime !== undefined ){
-      req = {createTime}
-    }else if(keyword !== ''&& keyword !== undefined){
-      req = {VNFTestName:keyword}
-    }
+      Object.keys(obj).forEach(item =>{
+          if(obj[item] !== '' &&obj[item] !== undefined ){
+              req[item]=obj[item];
+          }
+      });
     axiosget('/getTestSpec', req).then(res => {
       if(res.code === 200){
         commit('updateTableData',res)
@@ -56,6 +71,26 @@ const actions = {
   clearOptions({commit}){ 
     commit('updateVNFOptions', [])
   },
+    createOrEditTestSpec({commit,dispatch},{isEdit,data}){
+        let url = this.isEdit ? '/updateTestSpec':'/addTestSpec';
+        axiospost(url, data)
+            .then((res) => {
+                    if(res.code === 200){
+                        commit('updateSuccessMessage',isEdit ? 'Successfully updated' : 'Has been added successfully');
+                        dispatch('getTableData',{})
+                    }else commit('updateFailedMessage',isEdit ? 'Update failed' : 'add failed')
+                },
+                () => {
+                    commit('updateFailedMessage','Network exception, please try again')
+                })
+    },
+    deleteTestSpec({commit},data){
+        axiospost('/deleteTestSpec',data).then( res => {
+            if(res.code === 200){
+                commit('updateSuccessMessage','Deleted successfully')
+            }else commit('updateFailedMessage','Network exception, please try again')
+        })
+    }
    
 }
 const getters = {

@@ -32,17 +32,17 @@ export default {
             },
             {
                 auth: ['admin', 'customer'],
-                name: 'Test MGT',
+                name: 'Test Instrument MGT',
                 iconType: 'bar-chart',
                 isChildren: true,
                 children: [{
                     auth: ['admin'],
-                    name: 'Test Instrument MGT',
+                    name: 'Instrument Manage System MGT',
                     iconType: '',
                 },
                 {
                     auth: ['admin', 'customer'],
-                    name: 'VNF/PNF suite MGT',
+                    name: 'Instrument Package MGT',
                     iconType: '',
                 }]
             },
