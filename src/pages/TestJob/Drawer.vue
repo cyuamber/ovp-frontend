@@ -1,33 +1,43 @@
 <template>
   <a-drawer
     title="Create Test Job"
-    :width="550"
+    :width="450"
     @close="onClose"
     :visible="visible"
     :closable="false"
+    class="drawer"
   >
     <a-form :form="form" class="form">
-      <a-form-item v-for="(item,i) in inputs" :key="item" :label="item"  :label-col="{ span: 8 }" 
-       :wrapper-col="{ span: (item === 'SUT Name' || item === 'Job Specification'|| item === 'SUT Type')? 9:14 }" 
+      <a-form-item v-for="(item,i) in formList" :key="item" :label="item"  :label-col="{ span: 8 }" 
+       :wrapper-col="{ span: 14 }" 
       >
-        <a-input v-if="item !== 'SUT Name' && item !=='Job Specification' && item !== 'SUT Type'" v-decorator="[formList[i],{ rules: [{ required: true, message: item +' is required'}]}]"/>
-        <a-select v-if="item === 'SUT Type'" v-decorator="[formList[i],{ rules: [{ required: true, }], initialValue: SUTTypes[0]}]" 
-          @select="((key) => selectSUTType(key))" class="select"
+        <a-input v-if="item === formList[0]" v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}]}]" /> 
+        <a-textarea v-if="item === formList[1]"  v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}]}]" :autosize="{minRows: 3}"/>
+        <a-select v-else-if="item === 'SUT Type'" v-decorator="[keyList[i],{ rules: [{ required: true, }]}]" 
+          @select="((key) => selectSUTType(key))" class="form__select--width"
         >
-          <a-select-option  v-for="type in SUTTypes" :key="type" :value="type"> {{type}} </a-select-option>
+          <a-select-option  v-for="type in SUTTypeList" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
-        <a-select v-if="item === 'SUT Name'" :disabled="!getSUTName" class="select"
-         v-decorator="[formList[i],{ rules: [{ required: true }], initialValue: getSUTName ? SUTNames[0]: ''}]"
+        <a-select v-else-if="item === 'SUT Name'" :disabled="!getSUTName" class="form__select--width"
+         v-decorator="[keyList[i],{ rules: [{ required: true }]}]" :title="!getSUTName ? 'Please select SUT Type first' : ''"
          @select="((key) => selectSUTName(key))"
         >
-          <a-select-option  v-for="type in SUTNames" :key="type" :value="type"> {{type}} </a-select-option>
+          <a-select-option  v-for="type in SUTNameList" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
-        <a-select v-if="item === 'Job Specification'" :disabled="!getSpecification" class="select"
-         v-decorator="[formList[i],{ rules: [{ required: true }], initialValue: getSpecification ? specifications[0]: ''}]" 
-         @select="((key)=> selectSpecification(key))"
+        <a-select v-else-if="item === 'Job Specification'" :disabled="!getSpecification" class="form__select--width"
+         v-decorator="[keyList[i],{ rules: [{ required: true }]}]" @select="((key)=> selectSpecification(key))"
+         :title="!getSUTName ? 'Please select SUT Type and SUT Name first' : (!getSpecification ? 'Please select SUT Name first': '')"
         >
-          <a-select-option  v-for="type in specifications" :key="type" :value="type"> {{type}} </a-select-option>
+          <a-select-option  v-for="type in specificationList" :key="type" :value="type"> {{type}} </a-select-option>
         </a-select>
+        <!-- Test VNFM/VIM  -->
+        <a-select v-else-if="item === 'Test VNFM ENV'" v-decorator="[keyList[i]]" class="form__select--width">
+          <a-select-option  v-for="type in VNFMOption" :key="type" :value="type"> {{type}} </a-select-option>
+        </a-select>
+        <a-select v-else-if="item === 'Test VIM ENV'" v-decorator="[keyList[i]]" class="form__select--width">
+          <a-select-option  v-for="type in VNFMOption" :key="type" :value="type"> {{type}} </a-select-option>
+        </a-select>
+        <!-- loading -->
         <a-spin :spinning="nameSpin" v-if="item === 'SUT Name'">
           <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
         </a-spin>
@@ -35,63 +45,59 @@
           <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
         </a-spin>
       </a-form-item>
-      <a-spin size="large" :spinning="testCaseSpin" tip="loading...">
-        <div class="testCases spin-content">
-          <div class="testCase" v-for="(item,index) in testCases" :key="item">
-            <a-form-item :wrapper-col="{span: 7}" >
-              <a-checkbox-group v-decorator="['checkboxGroup', { initialValue: ['case1'] }]">
-                <a-checkbox :value="'case'+index" @change="onChange">{{item}}</a-checkbox>
-              </a-checkbox-group>
-            </a-form-item>
-              <label :for="'case'+index+'VNFM'">Test VNFM ENV:</label> 
-              <a-select v-decorator="['case'+index+'VNFM']" style="width: 120px" class="select-margin" :id="'case'+index+'VNFM'">
-                <a-select-option  v-for="type in VNFMOption" :key="type" :value="type"> {{type}} </a-select-option>
-              </a-select>
-            </a-form-item>
-            <label :for="'case'+index+'VNFM'">Test VIM ENV:</label>
-              <a-select v-decorator="['case'+index+'VNFM']" style="width: 120px"  class="select-margin" :id="'case'+index+'VNFM'" >
-                <a-select-option  v-for="type in VIMOption" :key="type" :value="type"> {{type}} </a-select-option>
-              </a-select>
-            </a-form-item>
-          </div>
-          <p class="wain" v-show="isShowWain">Select at least one test case！</p>
+      <!-- Test Case -->
+      <a-spin :spinning="testCaseSpin" tip="loading...">
+        <div  class="form__spin-content">
+          <a-form-item v-if="testCaseList.length !== 0">
+          <h3>Test Case List:</h3>
+            <a-checkbox-group v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}]}]" @change="onChange">
+              <a-card-grid v-for="(item,index) in testCaseList" :key="index "  class="form__card--padding">
+                <a-checkbox :value="'case'+index" class="form__checkbox--size"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
+              </a-card-grid>
+            </a-checkbox-group>
+          </a-form-item>  
         </div>
-      </a-spin>     
+      </a-spin>
     </a-form>
-     <div class="footer">
-        <a-button @click="onClose" size="large" class="btn-color">
-          Cancel
-        </a-button>
-        <a-button type="primary" size="large" @click="handleSubmit">Submit</a-button>
-      </div>
+    <div class="footer">
+      <a-button @click="onClose" size="large"> Cancel </a-button>
+      <a-button type="primary" size="large" @click="handleSubmit">Submit</a-button>
+    </div>
   </a-drawer>
 </template>
 
 <script type="text/ecmascript-6">
+import { mapState } from 'vuex'
+
+import { formList, SUTTypeList } from './constants'
+
   export default {
     props: ['isShow'],
     data(){
       return {
-        visible: false,
-        inputs: ['Job Name', 'Job Description', 'SUT Type', 'SUT Name', 'Job Specification'],
-        formList: [],
+        visible: this.isShow,
+        formList,
+        keyList: [],
         form: this.$form.createForm(this),
-        SUTTypes: ['VNF','PNF', 'NFVI'],
-        getSUTName: false,
-        SUTNames: [],
-        nameSpin: false,
+        SUTTypeList, 
         selectedSUTType: '',
-        specifications: [],
-        getSpecification: false,
-        specificationSpin: false,
         selectedSUTName: '',
         selectedSpecification: '',
-        testCases: [],
-        testCaseSpin: false,
-        isShowWain: false,
         VNFMOption: ['111','ssss','sss'],
         VIMOption: ['111','ssss','sss'],
       }
+    },
+    computed: {
+      ...mapState({
+        SUTNameList: store => store.testJob.SUTNameList,
+        nameSpin: store => store.testJob.nameSpin,
+        getSUTName: store => store.testJob.getSUTName,
+        specificationSpin: store => store.testJob.specificationSpin,
+        getSpecification: store => store.testJob.getSpecification,
+        specificationList: store => store.testJob.specificationList,
+        testCaseSpin: store => store.testJob.testCaseSpin,
+        testCaseList: store => store.testJob.testCaseList,
+      })
     },
     watch: {
       isShow(val){
@@ -101,23 +107,19 @@
       },
       visible(val){
         if(!val){
-          this.getSUTName = false
-          this.SUTNames = []
+          this.$store.commit('testJob/clean')
           this.selectedSUTType = ''
-          this.specifications = []
-          this.getSpecification = false
-          this.specificationSpin = false
           this.selectedSUTName = ''
           this.selectedSpecification = ''
-          this.testCases =  []
-          this.testCaseSpin = false
-          this.form.setFieldsValue({SUTType: 'VNF', SUTName: '', JobSpecification: ''})
+          this.keyList.forEach((item) => {
+            this.form.setFieldsValue({[item]: ''})
+          })
         }
       }
     },
     created(){
-      this.formList = this.inputs.map(item => {
-        item = item.replace(' ','')
+      this.keyList = this.formList.map(item => {
+        item = item.replace(' ','').replace(' ','')
         return item
       })
     },
@@ -125,55 +127,36 @@
       onClose(){
         this.visible = false;
         this.$emit('close')
-        
       },
       handleSubmit(){
         this.form.validateFields((error,values) => {
           if(!error){
-            if(values.checkboxGroup.length === 0){
-              this.isShowWain = true
-              return
-            }
+            this.$store.dispatch('testJob/createrTestJobMGT',values)
             this.visible = false;
+            this.$emit('close')
           }
         })
       },
       selectSUTType(key){
         if(key === this.selectedSUTType) return
-        this.selectedSUTType = key
-        // Simulation request
-        this.nameSpin = true
-        this.getSUTName = false
-        setTimeout(() => {
-          this.getSUTName = true;
-          this.SUTNames = ['name1', 'name2', 'name3']
-          this.nameSpin = false
-        },1000)
+        this.selectedSUTName = ''
+        this.selectedSpecification = ''
+        this.$store.dispatch('testJob/getSUTName',{SUTType: key,message: this.$message})
+        this.form.setFieldsValue({SUTName: '', JobSpecification: ''})
       },
       selectSUTName(key){
         if(key === this.selectedSUTName) return
         this.selectedSUTName = key
-        // Simulation request
-        this.specificationSpin = true
-        this.getSpecification = false
-        setTimeout(() => {
-          this.getSpecification = true;
-          this.specifications = ['name1', 'name2', 'name3']
-          this.specificationSpin = false
-        },1000)
+        this.selectedSpecification = ''
+        this.$store.dispatch('testJob/getSpecification',{SUTName: key, message: this.$message})
+        this.form.setFieldsValue({JobSpecification: ''})
       },
       selectSpecification(key){
         if(key === this.selectedSpecification) return
         this.selectedSpecification = key
-        this.testCaseSpin = true
-        this.testCases = []
-        setTimeout(() => {
-          this.testCaseSpin = false
-          this.testCases = ['Test Case01', 'Test Case02', 'Test Case03']
-        },2000)
+        this.$store.dispatch('testJob/getTestCase',{JobSpecification: key, message: this.$message})
       },
       onChange(e){
-        this.isShowWain = false
         console.log(e.target,e)
       }
 
@@ -185,16 +168,24 @@
 <style lang="less" scope>
 
   .form{
-    
-    .select{
-      width: 70%;
+    .ant-form-item-label {
+      text-align: left;
+    }
+    .form__select--width{
+      width: 55%;
       margin-right: 10%;
     }
-    .select-margin{
-      margin: 0 20px 24px 10px;
+    .form__checkbox--size{
+      font-size: 20px;
     }
-    .wain{
-      color: red;
+    .form__spin-content{
+      width: 100%;
+      height: 80px;
+    }
+    .form__card--padding{
+      width: 50%;
+      padding: 14px;
+      text-indent: .5em;
     }
   }
   .footer{
@@ -204,12 +195,6 @@
     width: 100%;
     .ant-btn{
       width: 50%;
-      border: none;
-      border-radius: 0;
-    }
-    .btn-color{
-      background-color: #7A7A86;
-
     }
   }
 

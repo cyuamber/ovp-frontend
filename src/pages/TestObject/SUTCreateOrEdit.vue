@@ -1,12 +1,12 @@
 <template>
   <a-modal
     :title="(isEdit === true ? 'Edit ': 'Create ') + currentTab + ' SUT'"
-    v-model="showModal"
-    :footer="null"
+    v-model="visible"
+    :footer="null" 
     @cancel="handleCancel"
   >
     <template>
-      <a-form :form="form" @submit="handleSubmit">
+      <a-form :form="form" @submit="handleSubmit" class="form">
         <a-form-item
           :label=" currentTab +' Name'"
           :label-col="{ span: 7 }"
@@ -20,11 +20,11 @@
           />
         </a-form-item>
         <a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-          <a-select :disabled="spin" class="select" @dropdownVisibleChange="handleExpand"
+          <a-select :disabled="spin" class="form__select" @dropdownVisibleChange="handleExpand"
             v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]">
             <a-select-option v-for="type in VNFOptions" :key="type" :value="type"> {{type}} </a-select-option>
           </a-select>
-          <a-spin :spinning="spin" class='skip-size'>
+          <a-spin :spinning="spin">
             <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
           </a-spin>
         </a-form-item>
@@ -47,12 +47,23 @@
           />
         </a-form-item>
         <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-           <a-upload-dragger
-            name="file"
-            @change="handleChange"
+           <a-upload-dragger :remove="handleRemove" :beforeUpload="beforeUpload" :fileList="fileList"
           >
-            <p class="ant-upload-text upload-text">Click or drag to upload</p>
+            <p class="ant-upload-text form__upload-text--font-size"><a-icon type="upload"/>&nbsp;&nbsp;&nbsp;<span>Click or drag to upload</span></p>
           </a-upload-dragger>
+          <div class="form__upload-btns">
+<a-button
+            type="primary"
+            @click="handleUpload"
+            :disabled="!fileList.length"
+            :loading="uploading"
+            class="form__btn--margin"          
+          >
+            {{uploading ? 'Uploading' : 'Start Upload' }}
+          </a-button>
+          <a-button @click="interruptUpload" v-show="uploading">Interrupt</a-button>
+          </div>
+          
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
           <a-button type="primary" html-type="submit">Submit</a-button>
@@ -64,33 +75,48 @@
 </template>
 
 <script type="text/ecmascript-6">
-
 import moment from 'moment';
-import {mapState} from 'vuex'
-import {axiospost} from '../../utils/http';
+import {mapState} from 'vuex';
+
   export default {
-    props: ['isEdit', 'currentTab','visible'],
+    props: ['isEdit', 'currentTab'],
     data(){
       return {
-        showModal: false,
+        // showModal: false,
         form: this.$form.createForm(this),
         selected: '',
         count: 0,
-        spin: false
+        spin: false,
+        fileList: [],
+        uploading: false
       }
     },
     computed: {
       ...mapState({
         VNFOptions: state => state.testSUT.VNFOptions,
-        VNFTest: state => state.testSUT.VNFTest 
-      })
+        VNFTest: state => state.testSUT.VNFTest,
+        // visible: state => state.testSUT.visible
+      }),
+      visible: {
+        get(){
+          return this.$store.state.testSUT.visible
+        },
+        set(val){
+          if(!val) {
+            this.$store.commit('testSUT/updateVNFOptions', [])
+            this.$store.commit('testSUT/updateVNFTest', {})
+            this.form.setFieldsValue({testName: '', version: '', vendor: '', typeName: '' })
+            this.spin = false
+            console.log(this.spin,'close')
+          }
+        }
+      }
     },
     watch: {
       visible(val){
-        this.count ++
         if(val) {
-          this.showModal = val;
-          if(!val.length && this.isEdit && this.count !== 1){
+          this.count ++
+          if(this.isEdit && this.count !== 1){
             this.form.setFieldsValue({
               testName: this.VNFTest.VNFTestName,
               typeName: this.VNFTest.VNFTypeName,
@@ -98,30 +124,26 @@ import {axiospost} from '../../utils/http';
               version: this.VNFTest.VNFTestVersion
             })
           } 
-        }
-      },
-      showModal(val){
-        if(!val) {
-          this.$emit('close')
-          this.$store.dispatch('testSUT/clearOptions')
-          this.$store.dispatch('testSUT/getVNFTest', {})
-          this.form.setFieldsValue({testName: '', version: '', vendor: '', typeName: '', })
+          if(!this.isEdit) this.spin = true 
         }
       },
       VNFOptions(val){
-        if(val.length) this.spin = false      
+        if(val.length) {
+          this.spin = false
+        }      
         if(val.length && !this.isEdit){
           this.form.setFieldsValue({typeName: val[0]})
-          this.spin = true
         }
+      },
+      spin(val){
+        console.log(val)
       }
     },
     methods: {
       handleCancel(){
-        this.$emit('close')
+        this.$store.commit('testSUT/updateVisible', false)
       },
       handleSubmit(e){
-        let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest';
         e.preventDefault();
         this.form.validateFields((err, values) => {
           if(!err){
@@ -134,31 +156,39 @@ import {axiospost} from '../../utils/http';
               createTime: this.isEdit ? this.VNFTest.createTime : moment(new Date()).format('YYYY-MM-DD'),
               VNFFileName: {}
             }
-            axiospost(url, data)
-              .then((res) => {
-                if(res.code === 200){
-                  this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
-                  this.$emit('getAllVnfType')
-                }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
-                this.showModal = false
-              },
-              () => {
-                this.$message.error('Network exception, please try again');
-                this.showModal = false
-              })
-            
+            let {isEdit} = this
+            this.$store.dispatch('testSUT/createOrEditVNFTest',{isEdit,data}).then(()=>{
+              this.$store.commit('testSUT/updateVisible', false)
+              },()=>{this.$store.commit('testSUT/updateVisible', false)})
           }
         })
       },
       handleExpand(){
+        console.log('展开')
         if(!this.VNFOptions.length) {
           this.spin = true
-          this.$store.dispatch('testSUT/getVNFOptions').then(() => {this.spin = true})
-          
+          this.$store.dispatch('testSUT/getVNFOptions',() => {
+            this.spin = false
+          })
         }
       },
-      handleChange(){
-        console.log('上传')
+      handleUpload(){
+        const { fileList } = this;
+        const formData = new FormData();
+        formData.append('files', fileList[0])
+        console.log(formData.get('files'))
+        this.uploading = true;
+        this.$store.dispatch('testSUT/upload', {formData, message: this.$message}).then(() => {setTimeout(()=>{this.uploading = false},5000)},() => {this.uploading = false})
+      },
+      handleRemove(){
+        this.fileList.splice(0,1)
+      },
+      beforeUpload(file){
+        this.fileList.splice(0,1,file)
+        return false
+      },
+      interruptUpload(){
+        this.$store.dispatch('test/interrupt')
       }
     
   }
@@ -166,11 +196,22 @@ import {axiospost} from '../../utils/http';
 </script>
 
 <style lang="less" scoped>
-.select{
-  width: 70%;
-  margin-right: 5%;
+.form{
+  .form__select{
+    width: 70%;
+    margin-right: 5%;
+  }
+  .form__upload-text--font-size{
+    font-size: 12px !important;
+  }
+  .form__upload-btns{
+    display: flex;
+    justify-content: center;
+    margin-top:16px;
+    .form__btn--margin{
+      margin-right: 20px;
+    }
+  }
 }
-.upload-text{
-  font-size: 12px !important;
-}
+
 </style>
