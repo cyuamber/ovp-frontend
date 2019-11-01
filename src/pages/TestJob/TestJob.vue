@@ -46,90 +46,89 @@ import Drawer from "./Drawer";
 import { mapState } from "vuex";
 
 export default {
-  name: "TestJob",
-
-  data() {
-    return {
-      columns: testJobColumns,
-      loading: false
-    };
-  },
-  computed: {
-    ...mapState({
-      isShow: state => state.testJob.isShow,
-      loadingMessage: state => state.testJob.loadingMessage,
-      tableData: state => state.testJob.tableData,
-      pagination: state => state.testJob.pagination
-	}),
-  },
-  components: { Drawer, Loading },
-  mounted() {
-    this.$store.dispatch("testJob/getTableData");
-  },
-  methods: {
-    handleCreate() {
-      this.$store.commit("testJob/setIsShow", true);
-    },
-    handleSelectCreateTime(date, d) {
-      this.$store.commit("testJob/setFilter", { time: d });
-      this.$store.dispatch("testJob/getTableData");
-    },
-    handleActions(action, data) {
-      if (
-        action === "Start" ||
-        action === "Pause" ||
-        action === "Success" ||
-        action === "Fail"
-      )
-        this.handleStart(action, data);
-      else if (action === "Delete") this.handleDelete(data);
-      else if (action === "More") this.handleOpenDetail(data);
-    },
-    handleStart(action, data) {
-      data.currentAction = action;
-      this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
-      this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
-      this.$router.push({ name: "JobDetail", params: data });
-    },
-    handleDelete(data) {
-      this.$confirm({
-        title: "Are you sure delete this task?",
-        okText: "Yes",
-        okType: "danger",
-        cancelText: "No",
-        onOk: () => {
-          this.$store.dispatch("testJob/delete", data);
-        },
-        onCancel() {
-          console.log("Cancel");
-        }
-      });
-    },
-    handleDownload() {
-      console.log(555);
-    },
-    handleOpenDetail(data) {
-      data.currentAction = "More";
-      this.$router.push({ name: "JobDetail", params: data });
-    },
-    close() {
-      this.$store.commit("testJob/setIsShow", false);
-    },
-    handlePageChange(pageObj) {
-      this.$store.commit("testJob/setFilter", { pageObj });
-      this.$store.dispatch("testJob/getTableData");
+	name: "TestJob",
+	data() {
+		return {
+			columns: testJobColumns,
+			loading: false,
+		};
 	},
-	getStatusTitle(status){
-		return status === 0? 'Pending execution': (status === 1? 'Executing':(status === 2? 'Execution completed':'Execution failed'))
+	computed: {
+		...mapState({
+			isShow: state => state.testJob.isShow,
+			loadingMessage: state => state.testJob.loadingMessage,
+			tableData: state => state.testJob.tableData,
+			pagination: state => state.testJob.pagination
+		}),
 	},
-	getStatusStyle(status){
-		let color = status === 0? '#979797': (status === 1? '#F5A623':(status === 2? '#7ED321':'#D0021B'))
-		return {backgroundColor: color}
+	components: { Drawer, Loading },
+	mounted() {
+		this.$store.dispatch("testJob/getTableData");
 	},
-	getActionsColor(actions, item){
-		return item === actions[0]? 'blue': (item === actions[1]? 'red':(item === actions[2]? 'green': 'purple'))
+	methods: {
+		handleCreate() {
+			this.$store.commit("testJob/setIsShow", true);
+		},
+		handleSelectCreateTime(date, d) {
+			this.$store.commit("testJob/setFilter", { time: d });
+			this.$store.dispatch("testJob/getTableData", true);
+		},
+		handleActions(action, data) {
+			if ( action === "Start" ) this.handleStart(data);
+			else if (action === "Delete") this.handleDelete(data);
+			else if (action === "More") this.handleOpenDetail(data);
+			else if (action === 'Download') this.handleDownload(data);
+			else if (action === 'Stop') this.handleStop(data)
+		},
+		handleStart(data) {
+			data.currentAction = 'Start';
+			this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
+			this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+			this.$router.push({ name: "JobDetail", params: data });
+		},
+		handleDelete(data) {
+			this.$confirm({
+				title: "Are you sure delete this task?",
+				okText: "Yes",
+				okType: "danger",
+				cancelText: "No",
+				onOk: () => {
+				this.$store.dispatch("testJob/delete", data);
+				},
+				onCancel() {
+				console.log("Cancel");
+				}
+			});
+		},
+		handleDownload() {
+			console.log('Download');
+		},
+		handleOpenDetail(data) {
+			data.currentAction = "More";
+			this.$router.push({ name: "JobDetail", params: data });
+		},
+		close() {
+			this.$store.commit("testJob/setIsShow", false);
+		},
+		handlePageChange(pageObj) {
+			this.$store.commit("testJob/setFilter", { pageObj });
+			this.$store.dispatch("testJob/getTableData",true);
+		},
+		handleStop(data){
+			// The analog call interface changes a single piece of data in a single table
+			this.$store.dispatch('testJob/stopJop',data)
+		},
+		getStatusTitle(status){
+			return status === 0? 'Pending execution': (status === 1? 'Executing':(status === 2? 'Execution completed':'Execution failed'))
+		},
+		getStatusStyle(status){
+			let color = status === 0? '#979797': (status === 1? '#F5A623':(status === 2? '#7ED321':'#D0021B'))
+			return {backgroundColor: color}
+		},
+		getActionsColor(actions, item){
+			return item === actions[0]? 'blue': (item === actions[1]? 'red':(item === actions[2]? 'green': 'purple'))
+		}
 	}
-  }
 };
 </script>
 <style lang="less" scope>

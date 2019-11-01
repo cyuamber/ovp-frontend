@@ -390,7 +390,7 @@ module.exports = {
             }
         })
     },
-    createrTestJobMGT: {
+    createTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
         body: {

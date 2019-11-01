@@ -94,11 +94,15 @@ const mutations = {
 			state.pageNum = pageObj.current;
 			state.pageSize = pageObj.pageSize;
 		}
+	},
+	updateTableItemData(state, data){
+		let index = data.index-1
+		state.tableData.splice( index, 1, data )
 	}
 }
 
 const actions = {
-	getTableData({ commit },) {
+	getTableData({ commit }, bool) {
 		let obj = {pageNum: state.pageNum, pageSize: state.pageSize}
 		if(state.createTime !== '') obj.createTime = state.createTime
 		axiosget('/getTestJobMGT',obj).then((res) => {
@@ -114,12 +118,13 @@ const actions = {
 					return item
 				})
 				commit('updateTableData', tableData)
-			}
+				if(bool) commit('updateSuccessMessage', 'Successfully get table data')
+			}else if(bool) commit('updateFailedMessage', 'Network exception, please try again')
+		}).catch(() => {
+			if(bool) commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
-	createrTestJobMGT({
-		commit
-	}, values) {
+	createrTestJobMGT({ commit }, values) {
 		let body = {
 			jobName: values.JobName,
 			jobDescription: values.JobDescription,
@@ -131,7 +136,7 @@ const actions = {
 		}
 		if (values.TestVIMENV) body.testVIMENV = values.TestVIMENV
 		if (values.TestVNFMENV) body.testVNFMENV = values.TestVNFMENV
-		axiospost('createrTestJobMGT', body)
+		axiospost('createTestJobMGT', body)
 			.then((res) => {
 				if (res.code === 200) {
 					commit('updateSuccessMessage', 'Has been added successfully')
@@ -141,12 +146,7 @@ const actions = {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			})
 	},
-	getSUTName({
-		commit
-	}, {
-		SUTType,
-		message
-	}) {
+	getSUTName({ commit }, { SUTType, message }) {
 		commit('updataSUTName', {
 			get: false,
 			spin: true
@@ -317,6 +317,12 @@ const actions = {
 				}
 			}
 		})
+	},
+	stopJop({commit},data){
+		// Simulation request
+		data.status = 0
+		data.actions[0] = 'Start'
+		commit('updateTableItemData',data)
 	}
 
 }
