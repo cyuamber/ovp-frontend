@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-    import {axiospost} from '../../utils/http'
     import Search from '../../components/Search/Search'
     import {TestSpecColumns} from '../../const/constant'
     import {mapState} from 'vuex'
