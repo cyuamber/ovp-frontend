@@ -6,11 +6,8 @@ import testInstrument from './modules/testInstrument';
 import testSpecMGT from './modules/testSpecMGT';
 import VnfpnfSuite from './modules/VnfpnfSuite';
 import testSUT from './modules/testSUT'
-<<<<<<< HEAD
 import testCase from './modules/testCase'
-=======
 import testJob from './modules/testJob'
->>>>>>> origin/dev
 
 Vue.use(Vuex);
 

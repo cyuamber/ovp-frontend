@@ -43,7 +43,8 @@ const TestSUTColumns = [{
         dataIndex: 'action',
         scopedSlots: {
             customRender: 'action'
-        }
+        },
+        width: 250
     }
 ]
 const testEnvVIMColumns = [

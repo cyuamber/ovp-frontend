@@ -21,7 +21,7 @@ const mutations = {
     state.tableData = tableData.body.map( (item, index) => {
       item.createTime = moment(item.createTime).format('YYYY-MM-DD') 
       item.index = tableData.body.length * (state.pagination.current -1) + index+1;
-      item.action = ['Edit', 'Delete']
+      item.action = ['Edit', 'Delete', 'Download']
       return item
     })
   },
@@ -104,7 +104,7 @@ const actions = {
     let Options = ['VNF', 'PNF', 'NFVI']
     setTimeout(() => {
       if(state.visible) {
-        console.log(111)
+        console.log(state.visible)
         commit('updateVNFOptions',Options)
         fn && typeof fn === 'function' && fn()
       }

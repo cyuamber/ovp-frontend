@@ -20,7 +20,7 @@
           />
         </a-form-item>
         <a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-          <a-select :disabled="spin" class="form__select" @dropdownVisibleChange="handleExpand"
+          <a-select :disabled="spin" class="form__select" @dropdownVisibleChange="handleExpand" v-if="visible"
             v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]">
             <a-select-option v-for="type in VNFOptions" :key="type" :value="type"> {{type}} </a-select-option>
           </a-select>
@@ -105,9 +105,8 @@ import {mapState} from 'vuex';
           if(!val) {
             this.$store.commit('testSUT/updateVNFOptions', [])
             this.$store.commit('testSUT/updateVNFTest', {})
-            this.form.setFieldsValue({testName: '', version: '', vendor: '', typeName: '' })
+            this.form.setFieldsValue({testName: '', version: '', vendor: ''})
             this.spin = false
-            console.log(this.spin,'close')
           }
         }
       }
@@ -119,7 +118,6 @@ import {mapState} from 'vuex';
           if(this.isEdit && this.count !== 1){
             this.form.setFieldsValue({
               testName: this.VNFTest.VNFTestName,
-              typeName: this.VNFTest.VNFTypeName,
               vendor: this.VNFTest.VNFTestVendor,
               version: this.VNFTest.VNFTestVersion
             })
@@ -131,13 +129,7 @@ import {mapState} from 'vuex';
         if(val.length) {
           this.spin = false
         }      
-        if(val.length && !this.isEdit){
-          this.form.setFieldsValue({typeName: val[0]})
-        }
       },
-      spin(val){
-        console.log(val)
-      }
     },
     methods: {
       handleCancel(){

@@ -1,5 +1,5 @@
 <template>
-  <a-modal :title="(isEdit ? 'Edit ': 'Rigister ') + currentTab" v-model="showModal" :footer="null" @cancel="handleCancel" centered>
+  <a-modal :title="(isEdit ? 'Edit ': 'Register ') + currentTab" v-model="visible" :footer="null" @cancel="handleCancel" centered>
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <div v-if="currentTab === 'VIM ENV'">
@@ -9,16 +9,16 @@
               VIMformList[i],
               { rules: [{ required: true, message: item +' is required' }], initialValue: initValues[i] },
             ]" />
-            <a-select v-if="item === 'Cloud Region ID'" v-decorator="[VIMformList[i],{ rules: [{ required: true }]}]" :disabled="regionId.length === 0" class="select">
-              <a-select-option v-for="type in regionId" :key="type" :value="type"> {{type}} </a-select-option>
+            <a-select v-if="item === 'Cloud Region ID'" v-decorator="[VIMformList[i],{ rules: [{ required: true }]}]" :disabled="regionIdOptions.length === 0" class="select">
+              <a-select-option v-for="type in regionIdOptions" :key="type" :value="type"> {{type}} </a-select-option>
             </a-select>
-            <a-select v-if="item === 'Cloud Type'" v-decorator="[VIMformList[i],{ rules: [{ required: true }]}]" :disabled="cloudType.length ===0" class="select">
-              <a-select-option v-for="type in cloudType" :key="type" :value="type"> {{type}} </a-select-option>
+            <a-select v-if="item === 'Cloud Type'" v-decorator="[VIMformList[i],{ rules: [{ required: true }]}]" :disabled="cloudTypeOptions.length ===0" class="select">
+              <a-select-option v-for="type in cloudTypeOptions" :key="type" :value="type"> {{type}} </a-select-option>
             </a-select>
-            <a-spin :spinning="regionId.length === 0" v-if="item === 'Cloud Region ID'">
+            <a-spin :spinning="regionIdOptions.length === 0" v-if="item === 'Cloud Region ID'">
               <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
             </a-spin>
-            <a-spin :spinning="cloudType.length ===0" v-if="item === 'Cloud Type'">
+            <a-spin :spinning="cloudTypeOptions.length ===0" v-if="item === 'Cloud Type'">
               <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
             </a-spin>
           </a-form-item>
@@ -44,37 +44,54 @@
 <script type="text/ecmascript-6">
 import {axiospost} from '../../utils/http'
 import {VIMForm, VNFMForm} from '../../const/TestEnvConst.js'
+import { mapState } from 'vuex'
+
   export default {
-    props: ['currentTab', 'isEdit', 'initValues','cloudTypeOptions','regionIdOptions'],
+    props: [ 'isEdit', 'initValues'],
     data(){
       return {
-        showModal: true,
         form: this.$form.createForm(this),
         VIMForm: VIMForm,
         VIMformList: [],
         VNFMForm: VNFMForm,
         VNFMformList: [],
-        cloudType: this.cloudTypeOptions,
-        regionId: this.regionIdOptions
       }
     },
-    watch: {
-      cloudTypeOptions(val){
-        this.cloudType = val
-      },
-      regionIdOptions(val){
-        this.regionId = val
+    computed: {
+      ...mapState({
+        currentTab: state => state.testENV.currentTab,
+        cloudTypeOptions: state => state.testENV.cloudTypeOptions,
+        regionIdOptions: state => state.testENV.regionIdOptions,
+
+      }),
+      visible: {
+        get(){
+          return this.$store.state.testENV.visible
+        },
+        set(val){
+          if(!val) {
+           
+            // this.$store.commit('testSUT/updateVNFOptions', [])
+            // this.$store.commit('testSUT/updateVNFTest', {})
+            // this.form.setFieldsValue({testName: '', version: '', vendor: ''})
+            // this.spin = false
+          }
+        }
       }
+    },
+    created () {
+      if(this.currentTab === 'VIM ENV') this.formatFormList(this.VIMForm,this.VIMformList)
+      else this.formatFormList(this.VNFMForm,this.VNFMformList)
     },
     methods: {
       handleCancel(){
-        this.$emit('close')
+        this.$store.commit('testENV/updateVisible', false)
+        this.clear()
       },
       handleSubmit(e){
         e.preventDefault();
         this.form.validateFields((err, values) => {
           if(!err){
-            let url = (this.isEdit ? '/update' : '/login') + (this.currentTab === 'VIM ENV'? 'VIM': 'VNFM');
             // Did not implement the check if there is a change
             let data = { }
             if(this.currentTab === 'VIM ENV'){
@@ -94,19 +111,9 @@ import {VIMForm, VNFMForm} from '../../const/TestEnvConst.js'
                 password: values.password
               }
             }
-            axiospost(url, data)
-              .then((res) => {
-                if(res.code === 200){
-                  this.$message.success(this.isEdit ? 'Successfully updated' : 'Has been added successfully');
-                  this.$emit('getAllTableData')
-                }else this.$message.error(this.isEdit ? 'Update failed' : 'add failed');
-                this.$emit('close')
-              },
-              error => {
-                this.$message.error('Network exception, please try again');
-                this.$emit('close')
-              })
-            
+            this.$store.commit('testENV/updateVisible', false)
+            this.clear()
+            this.$store.dispatch('testENV/loginVIN',{isEdit: this.isEdit, data})
           }
         })
       },
@@ -115,12 +122,15 @@ import {VIMForm, VNFMForm} from '../../const/TestEnvConst.js'
           let ite = item.replace(' ','')
           decorator[index] = ite.replace(' ','').replace(ite[0],ite[0].toLowerCase())
         }) 
+      },
+      clear(){
+        let list = this.currentTab === 'VIM ENV' ? this.VIMformList : this.VNFMformList
+        list.forEach(item => {
+          this.form.setFieldsValue({ [item]: ''})
+        })
       }
     },
-    created () {
-      if(this.currentTab === 'VIM ENV') this.formatFormList(this.VIMForm,this.VIMformList)
-      else this.formatFormList(this.VNFMForm,this.VNFMformList)
-    }
+   
   }
 </script>
 
