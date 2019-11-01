@@ -8,6 +8,7 @@ import VnfpnfSuite from './modules/VnfpnfSuite';
 import testSUT from './modules/testSUT'
 import testCase from './modules/testCase'
 import testJob from './modules/testJob'
+import testENV from './modules/testENV'
 
 Vue.use(Vuex);
 
@@ -20,7 +21,8 @@ const store = new Vuex.Store({
     VnfpnfSuite,
     testSUT,
     testCase,
-    testJob
+    testJob,
+    testENV
   },
 
 })

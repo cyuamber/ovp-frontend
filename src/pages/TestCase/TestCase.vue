@@ -56,9 +56,7 @@ export default {
     },
     mounted () {
         this.loading = true;
-        this.$store.dispatch('testCase/getTableData',{}).then(() => setTimeout(() => {
-            this.loading = false
-        },2000))
+        this.$store.dispatch('testCase/getTableData',{}).then(() =>this.loading = false)
     },
     methods: {
         clearInput(val){

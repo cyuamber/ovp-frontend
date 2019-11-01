@@ -151,7 +151,7 @@ const actions = {
           commit('updateFailedMessage',this.isEdit ? 'Update failed' : 'add failed')
         }
       },
-      error => {
+      () => {
         commit('updateFailedMessage','Network exception, please try again')
       })
   }
