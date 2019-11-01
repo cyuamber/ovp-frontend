@@ -27,15 +27,15 @@ const siderStyle = {
   background: "#ffffff",
   overflow: "auto",
   height: "100vh",
-  width: "220px",
-  maxWidth: "220px",
+  width: "250px",
+  maxWidth: "250px",
   position: "fixed",
   left: 0,
   borderRight: "1px solid rgb(232, 232, 232)"
 };
 const layoutStyle = {
   layoutStyle__container: {
-    marginLeft: "220px"
+    marginLeft: "250px"
   },
   layoutStyle__header: {
     background: "#fff",
