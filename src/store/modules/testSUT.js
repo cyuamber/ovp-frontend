@@ -104,7 +104,7 @@ const actions = {
     let Options = ['VNF', 'PNF', 'NFVI']
     setTimeout(() => {
       if(state.visible) {
-        console.log(111)
+        console.log(state.visible)
         commit('updateVNFOptions',Options)
         fn && typeof fn === 'function' && fn()
       }
