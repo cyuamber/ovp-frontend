@@ -1,7 +1,6 @@
 <template>
     <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
         <template>
-            <Loading :loadingMessage="loadingMessage" />
             <a-form :form="form" @submit="handleSubmit">
                 <a-form-item label="Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['Name',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecName }]"/>
@@ -33,13 +32,8 @@
 <script type="text/ecmascript-6">
     import moment from 'moment';
     import {mapState} from 'vuex'
-    import Loading from "../../components/Loading/Loading";
-    import {axiospost} from '../../utils/http'
     export default {
         props: ['isEdit'],
-        components: {
-            Loading
-        },
         data(){
             return {
                 form: this.$form.createForm(this),
@@ -47,11 +41,6 @@
                 title: this.isEdit ? 'Edit Spec':'Add Spec',
                 spin: false,
                 count: 0,
-                loadingMessage : {
-                    type: '',
-                    toast: '',
-                    show: true
-                }
             }
         },
         computed: {
@@ -94,13 +83,6 @@
             }
         },
         methods: {
-            handleLoadingMessage(type,toast,show){
-                this.loadingMessage = {
-                    type: type,
-                    toast: toast,
-                    show:show
-                };
-            },
             dropdownVisibleChange(){
                 if(!this.VNFOptions.length) {
                     this.spin = true;
@@ -111,7 +93,6 @@
                 this.$emit('close');
             },
             handleSubmit(){
-                let url = this.isEdit ? '/updateTestSpec':'/addTestSpec';
                 this.form.validateFields((err, values) => {
                     if(!err){
                         let data = {
@@ -121,23 +102,8 @@
                             PublishORG: values.PublishORG,
                             publishTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                        this.handleLoadingMessage("","",true);
-                        axiospost(url, data)
-                            .then((res) => {
-                                    if(res.code === 200){
-                                        this.handleLoadingMessage("success",this.isEdit ? 'Successfully updated' : 'successfully added ',false);
-                                        this.$emit('getAllTestSpec')
-                                    }else this.handleLoadingMessage("error",this.isEdit ? 'updated failed' : 'added failed',false);
-                                    setTimeout(() => {
-                                        this.$emit('close');
-                                    },1000)
-                                },
-                                () => {
-                                    this.handleLoadingMessage("error","Network exception, please try again",false);
-                                    setTimeout(() => {
-                                        this.$emit('close');
-                                    },1000)
-                                });
+                        let {isEdit} = this;
+                        this.$store.dispatch('testSpecMGT/createOrEditTestSpec',{isEdit,data}).then(()=>{this.$emit('close');},()=>{this.$emit('close');})
                     }
                 });
 

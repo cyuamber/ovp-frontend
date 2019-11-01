@@ -39,12 +39,7 @@ export default {
             currentPage:'TestSpecMGT',
             isEdit: false,
             publishTime: '',
-            keyword: '',
-            loadingMessage: {
-                type: "",
-                toast: "",
-                show:true
-            }
+            keyword: ''
         }
     },
     computed: {
@@ -52,6 +47,7 @@ export default {
             tableData: state => state.testSpecMGT.tableData,
             pagination: state => state.testSpecMGT.pagination,
             testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
+            loadingMessage: state => state.testSpecMGT.loadingMessage
         }),
     },
     mounted () {
@@ -59,13 +55,6 @@ export default {
         this.$store.dispatch('testSpecMGT/getTableData',{}).then(() => this.loading = false)
     },
     methods: {
-        handleLoadingMessage(type,toast,show){
-            this.loadingMessage = {
-                type: type,
-                toast: toast,
-                show:show
-            };
-        },
         handleCreateClick(){
             this.visible = true;
             this.isEdit = false;
@@ -77,7 +66,7 @@ export default {
             this.$store.dispatch('testSpecMGT/getPagination',{pagination});
             let current = pagination.current,
                 pageSize = pagination.pageSize,
-                obj = {VNFTestName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
+                obj = {testSpecName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
             this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => this.loading = false)
         },
         close(){
@@ -93,7 +82,7 @@ export default {
             let obj = {};
             if(isSearch) this.keyword = keyword;
             if(!(keyword === '' && this.publishTime === '')) {
-                obj = {VNFTestName: this.keyword, publishTime: this.publishTime};
+                obj = {testSpecName: this.keyword, publishTime: this.publishTime};
             }
             this.$store.dispatch('testSpecMGT/clearPagination');
             // Simulation request
@@ -114,11 +103,7 @@ export default {
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        axiospost('/deleteTestSpec',{testSpecId:testSpecSingleData.testSpecId}).then( res => {
-                            if(res.code === 200){
-                                this.handleLoadingMessage("success","Deleted successfully",false);
-                            }else  this.handleLoadingMessage("error","Network exception, please try again",false);
-                        })
+                        this.$store.dispatch('testSpecMGT/deleteTestSpec',{testSpecId: testSpecSingleData.testSpecId})
                     }
                 });
             }
