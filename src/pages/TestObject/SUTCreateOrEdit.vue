@@ -1,209 +1,210 @@
 <template>
-  <a-modal
-    :title="(isEdit === true ? 'Edit ': 'Create ') + currentTab + ' SUT'"
-    v-model="visible"
-    :footer="null" 
-    @cancel="handleCancel"
-  >
-    <template>
-      <a-form :form="form" @submit="handleSubmit" class="form">
-        <a-form-item
-          :label=" currentTab +' Name'"
-          :label-col="{ span: 7 }"
-          :wrapper-col="{ span: 12 }"
-        >
-          <a-input
-            v-decorator="[
-          'testName',
-          { rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.VNFTestName },
-        ]"
-          />
-        </a-form-item>
-        <a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-          <a-select :disabled="spin" class="form__select" @dropdownVisibleChange="handleExpand" v-if="visible"
-            v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]">
-            <a-select-option v-for="type in VNFOptions" :key="type" :value="type"> {{type}} </a-select-option>
-          </a-select>
-          <a-spin :spinning="spin">
-            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
-          </a-spin>
-        </a-form-item>
-        <a-form-item
-          :label="currentTab + ' Vendor'"
-          :label-col="{ span: 7 }"
-          :wrapper-col="{ span: 12 }"
-        >
-          <a-input
-            v-decorator="[
-          'vendor', { rules: [{ required: true, message: 'Vendor is required' }], initialValue: VNFTest.VNFTestVendor},
-        ]"
-          />
-        </a-form-item>
-        <a-form-item label="Vension" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-          <a-input
-            v-decorator="[
-          'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.VNFTestVersion},
-        ]"
-          />
-        </a-form-item>
-        <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-           <a-upload-dragger :remove="handleRemove" :beforeUpload="beforeUpload" :fileList="fileList"
-          >
-            <p class="ant-upload-text form__upload-text--font-size"><a-icon type="upload"/>&nbsp;&nbsp;&nbsp;<span>Click or drag to upload</span></p>
-          </a-upload-dragger>
-          <div class="form__upload-btns">
-<a-button
-            type="primary"
-            @click="handleUpload"
-            :disabled="!fileList.length"
-            :loading="uploading"
-            class="form__btn--margin"          
-          >
-            {{uploading ? 'Uploading' : 'Start Upload' }}
-          </a-button>
-          <a-button @click="interruptUpload" v-show="uploading">Interrupt</a-button>
-          </div>
-          
-        </a-form-item>
-        <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-          <a-button type="primary" html-type="submit">Submit</a-button>
-        </a-form-item>
-      </a-form>
-    </template>
-    
-  </a-modal>
+	<a-modal
+		:title="(isEdit === true ? 'Edit ': 'Create ') + currentTab + ' SUT'"
+		v-model="visible"
+		:footer="null" 
+		@cancel="handleCancel"
+	>
+		<template>
+			<a-form :form="form" @submit="handleSubmit" class="form">
+				<a-form-item
+					:label=" currentTab +' Name'"
+					:label-col="{ span: 7 }"
+					:wrapper-col="{ span: 12 }"
+				>
+					<a-input
+						v-decorator="[
+							'testName',
+							{ rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.VNFTestName },
+						]"
+					/>
+				</a-form-item>
+				<a-form-item :label="currentTab + ' Type'" :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
+					<!-- @dropdownVisibleChange="handleExpand"  -->
+					<a-select class="form__select" :disabled="spin"
+						v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]">
+						<a-select-option v-for="type in VNFOptions" :key="type" :value="type"> {{type}} </a-select-option>
+					</a-select>
+					<a-spin :spinning="spin">
+						<a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
+					</a-spin>
+				</a-form-item>
+				<a-form-item
+					:label="currentTab + ' Vendor'"
+					:label-col="{ span: 7 }"
+					:wrapper-col="{ span: 12 }"
+				>
+					<a-input
+						v-decorator="[
+							'vendor', { rules: [{ required: true, message: 'Vendor is required' }], initialValue: VNFTest.VNFTestVendor},
+						]"
+					/>
+				</a-form-item>
+				<a-form-item label="Vension" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+					<a-input
+						v-decorator="[
+					'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.VNFTestVersion},
+				]"
+					/>
+				</a-form-item>
+				<a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+					 <a-upload-dragger :remove="handleRemove" :beforeUpload="beforeUpload" :fileList="fileList"
+					>
+						<p class="ant-upload-text form__upload-text--font-size">
+							<a-icon type="upload"/>&nbsp;&nbsp;&nbsp;<span>Click or drag to upload</span>
+						</p>
+					</a-upload-dragger>
+					<div class="form__upload-btns">
+						<a-button
+							type="primary"
+							@click="handleUpload"
+							:disabled="!fileList.length"
+							:loading="uploading"
+							class="form__btn--margin"          
+						>
+							{{uploading ? 'Uploading' : 'Start Upload' }}
+						</a-button>
+						<a-button @click="interruptUpload" v-show="uploading">Interrupt</a-button>
+					</div>
+					
+				</a-form-item>
+				<a-form-item :wrapper-col="{ span: 12, offset: 10 }">
+					<a-button type="primary" html-type="submit">Submit</a-button>
+				</a-form-item>
+			</a-form>
+		</template>
+		
+	</a-modal>
 </template>
 
 <script type="text/ecmascript-6">
 import moment from 'moment';
 import {mapState} from 'vuex';
 
-  export default {
-    props: ['isEdit', 'currentTab'],
-    data(){
-      return {
-        // showModal: false,
-        form: this.$form.createForm(this),
-        selected: '',
-        count: 0,
-        spin: false,
-        fileList: [],
-        uploading: false
-      }
-    },
-    computed: {
-      ...mapState({
-        VNFOptions: state => state.testSUT.VNFOptions,
-        VNFTest: state => state.testSUT.VNFTest,
-        // visible: state => state.testSUT.visible
-      }),
-      visible: {
-        get(){
-          return this.$store.state.testSUT.visible
-        },
-        set(val){
-          if(!val) {
-            this.$store.commit('testSUT/updateVNFOptions', [])
-            this.$store.commit('testSUT/updateVNFTest', {})
-            this.form.setFieldsValue({testName: '', version: '', vendor: ''})
-            this.spin = false
-          }
-        }
-      }
-    },
-    watch: {
-      visible(val){
-        if(val) {
-          this.count ++
-          if(this.isEdit && this.count !== 1){
-            this.form.setFieldsValue({
-              testName: this.VNFTest.VNFTestName,
-              vendor: this.VNFTest.VNFTestVendor,
-              version: this.VNFTest.VNFTestVersion
-            })
-          } 
-          if(!this.isEdit) this.spin = true 
-        }
-      },
-      VNFOptions(val){
-        if(val.length) {
-          this.spin = false
-        }      
-      },
-    },
-    methods: {
-      handleCancel(){
-        this.$store.commit('testSUT/updateVisible', false)
-      },
-      handleSubmit(e){
-        e.preventDefault();
-        this.form.validateFields((err, values) => {
-          if(!err){
-            // Did not implement the check if there is a change
-            let data = {
-              VNFTestName: values.testName,
-              VNFTestVendor: values.vendor,
-              VNFTestVersion: values.version,
-              VNFTypeName: this.selected,
-              createTime: this.isEdit ? this.VNFTest.createTime : moment(new Date()).format('YYYY-MM-DD'),
-              VNFFileName: {}
-            }
-            let {isEdit} = this
-            this.$store.dispatch('testSUT/createOrEditVNFTest',{isEdit,data}).then(()=>{
-              this.$store.commit('testSUT/updateVisible', false)
-              },()=>{this.$store.commit('testSUT/updateVisible', false)})
-          }
-        })
-      },
-      handleExpand(){
-        console.log('展开')
-        if(!this.VNFOptions.length) {
-          this.spin = true
-          this.$store.dispatch('testSUT/getVNFOptions',() => {
-            this.spin = false
-          })
-        }
-      },
-      handleUpload(){
-        const { fileList } = this;
-        const formData = new FormData();
-        formData.append('files', fileList[0])
-        console.log(formData.get('files'))
-        this.uploading = true;
-        this.$store.dispatch('testSUT/upload', {formData, message: this.$message}).then(() => {setTimeout(()=>{this.uploading = false},5000)},() => {this.uploading = false})
-      },
-      handleRemove(){
-        this.fileList.splice(0,1)
-      },
-      beforeUpload(file){
-        this.fileList.splice(0,1,file)
-        return false
-      },
-      interruptUpload(){
-        this.$store.dispatch('test/interrupt')
-      }
-    
-  }
+	export default {
+		props: ['isEdit', 'currentTab'],
+		data(){
+			return {
+				form: this.$form.createForm(this),
+				selected: '',
+				count: 0,
+				spin: true,
+				fileList: [],
+				uploading: false
+			}
+		},
+		computed: {
+			...mapState({
+				VNFOptions: state => state.testSUT.VNFOptions,
+				VNFTest: state => state.testSUT.VNFTest,
+			}),
+			visible: {
+				get(){
+					return this.$store.state.testSUT.visible
+				},
+				set(val){
+					if(!val) {
+						this.$store.commit('testSUT/updateVNFTest', {})
+						this.form.setFieldsValue({testName: '', version: '', vendor: '', typeName: ''})
+					}
+				}
+			}
+		},
+		watch: {
+			visible(val){
+				if(val) {
+					this.count ++
+					if(this.isEdit && this.count !== 1){
+						this.form.setFieldsValue({
+							testName: this.VNFTest.VNFTestName,
+							vendor: this.VNFTest.VNFTestVendor,
+							version: this.VNFTest.VNFTestVersion,
+							typeName: this.VNFTest.VNFTypeName
+						})
+					}else if(!this.isEdit && this.count){
+						this.form.setFieldsValue({typeName: this.VNFOptions[0]})
+					}
+				}
+			},
+			VNFOptions(val){
+				if(val.length) {
+					this.spin = false
+				}      
+			},
+		},
+		methods: {
+			handleCancel(){
+				this.$store.commit('testSUT/updateVisible', false)
+			},
+			handleSubmit(e){
+				e.preventDefault();
+				this.form.validateFields((err, values) => {
+					if(!err){
+						// Did not implement the check if there is a change
+						let data = {
+							VNFTestName: values.testName,
+							VNFTestVendor: values.vendor,
+							VNFTestVersion: values.version,
+							VNFTypeName: this.selected,
+							createTime: this.isEdit ? this.VNFTest.createTime : moment(new Date()).format('YYYY-MM-DD'),
+							VNFFileName: {}
+						}
+						let {isEdit} = this
+						this.$store.dispatch('testSUT/createOrEditVNFTest',{isEdit,data}).then(()=>{
+							this.$store.commit('testSUT/updateVisible', false)
+							},()=>{this.$store.commit('testSUT/updateVisible', false)})
+					}
+				})
+			},
+			// handleExpand(){
+			// 	console.log('展开')
+			// 	if(!this.VNFOptions.length) {
+			// 		this.spin = true
+			// 		this.$store.dispatch('testSUT/getVNFOptions',() => {
+			// 			this.spin = false
+			// 		})
+			// 	}
+			// },
+			handleUpload(){
+				const { fileList } = this;
+				const formData = new FormData();
+				formData.append('files', fileList[0])
+				console.log(formData.get('files'))
+				this.uploading = true;
+				this.$store.dispatch('testSUT/upload', {formData, message: this.$message}).then(() => {setTimeout(()=>{this.uploading = false},5000)},() => {this.uploading = false})
+			},
+			handleRemove(){
+				this.fileList.splice(0,1)
+			},
+			beforeUpload(file){
+				this.fileList.splice(0,1,file)
+				return false
+			},
+			interruptUpload(){
+				this.$store.dispatch('test/interrupt')
+			}
+		
+	}
 };
 </script>
 
 <style lang="less" scoped>
 .form{
-  .form__select{
-    width: 70%;
-    margin-right: 5%;
-  }
-  .form__upload-text--font-size{
-    font-size: 12px !important;
-  }
-  .form__upload-btns{
-    display: flex;
-    justify-content: center;
-    margin-top:16px;
-    .form__btn--margin{
-      margin-right: 20px;
-    }
-  }
+	.form__select{
+		width: 70%;
+		margin-right: 5%;
+	}
+	.form__upload-text--font-size{
+		font-size: 12px !important;
+	}
+	.form__upload-btns{
+		display: flex;
+		justify-content: center;
+		margin-top:16px;
+		.form__btn--margin{
+			margin-right: 20px;
+		}
+	}
 }
 
 </style>

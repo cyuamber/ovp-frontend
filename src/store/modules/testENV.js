@@ -14,6 +14,7 @@ const state = {
     visible: false,
     cloudTypeOptions: [],
     regionIdOptions: [],
+    initValues: {}
 }
 
 const mutations = {
@@ -79,6 +80,9 @@ const mutations = {
     updateOptionList(state,{ CloudTypeList, regionIdList }){
         state.cloudTypeOptions = CloudTypeList
         state.regionIdOptions = regionIdList
+    },
+    setInitValues(state, values){
+        state.initValues = values
     }
 }
 

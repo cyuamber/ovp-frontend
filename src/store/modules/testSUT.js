@@ -58,13 +58,7 @@ const mutations = {
 	updateToken(state, source) {
 		state.source = source
 	},
-	setFilterItem(state, {
-		time,
-		key,
-		pageObj,
-		isSearch,
-		message
-	}) {
+	setFilterItem(state, { time, key, pageObj, isSearch, message }) {
 		if (isSearch) {
 			if (key === '' && state.createTime === '' && state.keyword === '') {
 				message.warning('Please enter valid search information')
@@ -90,10 +84,7 @@ const mutations = {
 	}
 }
 const actions = {
-	setParams({
-		state,
-		dispatch
-	}, isFilter) {
+	setParams({ state, dispatch }, isFilter) {
 		let paramsObj = {}
 		if (state.createTime !== '') paramsObj.createTime = state.createTime
 		if (state.keyword !== '') paramsObj.VNFTestName = state.keyword
@@ -106,12 +97,7 @@ const actions = {
 			isFilter
 		})
 	},
-	getTableData({
-		commit
-	}, {
-		paramsObj,
-		isFilter
-	}) {
+	getTableData({ commit }, { paramsObj, isFilter }) {
 		axiosget('/getVNFTest', paramsObj).then(res => {
 				if (res.code === 200) {
 					commit('updateTableData', res)
@@ -125,26 +111,13 @@ const actions = {
 
 		)
 	},
-	getVNFOptions({
-		commit,
-		state
-	}, fn) {
+	getVNFOptions({ commit, state }, fn) {
 		let Options = ['VNF', 'PNF', 'NFVI']
 		setTimeout(() => {
-			if (state.visible) {
-				console.log(state.visible)
-				commit('updateVNFOptions', Options)
-				fn && typeof fn === 'function' && fn()
-			}
-		}, 5000)
+			commit('updateVNFOptions', Options)
+		}, 3000)
 	},
-	createOrEditVNFTest({
-		commit,
-		dispatch
-	}, {
-		data,
-		isEdit
-	}) {
+	createOrEditVNFTest({ commit, dispatch }, { data, isEdit }) {
 		let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest';
 		axiospost(url, data)
 			.then((res) => {
@@ -157,10 +130,7 @@ const actions = {
 					commit('updateFailedMessage', 'Network exception, please try again')
 				})
 	},
-	deleteVNFTest({
-		commit,
-		dispatch
-	}, data) {
+	deleteVNFTest({ commit, dispatch }, data) {
 		axiospost('/deleteVNFTest', data).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
@@ -168,12 +138,7 @@ const actions = {
 			} else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
-	upload({
-		commit
-	}, {
-		data,
-		message
-	}) {
+	upload({ commit }, { data, message }) {
 		let source = axios.CancelToken.source(
 			commit('updateToken', source))
 		let body = {
