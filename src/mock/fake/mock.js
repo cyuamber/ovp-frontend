@@ -36,7 +36,7 @@ module.exports = {
     'deleteVNFM': fakeData.deleteVNFM,
     'getTestCaseMGTs': fakeData.getTestCaseMGTs,
     'getTestJobMGT': fakeData.getTestJobMGT,
-    'createrTestJobMGT': fakeData.createrTestJobMGT,
+    'createTestJobMGT': fakeData.createTestJobMGT,
     'getSUTName': fakeData.getSUTName,
     'getJobSpecification': fakeData.getJobSpecification,
     'getTestCaseList': fakeData.getTestCaseList,
