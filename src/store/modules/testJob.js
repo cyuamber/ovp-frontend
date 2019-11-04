@@ -282,7 +282,7 @@ const actions = {
             }
         })
     },
-	runTestJobMGT( data) {
+	runTestJobMGT({commit,dispatch},data) {
 		let {
 			jobId,
 			VNFName,
@@ -295,12 +295,15 @@ const actions = {
 			jobName,
 			status
 		})
-		// .then(res => {
-		// 	if (res.code === 200) {
-		// 		console.log('Successfully started testing')
-		// 		dispatch('getProgress')
-		// 	}
-		// })
+		.then(res => {
+			if (res.code === 200) {
+                commit('updateSuccessMessage', 'download Successfully started testing');
+                data.status = 1;
+                data.actions[0] = 'Stop';
+                commit('updateTableItemData',data);
+                dispatch('getTableData',true)
+			}
+		})
 	},
 	getProgress({ commit, dispatch, state }) {
 		/* const socket = new WebSocket('ws://localhost:8080/getProgress');

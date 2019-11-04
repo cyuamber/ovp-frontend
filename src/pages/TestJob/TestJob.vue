@@ -84,7 +84,18 @@ export default {
 			data.currentAction = 'Start';
 			this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
 			this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
-            this.$store.dispatch("testJob/runTestJobMGT", data);
+            this.$confirm({
+                title: "Are you sure start this task?",
+                okText: "Yes",
+                okType: "danger",
+                cancelText: "No",
+                onOk: () => {
+                    this.$store.dispatch("testJob/runTestJobMGT", data);
+                },
+                onCancel() {
+                    console.log("Cancel");
+                }
+            });
 		},
 		handleDelete(data) {
 			this.$confirm({
