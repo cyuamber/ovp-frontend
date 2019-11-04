@@ -130,10 +130,7 @@
             beforeUpload() {
                 return false;
             },
-            handleUpload(data) {
-                let fileList = this.form.getFieldValue("upload");
-                const formData = new FormData();
-                formData.append('files', fileList[0]);
+            handleUpload(data,formData) {
                 this.disabled = true;
                 this.$store.dispatch('VnfpnfSuite/uploadVNFFile', {formData, message: this.$message}).then(
                     () => { this.submitFormData(data)},
@@ -159,7 +156,7 @@
                             VNFFileName:formData,
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
-                       this.handleUpload(data);
+                       this.handleUpload(data,formData);
                     }
                 });
 
