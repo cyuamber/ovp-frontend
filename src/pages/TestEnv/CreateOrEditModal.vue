@@ -17,12 +17,21 @@
 				:wrapper-col="{ span: (item.title === 'Cloud Type' || item.title === 'Cloud Region ID')? 8:12 }"
 			>
 			<a-input
-				v-if="item.title !== 'Cloud Type' && item.title !== 'Cloud Region ID'"
+				v-if="item.title !== 'Cloud Type' && item.title !== 'Cloud Region ID' && item.title !== 'Password'"
 				v-decorator="[
 				item.key,
 				{ rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] },
 				]"
 			/>
+			<a-input-password
+					v-if="item.title === 'Password'"
+					type="password"
+					v-decorator="[
+				item.key,
+				{ rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] },
+				]"
+			>
+			</a-input-password>
 			<a-select
 				v-if="item.title === 'Cloud Region ID'"
 				v-decorator="[item.key,{ rules: [{ required: true }],  initialValue: isEdit? initValues[item.key] :regionIdOptions[0]}]"
@@ -56,11 +65,21 @@
 			:wrapper-col="{ span: 12}"
 			>
 			<a-input
+                v-if="item.title !== 'Password'"
 				v-decorator="[
 				item.key,
 				{ rules: [{ required: true, message: item +' is required' }], initialValue: initValues[item.key] },
 				]"
 			/>
+                <a-input-password
+                        v-if="item.title === 'Password'"
+                        type="password"
+                        v-decorator="[
+				item.key,
+				{ rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] },
+				]"
+                >
+                </a-input-password>
 			</a-form-item>
 		</div>
 		<a-form-item :wrapper-col="{ span: 12, offset: 10 }">
