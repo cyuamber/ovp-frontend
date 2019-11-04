@@ -101,7 +101,7 @@ const actions = {
         })
     },
     createOrEditTestMeter({commit,dispatch},{data, isEdit}){
-        let url = this.isEdit ? '/updateTestMeter':'/createTestMeter';
+        let url = isEdit ? '/updateTestMeter':'/createTestMeter';
         axiospost(url, data)
             .then((res) => {
                     if(res.code === 200){
