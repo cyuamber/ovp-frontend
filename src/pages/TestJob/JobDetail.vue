@@ -88,12 +88,8 @@ export default {
 	},
 	mounted() {
 		this.getProgress();
-		if(this.$route.params.currentAction === 'Start'){
-			this.statusColor = '#F5A623'
-			setTimeout(() => {
-				this.statusColor = '#7ED321'
-			},5000)
-		}
+		this.statusColor = this.$route.params.status === 0? '#979797': (status === 1? '#F5A623':(status === 2? '#7ED321':'#D0021B'));
+
 	},
 	destroyed() {
 		this.$store.commit("testJob/changeComponent", false);
