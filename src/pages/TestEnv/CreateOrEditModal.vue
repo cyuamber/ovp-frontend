@@ -72,7 +72,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { VIMForm, VNFMForm } from "../../const/TestEnvConst.js";
+import { VIMForm, VNFMForm } from "../../const/constant";
 import { mapState } from "vuex";
 
 export default {

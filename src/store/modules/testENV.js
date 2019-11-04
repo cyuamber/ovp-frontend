@@ -5,7 +5,7 @@ const state = {
     loadingMessage: null,
     VIMTableData: [],
     VNFMTableData: [],
-    pagination: null,
+    pagination: {current:1,total:0},
     searchKeyword: '',
     createTime: '',
     pageNum: 1,

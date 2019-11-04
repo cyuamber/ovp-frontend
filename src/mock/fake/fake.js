@@ -265,6 +265,9 @@ module.exports = {
                 userName: faker.internet.userName(),
                 passwd: faker.internet.password(),
                 authUrl: faker.internet.url(),
+                sslCacert:faker.internet.protocol(),
+                sslInsecure:faker.internet.ipv6(),
+                cloudDomain:faker.internet.domainName(),
                 tenant: faker.internet.userName(),
                 createTime: faker.date.recent(),
                 defaultTenant: faker.random.word(),
@@ -316,7 +319,7 @@ module.exports = {
         code: 200,
         message: 'SUCCESS',
         total: 50,
-        body: _.times(10, function (n) {
+        body: _.times(10, function () {
             return {
                 VNFMname: faker.name.firstName(),
                 VNFMtype: faker.random.word(),
