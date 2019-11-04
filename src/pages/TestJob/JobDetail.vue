@@ -12,7 +12,7 @@
 				:showInfo="false"
 				class="job-detail__progress"
 			/>
-			<a-button class="job-detail__refresh-btn" @click="handleRefresh" :disabled="$route.params.status !== 1">
+			<a-button class="job-detail__refresh-btn" @click="handleRefresh" :disabled="$route.params.status === 0">
 				<a-icon type="sync" />Refresh
 			</a-button>
 		</div>
@@ -109,9 +109,10 @@ export default {
 		},
 		getProgress() {
 			let { currentAction, status } = this.$route.params;
+			console.log(currentAction,status,"currentAction")
 			// If not executed, start the test first.
-			if (currentAction === "Start") this.$store.dispatch("testJob/runTestJobMGT", this.$route.params);
-			else if (status === 1) this.$store.dispatch("testJob/getProgress");
+			// if (currentAction === "Start") this.$store.dispatch("testJob/runTestJobMGT", this.$route.params);
+			if (status === 1) this.$store.dispatch("testJob/getProgress");
 			else if (status === 2)
 				this.$store.commit("testJob/updateProgress", {
 					percent: 100,

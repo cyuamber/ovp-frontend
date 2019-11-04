@@ -84,7 +84,7 @@ export default {
 			data.currentAction = 'Start';
 			this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
 			this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
-			this.$router.push({ name: "JobDetail", params: data });
+            this.$store.dispatch("testJob/runTestJobMGT", data);
 		},
 		handleDelete(data) {
 			this.$confirm({
@@ -100,8 +100,20 @@ export default {
 				}
 			});
 		},
-		handleDownload() {
+		handleDownload(data) {
 			console.log('Download');
+            this.$confirm({
+                title: "Are you sure download this task?",
+                okText: "Yes",
+                okType: "danger",
+                cancelText: "No",
+                onOk: () => {
+                    this.$store.dispatch("testJob/download", data);
+                },
+                onCancel() {
+                    console.log("Cancel");
+                }
+            });
 		},
 		handleOpenDetail(data) {
 			data.currentAction = "More";
@@ -116,7 +128,19 @@ export default {
 		},
 		handleStop(data){
 			// The analog call interface changes a single piece of data in a single table
-			this.$store.dispatch('testJob/stopJop',data)
+            this.$confirm({
+                title: "Are you sure stop this task?",
+                okText: "Yes",
+                okType: "danger",
+                cancelText: "No",
+                onOk: () => {
+                    this.$store.dispatch('testJob/stopJop',data)
+                },
+                onCancel() {
+                    console.log("Cancel");
+                }
+            });
+
 		},
 		getStatusTitle(status){
 			return status === 0? 'Pending execution': (status === 1? 'Executing':(status === 2? 'Execution completed':'Execution failed'))

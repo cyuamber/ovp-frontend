@@ -438,6 +438,10 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
+    downloadTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS'
+    },
     runTestJobMGT: {
         code: 200,
         message: 'SUCCESS'

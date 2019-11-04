@@ -41,6 +41,7 @@ module.exports = {
     'getJobSpecification': fakeData.getJobSpecification,
     'getTestCaseList': fakeData.getTestCaseList,
     'deleteTestJobMGT': fakeData.deleteTestJobMGT,
+    'downloadTestJobMGT': fakeData.downloadTestJobMGT,
     'runTestJobMGT': fakeData.runTestJobMGT,
     'getProgress': fakeData.getProgress
 }

@@ -114,7 +114,7 @@ const actions = {
 				let tableData = res.body.map((item, index) => {
 					item.createTime = moment(item.createTime).format('YYYY-MM-DD');
 					item.index = res.body.length * (state.pagination.current - 1) + index + 1;
-					item.actions = [item.status === 0 ? 'Start' : 'Stop', 'Delete', 'Download', 'More']
+					item.actions = [item.status === 1 ? 'Stop' : 'Start', 'Delete', 'Download', 'More']
 					return item
 				})
 				commit('updateTableData', tableData)
@@ -264,7 +264,25 @@ const actions = {
 			}
 		})
 	},
-	runTestJobMGT({ dispatch }, data) {
+    download({ commit }, data) {
+        let {
+            jobId,
+            VNFName,
+            jobName,
+            status
+        } = data
+        axiospost('downloadTestJobMGT', {
+            jobId,
+            VNFName,
+            jobName,
+            status
+        }).then(res => {
+            if (res.code === 200) {
+                commit('updateSuccessMessage', 'download successfully')
+            }
+        })
+    },
+	runTestJobMGT( data) {
 		let {
 			jobId,
 			VNFName,
@@ -276,12 +294,13 @@ const actions = {
 			VNFName,
 			jobName,
 			status
-		}).then(res => {
-			if (res.code === 200) {
-				console.log('成功开始测试')
-				dispatch('getProgress')
-			}
 		})
+		// .then(res => {
+		// 	if (res.code === 200) {
+		// 		console.log('Successfully started testing')
+		// 		dispatch('getProgress')
+		// 	}
+		// })
 	},
 	getProgress({ commit, dispatch, state }) {
 		/* const socket = new WebSocket('ws://localhost:8080/getProgress');
@@ -313,16 +332,17 @@ const actions = {
 					})
 					setTimeout(() => {
 						dispatch('getProgress')
-					}, 5000)
+					}, 3000)
 				}
 			}
 		})
 	},
-	stopJop({commit},data){
+	stopJop({dispatch,commit},data){
 		// Simulation request
 		data.status = 0
 		data.actions[0] = 'Start'
-		commit('updateTableItemData',data)
+		commit('updateTableItemData',data);
+        dispatch('getTableData',true)
 	}
 
 }
