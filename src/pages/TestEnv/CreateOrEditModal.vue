@@ -68,7 +68,7 @@
                 v-if="item.title !== 'Password'"
 				v-decorator="[
 				item.key,
-				{ rules: [{ required: true, message: item +' is required' }], initialValue: initValues[item.key] },
+				{ rules: [{ required: (item.title !== 'Certificate URL' && item.title !== 'User Name') ? true:false, message: item.title +' is required' }], initialValue: initValues[item.key] },
 				]"
 			/>
                 <a-input-password
@@ -76,7 +76,7 @@
                         type="password"
                         v-decorator="[
 				item.key,
-				{ rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] },
+				{ initialValue: initValues[item.key] },
 				]"
                 >
                 </a-input-password>

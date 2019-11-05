@@ -132,6 +132,7 @@ export default {
 		},
 		close() {
 			this.$store.commit("testJob/setIsShow", false);
+            this.$store.dispatch("testJob/getTableData");
 		},
 		handlePageChange(pageObj) {
 			this.$store.commit("testJob/setFilter", { pageObj });

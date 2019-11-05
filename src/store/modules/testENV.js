@@ -92,7 +92,7 @@ const actions = {
         if(state.createTime !== '') paramsObj.createTime = state.createTime
         if(state.searchKeyword !== '') {
             if(state.currentTab === 'VIM ENV'){
-                paramsObj.cloudRegionId = state.searchKeyword
+                paramsObj.cloudType = state.searchKeyword
             }else paramsObj.VNFMname = state.searchKeyword
         }
         if(state.pageNum !== '') {

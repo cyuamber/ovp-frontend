@@ -43,7 +43,7 @@
           <a-select-option v-for="type in SUTNameList" :key="type" :value="type">{{type}}</a-select-option>
         </a-select>
         <a-select
-          v-else-if="item === 'Job Specification'"
+          v-else-if="item === 'Test Specification'"
           :disabled="!getSpecification"
           class="form__select--width"
           v-decorator="[keyList[i],{ rules: [{ required: true }]}]"
@@ -71,7 +71,7 @@
         <a-spin :spinning="nameSpin" v-if="item === 'SUT Name'">
           <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
         </a-spin>
-        <a-spin :spinning="specificationSpin" v-if="item === 'Job Specification'">
+        <a-spin :spinning="specificationSpin" v-if="item === 'Test Specification'">
           <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
         </a-spin>
       </a-form-item>
@@ -182,7 +182,7 @@ export default {
         SUTType: key,
         message: this.$message
       });
-      this.form.setFieldsValue({ SUTName: "", JobSpecification: "" });
+      this.form.setFieldsValue({ SUTName: "", TestSpecification: "" });
     },
     selectSUTName(key) {
       if (key === this.selectedSUTName) return;
@@ -192,13 +192,13 @@ export default {
         SUTName: key,
         message: this.$message
       });
-      this.form.setFieldsValue({ JobSpecification: "" });
+      this.form.setFieldsValue({ TestSpecification: "" });
     },
     selectSpecification(key) {
       if (key === this.selectedSpecification) return;
       this.selectedSpecification = key;
       this.$store.dispatch("testJob/getTestCase", {
-        JobSpecification: key,
+        TestSpecification: key,
         message: this.$message
       });
     },

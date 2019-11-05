@@ -101,6 +101,7 @@ export default {
 	methods: {
 		handleBack() {
 			// this.$router.back()
+            this.$emit('close');
 			this.$router.push("/testjobmgt");
 		},
 		getProgress() {

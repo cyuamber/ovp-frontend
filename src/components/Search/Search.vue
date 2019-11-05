@@ -1,6 +1,6 @@
 <template>
   <div class="components-input-demo-presuffix">
-    <a-input placeholder="Input ID"  v-model="keyword" class="search"  @keyup.enter="searchTypeID">
+    <a-input placeholder="Input Name"  v-model="keyword" class="search"  @keyup.enter="searchTypeID">
       <a-icon slot="prefix" type="search"/>
     </a-input>
   </div>

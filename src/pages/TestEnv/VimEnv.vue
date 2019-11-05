@@ -7,7 +7,7 @@
 					<a-button type="primary" @click="handleRigister">Register {{tab}}</a-button>
 					<a-input
 						class="tab-content__button"
-						placeholder="Input ID"
+						:placeholder="tab === 'VIM ENV'?'CloudType':'Name'"
 						@keyup.enter="searchTypeID"
 						v-model="keyword"
 					>
@@ -97,6 +97,7 @@ export default {
 	methods: {
 		handleTabsChange(key) {
 			this.$store.commit("testENV/changeTab", key);
+			this.keyword = '';
 			this.loading = true;
 			this.$store.dispatch("testENV/getTableData", {})
 				.then(() => (this.loading = false), () => (this.loading = false));

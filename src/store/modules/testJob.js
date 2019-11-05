@@ -201,7 +201,7 @@ const actions = {
 					})
 				}, 1000)
 			} else {
-				message.error('Failed to get Job Specification list')
+				message.error('Failed to get Test Specification list')
 				commit('updateSpecification', {
 					get: false,
 					spin: false
@@ -218,14 +218,14 @@ const actions = {
 	getTestCase({
 		commit
 	}, {
-		JobSpecification,
+        TestSpecification,
 		message
 	}) {
 		commit('updateTestCaseList', {
 			spin: true
 		})
 		axiosget('getTestCaseList', {
-			JobSpecification
+			TestSpecification
 		}).then(res => {
 			if (res.code === 200) {
 				commit('updateTestCaseList', {
