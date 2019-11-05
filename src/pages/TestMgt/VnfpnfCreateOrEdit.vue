@@ -30,7 +30,7 @@
                            name="files"
                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: true,}]}]"
                    >
-                       <p class="ant-upload-text upload-test">Click or drag to upload</p>
+                       <p class="ant-upload-text form__upload-text--font-size">Click or drag to upload</p>
                    </a-upload-dragger>
                     <a-spin  :spinning="disabled" class='skip-size skip-float'>
                         <a-icon slot="indicator"  type="loading-3-quarters" size="small" spin />
@@ -171,8 +171,10 @@
 </script>
 
 <style scoped>
-    .upload-test{
+    .form__upload-text--font-size{
         font-size: 12px !important;
+        line-height: 3;
+        margin: 0!important;
     }
     .select{
         width: 70%;
