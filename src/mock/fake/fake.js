@@ -345,8 +345,8 @@ module.exports = {
             url: faker.internet.url(),
             vim: faker.name.firstName(),
             authUrl: faker.internet.url(),
-            userName: faker.internet.userName(),
-            passwd: faker.internet.password()
+            username: faker.internet.userName(),
+            password: faker.internet.password()
         }
     },
     updateVNFM: {
@@ -360,8 +360,8 @@ module.exports = {
             url: faker.internet.url(),
             vim: faker.name.firstName(),
             authUrl: faker.internet.url(),
-            userName: faker.internet.userName(),
-            passwd: faker.internet.password()
+            username: faker.internet.userName(),
+            password: faker.internet.password()
         }
     },
     deleteVNFM: {
