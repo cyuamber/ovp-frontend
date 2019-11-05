@@ -88,7 +88,7 @@ export default {
 	},
 	mounted() {
 		this.getProgress();
-		this.statusColor = this.$route.params.status === 0? '#979797': (status === 1? '#F5A623':(status === 2? '#7ED321':'#D0021B'));
+		this.statusColor = this.$route.params.status === 0? '#979797': (this.$route.params.status === 1? '#F5A623':(this.$route.params.status === 2? '#7ED321':'#D0021B'));
 
 	},
 	destroyed() {

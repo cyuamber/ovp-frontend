@@ -157,12 +157,8 @@ import {mapState} from 'vuex';
 							VNFTypeName: this.selected,
 							createTime: this.isEdit ? this.VNFTest.createTime : moment(new Date()).format('YYYY-MM-DD'),
 							VNFFileName: formData
-						}
+						};
                         this.handleUpload(data,formData);
-						let {isEdit} = this;
-						this.$store.dispatch('testSUT/createOrEditVNFTest',{isEdit,data}).then(()=>{
-							this.$store.commit('testSUT/updateVisible', false)
-							},()=>{this.$store.commit('testSUT/updateVisible', false)})
 					}
 				})
 			},
@@ -216,6 +212,8 @@ import {mapState} from 'vuex';
 	}
 	.form__upload-text--font-size{
 		font-size: 12px !important;
+		line-height: 3;
+        margin: 0!important;
 	}
 	.form__upload-float{
 		width: 85%;
