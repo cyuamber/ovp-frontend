@@ -455,5 +455,12 @@ module.exports = {
         body: {
             progress: 99,
         }
+    },
+    getCurrentLanguage: {
+        code: 200,
+        message: 'SUCCESS',
+        body:{
+            language:"EN"
+        }
     }
 }

@@ -83,7 +83,7 @@ export default new Router({
         },
       ]
     }, {
-      path: '/instrumentmanagesystemmgt',
+      path: '/instrumentmgsmgt',
       component: Layout,
       children: [
         {

@@ -15,17 +15,17 @@
       <template v-for="menu in menus">
         <a-menu-item v-if="!menu.isChildren && menu.auth.includes(getuserAuth)" :key="menu.name">
           <a-icon v-if="menu.iconType!==''" :type="menu.iconType" />
-          <span>{{menu.name}}</span>
+          <span>{{$t(`T.${menu.name}`)}}</span>
         </a-menu-item>
         <a-sub-menu :key="menu.name" v-else-if="menu.isChildren && menu.auth.includes(getuserAuth)">
           <span slot="title">
             <a-icon :type="menu.iconType" />
-            {{menu.name}}
+            {{$t(`T.${menu.name}`)}}
           </span>
           <template v-for="submenu in menu.children">
             <a-menu-item :key="submenu.name" v-if="submenu.auth.includes(getuserAuth)">
               <a-icon v-if="submenu.iconType!==''" :type="submenu.iconType" />
-              <span>{{submenu.name}}</span>
+              <span>{{$t(`T.${submenu.name}`)}}</span>
             </a-menu-item>
           </template>
         </a-sub-menu>
@@ -33,7 +33,6 @@
     </a-menu>
   </div>
 </template>
-
 <script>
 import { mapGetters, mapState } from "vuex";
 import util from "../../utils/utils";

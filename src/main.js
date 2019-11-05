@@ -13,10 +13,19 @@ Axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 Vue.use(VueI18n);
 Vue.use(antd);
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+const i18n = new VueI18n({
+    locale: 'EN',    
+    messages: {
+        'ZH': require('./assets/i18n/zh'),
+        'EN': require('./assets/i18n/en')
+    }
+});
 
 new Vue({
   router,
   store,
+  i18n,
   render: h => h(App)
 }).$mount('#app')

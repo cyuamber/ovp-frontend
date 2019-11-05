@@ -37,7 +37,7 @@ export default {
                 isChildren: true,
                 children: [{
                     auth: ['admin'],
-                    name: 'Instrument Manage System MGT',
+                    name: 'Instrument MGS MGT',
                     iconType: '',
                 },
                 {
