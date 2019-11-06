@@ -81,6 +81,7 @@
           <a-form-item v-if="testCaseList.length !== 0">
             <h3>Test Case List:</h3>
             <a-checkbox-group
+              class="form__checkboxgroup--margin"
               v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}]}]"
               @change="onChange"
             >
@@ -232,6 +233,9 @@ export default {
     width: 110%;
     padding: 14px;
     text-indent: 0.5em;
+  }
+  .form__checkboxgroup--margin{
+    margin-bottom: 30px;
   }
 }
 .footer {
