@@ -395,6 +395,7 @@ const VNFMForm = [
         key: 'password'
     }
 ]
+const SUTType = ['VNF','PNF','XNF']
 
 export {
     mockcolumns,
@@ -407,5 +408,6 @@ export {
     testJobColumns,
     TestCaseColumns,
     VIMForm,
-    VNFMForm
+    VNFMForm,
+    SUTType
 }

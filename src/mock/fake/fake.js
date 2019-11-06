@@ -177,6 +177,7 @@ module.exports = {
                 testSpecId: n + 1,
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
+                SUTType:faker.database.type(),
                 VNFtype: faker.database.type(),
                 PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),
@@ -187,7 +188,7 @@ module.exports = {
         code: 200,
         message: 'SUCCESS',
         total: 50,
-        body: ['VNF','PNF','XNF','NFVI']
+        body: ['VNF01','PNF01','XNF01','NFVI01']
     },
     addTestSpec: {
         code: 200,
@@ -197,6 +198,7 @@ module.exports = {
                 testSpecId: n,
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
+                SUTType:faker.database.type(),
                 VNFtype: faker.database.type(),
                 PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),
@@ -211,6 +213,7 @@ module.exports = {
                 testSpecId: n,
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
+                SUTType:faker.database.type(),
                 VNFtype: faker.database.type(),
                 PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),

@@ -64,8 +64,8 @@ const actions = {
   getTestSpec({commit},data){
     commit('updateVNFTest',data)
   },
-  getVNFOptions({commit}){
-      axiosget('/getTestSpecVNFType').then(res => {
+  getVNFOptions({commit},obj){
+      axiosget('/getTestSpecVNFType',obj).then(res => {
           if(res.code === 200){
             commit('updateVNFOptions',res.body)
           }else {

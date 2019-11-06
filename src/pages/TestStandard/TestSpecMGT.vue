@@ -58,7 +58,7 @@ export default {
             this.visible = true;
             this.isEdit = false;
             this.$store.dispatch('testSpecMGT/getTestSpec','');
-            this.$store.dispatch('testSpecMGT/getVNFOptions')
+            this.$store.dispatch('testSpecMGT/getVNFOptions',{STUType:'VNF'})
         },
         handleTableChange(pagination){
             this.loading = true;

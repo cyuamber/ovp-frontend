@@ -8,8 +8,13 @@
                 <a-form-item label="Version"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['Version',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecVersion }]"/>
                 </a-form-item>
-                <a-form-item label="VNF Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 8 }">
-                    <a-select class="select" :disabled="spin" v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? testSpecSingleData.VNFtype:VNFOptions[0]}]" @dropdownVisibleChange="dropdownVisibleChange">
+                <a-form-item label="SUT Type"  :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+                    <a-select class="select" v-decorator="['SUTType',{ rules: [{ required: true, }],initialValue:this.isEdit ? testSpecSingleData.SUTType:SUTTypes[0]}]"  @change="handleSelectSUTChange">
+                        <a-select-option v-for="type of SUTTypes" :key="type" :value="type">
+                            {{type}}
+                        </a-select-option>
+                    </a-select>
+                    <a-select class="select" v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? testSpecSingleData.VNFtype:VNFOptions[1]}]" @dropdownVisibleChange="dropdownVisibleChange">
                         <a-select-option v-for="type of VNFOptions" :key="type" :value="type">
                             {{type}}
                         </a-select-option>
@@ -31,11 +36,13 @@
 
 <script type="text/ecmascript-6">
     import moment from 'moment';
+    import {SUTType} from '../../const/constant'
     import {mapState} from 'vuex'
     export default {
         props: ['isEdit'],
         data(){
             return {
+                SUTTypes:SUTType,
                 form: this.$form.createForm(this),
                 showModal: true,
                 title: this.isEdit ? 'Edit Spec':'Add Spec',
@@ -58,6 +65,7 @@
                         this.form.setFieldsValue({
                             Name: this.testSpecSingleData.testSpecName,
                             Version: this.testSpecSingleData.testSpecVersion,
+                            SUTType: this.testSpecSingleData.SUTType,
                             VNFType: this.testSpecSingleData.VNFtype,
                             PublishORG: this.testSpecSingleData.PublishORG
                         })
@@ -70,7 +78,7 @@
                     this.$emit('close');
                     this.$store.dispatch('testSpecMGT/clearOptions');
                     this.$store.dispatch('testSpecMGT/getTestSpec', {});
-                    this.form.setFieldsValue({Name: '', Version: '', VNFType: '',PublishORG:''})
+                    this.form.setFieldsValue({Name: '', Version: '',SUTType:'', VNFType: '',PublishORG:''})
                 }
             },
             VNFOptions(val){
@@ -83,10 +91,16 @@
             }
         },
         methods: {
+            handleSelectSUTChange(val){
+                this.spin = true;
+                this.$store.dispatch('testSpecMGT/getVNFOptions',{STUType:val}).then(()=>{
+                    this.form.setFieldsValue({VNFType: this.VNFOptions[0]})
+                })
+            },
             dropdownVisibleChange(){
                 if(!this.VNFOptions.length) {
                     this.spin = true;
-                    this.$store.dispatch('testSpecMGT/getVNFOptions').then(() => {this.spin = true})
+                    this.$store.dispatch('testSpecMGT/getVNFOptions',{SUTType:this.testSpecSingleData.SUTType})
                 }
             },
             handleCancel(){
@@ -98,6 +112,7 @@
                         let data = {
                             testSpecName: values.Name,
                             testSpecVersion: values.Version,
+                            SUTType: values.SUTType,
                             VNFtype: values.VNFType,
                             PublishORG: values.PublishORG,
                             publishTime: moment(new Date()).format('YYYY-MM-DD')
@@ -114,7 +129,7 @@
 
 <style lang="less" scoped>
     .select{
-        width: 70%;
+        width: 40%;
         margin-right: 5%;
     }
 
