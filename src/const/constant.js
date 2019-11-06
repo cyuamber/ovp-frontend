@@ -1,51 +1,51 @@
 const mockcolumns = [{
-        title: "Avatar",
-        key: "avatar",
-        scopedSlots: {
-            customRender: "avatar"
-        }
-    },
-    {
-        title: "Name",
-        dataIndex: "name"
-    },
-    {
-        title: "Address",
-        dataIndex: "address"
-    },
-    {
-        title: "Phone",
-        dataIndex: "phone"
+    title: "Avatar",
+    key: "avatar",
+    scopedSlots: {
+        customRender: "avatar"
     }
+},
+{
+    title: "Name",
+    dataIndex: "name"
+},
+{
+    title: "Address",
+    dataIndex: "address"
+},
+{
+    title: "Phone",
+    dataIndex: "phone"
+}
 ]
 const TestSUTColumns = [{
-        title: 'ID',
-        dataIndex: 'index'
+    title: 'ID',
+    dataIndex: 'index'
+},
+{
+    title: 'Name',
+    dataIndex: 'VNFTestName'
+},
+{
+    title: 'Type',
+    dataIndex: 'VNFTypeName'
+},
+{
+    title: 'Vendor',
+    dataIndex: 'VNFTestVersion'
+},
+{
+    title: 'Create Time',
+    dataIndex: 'createTime'
+},
+{
+    title: 'Action',
+    dataIndex: 'action',
+    scopedSlots: {
+        customRender: 'action'
     },
-    {
-        title: 'Name',
-        dataIndex: 'VNFTestName'
-    },
-    {
-        title: 'Type',
-        dataIndex: 'VNFTypeName'
-    },
-    {
-        title: 'Vendor',
-        dataIndex: 'VNFTestVersion'
-    },
-    {
-        title: 'Create Time',
-        dataIndex: 'createTime'
-    },
-    {
-        title: 'Action',
-        dataIndex: 'action',
-        scopedSlots: {
-            customRender: 'action'
-        },
-        width: 250
-    }
+    width: 250
+}
 ]
 const testEnvVIMColumns = [
     {
@@ -62,7 +62,7 @@ const testEnvVIMColumns = [
         },
     },
     {
-        title: 'CloudOwner',
+        title: 'Cloud Owner',
         dataIndex: 'cloudOwner'
     },
     {
@@ -127,7 +127,7 @@ const testEvnVNFMColumns = [
         dataIndex: 'VNFMvendor'
     },
     {
-        title: 'Vension',
+        title: 'Version',
         dataIndex: 'VNFMversion'
     },
     {
@@ -221,7 +221,7 @@ const TestInsrigisterColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
-	width:180,
+        width: 180,
         scopedSlots: { customRender: 'action' }
     }
 ]
@@ -249,8 +249,8 @@ const VnfpnfSuiteColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
-	width:180,
-        scopedSlots: {customRender: 'action'}
+        width: 180,
+        scopedSlots: { customRender: 'action' }
     }
 ]
 const TestSpecColumns = [
@@ -281,7 +281,7 @@ const TestSpecColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
-        width:180,
+        width: 180,
         scopedSlots: { customRender: 'action' }
     }
 ]
@@ -391,11 +391,11 @@ const VNFMForm = [
         key: 'username',
     },
     {
-        title:  'Password',
+        title: 'Password',
         key: 'password'
     }
 ]
-const SUTType = ['VNF','PNF','XNF']
+const SUTType = ['VNF', 'PNF', 'XNF']
 
 export {
     mockcolumns,
