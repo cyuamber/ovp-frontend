@@ -84,16 +84,16 @@ export default {
     this.initTestcaseTable();
   },
   methods: {
-    ...mapActions({
-      getTableData: "testCase/getTableData",
-      clearPagination: "testCase/clearPagination",
-      getPagination: "testCase/getPagination"
-    }),
-    ...mapMutations({
-      updateclearFilter: "testCase/updateclearFilter",
-      updateSearchLoading: "testCase/updateSearchLoading",
-      updateTableLoading: "testCase/updateTableLoading"
-    }),
+    ...mapActions("testCase", [
+      "getTableData",
+      "clearPagination",
+      "getPagination"
+    ]),
+    ...mapMutations("testCase", [
+      "updateclearFilter",
+      "updateSearchLoading",
+      "updateTableLoading"
+    ]),
     initTestcaseTable() {
       this.getTableData();
     },
