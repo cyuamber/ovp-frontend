@@ -65,7 +65,6 @@ export default {
   data() {
     return {
       columns: TestCaseColumns,
-      loading: false,
       publishTime: "",
       inputName: "",
       inputVersion: ""
@@ -133,7 +132,6 @@ export default {
       this.testCaseSearch();
     },
     testCaseSearch(SearchClick) {
-      this.loading = true;
       if (SearchClick === "SearchClick") {
         this.$store.commit("testCase/updateSearchLoading", true);
       }
