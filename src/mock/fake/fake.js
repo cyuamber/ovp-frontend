@@ -256,7 +256,7 @@ module.exports = {
         code: 200,
         message: 'SUCCESS',
         total: 50,
-        body: _.times(10, function (n) {
+        body: _.times(10, function () {
             return {
                 isOnline: true,
                 cloudOwner: faker.name.firstName(),
@@ -281,17 +281,17 @@ module.exports = {
     loginVIM: {
         code: 200,
         message: 'SUCCESS',
-        body: _.times(10, function (n) {
+        body: _.times(10, function () {
             return {
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),
                 cloudType: faker.random.word(),
                 cloudVersion: 'V' + faker.random.number(),
-                ownerDefinedType: faker.random.word(),
-                cloudZone: faker.random.word(),
                 userName: faker.internet.userName(),
                 passwd: faker.internet.password(),
+                ownerDefinedType: faker.random.word(),
                 authUrl: faker.internet.url(),
+                cloudZone: faker.random.word(),
                 tenant: faker.internet.userName(),
             }
         })

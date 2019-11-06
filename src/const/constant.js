@@ -267,7 +267,7 @@ const TestSpecColumns = [
         dataIndex: 'testSpecVersion'
     },
     {
-        title: 'VNF Type',
+        title: 'SUT Type',
         dataIndex: 'VNFtype'
     },
     {

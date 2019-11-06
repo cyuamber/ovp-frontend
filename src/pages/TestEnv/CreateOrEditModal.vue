@@ -98,8 +98,8 @@ export default {
 	props: ["isEdit"],
 	data() {
 		return {
-			form: this.$form.createForm(this),
-			VIMForm,
+			form:this.$form.createForm(this),
+			VIMForm:VIMForm,
 			VNFMForm: VNFMForm,
 			VIMCount: 0,
 			VNFMCount: 0
@@ -110,7 +110,8 @@ export default {
 			currentTab: state => state.testENV.currentTab,
 			cloudTypeOptions: state => state.testENV.cloudTypeOptions,
 			regionIdOptions: state => state.testENV.regionIdOptions,
-			initValues: state => state.testENV.initValues
+			initValues: state => state.testENV.initValues,
+            visible: state => state.testENV.visible,
 		}),
 		visible: {
 			get() {
@@ -119,10 +120,11 @@ export default {
 			set(val) {
 				if (!val) {
 					let list = this.currentTab === "VIM ENV" ? this.VIMForm : this.VNFMForm;
+                    this.$store.commit('testENV/setInitValues',{});
 					list.forEach(item => {
 						this.form.setFieldsValue({ [item.key]: '' });
 					});
-					this.$store.commit('testENV/setInitValues',{})
+
 				}
 			}
 		}
@@ -130,26 +132,18 @@ export default {
 	watch: {
 		visible(val){
 			if(val) {
+                this.form = this.$form.createForm(this);
 				if(this.currentTab === 'VIM ENV'){
-					this.VIMCount ++
-					if(this.isEdit && this.VIMCount > 1){
-						this.VIMForm.forEach(item => {
-							this.form.setFieldsValue({[item.key]: this.initValues[item.key]})
-						})
-					}else if(!this.isEdit && this.VIMCount > 1){
+					if(!this.isEdit){
 						this.form.setFieldsValue({cloudRegionId: this.regionIdOptions[0], cloudType: this.cloudTypeOptions[0]})
-					}
-				}else{
-					this.VNFMCount ++
-					if(this.isEdit && this.VNFMCount > 1){
-						this.VNFMForm.forEach(item => {
-							this.form.setFieldsValue({[item.key]: this.initValues[item.key]})
-						})
 					}
 				}
 			}
-		},
+		}
 	},
+    // created(){
+    //     this.form = this.$form.createForm(this)
+    // },
 	methods: {
 		handleCancel() {
 			this.$store.commit("testENV/updateVisible", false);
@@ -161,21 +155,15 @@ export default {
 				// Did not implement the check if there is a change
 				let data = {};
 				if (this.currentTab === "VIM ENV") {
-					this.VIMformList.forEach(item => {
-						if (item === "password") data.passwd = values[item];
-						else data[item] = values[item];
+					this.VIMForm.forEach(item => {
+						if (item.key === "password") data.passwd = values[item.key];
+						else data[item.key] = values[item.key];
 					});
 				} else {
-					data = {
-						VNFMname: values.name,
-						VNFMtype: values.type,
-						VNFMvendor: values.vendor,
-						VNFMversion: values.version,
-						url: values.uRL,
-						authUrl: values.certificateURL,
-						username: values.userName,
-						password: values.password
-					};
+                    this.VNFMForm.forEach(item => {
+                        if (item.key === "password") data.passwd = values[item.key];
+                        else data[item.key] = values[item.key];
+                    });
 				}
 				this.$store.commit("testENV/updateVisible", false);
 				this.$store.dispatch("testENV/loginVIN", {

@@ -1,4 +1,5 @@
 import {axiosget, axiospost} from '../../utils/http'
+import { VIMForm, VNFMForm } from "../../const/constant";
 import moment from 'moment'
 
 const state = {
@@ -82,7 +83,15 @@ const mutations = {
         state.regionIdOptions = regionIdList
     },
     setInitValues(state, values){
-        state.initValues = values
+        if(values.item !== "Edit"){
+            state.initValues = values;
+        }else {
+            if(state.currentTab === "VIM ENV")VIMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
+            else {
+                VNFMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
+                console.log(state.initValues,"state.initValues")
+            }
+        }
     }
 }
 

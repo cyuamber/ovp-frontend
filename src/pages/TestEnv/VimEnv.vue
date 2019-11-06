@@ -120,8 +120,7 @@ export default {
 		},
 		showEditOrDeleteModal(item, record) {
 			if (item === "Edit") {
-				console.log(record)
-				this.$store.commit('testENV/setInitValues',record)
+				this.$store.commit('testENV/setInitValues',{record,item});
 				this.$store.commit("testENV/updateVisible", true);
 				this.isEdit = true;
 			} else {
@@ -141,6 +140,9 @@ export default {
 			this.$store.commit("testENV/setFilterItem", { pageObj });
 			this.$store.dispatch("testENV/setParams");
 		}
+	},
+    destroyed(){
+        this.$store.commit("testENV/changeTab", 'VIM ENV');
 	}
 };
 </script>
