@@ -28,7 +28,7 @@
 
 <script type="text/ecmascript-6">
     import moment from 'moment';
-    import {mapState} from 'vuex'
+    import { mapState, mapActions } from "vuex";
     export default {
         props: ['isEdit'],
         data(){
@@ -47,6 +47,9 @@
             this.$store.dispatch('testInstrument/getMeterSys', {})
         },
         methods: {
+            ...mapActions("testInstrument", [
+                "createOrEditTestIns"
+            ]),
             handleCancel(){
                 this.$emit('close');
             },
@@ -63,7 +66,11 @@
                             createTime: moment(new Date()).format('YYYY-MM-DD')
                         };
                         let {isEdit} = this;
-                        this.$store.dispatch('testInstrument/createOrEditTestIns',{isEdit,data}).then(()=>{this.$emit('close');},()=>{this.$emit('close');})
+                        this.createOrEditTestIns({isEdit,data}).
+                            then(
+                                ()=>{this.$emit('close');},
+                                ()=>{this.$emit('close');}
+                            )
                     }
                 });
 
