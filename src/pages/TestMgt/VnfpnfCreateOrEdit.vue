@@ -46,7 +46,7 @@
 
 <script type="text/ecmascript-6">
     import moment from 'moment';
-    import {mapState} from 'vuex'
+    import { mapState, mapActions } from "vuex";
     import {axiosCancelToken} from '../../utils/http'
     export default {
         props: ['isEdit', 'currentTab','visible'],
@@ -85,8 +85,8 @@
             showModal(val){
                 if(!val) {
                     this.$emit('close');
-                    this.$store.dispatch('VnfpnfSuite/clearOptions');
-                    this.$store.dispatch('VnfpnfSuite/getTestMeter', {});
+                    this.clearOptions();
+                    this.getTestMeter({});
                     this.form.setFieldsValue({XNFName: '', XNFType: '', XNFVendor: '', Version: ''})
                 }
             },
@@ -100,10 +100,17 @@
             }
         },
         methods: {
+            ...mapActions("VnfpnfSuite", [
+                "getTestMeter",
+                "getVNFOptions",
+                "clearOptions",
+                "uploadVNFFile",
+                "createOrEditTestMeter"
+            ]),
             dropdownVisibleChange(){
                 if(!this.VNFOptions.length) {
                     this.spin = true;
-                    this.$store.dispatch('VnfpnfSuite/getVNFOptions').then(() => {this.spin = true})
+                    this.getVNFOptions().then(() => {this.spin = true})
                 }
             },
             normFile(e) {
@@ -132,7 +139,8 @@
             },
             handleUpload(data,formData) {
                 this.disabled = true;
-                this.$store.dispatch('VnfpnfSuite/uploadVNFFile', {formData, message: this.$message}).then(
+                this.uploadVNFFile({formData, message: this.$message})
+                    .then(
                     () => { this.submitFormData(data)},
                     () => { this.disabled = false;}
                     );
@@ -162,7 +170,8 @@
 
             },
             submitFormData(data){
-                this.$store.dispatch('VnfpnfSuite/createOrEditTestMeter',{isEdit:this.isEdit,data}).then(()=>{this.$emit('close');
+                this.createOrEditTestMeter({isEdit:this.isEdit,data})
+                    .then(()=>{this.$emit('close');
                 },()=>{ this.$emit('close');})
 
             }

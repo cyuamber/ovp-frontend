@@ -26,7 +26,7 @@
 <script>
     import Search from '../../components/Search/Search'
     import {VnfpnfSuiteColumns} from '../../const/constant'
-    import {mapState} from 'vuex'
+    import { mapState, mapActions } from "vuex";
     import Loading from "../../components/Loading/Loading";
     import xNFCreateOrEdit from './VnfpnfCreateOrEdit'
 
@@ -59,28 +59,39 @@
             }),
         },
         mounted() {
-            this.loading = true;
-            this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() =>this.loading = false)
+            this.initVnfPnfSuiteTable()
         },
         methods: {
+            ...mapActions("VnfpnfSuite", [
+                "getTableData",
+                "getTestMeter",
+                "getVNFOptions",
+                "getPagination",
+                "clearPagination",
+                "deleteTestMeter"
+            ]),
+            initVnfPnfSuiteTable() {
+                this.loading = true;
+                this.getTableData({}).then(() =>this.loading = false)
+            },
             handleClick(){
                 this.visible = true;
                 this.isEdit = false;
-                this.$store.dispatch('VnfpnfSuite/getTestMeter','');
-                this.$store.dispatch('VnfpnfSuite/getVNFOptions')
+                this.getTestMeter("");
+                this.getVNFOptions()
             },
             handleTabsChange(key){
                 this.currentTab = key;
                 this.loading = true;
-                this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() =>this.loading = false)
+                this.getTableData({}).then(() =>this.loading = false)
             },
             handleTableChange(pagination){
                 this.loading = true;
-                this.$store.dispatch('VnfpnfSuite/getPagination',{pagination});
+                this.getPagination({pagination});
                 let current = pagination.current,
                     pageSize = pagination.pageSize,
                     obj = {VNFTestName: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
-                this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() => this.loading = false)
+                this.getTableData(obj).then(() =>this.loading = false)
             },
             // Filter by creating time
             onChange(date,d) {
@@ -94,11 +105,9 @@
                 if(!(keyword === '' && this.createTime === '')) {
                     obj = {VNFTestName: this.keyword, createTime: this.createTime};
                 }
-                this.$store.dispatch('VnfpnfSuite/clearPagination');
+                this.clearPagination()
                 // Simulation request
-                this.$store.dispatch('VnfpnfSuite/getTableData',obj).then(() =>
-                    this.loading = false
-                )
+                this.getTableData(obj).then(() =>this.loading = false)
             },
             close(){
                 this.visible = false;
@@ -108,7 +117,7 @@
                     this.visible = true;
                     this.currentTab = tab;
                     this.isEdit = true;
-                    this.$store.dispatch('VnfpnfSuite/getTestMeter',SuiteSingleData)
+                    this.getTestMeter(SuiteSingleData)
                 }else {
                     this.$confirm({
                         title: 'Are you sure delete this xNF TT?',
@@ -116,12 +125,14 @@
                         okText: 'Yes',
                         okType: 'danger',
                         cancelText: 'No',
-                        onOk: () => {  this.$store.dispatch('VnfpnfSuite/deleteTestMeter',{tesyMeterName: SuiteSingleData.tesyMeterName}) }
+                        onOk: () => {
+                            this.deleteTestMeter({tesyMeterName: SuiteSingleData.tesyMeterName})
+                        }
                     });
                 }
             },
             getAllTestMeter(){
-                this.$store.dispatch('VnfpnfSuite/getTableData',{}).then(() => this.loading = false);
+                this.getTableData({}).then(() =>this.loading = false)
             }
         }
     };
