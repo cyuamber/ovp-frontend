@@ -89,9 +89,7 @@ export default {
 		CreateOrEditModal
 	},
 	mounted() {
-		this.loading = true;
-		this.getOptionList();
-		this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
+        this.initVimEnvTable()
 	},
 	methods: {
         ...mapActions("testENV", [
@@ -106,6 +104,11 @@ export default {
 			"setFilterItem",
 			"setInitValues",
         ]),
+        initVimEnvTable() {
+            this.loading = true;
+            this.getOptionList();
+            this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
+        },
 		handleTabsChange(key) {
             this.changeTab(key);
 			this.keyword = '';

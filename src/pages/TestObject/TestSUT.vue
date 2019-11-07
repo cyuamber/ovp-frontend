@@ -80,9 +80,7 @@ export default {
 		Loading
 	},
 	mounted() {
-        this.getVNFOptions();
-		this.loading = true;
-        this.getTableData({}).then(() => (this.loading = false));
+        this.initTestSUTeTable()
 	},
 	methods: {
         ...mapActions("testSUT", [
@@ -96,6 +94,11 @@ export default {
             "setFilterItem",
             "updateVNFTest"
         ]),
+        initTestSUTeTable() {
+            this.getVNFOptions();
+            this.loading = true;
+            this.getTableData({}).then(() => (this.loading = false));
+        },
 		handleCreate() {
             this.updateVisible(true);
 			this.isEdit = false;
