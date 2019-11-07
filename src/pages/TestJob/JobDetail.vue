@@ -54,7 +54,7 @@
 
 <script type="text/ecmascript-6">
 import { testJobColumns } from "../../const/constant";
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
 	name: "JobDetail",
@@ -80,55 +80,63 @@ export default {
 		}
 	},
 	created() {
-		this.$store.commit("testJob/changeComponent", true);
-		if (!this.$store.state.router.breadcrumbArr.length) {
+        this.changeComponent(true);
+        if (!this.$store.state.router.breadcrumbArr.length) {
 			this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
 			this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
 		}
 	},
 	mounted() {
-		this.getProgress();
-		this.statusColor = this.$route.params.status === 0? '#979797': (this.$route.params.status === 1? '#F5A623':(this.$route.params.status === 2? '#7ED321':'#D0021B'));
-
+		this.initJobDetail()
 	},
 	destroyed() {
-		this.$store.commit("testJob/changeComponent", false);
-		this.$store.commit("testJob/updateProgress", {
-			percent: 0,
-			status: "normal"
-		});
+        this.changeComponent(false);
+        this.updateProgress({
+            percent: 0,
+            status: "normal"
+        })
 	},
 	methods: {
+        ...mapActions("testJob", [
+			"getProgress"
+        ]),
+        ...mapMutations("testJob", [
+            "changeComponent",
+			"updateProgress"
+        ]),
+        initJobDetail(){
+            this.getDetailProgress();
+            this.statusColor = this.$route.params.status === 0? '#979797': (this.$route.params.status === 1? '#F5A623':(this.$route.params.status === 2? '#7ED321':'#D0021B'));
+		},
 		handleBack() {
 			// this.$router.back()
             this.$emit('close');
 			this.$router.push("/testjobmgt");
 		},
-		getProgress() {
-			let { currentAction, status } = this.$route.params;
-			console.log(currentAction,status,"currentAction")
+		getDetailProgress() {
+			let {status } = this.$route.params;
+			console.log(status,"status");
 			// If not executed, start the test first.
-			// if (currentAction === "Start") this.$store.dispatch("testJob/runTestJobMGT", this.$route.params);
-			if (status === 1) this.$store.dispatch("testJob/getProgress");
-			else if (status === 2)
-				this.$store.commit("testJob/updateProgress", {
-					percent: 100,
-					status: "success"
-				});
-			else if(status === 3)
-				this.$store.commit("testJob/updateProgress", {
-					percent: 90,
-					status: "exception"
-				});
-			else {
-				this.$store.commit("testJob/updateProgress", {
-					percent: 0,
-					status: "normal"
-				});
+			if (status === 1)this.getProgress();
+			else if (status === 2){
+                this.updateProgress({
+                    percent: 100,
+                    status: "success"
+                });
+			}else if(status === 3) {
+                this.updateProgress({
+                    percent: 90,
+                    status: "exception"
+                });
+            }else {
+                this.updateProgress({
+                    percent: 0,
+                    status: "normal"
+                });
 			}
 		},
 		handleRefresh() {
-			this.$store.dispatch("testJob/getProgress");
+            this.getProgress()
 		},
 	}
 };

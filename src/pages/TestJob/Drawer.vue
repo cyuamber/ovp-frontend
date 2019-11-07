@@ -34,21 +34,21 @@
         </a-select>
         <a-select
           v-else-if="item === 'SUT Name'"
-          :disabled="!getSUTName"
+          :disabled="!getSUTNames"
           class="form__select--width"
           v-decorator="[keyList[i],{ rules: [{ required: true }]}]"
-          :title="!getSUTName ? 'Please select SUT Type first' : ''"
+          :title="!getSUTNames ? 'Please select SUT Type first' : ''"
           @select="((key) => selectSUTName(key))"
         >
           <a-select-option v-for="type in SUTNameList" :key="type" :value="type">{{type}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test Specification'"
-          :disabled="!getSpecification"
+          :disabled="!getSpecifications"
           class="form__select--width"
           v-decorator="[keyList[i],{ rules: [{ required: true }]}]"
           @select="((key)=> selectSpecification(key))"
-          :title="!getSUTName ? 'Please select SUT Type and SUT Name first' : (!getSpecification ? 'Please select SUT Name first': '')"
+          :title="!getSUTNames ? 'Please select SUT Type and SUT Name first' : (!getSpecifications ? 'Please select SUT Name first': '')"
         >
           <a-select-option v-for="type in specificationList" :key="type" :value="type">{{type}}</a-select-option>
         </a-select>
@@ -106,7 +106,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import { formList, SUTTypeList } from "./constants";
 
 export default {
@@ -129,9 +129,9 @@ export default {
     ...mapState({
       SUTNameList: store => store.testJob.SUTNameList,
       nameSpin: store => store.testJob.nameSpin,
-      getSUTName: store => store.testJob.getSUTName,
+      getSUTNames: store => store.testJob.getSUTName,
       specificationSpin: store => store.testJob.specificationSpin,
-      getSpecification: store => store.testJob.getSpecification,
+      getSpecifications: store => store.testJob.getSpecification,
       specificationList: store => store.testJob.specificationList,
       testCaseSpin: store => store.testJob.testCaseSpin,
       testCaseList: store => store.testJob.testCaseList
@@ -145,7 +145,7 @@ export default {
     },
     visible(val) {
       if (!val) {
-        this.$store.commit("testJob/clean");
+        this.clean();
         this.selectedSUTType = "";
         this.selectedSUTName = "";
         this.selectedSpecification = "";
@@ -162,6 +162,15 @@ export default {
     });
   },
   methods: {
+    ...mapActions("testJob", [
+        "createrTestJobMGT",
+        "getSUTName",
+        "getSpecification",
+        "getTestCase"
+    ]),
+    ...mapMutations("testJob", [
+        "clean"
+    ]),
     onClose() {
       this.visible = false;
       this.$emit("close");
@@ -169,7 +178,7 @@ export default {
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
-          this.$store.dispatch("testJob/createrTestJobMGT", values);
+          this.createrTestJobMGT(values)
           this.visible = false;
           this.$emit("close");
         }
@@ -179,9 +188,9 @@ export default {
       if (key === this.selectedSUTType) return;
       this.selectedSUTName = "";
       this.selectedSpecification = "";
-      this.$store.dispatch("testJob/getSUTName", {
-        SUTType: key,
-        message: this.$message
+      this.getSUTName({
+          SUTType: key,
+          message: this.$message
       });
       this.form.setFieldsValue({ SUTName: "", TestSpecification: "" });
     },
@@ -189,19 +198,19 @@ export default {
       if (key === this.selectedSUTName) return;
       this.selectedSUTName = key;
       this.selectedSpecification = "";
-      this.$store.dispatch("testJob/getSpecification", {
-        SUTName: key,
-        message: this.$message
+      this.getSpecification({
+          SUTName: key,
+          message: this.$message
       });
       this.form.setFieldsValue({ TestSpecification: "" });
     },
     selectSpecification(key) {
       if (key === this.selectedSpecification) return;
       this.selectedSpecification = key;
-      this.$store.dispatch("testJob/getTestCase", {
-        TestSpecification: key,
-        message: this.$message
-      });
+      this.getTestCase({
+          TestSpecification: key,
+          message: this.$message
+      })
     },
     onChange(e) {
       console.log(e.target, e);

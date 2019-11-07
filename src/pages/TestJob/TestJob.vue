@@ -43,7 +43,7 @@
 import { testJobColumns } from "../../const/constant.js";
 import Loading from "../../components/Loading/Loading";
 import Drawer from "./Drawer";
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
 	name: "TestJob",
@@ -63,15 +63,29 @@ export default {
 	},
 	components: { Drawer, Loading },
 	mounted() {
-		this.$store.dispatch("testJob/getTableData");
+		this.initTestJobTable()
 	},
 	methods: {
+        ...mapActions("testJob", [
+            "getTableData",
+            "runTestJobMGT",
+            "delete",
+            "download",
+            "stopJop"
+        ]),
+        ...mapMutations("testJob", [
+            "setIsShow",
+            "setFilter"
+        ]),
+        initTestJobTable() {
+            this.getTableData();
+        },
 		handleCreate() {
-			this.$store.commit("testJob/setIsShow", true);
+            this.setIsShow(true)
 		},
 		handleSelectCreateTime(date, d) {
-			this.$store.commit("testJob/setFilter", { time: d });
-			this.$store.dispatch("testJob/getTableData", true);
+            this.setFilter({ time: d });
+            this.getTableData(true);
 		},
 		handleActions(action, data) {
 			if ( action === "Start" ) this.handleStart(data);
@@ -90,7 +104,7 @@ export default {
                 okType: "danger",
                 cancelText: "No",
                 onOk: () => {
-                    this.$store.dispatch("testJob/runTestJobMGT", data);
+                    this.runTestJobMGT(data)
                 },
                 onCancel() {
                     console.log("Cancel");
@@ -104,7 +118,7 @@ export default {
 				okType: "danger",
 				cancelText: "No",
 				onOk: () => {
-				this.$store.dispatch("testJob/delete", data);
+                    this.delete(data)
 				},
 				onCancel() {
 				console.log("Cancel");
@@ -119,7 +133,7 @@ export default {
                 okType: "danger",
                 cancelText: "No",
                 onOk: () => {
-                    this.$store.dispatch("testJob/download", data);
+                    this.download(data)
                 },
                 onCancel() {
                     console.log("Cancel");
@@ -131,13 +145,13 @@ export default {
 			this.$router.push({ name: "JobDetail", params: data });
 		},
 		close() {
-			this.$store.commit("testJob/setIsShow", false);
-            this.$store.dispatch("testJob/getTableData");
+            this.setIsShow(false);
+            this.getTableData()
 		},
 		handlePageChange(pageObj) {
-			this.$store.commit("testJob/setFilter", { pageObj });
-			this.$store.dispatch("testJob/getTableData",true);
-		},
+            this.setFilter({ pageObj });
+            this.getTableData(true)
+        },
 		handleStop(data){
 			// The analog call interface changes a single piece of data in a single table
             this.$confirm({
@@ -146,7 +160,7 @@ export default {
                 okType: "danger",
                 cancelText: "No",
                 onOk: () => {
-                    this.$store.dispatch('testJob/stopJop',data)
+                    this.stopJop(data)
                 },
                 onCancel() {
                     console.log("Cancel");
