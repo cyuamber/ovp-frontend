@@ -10,32 +10,41 @@
       <a-button :style="headerbuttonStyle" @click="handleCreateTestJob">{{$t('T.CreateTestJob')}}</a-button>
       <a-dropdown>
         <a-menu slot="overlay" @click="handleMenuClick">
-          <a-menu-item key="1">
-            <a-icon type="login" />{{$t(`T.${'Log in'}`)}}
-          </a-menu-item>
-          <a-menu-divider />
+          <!-- <a-menu-item key="1">
+            <a-icon type="login" />
+            {{$t(`T.${'Log in'}`)}}
+          </a-menu-item>-->
+          <!-- <a-menu-divider /> -->
           <a-menu-item key="2">
-            <a-icon type="mail" />{{$t(`T.${'Change E-mail'}`)}}
+            <a-icon type="mail" />
+            {{$t(`T.${'Change E-mail'}`)}}
           </a-menu-item>
           <a-menu-item key="3">
-            <a-icon type="user" />{{$t(`T.${'Change passport'}`)}}
+            <a-icon type="user" />
+            {{$t(`T.${'Change passport'}`)}}
           </a-menu-item>
           <a-menu-divider />
           <a-menu-item key="4">
-            <a-icon type="logout" />{{$t(`T.${'Log out'}`)}}
+            <a-icon type="logout" />
+            {{$t(`T.${'Log out'}`)}}
           </a-menu-item>
         </a-menu>
         <a-button :style="headerbuttonStyle">
-          <a-icon type="user" />{{$t('T.LOGIN')}}
+          <!-- <a-icon type="user" />{{$t('T.LOGIN')}} -->
+          <a-icon type="user" />
+          {{userName}}
         </a-button>
       </a-dropdown>
-      <a-button :style="headerbuttonStyle" @click="(() => handleLangChange(language))">{{$t('T.language')}}</a-button>
+      <a-button
+        :style="headerbuttonStyle"
+        @click="(() => handleLangChange(language))"
+      >{{$t('T.language')}}</a-button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters,mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 const headerbuttonStyle = {
   height: "100%",
@@ -50,23 +59,24 @@ export default {
   name: "Header",
   data() {
     return {
+      userName: "Admin",
       headerbuttonStyle
     };
   },
   mounted() {
-      this.$store.dispatch('getCurrentLanguage',{});
+    this.$store.dispatch("getCurrentLanguage", {});
   },
   computed: {
-      ...mapGetters(["updateBread"]),
-      ...mapState ({
-          language: state => state.router.language,
-      }),
+    ...mapGetters(["updateBread"]),
+    ...mapState({
+      language: state => state.router.language
+    })
   },
-    watch:{
-        language(val){
-            this.$i18n.locale = val;
-        }
-    },
+  watch: {
+    language(val) {
+      this.$i18n.locale = val;
+    }
+  },
   methods: {
     handleMenuClick(e) {
       if (e.key === "1" || e.key === "4") {
@@ -78,19 +88,18 @@ export default {
         path: "/login"
       });
     },
-    handleCreateTestJob(){
-      if(this.$route.path !== '/testjobmgt'){
+    handleCreateTestJob() {
+      if (this.$route.path !== "/testjobmgt") {
         this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
-        this.$store.commit("setBreadcrumb", ["Test Job MGT"])
-        this.$router.push({path: 'testjobmgt'})
-        
+        this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+        this.$router.push({ path: "testjobmgt" });
       }
-      this.$store.commit('testJob/setIsShow', true)
+      this.$store.commit("testJob/setIsShow", true);
     },
-      handleLangChange(val){
-          let obj = {language:val === 'EN' ?'ZH':'EN'};
-          this.$store.dispatch('getCurrentLanguage',obj);
-      }
+    handleLangChange(val) {
+      let obj = { language: val === "EN" ? "ZH" : "EN" };
+      this.$store.dispatch("getCurrentLanguage", obj);
+    }
   }
 };
 </script>
