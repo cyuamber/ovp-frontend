@@ -49,7 +49,7 @@ import Search from "../../components/Search/Search";
 import SUTCreateOrEdit from "./SUTCreateOrEdit";
 import { TestSUTColumns } from "../../const/constant";
 import Loading from "../../components/Loading/Loading";
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
 	name: "VnfTypeobject",
@@ -80,14 +80,24 @@ export default {
 		Loading
 	},
 	mounted() {
-		this.$store.dispatch("testSUT/getVNFOptions");
+        this.getVNFOptions();
 		this.loading = true;
-		this.$store.dispatch("testSUT/getTableData", {})
-			.then(() => (this.loading = false));
+        this.getTableData({}).then(() => (this.loading = false));
 	},
 	methods: {
+        ...mapActions("testSUT", [
+            "getTableData",
+            "setParams",
+            "getVNFOptions",
+            "deleteVNFTest"
+        ]),
+        ...mapMutations("testSUT", [
+            "updateVisible",
+            "setFilterItem",
+            "updateVNFTest"
+        ]),
 		handleCreate() {
-			this.$store.commit("testSUT/updateVisible", true);
+            this.updateVisible(true);
 			this.isEdit = false;
 		},
 		handleTabsChange(key) {
@@ -95,25 +105,25 @@ export default {
 		},
 		// Get table data by entering information or selecting time
 		serchTestSUT(keyword) {
-			this.$store.commit("testSUT/setFilterItem", {
-				key: keyword,
-				isSearch: true,
-				message: this.$message
-			});
-			this.$store.dispatch("testSUT/setParams", true);
+            this.setFilterItem({
+                key: keyword,
+                isSearch: true,
+                message: this.$message
+            });
+            this.setParams(true);
 		},
 		// Filter by creating time
 		onChange(date, d) {
-			this.$store.commit("testSUT/setFilterItem", { time: d });
-			this.$store.dispatch("testSUT/setParams", true);
+            this.setFilterItem({ time: d });
+            this.setParams(true);
 		},
 		showEditOrDeleteModal(item, tab, VNFTest) {
 			console.log(VNFTest);
 			if (item === "Edit") {
 				this.isEdit = true;
 				this.currentTab = tab;
-				this.$store.commit("testSUT/updateVNFTest", VNFTest);
-				this.$store.commit("testSUT/updateVisible", true);
+                this.updateVNFTest(VNFTest);
+                this.updateVisible(true);
 			} else if (item === "Delete")
 				this.showConfirm(item, "Are you sure delete this task?", VNFTest);
 			else this.showConfirm(item, "Whether to confirm the download？", VNFTest);
@@ -126,18 +136,16 @@ export default {
 				okType: "danger",
 				cancelText: "No",
 				onOk: () => {
-					if (item === "Delete")
-					this.$store.dispatch("testSUT/deleteVNFTest", {
-						VNFFileName: VNFTest.VNFFileName
-					});
+					if (item === "Delete") this.deleteVNFTest({
+                        VNFFileName: VNFTest.VNFFileName
+                    });
 					else console.log("下载");
 				}
 			});
 		},
 		pageChange(pageObj) {
-			// this.$store.dispatch('getTableData',pageObj)
-			this.$store.commit("testSUT/setFilterItem", { pageObj });
-			this.$store.dispatch("testSUT/setParams", true);
+            this.setFilterItem({ pageObj });
+            this.setParams(true);
 		}
 	}
 };

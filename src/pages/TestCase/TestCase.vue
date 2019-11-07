@@ -5,7 +5,7 @@
       <a-input-group class="test-case__inputgroup">
         <a-row :gutter="6">
           <a-col :span="9">
-            <a-input placeholder="Input Name" v-model="inputName" allowClear />
+            <a-input placeholder="Input Name" v-model="inputName" />
             <a-icon
               type="close-circle"
               :class="[{'ant-calendar-picker-clear':inputName.length === 0},{'ant-calendar-picker-icon':inputName.length !== 0}]"
@@ -13,7 +13,7 @@
             />
           </a-col>
           <a-col :span="9">
-            <a-input placeholder="Input Version" v-model="inputVersion" allowClear />
+            <a-input placeholder="Input Version" v-model="inputVersion" />
             <a-icon
               type="close-circle"
               :class="[{'ant-calendar-picker-clear':inputVersion.length === 0},{'ant-calendar-picker-icon':inputVersion.length !== 0}]"
@@ -133,7 +133,7 @@ export default {
     },
     testCaseSearch(SearchClick) {
       if (SearchClick === "SearchClick") {
-        this.$store.commit("testCase/updateSearchLoading", true);
+          this.updateSearchLoading(true);
       }
       let obj = {};
       if (

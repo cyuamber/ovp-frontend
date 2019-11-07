@@ -141,9 +141,6 @@ export default {
 			}
 		}
 	},
-    // created(){
-    //     this.form = this.$form.createForm(this)
-    // },
 	methods: {
 		handleCancel() {
 			this.$store.commit("testENV/updateVisible", false);

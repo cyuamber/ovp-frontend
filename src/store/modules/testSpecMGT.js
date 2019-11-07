@@ -77,7 +77,7 @@ const actions = {
     commit('updateVNFOptions', [])
   },
     createOrEditTestSpec({commit,dispatch},{isEdit,data}){
-        let url = this.isEdit ? '/updateTestSpec':'/addTestSpec';
+        let url = isEdit ? '/updateTestSpec':'/addTestSpec';
         axiospost(url, data)
             .then((res) => {
                     if(res.code === 200){

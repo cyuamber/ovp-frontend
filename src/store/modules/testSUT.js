@@ -111,14 +111,14 @@ const actions = {
 
 		)
 	},
-	getVNFOptions({ commit, state }, fn) {
+	getVNFOptions({ commit }) {
 		let Options = ['VNF', 'PNF', 'NFVI']
 		setTimeout(() => {
 			commit('updateVNFOptions', Options)
 		}, 3000)
 	},
 	createOrEditVNFTest({ commit, dispatch }, { data, isEdit }) {
-		let url = this.isEdit ? '/updateVNFTest' : '/createVNFTest';
+		let url = isEdit ? '/updateVNFTest' : '/createVNFTest';
 		axiospost(url, data)
 			.then((res) => {
 					if (res.code === 200) {
@@ -153,10 +153,7 @@ const actions = {
 			message.error('Network exception, please try again')
 			commit('updateToken', null)
 		})
-	},
-	// inerrupt({commit,state}){
-	//   axiosget
-	// }
+	}
 
 }
 const getters = {
