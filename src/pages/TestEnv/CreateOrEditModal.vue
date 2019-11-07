@@ -92,7 +92,7 @@
 
 <script type="text/ecmascript-6">
 import { VIMForm, VNFMForm } from "../../const/constant";
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
 	props: ["isEdit"],
@@ -120,7 +120,7 @@ export default {
 			set(val) {
 				if (!val) {
 					let list = this.currentTab === "VIM ENV" ? this.VIMForm : this.VNFMForm;
-                    this.$store.commit('testENV/setInitValues',{});
+					this.setInitValues({});
 					list.forEach(item => {
 						this.form.setFieldsValue({ [item.key]: '' });
 					});
@@ -142,8 +142,16 @@ export default {
 		}
 	},
 	methods: {
+        ...mapActions("testENV", [
+          "loginVIN"
+        ]),
+        ...mapMutations("testENV", [
+            "setFilterItem",
+            "setInitValues",
+			"updateVisible"
+        ]),
 		handleCancel() {
-			this.$store.commit("testENV/updateVisible", false);
+            this.updateVisible(false)
 		},
 		handleSubmit(e) {
 			e.preventDefault();
@@ -162,11 +170,11 @@ export default {
                         else data[item.key] = values[item.key];
                     });
 				}
-				this.$store.commit("testENV/updateVisible", false);
-				this.$store.dispatch("testENV/loginVIN", {
-					isEdit: this.isEdit,
-					data
-				});
+				this.updateVisible(false);
+				this.loginVIN({
+                    isEdit: this.isEdit,
+                    data
+                })
 			}
 			});
 		},

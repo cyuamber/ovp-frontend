@@ -59,7 +59,7 @@
 import CreateOrEditModal from "./CreateOrEditModal";
 import Loading from "../../components/Loading/Loading";
 import { testEnvVIMColumns, testEvnVNFMColumns } from "../../const/constant";
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
 	name: "VimEnv",
@@ -90,38 +90,48 @@ export default {
 	},
 	mounted() {
 		this.loading = true;
-		this.$store.dispatch("testENV/getOptionList");
-		this.$store.dispatch("testENV/getTableData", {})
-			.then(() => (this.loading = false), () => (this.loading = false));
+		this.getOptionList();
+		this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
 	},
 	methods: {
+        ...mapActions("testENV", [
+            "getTableData",
+			"setParams",
+			"deleteData",
+			"getOptionList"
+        ]),
+        ...mapMutations("testENV", [
+            "changeTab",
+            "updateVisible",
+			"setFilterItem",
+			"setInitValues",
+        ]),
 		handleTabsChange(key) {
-			this.$store.commit("testENV/changeTab", key);
+            this.changeTab(key);
 			this.keyword = '';
 			this.loading = true;
-			this.$store.dispatch("testENV/getTableData", {})
-				.then(() => (this.loading = false), () => (this.loading = false));
+            this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
 		},
 		handleRigister() {
-			this.$store.commit("testENV/updateVisible", true);
+            this.updateVisible(true);
 			this.isEdit = false;
 		},
 		searchTypeID() {
-			this.$store.commit("testENV/setFilterItem", {
-				key: this.keyword,
-				isSearch: true,
-				message: this.$message
-			});
-			this.$store.dispatch("testENV/setParams");
+            this.setFilterItem({
+                key: this.keyword,
+                isSearch: true,
+                message: this.$message
+            });
+            this.setParams();
 		},
 		selectedTime(date, d) {
-			this.$store.commit("testENV/setFilterItem", { time: d });
-			this.$store.dispatch("testENV/setParams");
+            this.setFilterItem({ time: d });
+            this.setParams();
 		},
 		showEditOrDeleteModal(item, record) {
 			if (item === "Edit") {
-				this.$store.commit('testENV/setInitValues',{record,item});
-				this.$store.commit("testENV/updateVisible", true);
+                this.setInitValues({record,item});
+                this.updateVisible(true);
 				this.isEdit = true;
 			} else {
 				this.$confirm({
@@ -131,18 +141,18 @@ export default {
 					okType: "danger",
 					cancelText: "No",
 					onOk: () => {
-						this.$store.dispatch("testENV/deleteData", record);
+                        this.deleteData(record)
 					}
 				});
 			}
 		},
 		pageChange(pageObj) {
-			this.$store.commit("testENV/setFilterItem", { pageObj });
-			this.$store.dispatch("testENV/setParams");
+            this.setFilterItem({ pageObj });
+            this.setParams()
 		}
 	},
     destroyed(){
-        this.$store.commit("testENV/changeTab", 'VIM ENV');
+        this.changeTab('VIM ENV')
 	}
 };
 </script>
