@@ -73,6 +73,12 @@ const actions = {
           }
       })
   },
+    getPagination({commit},{pagination}){
+        commit('updatePagination',pagination)
+    },
+    clearPagination({commit}){
+        commit('updatePagination', {current: 1 , total: 0})
+    },
   clearOptions({commit}){ 
     commit('updateVNFOptions', [])
   },

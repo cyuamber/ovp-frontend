@@ -47,7 +47,7 @@
 <script type="text/ecmascript-6">
 import moment from "moment";
 import { SUTType } from "../../const/constant";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   props: ["isEdit"],
   data() {
@@ -86,8 +86,8 @@ export default {
     showModal(val) {
       if (!val) {
         this.$emit("close");
-        this.$store.dispatch("testSpecMGT/clearOptions");
-        this.$store.dispatch("testSpecMGT/getTestSpec", {});
+        this.clearOptions();
+        this.getTestSpec({});
         this.form.setFieldsValue({
           Name: "",
           Version: "",
@@ -107,10 +107,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions("testSpecMGT", [
+        "clearOptions",
+        "getTestSpec",
+        "getVNFOptions",
+        "createOrEditTestSpec"
+    ]),
     handleSelectSUTChange(val) {
       this.spin = true;
-      this.$store
-        .dispatch("testSpecMGT/getVNFOptions", { STUType: val })
+      this.getVNFOptions({ STUType: val })
         .then(() => {
           this.form.setFieldsValue({ VNFType: this.VNFOptions[0] });
         });
@@ -118,9 +123,9 @@ export default {
     dropdownVisibleChange() {
       if (!this.VNFOptions.length) {
         this.spin = true;
-        this.$store.dispatch("testSpecMGT/getVNFOptions", {
-          SUTType: this.testSpecSingleData.SUTType
-        });
+        this.getVNFOptions({
+            SUTType: this.testSpecSingleData.SUTType
+        })
       }
     },
     handleCancel() {
@@ -138,8 +143,7 @@ export default {
             publishTime: moment(new Date()).format("YYYY-MM-DD")
           };
           let { isEdit } = this;
-          this.$store
-            .dispatch("testSpecMGT/createOrEditTestSpec", { isEdit, data })
+          this.createOrEditTestSpec({ isEdit, data })
             .then(
               () => {
                 this.$emit("close");
@@ -157,7 +161,7 @@ export default {
 
 <style lang="less" scoped>
 .select {
-  width: 45%;
+  width: 40%;
   margin-right: 5%;
 }
 </style>

@@ -20,7 +20,7 @@
 <script>
     import Search from '../../components/Search/Search'
     import {TestSpecColumns} from '../../const/constant'
-    import {mapState} from 'vuex'
+    import { mapState, mapActions } from "vuex";
     import Loading from "../../components/Loading/Loading";
     import TestSpecMGTAddOrEdit from './TestSpecMGTAddOrEdit'
 export default {
@@ -50,23 +50,33 @@ export default {
         }),
     },
     mounted () {
-        this.loading = true;
-        this.$store.dispatch('testSpecMGT/getTableData',{}).then(() => this.loading = false)
+       this.initTestStandardTable()
     },
     methods: {
+        ...mapActions("testSpecMGT", [
+            "getTableData",
+            "getTestSpec",
+            "deleteTestSpec",
+            "getPagination",
+            "clearPagination"
+        ]),
+        initTestStandardTable() {
+            this.loading = true;
+            this.getTableData({}).then(() => this.loading = false)
+        },
         handleCreateClick(){
             this.visible = true;
             this.isEdit = false;
-            this.$store.dispatch('testSpecMGT/getTestSpec','');
-            this.$store.dispatch('testSpecMGT/getVNFOptions',{STUType:'VNF'})
+            this.getTestSpec("");
+            this.getVNFOptions({STUType:'VNF'})
         },
         handleTableChange(pagination){
             this.loading = true;
-            this.$store.dispatch('testSpecMGT/getPagination',{pagination});
+            this.getPagination({pagination});
             let current = pagination.current,
                 pageSize = pagination.pageSize,
                 obj = {testSpecName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
-            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() => this.loading = false)
+            this.getTableData(obj).then(() => this.loading = false)
         },
         close(){
             this.visible = false;
@@ -83,15 +93,15 @@ export default {
             if(!(keyword === '' && this.publishTime === '')) {
                 obj = {testSpecName: this.keyword, publishTime: this.publishTime};
             }
-            this.$store.dispatch('testSpecMGT/clearPagination');
+            this.clearPagination();
             // Simulation request
-            this.$store.dispatch('testSpecMGT/getTableData',obj).then(() =>this.loading = false)
+            this.getTableData(obj).then(() => this.loading = false)
         },
         showEditOrDeleteModal(item,testSpecSingleData){
             if(item === 'Edit') {
                 this.visible = true;
                 this.isEdit = true;
-                this.$store.dispatch('testSpecMGT/getTestSpec',testSpecSingleData)
+                this.getTestSpec(testSpecSingleData)
             }else {
                 this.$confirm({
                     title: 'Are you sure delete this Spec?',
@@ -100,13 +110,13 @@ export default {
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        this.$store.dispatch('testSpecMGT/deleteTestSpec',{testSpecId: testSpecSingleData.testSpecId})
+                        this.deleteTestSpec({testSpecId: testSpecSingleData.testSpecId})
                     }
                 });
             }
         },
         getAllTestSpec(){
-            this.$store.dispatch('testSpecMGT/getTableData',{}).then(() => this.loading = false);
+            this.getTableData({}).then(() => this.loading = false)
         }
     }
 };
