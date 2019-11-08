@@ -54,7 +54,7 @@
 
 <script type="text/ecmascript-6">
 import { testJobColumns } from "../../const/constant";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
