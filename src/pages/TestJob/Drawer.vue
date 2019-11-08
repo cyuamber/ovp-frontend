@@ -239,11 +239,12 @@ export default {
     height: 80px;
   }
   .form__card--padding {
-    width: 110%;
+    width: 100%;
     padding: 14px;
     text-indent: 0.5em;
   }
   .form__checkboxgroup--margin{
+    width: 100%;
     margin-bottom: 30px;
   }
 }
@@ -254,6 +255,9 @@ export default {
   width: 100%;
   .ant-btn {
     width: 50%;
+    border-radius: 0;
+    height: 50px!important;
+    line-height: 50px!important;
   }
 }
 </style>
