@@ -306,20 +306,6 @@ const actions = {
 		})
 	},
 	getProgress({ commit, dispatch, state }) {
-		/* const socket = new WebSocket('ws://localhost:8080/getProgress');
-		// WebSocket.onopen     Triggered after successful connection
-		socket.addEventListener('open', function (event) {
-		  socket.send('Hello Server!');
-		}); 
-		// WebSocket.onmessage   Triggered after receiving information from the server
-		socket.addEventListener('message', function (event) {
-		  console.log('Message from server ', event.data);
-		  if(event.data.progress === 100){
-			// Disconnect after the test is complete
-			socket.close()  
-		  }
-		}); */
-
 		axiosget('/getProgress').then((res) => {
 			if (!state.isJobDetail) return
 			if (res.code === 200) {

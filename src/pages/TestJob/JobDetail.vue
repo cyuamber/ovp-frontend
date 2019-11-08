@@ -54,12 +54,18 @@
 
 <script type="text/ecmascript-6">
 import { testJobColumns } from "../../const/constant";
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
 export default {
 	name: "JobDetail",
 	data(){
-		return { statusColor: '' }
+		return {
+            statusColor: '',
+            stompClient:'',
+            timer:'',
+		}
 	},
 	computed: {
 		...mapState({
@@ -105,7 +111,7 @@ export default {
 			"updateProgress"
         ]),
         initJobDetail(){
-            this.getDetailProgress();
+            this.initWebSocket();
             this.statusColor = this.$route.params.status === 0? '#979797': (this.$route.params.status === 1? '#F5A623':(this.$route.params.status === 2? '#7ED321':'#D0021B'));
 		},
 		handleBack() {
@@ -136,9 +142,49 @@ export default {
 			}
 		},
 		handleRefresh() {
-            this.getProgress()
+            this.initWebSocket()
 		},
-	}
+        initWebSocket(){ //initialization weosocket
+            this.connection();
+            let that= this;
+            this.timer = setInterval(() => {
+                try {
+                    that.stompClient.send("Test if the connection is normal");
+                } catch (err) {
+                    console.log("Disconnected: " + err);
+                    that.connection();
+                }
+            }, 5000);
+        },
+        connection() {
+            let socket = new SockJS('/webSocketEndPoint ');
+            this.stompClient = Stomp.over(socket);
+            let headers = {
+                Authorization:''
+            };
+            this.stompClient.connect(headers,() => {
+                this.stompClient.subscribe('/topic/status', (msg) => {
+                    console.log(msg,"socket-msg");
+                    this.updateProgress({
+                        percent: msg.progress,
+                        status: msg.state
+                    });
+                },headers);
+            }, (err) => {
+                console.log(err);
+            });
+        },
+        disconnect() {
+            if (this.stompClient) {
+                this.stompClient.disconnect();
+            }
+        },
+    },
+    beforeDestroy: function () {
+        this.disconnect();
+        clearInterval(this.timer);
+    },
+
 };
 </script>
 
