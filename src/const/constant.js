@@ -20,19 +20,19 @@ const mockcolumns = [{
 ]
 const TestSUTColumns = [{
     title: 'ID',
-    dataIndex: 'index'
+    dataIndex: 'id'
 },
 {
     title: 'Name',
-    dataIndex: 'VNFTestName'
+    dataIndex: 'name'
 },
 {
     title: 'Type',
-    dataIndex: 'VNFTypeName'
+    dataIndex: 'type'
 },
 {
     title: 'Vendor',
-    dataIndex: 'VNFTestVersion'
+    dataIndex: 'version'
 },
 {
     title: 'Create Time',

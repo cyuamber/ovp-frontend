@@ -39,18 +39,6 @@ module.exports = {
             createTime: faker.date.recent()
         }
     },
-    getVNFType: {
-        code: 200,
-        message: 'SUCCESS',
-        total: 50,
-        body: _.times(10, function (n) {
-            return {
-                id: n,
-                VNFTypeName: faker.random.words(),
-                createTime: faker.date.recent()
-            }
-        })
-    },
     deleteVNFType: {
         code: 200,
         message: 'SUCCESS'
@@ -61,15 +49,48 @@ module.exports = {
         total: 50,
         body: _.times(10, function (n) {
             return {
-                id: n,
-                VNFTestName: faker.name.firstName(),
-                VNFTestVendor: faker.random.word(),
-                VNFTestVersion: 'V' + faker.random.number(),
-                VNFTypeName: faker.name.lastName(),
+                id: n+1,
+                name: faker.name.firstName(),
+                vendor: faker.random.word(),
+                version: 'V' + faker.random.number(),
+                type: faker.name.lastName(),
                 createTime: faker.date.recent(),
                 VNFFileName: {}
             }
         })
+    },
+    getVNFType: {
+        code: 200,
+        message: 'SUCCESS',
+        total: 50,
+        body: ['VNF','PNF','XNF','NFVI']
+    },
+    createVNFTest: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            name: faker.name.firstName(),
+            vendor: faker.random.word(),
+            version: 'V' + faker.random.number(),
+            type: faker.name.lastName(),
+            createTime: faker.date.recent(),
+        }
+    },
+    updateVNFTest: {
+        code: 200,
+        message: 'SUCCESS',
+        body: {
+            id: faker.random.number(),
+            name: faker.name.firstName(),
+            vendor: faker.random.word(),
+            version: 'V' + faker.random.number(),
+            type: faker.name.lastName(),
+            createTime: faker.date.recent(),
+        }
+    },
+    uploadVNFFile: {
+        code: 200,
+        message: 'SUCCESS',
     },
     deleteVNFTest: {
         code: 200,
@@ -224,34 +245,6 @@ module.exports = {
         code: 200,
         message: 'SUCCESS'
     },
-    createVNFTest: {
-        code: 200,
-        message: 'SUCCESS',
-        body: {
-            id: faker.random.number(),
-            VNFTestName: faker.name.firstName(),
-            VNFTestVendor: faker.random.word(),
-            VNFTestVersion: 'V' + faker.random.word(),
-            VNFTypeName: faker.name.lastName(),
-            createTime: faker.date.recent(),
-        }
-    },
-    updateVNFTest: {
-        code: 200,
-        message: 'SUCCESS',
-        body: {
-            id: faker.random.number(),
-            VNFTestName: faker.name.firstName(),
-            VNFTestVendor: faker.random.word(),
-            VNFTestVersion: 'V' + faker.random.number(),
-            VNFTypeName: faker.name.lastName(),
-            createTime: faker.date.recent(),
-        }
-    },
-    uploadVNFFile: {
-        code: 200,
-        message: 'SUCCESS',
-    },
     getVIM: {
         code: 200,
         message: 'SUCCESS',
@@ -299,7 +292,7 @@ module.exports = {
     updateVIM: {
         code: 200,
         message: 'SUCCESS',
-        body: _.times(10, function (n) {
+        body: _.times(10, function () {
             return {
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),

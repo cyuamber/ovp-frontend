@@ -33,14 +33,14 @@
 				:key="item"
 				:color="item === 'Edit'? 'blue': (item === 'Delete'?'red': 'green')"
 				class="table__tag"
-				@click="(() => showEditOrDeleteModal(item,tab,record))"
+				@click="(() => showEditOrDeleteModal(item,record))"
 				>{{item}}</a-tag>
 			</span>
 			</a-table>
 		</div>
 		</a-tab-pane>
 	</a-tabs>
-	<SUTCreateOrEdit :isEdit="isEdit" :currentTab="currentTab" />
+	<SUTCreateOrEdit :isEdit="isEdit"/>
 	</div>
 </template>
 
@@ -56,7 +56,6 @@ export default {
 	data() {
 		return {
 			tabs: ["VNF", "PNF", "NFVI"],
-			currentTab: "VNF",
 			isEdit: false,
 			currentPage: "TestSUT",
 			columns: TestSUTColumns,
@@ -71,7 +70,8 @@ export default {
 			loadingMessage: state => state.testSUT.loadingMessage,
 			visible: state => state.testSUT.visible,
 			createTime: state => state.testSUT.createTime,
-			keyword: state => state.testSUT.keyword
+			keyword: state => state.testSUT.keyword,
+            currentTab: state => state.testSUT.currentTab,
 		})
 	},
 	components: {
@@ -92,19 +92,25 @@ export default {
         ...mapMutations("testSUT", [
             "updateVisible",
             "setFilterItem",
-            "updateVNFTest"
+            "updateVNFTest",
+			"changeTab"
         ]),
         initTestSUTeTable() {
             this.getVNFOptions();
             this.loading = true;
-            this.getTableData({}).then(() => (this.loading = false));
+            let paramsObj = {flag:this.currentTab};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false));
         },
 		handleCreate() {
             this.updateVisible(true);
 			this.isEdit = false;
 		},
 		handleTabsChange(key) {
-			this.currentTab = key;
+            this.changeTab(key);
+            this.keyword = '';
+            this.loading = true;
+            let paramsObj = {flag:this.currentTab};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
 		},
 		// Get table data by entering information or selecting time
 		serchTestSUT(keyword) {
@@ -120,11 +126,10 @@ export default {
             this.setFilterItem({ time: d });
             this.setParams(true);
 		},
-		showEditOrDeleteModal(item, tab, VNFTest) {
+		showEditOrDeleteModal(item,VNFTest) {
 			console.log(VNFTest);
 			if (item === "Edit") {
 				this.isEdit = true;
-				this.currentTab = tab;
                 this.updateVNFTest(VNFTest);
                 this.updateVisible(true);
 			} else if (item === "Delete")
@@ -150,7 +155,10 @@ export default {
             this.setFilterItem({ pageObj });
             this.setParams(true);
 		}
-	}
+	},
+    destroyed(){
+        this.changeTab('VNF')
+    }
 };
 </script>
 

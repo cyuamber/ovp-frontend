@@ -14,8 +14,8 @@
                 >
                     <a-input
                             v-decorator="[
-							'testName',
-							{ rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.VNFTestName },
+							'name',
+							{ rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.name },
 						]"
                     />
                 </a-form-item>
@@ -28,7 +28,7 @@
                     <a-select
                             class="form__select"
                             :disabled="spin"
-                            v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]"
+                            v-decorator="['type',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.type:VNFOptions[0]}]"
                     >
                         <a-select-option v-for="type in VNFOptions" :key="type" :value="type">{{type}}</a-select-option>
                     </a-select>
@@ -43,14 +43,14 @@
                 >
                     <a-input
                             v-decorator="[
-							'vendor', { rules: [{ required: true, message: 'Vendor is required' }], initialValue: VNFTest.VNFTestVendor},
+							'vendor', { rules: [{ required: true, message: 'Vendor is required' }], initialValue: VNFTest.vendor},
 						]"
                     />
                 </a-form-item>
                 <a-form-item label="Version" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input
                             v-decorator="[
-					'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.VNFTestVersion},
+					'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.version},
 				]"
                     />
                 </a-form-item>
@@ -85,7 +85,7 @@
     import {mapState, mapActions, mapMutations} from "vuex";
 
     export default {
-        props: ["isEdit", "currentTab"],
+        props: ["isEdit"],
         data() {
             return {
                 form: this.$form.createForm(this),
@@ -98,7 +98,8 @@
         computed: {
             ...mapState({
                 VNFOptions: state => state.testSUT.VNFOptions,
-                VNFTest: state => state.testSUT.VNFTest
+                VNFTest: state => state.testSUT.VNFTest,
+                currentTab: state => state.testSUT.currentTab,
             }),
             visible: {
                 get() {
@@ -108,10 +109,10 @@
                     if (!val) {
                         this.updateVNFTest({});
                         this.form.setFieldsValue({
-                            testName: "",
+                            name: "",
                             version: "",
                             vendor: "",
-                            typeName: ""
+                            type: ""
                         });
                     }
                 }
@@ -123,13 +124,13 @@
                     this.count++;
                     if (this.isEdit && this.count > 1) {
                         this.form.setFieldsValue({
-                            testName: this.VNFTest.VNFTestName,
-                            vendor: this.VNFTest.VNFTestVendor,
-                            version: this.VNFTest.VNFTestVersion,
-                            typeName: this.VNFTest.VNFTypeName
+                            name: this.VNFTest.name,
+                            vendor: this.VNFTest.vendor,
+                            version: this.VNFTest.version,
+                            type: this.VNFTest.type
                         });
                     } else if (!this.isEdit && this.count > 1) {
-                        this.form.setFieldsValue({typeName: this.VNFOptions[0]});
+                        this.form.setFieldsValue({type: this.VNFOptions[0]});
                     }
                 }
             },
@@ -171,10 +172,11 @@
                         const formData = new FormData();
                         formData.append("files", values.upload[0]);
                         let data = {
-                            VNFTestName: values.testName,
-                            VNFTestVendor: values.vendor,
-                            VNFTestVersion: values.version,
-                            VNFTypeName: this.selected,
+                            flag:this.currentTab,
+                            name: values.name,
+                            vendor: values.vendor,
+                            version: values.version,
+                            type: this.selected,
                             createTime: this.isEdit
                                 ? this.VNFTest.createTime
                                 : moment(new Date()).format("YYYY-MM-DD"),
@@ -213,7 +215,7 @@
             },
             handleRemove() {
                 if (this.uploading) {
-                    axiosCancelToken("/uploadVNFFile").then(res => {
+                    axiosCancelToken("/portal/business/files/upload").then(res => {
                         if (res.code === 200) {
                             this.uploading = false;
                             this.$message.success("cancel upload successfully.");

@@ -1,7 +1,9 @@
 import {
 	axiosget,
-	axiospost
+	axiospost,
+    axiosput
 } from '../../utils/http';
+import API from '../../const/apis';
 import moment from 'moment';
 import axios from 'axios'
 
@@ -19,7 +21,8 @@ const state = {
 	createTime: '',
 	keyword: '',
 	pageNum: 1,
-	pageSize: 10
+	pageSize: 10,
+    currentTab: 'VNF',
 }
 const mutations = {
 	updateTableData(state, tableData) {
@@ -37,6 +40,9 @@ const mutations = {
 	updateVisible(state, bool) {
 		state.visible = bool
 	},
+    changeTab(state, tab){
+        state.currentTab = tab
+    },
 	updateVNFTest(state, VNFTest) {
 		state.VNFTest = VNFTest
 	},
@@ -85,20 +91,21 @@ const mutations = {
 }
 const actions = {
 	setParams({ state, dispatch }, isFilter) {
-		let paramsObj = {}
-		if (state.createTime !== '') paramsObj.createTime = state.createTime
-		if (state.keyword !== '') paramsObj.VNFTestName = state.keyword
+		let paramsObj = {};
+		if (state.createTime !== '') paramsObj.createTime = state.createTime;
+		if (state.keyword !== '') paramsObj.name = state.keyword;
 		if (state.pageNum !== '') {
 			paramsObj.pageNum = state.pageNum
 			paramsObj.pageSize = state.pageSize
 		}
+        paramsObj.flag = state.currentTab;
 		dispatch('getTableData', {
 			paramsObj,
 			isFilter
 		})
 	},
 	getTableData({ commit }, { paramsObj, isFilter }) {
-		axiosget('/getVNFTest', paramsObj).then(res => {
+		axiosget(API.sutMgt.sutMgtTable, paramsObj).then(res => {
 				if (res.code === 200) {
 					commit('updateTableData', res)
 					if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
@@ -111,19 +118,24 @@ const actions = {
 
 		)
 	},
-	getVNFOptions({ commit }) {
-		let Options = ['VNF', 'PNF', 'NFVI']
-		setTimeout(() => {
-			commit('updateVNFOptions', Options)
-		}, 3000)
+	getVNFOptions({ commit,state }) {
+        let url = API.sutMgt.sutMgtType.replace(":flag",state.currentTab);
+        axiosget(url).then(res => {
+            if(res.code === 200){
+                commit('updateVNFOptions',res.body)
+            }else {
+                this.$message.error('Network exception, please try again');
+            }
+        })
 	},
 	createOrEditVNFTest({ commit, dispatch }, { data, isEdit }) {
-		let url = isEdit ? '/updateVNFTest' : '/createVNFTest';
-		axiospost(url, data)
+		let url = isEdit ? API.sutMgt.sutMgtUpdate : API.sutMgt.sutMgtInsert;
+        axiosput(url, data)
 			.then((res) => {
 					if (res.code === 200) {
 						commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
-						dispatch('getTableData', {})
+                        let paramsObj = {flag:state.currentTab};
+						dispatch('getTableData', {paramsObj,isFilter:false})
 					} else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
 				},
 				() => {
@@ -131,10 +143,11 @@ const actions = {
 				})
 	},
 	deleteVNFTest({ commit, dispatch }, data) {
-		axiospost('/deleteVNFTest', data).then(res => {
+		axiospost(API.sutMgt.sutMgtDelete, data).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
-				dispatch('setParams')
+                let paramsObj = {flag:state.currentTab};
+                dispatch('getTableData', {paramsObj,isFilter:false})
 			} else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
@@ -145,7 +158,7 @@ const actions = {
 			...data
 		};
 		body.cancelToken = source.token;
-		axiospost('/uploadVNFFile', body).then(res => {
+		axiospost(API.sutMgt.uploadFile, body).then(res => {
 			commit('updateToken', null)
 			if (res.code === 200) message.success('Upload successfully')
 			else message.error('Upload failed')

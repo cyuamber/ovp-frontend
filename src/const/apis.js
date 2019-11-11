@@ -1,4 +1,4 @@
-
+const baseUrl = "/portal/business";
 export default {
     //mock api
     mock: {
@@ -9,5 +9,13 @@ export default {
         home: '/home',
         deleteaddress: '/delete/address',
         putname: '/articles',
+    },
+    sutMgt:{
+        sutMgtTable:baseUrl+"/sutMgt",
+        sutMgtInsert:baseUrl+"/sutMgt/insert",
+        sutMgtUpdate:baseUrl+"/sutMgt/:id/update",
+        sutMgtDelete:baseUrl+"/sutMgt/:id/delete",
+        sutMgtType:baseUrl+"/sutMgt/:flag",
+        uploadFile:baseUrl+"/files/upload"
     }
 }

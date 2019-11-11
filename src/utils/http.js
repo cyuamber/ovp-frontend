@@ -34,6 +34,18 @@ export function axiosget (url, data) {
         });
     })
 }
+export function axiosput (url, data) {
+    axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+    return new Promise((resolve, reject) => {
+        axios.put(url, data, {
+            headers: getHeaders(),
+        }).then((res) => {
+            resolve(res.data);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+}
 export function axiosCancelToken (url) {
     let CancelToken = axios.CancelToken;
     let source = CancelToken.source();
