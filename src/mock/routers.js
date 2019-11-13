@@ -14,7 +14,7 @@ module.exports =
         ///////<-------------VimEnv--------->/////
         "/portal/business/:vimEnvMgt":"/getVIM",
         "/portal/business/:cloudRegionID":"/cloudRegionID",
-        "/portal/business/cloudType/:cloudRegionID":"/getcloudType",
+        "/portal/business/cloudType":"/getcloudType",
         "/portal/business/vimEnvMgt/insert":"/loginVIM",
         "/portal/business/vimEnvMgt/:update":"/updateVIM",
         "/portal/business/vimEnvMgt/:id/delete":"/deleteVIM",

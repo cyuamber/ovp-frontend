@@ -53,7 +53,15 @@ module.exports = {
                 name: faker.name.firstName(),
                 vendor: faker.random.word(),
                 version: 'V' + faker.random.number(),
-                type: faker.name.lastName(),
+                type: {
+                    code: 1,
+                    dictLabel: "test01",
+                    dictValue: "001",
+                    dictParentCode: null,
+                    status: "\u0000",
+                    remark: null,
+                    lang: null
+                },
                 createTime: faker.date.recent(),
                 VNFFileName: faker.name.firstName()
             }
@@ -64,8 +72,8 @@ module.exports = {
         "message": "OK",
         "body": [
             {
-            "code": null,
-            "dictLabel": null,
+            "code": 1,
+            "dictLabel": "test01",
             "dictValue": "test01",
             "dictParentCode": null,
             "status": "\u0000",
@@ -73,8 +81,8 @@ module.exports = {
             "lang": null
             },
             {
-                "code": null,
-                "dictLabel": null,
+                "code": 2,
+                "dictLabel": "test02",
                 "dictValue": "test02",
                 "dictParentCode": null,
                 "status": "\u0000",
@@ -293,50 +301,14 @@ module.exports = {
     cloudRegionID: {
         "code": 200,
         "message": "OK",
-        "body": [
-            {
-                "code": null,
-                "dictLabel": "001",
-                "dictValue": "VNF",
-                "status": "\u0000",
-                "remark": null,
-                "lang": null
-            },
-            {
-                "code": null,
-                "dictLabel": "002",
-                "dictValue": "PNF",
-                "status": "\u0000",
-                "remark": null,
-                "lang": null
-            }
-        ],
-        "total": 2,
+        "body": ["openstack","windriver","vmware"],
+        "total": 3,
         "pageTotal": 1
     },
     getcloudType: {
         "code": 200,
         "message": "OK",
-        "body": [
-            {
-                "code": null,
-                "dictLabel": null,
-                "dictValue": "test01",
-                "dictParentCode": null,
-                "status": "\u0000",
-                "remark": null,
-                "lang": null
-            },
-            {
-                "code": null,
-                "dictLabel": null,
-                "dictValue": "test02",
-                "dictParentCode": null,
-                "status": "\u0000",
-                "remark": null,
-                "lang": null
-            }
-        ],
+        "body": ["openstack","windriver","vmware"],
         "total": 0,
         "pageTotal": 0
     },

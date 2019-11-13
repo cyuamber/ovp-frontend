@@ -126,11 +126,7 @@ const actions = {
         let url = API.sutMgt.sutMgtType.replace(":flag",state.currentTab);
         axiosget(url).then(res => {
             if(res.code === 200){
-                let idList = [];
-                res.body.map((item)=>{
-                    idList.push(item.dictValue)
-                });
-                commit('updateVNFOptions',idList)
+                commit('updateVNFOptions',res.body)
             }else {
                 this.$message.error('Network exception, please try again');
             }

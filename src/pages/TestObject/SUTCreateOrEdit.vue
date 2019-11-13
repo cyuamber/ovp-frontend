@@ -28,9 +28,9 @@
                     <a-select
                             class="form__select"
                             :disabled="spin"
-                            v-decorator="['type',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.type:VNFOptions[0]}]"
+                            v-decorator="['type',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.type.dictLabel:VNFOptions[0].dictLabel}]"
                     >
-                        <a-select-option v-for="type in VNFOptions" :key="type" :value="type">{{type}}</a-select-option>
+                        <a-select-option v-for="type in VNFOptions" :key="type.dictLabel" :value="type.dictLabel">{{type.dictLabel}}</a-select-option>
                     </a-select>
                     <a-spin :spinning="spin">
                         <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
@@ -130,7 +130,7 @@
                             name: this.VNFTest.name,
                             vendor: this.VNFTest.vendor,
                             version: this.VNFTest.version,
-                            type: this.VNFTest.type
+                            type: this.VNFTest.type.dictLabel
                         });
                     } else if (!this.isEdit && this.count > 1) {
                         this.form.setFieldsValue({type: this.VNFOptions[0]});
@@ -167,6 +167,15 @@
                 }
                 return e && e.fileList;
             },
+            getSelectTypeCode(type){
+                let code =null;
+                if(this.VNFOptions.length>0){
+                    code = this.VNFOptions.find((item)=>{
+                        return item.dictLabel === type
+                    }).code
+                }
+                return code
+            },
             handleSubmit(e) {
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
@@ -179,7 +188,7 @@
                             name: values.name,
                             vendor: values.vendor,
                             version: values.version,
-                            type: values.type,
+                            type: this.getSelectTypeCode(values.type),
                             createTime: this.isEdit
                                 ? this.VNFTest.createTime
                                 : moment(new Date()).format("YYYY-MM-DD"),
