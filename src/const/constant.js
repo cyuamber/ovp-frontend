@@ -93,10 +93,10 @@ const testEnvVIMColumns = [
         title: 'Auth URL',
         dataIndex: 'authUrl'
     },
-    {
-        title: 'Tenant',
-        dataIndex: 'tenant'
-    },
+    // {
+    //     title: 'Tenant',
+    //     dataIndex: 'tenant'
+    // },
     {
         title: 'Action',
         dataIndex: 'action',

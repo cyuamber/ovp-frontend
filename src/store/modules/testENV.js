@@ -159,11 +159,7 @@ const actions = {
         let url = API.vimVnfmMgt.cloudType;
         axiosget(url).then(res => {
             if(res.code === 200){
-                let idList = [];
-                res.body.map((item)=>{
-                    idList.push(item.dictValue)
-                });
-                commit('updateCloudTypeOptions',{CloudTypeList:idList});
+                commit('updateCloudTypeOptions',{CloudTypeList:res.body});
             }else {
                 this.$message.error('Network exception, please try again');
             }
