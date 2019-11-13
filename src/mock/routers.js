@@ -13,7 +13,6 @@ module.exports =
         "/portal/business/files/upload":"/uploadVNFFile",
         ///////<-------------VimEnv--------->/////
         "/portal/business/:vimEnvMgt":"/getVIM",
-        "/portal/business/:cloudRegionID":"/cloudRegionID",
         "/portal/business/cloudType":"/getcloudType",
         "/portal/business/vimEnvMgt/insert":"/loginVIM",
         "/portal/business/vimEnvMgt/:update":"/updateVIM",

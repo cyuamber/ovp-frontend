@@ -21,7 +21,7 @@ import VnfpnfSuite from '../pages/TestMgt/VnfpnfSuite.vue';
 import TestJob from '../pages/TestJob/TestJob.vue';
 import JobDetail from '../pages/TestJob/JobDetail.vue'
 //TestCase
-import TestCase from '../pages/TestCase/TestCase.vue';
+// import TestCase from '../pages/TestCase/TestCase.vue';
 //TestSpecMGT
 import TestSpecMGT from '../pages/TestStandard/TestSpecMGT.vue';
 
@@ -118,17 +118,19 @@ export default new Router({
           component: JobDetail
         }
       ]
-    }, {
-      path: '/testcasemgt',
-      component: Layout,
-      children: [
-        {
-          path: '',
-          name: 'TestCase',
-          component: TestCase
-        },
-      ]
-    }, {
+    },
+    //   {
+    //   path: '/testcasemgt',
+    //   component: Layout,
+    //   children: [
+    //     {
+    //       path: '',
+    //       name: 'TestCase',
+    //       component: TestCase
+    //     },
+    //   ]
+    // },
+      {
       path: '/testspecmgt',
       component: Layout,
       children: [

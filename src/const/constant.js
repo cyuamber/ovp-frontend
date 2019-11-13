@@ -287,27 +287,27 @@ const TestSpecColumns = [
 ]
 const TestCaseColumns = [
     {
-        title: 'Number',
-        dataIndex: 'testCaseNm'
+        title: 'ID',
+        dataIndex: 'id'
     },
     {
         title: 'Name',
-        dataIndex: 'testCaseName'
+        dataIndex: 'name'
     },
     {
         title: 'Description',
-        dataIndex: 'testCaseDes'
+        dataIndex: 'description'
     },
-    {
-        title: 'Version',
-        dataIndex: 'testCaseVersion'
-    },
+    // {
+    //     title: 'Version',
+    //     dataIndex: 'testCaseVersion'
+    // },
     {
         title: 'Status',
-        dataIndex: 'testCaseState',
-        width: 120,
+        dataIndex: 'status',
+        width: 180,
         scopedSlots: {
-            customRender: 'testCaseState'
+            customRender: 'status'
         },
     },
 ]

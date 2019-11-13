@@ -62,13 +62,13 @@ export default {
                 isChildren: false,
                 children: null
             },
-            {
-                auth: ['admin'],
-                name: 'Test Case MGT',
-                iconType: 'appstore-o',
-                isChildren: false,
-                children: null
-            },
+            // {
+            //     auth: ['admin'],
+            //     name: 'Test Case MGT',
+            //     iconType: 'appstore-o',
+            //     isChildren: false,
+            //     children: null
+            // },
             {
                 auth: ['admin', 'customer'],
                 name: 'Test Spec MGT',

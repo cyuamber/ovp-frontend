@@ -3,6 +3,7 @@ import moment from 'moment';
 
 const state = {
   tableData: [],
+    caseMgtTableData: [],
   VNFOptions: [],
   testSpecSingleData: {},
   pagination: {current: 1 , total: 0},
@@ -18,6 +19,12 @@ const mutations = {
       return item
     })
   },
+    updatecaseMgtTableData(state,record){
+        state.caseMgtTableData= [];
+        console.log(state.caseMgtTableData,"1")
+        state.caseMgtTableData = [].concat(record.caseMgt);
+        console.log(state.caseMgtTableData,"2")
+    },
   updateVNFTest (state, testSpecSingleData){
     state.testSpecSingleData = testSpecSingleData
   },

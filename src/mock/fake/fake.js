@@ -231,6 +231,20 @@ module.exports = {
                 VNFtype: faker.database.type(),
                 PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),
+                caseMgt:[
+                    {
+                        id: n+12,
+                        name: 'testCase01',
+                        description: 'This is Description name',
+                        status: n>1?0:1,
+                    },
+                    {
+                        id: n+13,
+                        name: 'testCase02',
+                        description: 'This is Description name',
+                        status: n>1?0:1,
+                    }
+                ]
             }
         })
     },

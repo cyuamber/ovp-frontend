@@ -7,11 +7,27 @@
       <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" />
     </div>
     <div class="test-spec__table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination" @change="handleTableChange">
+      <a-table :columns="columns" :dataSource="tableData" :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination" @change="handleTableChange" @expand="caseMgtTableShow">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="test-spec__tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
       </span>
+        <a-table class="test-case__table"
+                slot="expandedRowRender"
+                :columns="innerColumns"
+                :dataSource="caseMgtTableData"
+                rowKey="id"
+                size="default"
+                :pagination="false"
+        >
+        <span slot="status" slot-scope="status">
+          <span
+                  class="test-case__showState"
+                  :style="{backgroundColor: status===0? '#d0021b': '#7ED321'}"
+                  :title="status===0? 'Available': 'unavailable'"
+          ></span>
+        </span>
+        </a-table>
       </a-table>
     </div>
     <TestSpecMGTAddOrEdit v-if="visible" @close="close" @getAllTestSpec="getAllTestSpec" :isEdit="isEdit"/>
@@ -19,8 +35,8 @@
 </template>
 <script>
     import Search from '../../components/Search/Search'
-    import {TestSpecColumns} from '../../const/constant'
-    import { mapState, mapActions } from "vuex";
+    import {TestSpecColumns,TestCaseColumns} from '../../const/constant'
+    import { mapState, mapActions, mapMutations } from "vuex";
     import Loading from "../../components/Loading/Loading";
     import TestSpecMGTAddOrEdit from './TestSpecMGTAddOrEdit'
 export default {
@@ -34,6 +50,7 @@ export default {
         return{
             visible: false,
             columns: TestSpecColumns,
+            innerColumns:TestCaseColumns,
             loading: true,
             currentPage:'TestSpecMGT',
             isEdit: false,
@@ -44,6 +61,7 @@ export default {
     computed: {
         ...mapState ({
             tableData: state => state.testSpecMGT.tableData,
+            caseMgtTableData: state => state.testSpecMGT.caseMgtTableData,
             pagination: state => state.testSpecMGT.pagination,
             testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
             loadingMessage: state => state.testSpecMGT.loadingMessage
@@ -59,6 +77,9 @@ export default {
             "deleteTestSpec",
             "getPagination",
             "clearPagination"
+        ]),
+        ...mapMutations("testSpecMGT", [
+            "updatecaseMgtTableData"
         ]),
         initTestStandardTable() {
             this.loading = true;
@@ -77,6 +98,9 @@ export default {
                 pageSize = pagination.pageSize,
                 obj = {testSpecName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
             this.getTableData(obj).then(() => this.loading = false)
+        },
+        caseMgtTableShow(expanded, record){
+            this.updatecaseMgtTableData(record)
         },
         close(){
             this.visible = false;
@@ -138,6 +162,15 @@ export default {
     .test-spec__tag{
       padding:0  8px;
       border-radius: 12px;
+    }
+    .test-case__table {
+      .test-case__showState {
+        display: block;
+        margin: 0 auto;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+      }
     }
   }
 

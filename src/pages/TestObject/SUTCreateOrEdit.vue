@@ -133,7 +133,7 @@
                             type: this.VNFTest.type.dictLabel
                         });
                     } else if (!this.isEdit && this.count > 1) {
-                        this.form.setFieldsValue({type: this.VNFOptions[0]});
+                        this.form.setFieldsValue({type: this.VNFOptions[0].dictLabel});
                     }
                 }
             },
