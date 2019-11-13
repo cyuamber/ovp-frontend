@@ -17,7 +17,7 @@
 				:wrapper-col="{ span: (item.title === 'Cloud Type' || item.title === 'Cloud Region ID')? 8:12 }"
 			>
 			<a-input
-				v-if="item.title !== 'Cloud Type' && item.title !== 'Cloud Region ID' && item.title !== 'Password'"
+				v-if="item.title !== 'Cloud Type' && item.title !== 'Password'"
 				v-decorator="[
 				item.key,
 				{ rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] },
@@ -32,15 +32,15 @@
 				]"
 			>
 			</a-input-password>
-			<a-select
-				v-if="item.title === 'Cloud Region ID'"
-				v-decorator="[item.key,{ rules: [{ required: true }],  initialValue: isEdit? initValues[item.key] :regionIdOptions[0]}]"
-				:disabled="regionIdOptions.length === 0"
-				class="select"
-				@select="((key) => selectCloudRegionID(key))"
-			>
-				<a-select-option v-for="type in regionIdOptions" :key="type" :value="type">{{type}}</a-select-option>
-			</a-select>
+			<!--<a-select-->
+				<!--v-if="item.title === 'Cloud Region ID'"-->
+				<!--v-decorator="[item.key,{ rules: [{ required: true }],  initialValue: isEdit? initValues[item.key] :regionIdOptions[0]}]"-->
+				<!--:disabled="regionIdOptions.length === 0"-->
+				<!--class="select"-->
+				<!--@select="((key) => selectCloudRegionID(key))"-->
+			<!--&gt;-->
+				<!--<a-select-option v-for="type in regionIdOptions" :key="type" :value="type">{{type}}</a-select-option>-->
+			<!--</a-select>-->
 			<a-select
 				v-if="item.title === 'Cloud Type'"
 				v-decorator="[item.key,{ rules: [{ required: true }], initialValue: isEdit? initValues[item.key] : cloudTypeOptions[0]}]"
@@ -49,9 +49,9 @@
 			>
 				<a-select-option v-for="type in cloudTypeOptions" :key="type" :value="type">{{type}}</a-select-option>
 			</a-select>
-			<a-spin :spinning="regionIdOptions.length === 0" v-if="item.title === 'Cloud Region ID'">
-				<a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
-			</a-spin>
+			<!--<a-spin :spinning="regionIdOptions.length === 0" v-if="item.title === 'Cloud Region ID'">-->
+				<!--<a-icon slot="indicator" type="loading-3-quarters" size="small" spin />-->
+			<!--</a-spin>-->
 			<a-spin :spinning="cloudTypeOptions.length ===0" v-if="item.title === 'Cloud Type'">
 				<a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
 			</a-spin>
@@ -104,14 +104,14 @@ export default {
 			VNFMForm: VNFMForm,
 			VIMCount: 0,
 			VNFMCount: 0,
-            selectedRegionID:""
+            // selectedRegionID:""
 		};
 	},
 	computed: {
 		...mapState({
 			currentTab: state => state.testENV.currentTab,
 			cloudTypeOptions: state => state.testENV.cloudTypeOptions,
-			regionIdOptions: state => state.testENV.regionIdOptions,
+			// regionIdOptions: state => state.testENV.regionIdOptions,
 			initValues: state => state.testENV.initValues,
             visible: state => state.testENV.visible,
 		}),
@@ -137,9 +137,11 @@ export default {
                 this.form = this.$form.createForm(this);
 				if(this.currentTab === 'VIM ENV'){
 					if(!this.isEdit){
-						this.form.setFieldsValue({cloudRegionId: this.regionIdOptions[0], cloudType: this.cloudTypeOptions[0]})
+						this.form.setFieldsValue({
+							// cloudRegionId: this.regionIdOptions[0],
+							cloudType: this.cloudTypeOptions[0]})
 					}
-                    this.selectedRegionID = "";
+                    // this.selectedRegionID = "";
 				}
 			}
 		}
@@ -156,14 +158,14 @@ export default {
 		handleCancel() {
             this.updateVisible(false)
 		},
-        selectCloudRegionID(key){
-            if (key === this.selectedSUTName) return;
-            this.selectedRegionID = key;
-            this.getCloudTypeOptions({
-                selectRegionId: key
-            });
-            this.form.setFieldsValue({ cloudType: "" });
-		},
+        // selectCloudRegionID(key){
+         //    if (key === this.selectedSUTName) return;
+         //    this.selectedRegionID = key;
+         //    this.getCloudTypeOptions({
+         //        selectRegionId: key
+         //    });
+         //    this.form.setFieldsValue({ cloudType: "" });
+		// },
 		handleSubmit(e) {
 			e.preventDefault();
 			this.form.validateFields((err, values) => {

@@ -155,8 +155,8 @@ const actions = {
         })
         // Simulation request
     },
-    getCloudTypeOptions({commit},{selectRegionId}){
-        let url = API.vimVnfmMgt.cloudType.replace(":cloudRegionID",selectRegionId);
+    getCloudTypeOptions({commit}){
+        let url = API.vimVnfmMgt.cloudType;
         axiosget(url).then(res => {
             if(res.code === 200){
                 let idList = [];

@@ -96,7 +96,7 @@ export default {
             "getTableData",
 			"setParams",
 			"deleteData",
-			"getRegionIdOptions"
+			"getCloudTypeOptions"
         ]),
         ...mapMutations("testENV", [
             "changeTab",
@@ -106,7 +106,7 @@ export default {
         ]),
         initVimEnvTable() {
             this.loading = true;
-            this.getRegionIdOptions();
+            this.getCloudTypeOptions();
             let paramsObj = {};
             this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
         },
