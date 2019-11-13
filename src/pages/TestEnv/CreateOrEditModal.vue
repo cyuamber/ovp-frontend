@@ -37,6 +37,7 @@
 				v-decorator="[item.key,{ rules: [{ required: true }],  initialValue: isEdit? initValues[item.key] :regionIdOptions[0]}]"
 				:disabled="regionIdOptions.length === 0"
 				class="select"
+				@select="((key) => selectCloudRegionID(key))"
 			>
 				<a-select-option v-for="type in regionIdOptions" :key="type" :value="type">{{type}}</a-select-option>
 			</a-select>
@@ -102,7 +103,8 @@ export default {
 			VIMForm:VIMForm,
 			VNFMForm: VNFMForm,
 			VIMCount: 0,
-			VNFMCount: 0
+			VNFMCount: 0,
+            selectedRegionID:""
 		};
 	},
 	computed: {
@@ -137,6 +139,7 @@ export default {
 					if(!this.isEdit){
 						this.form.setFieldsValue({cloudRegionId: this.regionIdOptions[0], cloudType: this.cloudTypeOptions[0]})
 					}
+                    this.selectedRegionID = "";
 				}
 			}
 		}
@@ -153,6 +156,14 @@ export default {
 		handleCancel() {
             this.updateVisible(false)
 		},
+        selectCloudRegionID(key){
+            if (key === this.selectedSUTName) return;
+            this.selectedRegionID = key;
+            this.getCloudTypeOptions({
+                selectRegionId: key
+            });
+            this.form.setFieldsValue({ cloudType: "" });
+		},
 		handleSubmit(e) {
 			e.preventDefault();
 			this.form.validateFields((err, values) => {
@@ -161,13 +172,11 @@ export default {
 				let data = {};
 				if (this.currentTab === "VIM ENV") {
 					this.VIMForm.forEach(item => {
-						if (item.key === "password") data.passwd = values[item.key];
-						else data[item.key] = values[item.key];
+                        data[item.key] = values[item.key]
 					});
 				} else {
                     this.VNFMForm.forEach(item => {
-                        if (item.key === "password") data.passwd = values[item.key];
-                        else data[item.key] = values[item.key];
+                        data[item.key] = values[item.key];
                     });
 				}
 				this.updateVisible(false);

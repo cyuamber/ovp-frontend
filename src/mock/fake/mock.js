@@ -3,6 +3,7 @@ module.exports = {
     //Mock json
     'customer_info': fakeData.customer,
     'home': fakeData.home,
+    'getCurrentLanguage': fakeData.getCurrentLanguage,
     'createVNFType': fakeData.createVNFType,
     'getVNFType': fakeData.getVNFType,
     'updateVNFType': fakeData.updateVNFType,
@@ -28,6 +29,8 @@ module.exports = {
     'deleteTestSpec': fakeData.deleteTestSpec,
     'getVIM': fakeData.getVIM,
     'getVNFM': fakeData.getVNFM,
+    'cloudRegionID':fakeData.cloudRegionID,
+    'getcloudType':fakeData.getcloudType,
     'loginVIM': fakeData.loginVIM,
     'updateVIM': fakeData.updateVIM,
     'loginVNFM': fakeData.loginVNFM,
@@ -43,6 +46,5 @@ module.exports = {
     'deleteTestJobMGT': fakeData.deleteTestJobMGT,
     'downloadTestJobMGT': fakeData.downloadTestJobMGT,
     'runTestJobMGT': fakeData.runTestJobMGT,
-    'getProgress': fakeData.getProgress,
-    'getCurrentLanguage':fakeData.getCurrentLanguage
+    'getProgress': fakeData.getProgress
 }

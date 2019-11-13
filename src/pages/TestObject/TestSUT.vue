@@ -98,7 +98,7 @@ export default {
         initTestSUTeTable() {
             this.getVNFOptions();
             this.loading = true;
-            let paramsObj = {flag:this.currentTab};
+            let paramsObj = {};
             this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false));
         },
 		handleCreate() {
@@ -109,7 +109,7 @@ export default {
             this.changeTab(key);
             this.keyword = '';
             this.loading = true;
-            let paramsObj = {flag:this.currentTab};
+            let paramsObj = {};
             this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
 		},
 		// Get table data by entering information or selecting time
@@ -145,7 +145,7 @@ export default {
 				cancelText: "No",
 				onOk: () => {
 					if (item === "Delete") this.deleteVNFTest({
-                        VNFFileName: VNFTest.VNFFileName
+                        id: VNFTest.id
                     });
 					else console.log("下载");
 				}

@@ -60,7 +60,7 @@
                             :beforeUpload="beforeUpload"
                             class="form__upload-float"
                             name="files"
-                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: true,}]}]"
+                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: !editUploadtextShow ? true :false,}]}]"
                     >
                         <p class="ant-upload-text form__upload-text--font-size">
                             <a-icon type="upload"/>&nbsp;&nbsp;&nbsp;
@@ -70,6 +70,8 @@
                     <a-spin :spinning="uploading" class="skip-size form__skip-float">
                         <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
                     </a-spin>
+                    <br>
+                    <span v-if="isEdit && editUploadtextShow" class="form__uploadtext-height" >{{this.VNFTest.VNFFileName}}</span>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
                     <a-button type="primary" html-type="submit" :disabled="uploading">Submit</a-button>
@@ -92,7 +94,8 @@
                 selected: "",
                 count: 0,
                 spin: true,
-                uploading: false
+                uploading: false,
+                editUploadtextShow: true
             };
         },
         computed: {
@@ -170,18 +173,19 @@
                     if (!err) {
                         // Did not implement the check if there is a change
                         const formData = new FormData();
-                        formData.append("files", values.upload[0]);
+                        formData.append("file", values.upload[0]);
                         let data = {
                             flag:this.currentTab,
                             name: values.name,
                             vendor: values.vendor,
                             version: values.version,
-                            type: this.selected,
+                            type: values.type,
                             createTime: this.isEdit
                                 ? this.VNFTest.createTime
                                 : moment(new Date()).format("YYYY-MM-DD"),
-                            VNFFileName: formData
+                            VNFFileName: values.upload[0].name
                         };
+
                         this.handleUpload(data, formData);
                     }
                 });
@@ -193,7 +197,6 @@
                         () => {
                             this.submitFormData(data);
                             this.uploading = false;
-                            this.fileList = [];
                         },
                         () => {
                             this.uploading = false;
@@ -207,6 +210,7 @@
                         () => {
                             this.updateVisible(false);
                             this.form.resetFields();
+                            this.updateVNFTest({});
                         },
                         () => {
                             this.updateVisible(false)
@@ -226,6 +230,7 @@
                 }
             },
             beforeUpload() {
+                this.editUploadtextShow = false;
                 return false;
             }
         }
@@ -251,6 +256,11 @@
         .form__skip-float {
             float: left;
             line-height: 3.5;
+        }
+        .form__uploadtext-height{
+            width: 100%;
+            line-height: 10px;
+            display: inline-block;
         }
     }
 </style>

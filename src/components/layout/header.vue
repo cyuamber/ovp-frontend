@@ -64,7 +64,9 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("getCurrentLanguage", {});
+      this.$store.dispatch('getCurrentLanguage',{}).then(()=>{
+          this.$i18n.locale = this.language;
+      });
   },
   computed: {
     ...mapGetters(["updateBread"]),
@@ -97,7 +99,7 @@ export default {
       this.$store.commit("testJob/setIsShow", true);
     },
     handleLangChange(val) {
-      let obj = { language: val === "EN" ? "ZH" : "EN" };
+      let obj = { language: val === "en_US" ? "zh_CN" : "en_US" };
       this.$store.dispatch("getCurrentLanguage", obj);
     }
   }

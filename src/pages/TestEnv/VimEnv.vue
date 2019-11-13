@@ -31,11 +31,11 @@
 						:scroll="{x: 1630}"
 						@change="pageChange"
 					>
-						<span slot="state" slot-scope="state,record">
+						<span slot="state" slot-scope="state">
 							<span
 								class="showState"
-								:style="{backgroundColor: record.isOnline? '#52C41A': '#F5222D'}"
-								:title="record.isOnline? 'online': 'offline'"
+								:style="{backgroundColor: state===0 ? '#52C41A': '#F5222D'}"
+								:title="state===0 ? 'online': 'offline'"
 							></span>
 						</span>
 						<span slot="action" slot-scope="action,record">
@@ -96,7 +96,7 @@ export default {
             "getTableData",
 			"setParams",
 			"deleteData",
-			"getOptionList"
+			"getRegionIdOptions"
         ]),
         ...mapMutations("testENV", [
             "changeTab",
@@ -106,14 +106,16 @@ export default {
         ]),
         initVimEnvTable() {
             this.loading = true;
-            this.getOptionList();
-            this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
+            this.getRegionIdOptions();
+            let paramsObj = {};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
         },
 		handleTabsChange(key) {
             this.changeTab(key);
 			this.keyword = '';
 			this.loading = true;
-            this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
+            let paramsObj = {};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
 		},
 		handleRigister() {
             this.updateVisible(true);

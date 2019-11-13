@@ -50,7 +50,7 @@ const TestSUTColumns = [{
 const testEnvVIMColumns = [
     {
         title: 'NO.',
-        dataIndex: 'index',
+        dataIndex: 'id',
         fixed: 'left',
         width: 50,
     },
@@ -79,7 +79,7 @@ const testEnvVIMColumns = [
     },
     {
         title: 'User Name',
-        dataIndex: 'userName'
+        dataIndex: 'username'
     },
     {
         title: 'Default Tenant',
@@ -110,25 +110,25 @@ const testEnvVIMColumns = [
 const testEvnVNFMColumns = [
     {
         title: 'NO.',
-        dataIndex: 'index',
+        dataIndex: 'id',
         fixed: 'left',
         width: 50,
     },
     {
         title: 'Name',
-        dataIndex: 'VNFMname',
+        dataIndex: 'name',
     },
     {
         title: 'Type',
-        dataIndex: 'VNFMtype'
+        dataIndex: 'type'
     },
     {
         title: 'Vendor',
-        dataIndex: 'VNFMvendor'
+        dataIndex: 'vendor'
     },
     {
         title: 'Version',
-        dataIndex: 'VNFMversion'
+        dataIndex: 'version'
     },
     {
         title: 'URL',
@@ -330,11 +330,11 @@ const VIMForm = [
     },
     {
         title: 'User Name',
-        key: 'userName'
+        key: 'username'
     },
     {
         title: 'Password',
-        key: 'passwd'
+        key: 'password'
     },
     {
         title: 'Auth URL',
@@ -360,19 +360,19 @@ const VIMForm = [
 const VNFMForm = [
     {
         title: 'Name',
-        key: 'VNFMname'
+        key: 'name'
     },
     {
         title: 'Type',
-        key: 'VNFMtype'
+        key: 'type'
     },
     {
         title: 'Vendor',
-        key: 'VNFMvendor',
+        key: 'vendor',
     },
     {
         title: 'Version',
-        key: 'VNFMversion',
+        key: 'version',
     },
     {
         title: 'URL',
@@ -384,7 +384,7 @@ const VNFMForm = [
     },
     {
         title: 'Certificate URL',
-        key: 'authUrl',
+        key: 'certificateUrl',
     },
     {
         title: 'User Name',

@@ -49,21 +49,41 @@ module.exports = {
         total: 50,
         body: _.times(10, function (n) {
             return {
-                id: n+1,
+                id: n + 1,
                 name: faker.name.firstName(),
                 vendor: faker.random.word(),
                 version: 'V' + faker.random.number(),
                 type: faker.name.lastName(),
                 createTime: faker.date.recent(),
-                VNFFileName: {}
+                VNFFileName: faker.name.firstName()
             }
         })
     },
     getVNFType: {
-        code: 200,
-        message: 'SUCCESS',
-        total: 50,
-        body: ['VNF','PNF','XNF','NFVI']
+        "code": 200,
+        "message": "OK",
+        "body": [
+            {
+            "code": null,
+            "dictLabel": null,
+            "dictValue": "test01",
+            "dictParentCode": null,
+            "status": "\u0000",
+            "remark": null,
+            "lang": null
+            },
+            {
+                "code": null,
+                "dictLabel": null,
+                "dictValue": "test02",
+                "dictParentCode": null,
+                "status": "\u0000",
+                "remark": null,
+                "lang": null
+            }
+        ],
+        "total": 1,
+        "pageTotal": 1
     },
     createVNFTest: {
         code: 200,
@@ -74,6 +94,7 @@ module.exports = {
             version: 'V' + faker.random.number(),
             type: faker.name.lastName(),
             createTime: faker.date.recent(),
+            VNFFileName: faker.name.firstName()
         }
     },
     updateVNFTest: {
@@ -157,7 +178,7 @@ module.exports = {
         code: 200,
         message: 'SUCCESS',
         total: 50,
-        body: ['VNF','PNF','XNF','NFVI']
+        body: ['VNF', 'PNF', 'XNF', 'NFVI']
     },
     createTestMeter: {
         code: 200,
@@ -249,17 +270,16 @@ module.exports = {
         code: 200,
         message: 'SUCCESS',
         total: 50,
-        body: _.times(10, function () {
+        body: _.times(10, function (n) {
             return {
-                isOnline: true,
+                id:n+1,
+                status: (n+1)%2===0 ? 0:1,
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),
                 cloudType: faker.random.word(),
                 cloudVersion: 'V' + faker.random.number(),
-                ownerDefinedType: faker.random.word(),
-                cloudZone: faker.random.word(),
-                userName: faker.internet.userName(),
-                passwd: faker.internet.password(),
+                username: faker.internet.userName(),
+                password: faker.internet.password(),
                 authUrl: faker.internet.url(),
                 sslCacert:faker.internet.protocol(),
                 sslInsecure:faker.internet.ipv6(),
@@ -267,9 +287,58 @@ module.exports = {
                 tenant: faker.internet.userName(),
                 createTime: faker.date.recent(),
                 defaultTenant: faker.random.word(),
-
             }
         })
+    },
+    cloudRegionID: {
+        "code": 200,
+        "message": "OK",
+        "body": [
+            {
+                "code": null,
+                "dictLabel": "001",
+                "dictValue": "VNF",
+                "status": "\u0000",
+                "remark": null,
+                "lang": null
+            },
+            {
+                "code": null,
+                "dictLabel": "002",
+                "dictValue": "PNF",
+                "status": "\u0000",
+                "remark": null,
+                "lang": null
+            }
+        ],
+        "total": 2,
+        "pageTotal": 1
+    },
+    getcloudType: {
+        "code": 200,
+        "message": "OK",
+        "body": [
+            {
+                "code": null,
+                "dictLabel": null,
+                "dictValue": "test01",
+                "dictParentCode": null,
+                "status": "\u0000",
+                "remark": null,
+                "lang": null
+            },
+            {
+                "code": null,
+                "dictLabel": null,
+                "dictValue": "test02",
+                "dictParentCode": null,
+                "status": "\u0000",
+                "remark": null,
+                "lang": null
+            }
+        ],
+        "total": 0,
+        "pageTotal": 0
     },
     loginVIM: {
         code: 200,
@@ -453,10 +522,8 @@ module.exports = {
         }
     },
     getCurrentLanguage: {
-        code: 200,
-        message: 'SUCCESS',
-        body:{
-            language:"EN"
-        }
+        body: "en_US",
+        statusCode: "100",
+        message: "OK"
     }
 }

@@ -8,12 +8,16 @@ const getHeaders = () => ({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "x-requested-with,content-type"
 });
+const uploadGetHeaders = () => ({
+    "Content-Type": "multipart/form-data",
+    "Accept": "application/json",
+});
 
-export function axiospost (url, data) {
+export function axiospost (url, data,uploadHeader) {
     axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
     return new Promise((resolve, reject) => {
         axios.post(url, data, {
-            headers: getHeaders(),
+            headers:uploadHeader ? uploadGetHeaders() : getHeaders(),
         }).then((res) => {
             resolve(res.data);
         }).catch((err) => {
@@ -45,6 +49,19 @@ export function axiosput (url, data) {
             reject(err);
         });
     });
+}
+export function axiosdelete (url, data) {
+    return new Promise((resolve, reject) => {
+        axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+        axios.delete(url, {
+            params: data,
+            headers: getHeaders(),
+        }).then((res) => {
+            resolve(res.data);
+        }).catch((err) => {
+            reject(err);
+        });
+    })
 }
 export function axiosCancelToken (url) {
     let CancelToken = axios.CancelToken;

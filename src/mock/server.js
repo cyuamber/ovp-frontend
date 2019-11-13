@@ -77,6 +77,11 @@ server.put(`/*`,(req,res,next) =>{
     req.method = 'GET'
     next();
 });
+server.delete(`/*`,(req,res,next) =>{
+    console.log(req.url);
+    req.method = 'GET'
+    next();
+});
 
 server.listen(3004, () => {
     console.log('Mock Server is successfully running on port 3004 😁')

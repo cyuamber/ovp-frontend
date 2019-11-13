@@ -1,5 +1,6 @@
-import {axiosget, axiospost} from '../../utils/http'
+import {axiosget, axiospost, axiosput, axiosdelete} from '../../utils/http'
 import { VIMForm, VNFMForm } from "../../const/constant";
+import API from '../../const/apis';
 import moment from 'moment'
 
 const state = {
@@ -78,9 +79,11 @@ const mutations = {
     updateVisible(state, bool){
         state.visible = bool
     },
-    updateOptionList(state,{ CloudTypeList, regionIdList }){
-        state.cloudTypeOptions = CloudTypeList
+    updateRegionIdOptions(state,{ regionIdList }){
         state.regionIdOptions = regionIdList
+    },
+    updateCloudTypeOptions(state,{ CloudTypeList }){
+        state.cloudTypeOptions = CloudTypeList
     },
     setInitValues(state, values){
         if(values.item !== "Edit"){
@@ -91,6 +94,7 @@ const mutations = {
                 VNFMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
                 console.log(state.initValues,"state.initValues")
             }
+            state.initValues.id = values.record.id;
         }
     }
 }
@@ -111,7 +115,9 @@ const actions = {
         dispatch('getTableData',{paramsObj,isFilter: true})
     },
     getTableData({commit, state}, {paramsObj, isFilter}){
-        let url = state.currentTab === 'VIM ENV' ? '/getVIM': '/getVNFM'
+        let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtTable: API.vimVnfmMgt.vnfmEnvMgtTable;
+        paramsObj.pageNum = state.pageNum;
+        paramsObj.pageSize = state.pageSize;
         axiosget(url, paramsObj).then(res => {
             if(res.code === 200){
                 commit('updateTableData',res)
@@ -122,20 +128,9 @@ const actions = {
         },() => {if(isFilter) commit('updateFailedMessage','Network exception, please try again')}
         )
     },
-    deleteData({dispatch,commit},data){
-        let url = '' 
-        let body = null;
-        if(state.currentTab === 'VIM ENV'){
-            body = {cloudRegionId: data.cloudRegionId}
-            url = '/deleteVIM'
-        }else {
-            body = {
-                VNFMname: data.VNFMname,
-                VNFMtype: data.VNFMtype
-            }
-            url =  '/deleteVNFM'
-        }
-        axiospost(url,body).then( res => {
+    deleteData({dispatch,commit,state},data){
+        let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtDelete: API.vimVnfmMgt.vnfmEnvMgtDelete;
+        axiosdelete(url.replace("id",data.id)).then( res => {
             if(res.code === 200){
                 commit('updateSuccessMessage','Deleted successfully')
                 let paramsObj = {pageNumstate: state.pageNum, pageSize: state.pageSize}
@@ -145,21 +140,49 @@ const actions = {
             commit('updateFailedMessage','Network exception, please try again')
         })
     },
-    getOptionList({commit}){
-        let CloudTypeList =  ['VNF', 'PNF', 'FNF']
-        let regionIdList =  ['VNF', 'PNF', 'FNF']
+    getRegionIdOptions({commit, dispatch}){
+        axiosget(API.vimVnfmMgt.cloudRegionID).then(res => {
+            if(res.code === 200){
+                let idList = [];
+                    res.body.map((item)=>{
+                        idList.push(item.dictValue)
+                    });
+                commit('updateRegionIdOptions',{regionIdList:idList})
+                dispatch('getCloudTypeOptions', {selectRegionId:idList[0]})
+            }else {
+                this.$message.error('Network exception, please try again');
+            }
+        })
         // Simulation request
-        setTimeout(() => {
-            commit('updateOptionList',{ CloudTypeList, regionIdList })
-        },2000)
+    },
+    getCloudTypeOptions({commit},{selectRegionId}){
+        let url = API.vimVnfmMgt.cloudType.replace(":cloudRegionID",selectRegionId);
+        axiosget(url).then(res => {
+            if(res.code === 200){
+                let idList = [];
+                res.body.map((item)=>{
+                    idList.push(item.dictValue)
+                });
+                commit('updateCloudTypeOptions',{CloudTypeList:idList});
+            }else {
+                this.$message.error('Network exception, please try again');
+            }
+        })
+        // Simulation request
     },
     loginVIN({state,commit, dispatch},{isEdit, data}){
-        let url = (isEdit ? '/update' : '/login') + (state.currentTab === 'VIM ENV'? 'VIM': 'VNFM');
-        axiospost(url, data)
+        if(isEdit) data.id = state.initValues.id;
+        let url = isEdit ? (state.currentTab === 'VIM ENV'? API.vimVnfmMgt.vimEnvMgtUpdate:API.vimVnfmMgt.vnfmEnvMgtUpdate) : (state.currentTab === 'VIM ENV'? API.vimVnfmMgt.vimEnvMgtInsert:API.vimVnfmMgt.vnfmEnvMgtInsert);
+        let axiosType = isEdit ? axiosput : axiospost;
+        axiosType(url, data)
             .then((res) => {
                 if(res.code === 200){
-                    commit('updateSuccessMessage',this.isEdit ? 'Successfully updated' : 'Has been added successfully')
-                    dispatch('getTableData', {})
+                    commit('updateSuccessMessage',this.isEdit ? 'Successfully updated' : 'Has been added successfully');
+                    let paramsObj = {
+                        pageNum :state.pageNum,
+                        pageSize :state.pageSize
+                    }
+                    dispatch('getTableData', {paramsObj})
                 }else {
                     commit('updateFailedMessage',this.isEdit ? 'Update failed' : 'add failed')
                 }

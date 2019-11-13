@@ -1,7 +1,8 @@
 import {
 	axiosget,
 	axiospost,
-    axiosput
+    axiosput,
+    axiosdelete
 } from '../../utils/http';
 import API from '../../const/apis';
 import moment from 'moment';
@@ -104,8 +105,11 @@ const actions = {
 			isFilter
 		})
 	},
-	getTableData({ commit }, { paramsObj, isFilter }) {
-		axiosget(API.sutMgt.sutMgtTable, paramsObj).then(res => {
+	getTableData({ commit,state }, { paramsObj, isFilter }) {
+        paramsObj.flag = state.currentTab;
+        paramsObj.pageNum = state.pageNum;
+        paramsObj.pageSize = state.pageSize;
+		axiosget(API.sutMgt.sutMgtTable,paramsObj).then(res => {
 				if (res.code === 200) {
 					commit('updateTableData', res)
 					if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
@@ -122,15 +126,21 @@ const actions = {
         let url = API.sutMgt.sutMgtType.replace(":flag",state.currentTab);
         axiosget(url).then(res => {
             if(res.code === 200){
-                commit('updateVNFOptions',res.body)
+                let idList = [];
+                res.body.map((item)=>{
+                    idList.push(item.dictValue)
+                });
+                commit('updateVNFOptions',idList)
             }else {
                 this.$message.error('Network exception, please try again');
             }
         })
 	},
-	createOrEditVNFTest({ commit, dispatch }, { data, isEdit }) {
-		let url = isEdit ? API.sutMgt.sutMgtUpdate : API.sutMgt.sutMgtInsert;
-        axiosput(url, data)
+	createOrEditVNFTest({ commit,state, dispatch }, { data, isEdit }) {
+        if(isEdit) data.id = state.VNFTest.id;
+		let url = isEdit ? API.sutMgt.sutMgtUpdate: API.sutMgt.sutMgtInsert;
+		let apiType = isEdit ? axiosput:axiospost;
+        apiType(url, data)
 			.then((res) => {
 					if (res.code === 200) {
 						commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
@@ -143,7 +153,7 @@ const actions = {
 				})
 	},
 	deleteVNFTest({ commit, dispatch }, data) {
-		axiospost(API.sutMgt.sutMgtDelete, data).then(res => {
+        axiosdelete(API.sutMgt.sutMgtDelete.replace("id",data.id)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
                 let paramsObj = {flag:state.currentTab};
@@ -158,7 +168,7 @@ const actions = {
 			...data
 		};
 		body.cancelToken = source.token;
-		axiospost(API.sutMgt.uploadFile, body).then(res => {
+        axiospost(API.sutMgt.uploadFile, {file:body}, true).then(res => {
 			commit('updateToken', null)
 			if (res.code === 200) message.success('Upload successfully')
 			else message.error('Upload failed')
