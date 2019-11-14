@@ -1,6 +1,6 @@
 <template>
     <a-modal
-            :title="(isEdit === true ? 'Edit ': 'Create ') + currentTab + ' SUT'"
+            :title="(isEdit === true ? 'Edit ': 'Create ') + replaceCurrentTabValue(currentTab) + ' SUT'"
             v-model="visible"
             :footer="null"
             @cancel="handleCancel"
@@ -8,36 +8,35 @@
         <template>
             <a-form :form="form" @submit="handleSubmit" class="form">
                 <a-form-item
-                        :label=" currentTab +' Name'"
+                        :label=" replaceCurrentTabValue(currentTab) +' Name'"
                         :label-col="{ span: 7 }"
                         :wrapper-col="{ span: 12 }"
                 >
                     <a-input
                             v-decorator="[
 							'name',
-							{ rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.name },
+							{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Name is required' }], initialValue: VNFTest.name },
 						]"
                     />
                 </a-form-item>
                 <a-form-item
-                        :label="currentTab + ' Type'"
+                        :label="replaceCurrentTabValue(currentTab) + ' Type'"
                         :label-col="{ span: 7 }"
                         :wrapper-col="{ span: 8 }"
                 >
-                    <!-- @dropdownVisibleChange="handleExpand"  -->
                     <a-select
                             class="form__select"
                             :disabled="spin"
-                            v-decorator="['type',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.type.dictLabel:VNFOptions[0].dictLabel}]"
+                            v-decorator="['type',{ rules: [{ required: true, }],initialValue: initNVFTypeValue}]"
                     >
-                        <a-select-option v-for="type in VNFOptions" :key="type.dictLabel" :value="type.dictLabel">{{type.dictLabel}}</a-select-option>
+                        <a-select-option v-for="types in VNFOptions" :key="types.code" :value="types.code">{{types.dictLabel}}</a-select-option>
                     </a-select>
                     <a-spin :spinning="spin">
                         <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
                     </a-spin>
                 </a-form-item>
                 <a-form-item
-                        :label="currentTab + ' Vendor'"
+                        :label="replaceCurrentTabValue(currentTab) + ' Vendor'"
                         :label-col="{ span: 7 }"
                         :wrapper-col="{ span: 12 }"
                 >
@@ -83,6 +82,7 @@
 
 <script type="text/ecmascript-6">
     import moment from "moment";
+    import { TestSUTTabs } from "../../const/constant";
     import {axiosCancelToken} from "../../utils/http";
     import {mapState, mapActions, mapMutations} from "vuex";
 
@@ -94,6 +94,7 @@
                 selected: "",
                 count: 0,
                 spin: true,
+                initNVFTypeValue:null,
                 uploading: false,
                 editUploadtextShow: true
             };
@@ -124,21 +125,33 @@
         watch: {
             visible(val) {
                 if (val) {
+                    if(!this.isEdit){
+                        this.editUploadtextShow = false;
+                    }else{
+                        this.editUploadtextShow = true;
+                    }
                     this.count++;
                     if (this.isEdit && this.count > 1) {
                         this.form.setFieldsValue({
                             name: this.VNFTest.name,
                             vendor: this.VNFTest.vendor,
                             version: this.VNFTest.version,
-                            type: this.VNFTest.type.dictLabel
+                            type: this.VNFTest.type.code
                         });
                     } else if (!this.isEdit && this.count > 1) {
-                        this.form.setFieldsValue({type: this.VNFOptions[0].dictLabel});
+                        this.form.setFieldsValue({type: this.VNFOptions[0].code});
                     }
                 }
             },
             VNFOptions(val) {
                 if (val.length) {
+                    this.initNVFTypeValue = val[0].code;
+                    this.spin = false;
+                }
+            },
+            VNFTest(val) {
+                if (val.length) {
+                    this.initNVFTypeValue = val.code;
                     this.spin = false;
                 }
             }
@@ -167,14 +180,11 @@
                 }
                 return e && e.fileList;
             },
-            getSelectTypeCode(type){
-                let code =null;
-                if(this.VNFOptions.length>0){
-                    code = this.VNFOptions.find((item)=>{
-                        return item.dictLabel === type
-                    }).code
-                }
-                return code
+            replaceCurrentTabValue(currentTab){
+                let keyWord = TestSUTTabs.find((item)=>{
+                        return item.val === currentTab
+                }).key;
+                return keyWord
             },
             handleSubmit(e) {
                 e.preventDefault();
@@ -182,20 +192,25 @@
                     if (!err) {
                         // Did not implement the check if there is a change
                         const formData = new FormData();
-                        formData.append("file", values.upload[0]);
+                        if(!this.isEdit ||(this.isEdit && !this.editUploadtextShow)){
+                            formData.append("file", values.upload[0]);
+                        }
                         let data = {
                             flag:this.currentTab,
                             name: values.name,
                             vendor: values.vendor,
                             version: values.version,
-                            type: this.getSelectTypeCode(values.type),
+                            type: values.type,
                             createTime: this.isEdit
                                 ? this.VNFTest.createTime
                                 : moment(new Date()).format("YYYY-MM-DD"),
-                            VNFFileName: values.upload[0].name
+                            VNFFileName: !this.editUploadtextShow ? values.upload[0].name : this.VNFTest.VNFFileName
                         };
-
-                        this.handleUpload(data, formData);
+                        if(this.isEdit && this.editUploadtextShow){
+                            this.submitFormData(data)
+                        }
+                        else{
+                            this.handleUpload(data, formData)}
                     }
                 });
             },

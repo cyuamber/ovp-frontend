@@ -23,7 +23,7 @@ const state = {
 	keyword: '',
 	pageNum: 1,
 	pageSize: 10,
-    currentTab: 'VNF',
+    currentTab: 101,
 }
 const mutations = {
 	updateTableData(state, tableData) {

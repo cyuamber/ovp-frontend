@@ -18,6 +18,17 @@ const mockcolumns = [{
     dataIndex: "phone"
 }
 ]
+const axiosgetType = 'axiospost';
+const TestSUTTabs =[{
+    key:"VNF",
+    val:101
+},{
+    key:"PNF",
+    val:102
+},{
+    key:"NFVI",
+    val:103
+}]
 const TestSUTColumns = [{
     title: 'ID',
     dataIndex: 'id'
@@ -28,7 +39,7 @@ const TestSUTColumns = [{
 },
 {
     title: 'Type',
-    dataIndex: 'type'
+    dataIndex: 'type.dictLabel'
 },
 {
     title: 'Vendor',
@@ -399,6 +410,8 @@ const SUTType = ['VNF', 'PNF', 'XNF']
 
 export {
     mockcolumns,
+    axiosgetType,
+    TestSUTTabs,
     TestSUTColumns,
     testEnvVIMColumns,
     testEvnVNFMColumns,

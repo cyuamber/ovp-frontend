@@ -2,9 +2,9 @@
 	<div>
 	<Loading :loadingMessage="loadingMessage" />
 	<a-tabs @change="handleTabsChange">
-		<a-tab-pane v-for="tab in tabs" :key="tab" :tab="tab">
+		<a-tab-pane v-for="tab in tabs" :key="tab.val" :tab="tab.key">
 		<div class="tab-content tab-content--margin">
-			<a-button type="primary" @click="handleCreate">Create {{tab}} SUT</a-button>
+			<a-button type="primary" @click="handleCreate">Create {{tab.key}} SUT</a-button>
 			<Search
 			class="tab-content__button"
 			@serchTestSUT="serchTestSUT"
@@ -47,7 +47,7 @@
 <script>
 import Search from "../../components/Search/Search";
 import SUTCreateOrEdit from "./SUTCreateOrEdit";
-import { TestSUTColumns } from "../../const/constant";
+import { TestSUTTabs, TestSUTColumns } from "../../const/constant";
 import Loading from "../../components/Loading/Loading";
 import { mapState, mapActions, mapMutations } from "vuex";
 
@@ -55,7 +55,7 @@ export default {
 	name: "VnfTypeobject",
 	data() {
 		return {
-			tabs: ["VNF", "PNF", "NFVI"],
+			tabs:TestSUTTabs,
 			isEdit: false,
 			currentPage: "TestSUT",
 			columns: TestSUTColumns,
@@ -70,9 +70,18 @@ export default {
 			loadingMessage: state => state.testSUT.loadingMessage,
 			visible: state => state.testSUT.visible,
 			createTime: state => state.testSUT.createTime,
-			keyword: state => state.testSUT.keyword,
             currentTab: state => state.testSUT.currentTab,
-		})
+		}),
+        currentTab: {
+            get() {
+                return this.$store.state.testSUT.keyword;
+            },
+            set(val) {
+                if (!val) {
+                    this.$store.state.testSUT.keyword = ""
+                }
+            }
+        }
 	},
 	components: {
 		SUTCreateOrEdit,
@@ -157,7 +166,7 @@ export default {
 		}
 	},
     destroyed(){
-        this.changeTab('VNF')
+        this.changeTab(101)
     }
 };
 </script>

@@ -54,8 +54,8 @@ module.exports = {
                 vendor: faker.random.word(),
                 version: 'V' + faker.random.number(),
                 type: {
-                    code: 1,
-                    dictLabel: "test01",
+                    code: 2,
+                    dictLabel: "test02",
                     dictValue: "001",
                     dictParentCode: null,
                     status: "\u0000",
@@ -68,27 +68,27 @@ module.exports = {
         })
     },
     getVNFType: {
-        "code": 200,
-        "message": "OK",
-        "body": [
+        code: 200,
+        message: "OK",
+        body: [
             {
-            "code": 1,
-            "dictLabel": "test01",
-            "dictValue": "test01",
-            "dictParentCode": null,
-            "status": "\u0000",
-            "remark": null,
-            "lang": null
+                code: 1,
+                dictLabel: "test01",
+                dictValue: "test01",
+                dictParentCode: null,
+                status: "\u0000",
+                remark: null,
+                lang: null
             },
             {
-                "code": 2,
-                "dictLabel": "test02",
-                "dictValue": "test02",
-                "dictParentCode": null,
-                "status": "\u0000",
-                "remark": null,
-                "lang": null
-            }
+                code: 2,
+                dictLabel: "test02",
+                dictValue: "test02",
+                dictParentCode: null,
+                status: "\u0000",
+                remark: null,
+                lang: null
+            },
         ],
         "total": 1,
         "pageTotal": 1
