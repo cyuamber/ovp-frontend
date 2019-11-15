@@ -4,28 +4,28 @@
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item label="Name" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
-            v-decorator="['Name',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecName }]"
+            v-decorator="['Name',{ rules: [{ required: true,message:' Name is required'}],initialValue:testSpecSingleData.testSpecName }]"
           />
         </a-form-item>
         <a-form-item label="Version" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
-            v-decorator="['Version',{ rules: [{ required: true,}],initialValue:testSpecSingleData.testSpecVersion }]"
+            v-decorator="['Version',{ rules: [{ required: true,message:' Version is required'}],initialValue:testSpecSingleData.testSpecVersion }]"
           />
         </a-form-item>
         <a-form-item label="SUT Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
           <a-select
             class="select"
-            v-decorator="['SUTType',{ rules: [{ required: true, }],initialValue:this.isEdit ? testSpecSingleData.SUTType:SUTTypes[0]}]"
+            v-decorator="['SUTType',{ rules: [{ required: true}],initialValue:initSUTTypeValue}]"
             @change="handleSelectSUTChange"
           >
-            <a-select-option v-for="type of SUTTypes" :key="type" :value="type">{{type}}</a-select-option>
+            <a-select-option v-for="type of SUTOptions" :key="type.code" :value="type.code">{{type.dictLabel}}</a-select-option>
           </a-select>
           <a-select
             class="select"
-            v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:this.isEdit ? testSpecSingleData.VNFtype:VNFOptions[1]}]"
+            v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
             @dropdownVisibleChange="dropdownVisibleChange"
           >
-            <a-select-option v-for="type of VNFOptions" :key="type" :value="type">{{type}}</a-select-option>
+            <a-select-option v-for="type of VNFOptions" :key="type.code" :value="type.code">{{type.dictLabel}}</a-select-option>
           </a-select>
           <a-spin :spinning="spin">
             <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
@@ -33,7 +33,7 @@
         </a-form-item>
         <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
-            v-decorator="['PublishORG',{ rules: [{ required: true,}],initialValue:testSpecSingleData.PublishORG }]"
+            v-decorator="['PublishORG',{ rules: [{ required: true,message:' PublishORG is required'}],initialValue:testSpecSingleData.PublishORG }]"
           />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
@@ -45,23 +45,23 @@
 </template>
 
 <script type="text/ecmascript-6">
-import moment from "moment";
-import { SUTType } from "../../const/constant";
 import { mapState, mapActions } from "vuex";
 export default {
   props: ["isEdit"],
   data() {
     return {
-      SUTTypes: SUTType,
       form: this.$form.createForm(this),
       showModal: true,
       title: this.isEdit ? "Edit Spec" : "Add Spec",
       spin: false,
+      initSUTTypeValue:null,
+      initVNFtypeValue:null,
       count: 0
     };
   },
   computed: {
     ...mapState({
+        SUTOptions: state => state.testSpecMGT.SUTOptions,
       VNFOptions: state => state.testSpecMGT.VNFOptions,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData
     })
@@ -73,11 +73,11 @@ export default {
         this.count++;
         if (!this.showModal.length && this.isEdit && this.count !== 1) {
           this.form.setFieldsValue({
-            Name: this.testSpecSingleData.testSpecName,
-            Version: this.testSpecSingleData.testSpecVersion,
-            SUTType: this.testSpecSingleData.SUTType,
-            VNFType: this.testSpecSingleData.VNFtype,
-            PublishORG: this.testSpecSingleData.PublishORG
+            Name: this.testSpecSingleData.name,
+            Version: this.testSpecSingleData.version,
+            SUTType: this.testSpecSingleData.sutType.code,
+            VNFType: this.testSpecSingleData.VNFtype.code,
+            PublishORG: this.testSpecSingleData.publishOrg
           });
         }
         if (!this.showModal.length && !this.isEdit) this.spin = true;
@@ -97,14 +97,29 @@ export default {
         });
       }
     },
+      SUTOptions(val) {
+          if (val.length) {
+              this.spin = false;
+          }
+          if (val.length && !this.isEdit) {
+              this.form.setFieldsValue({ SUTType: val[0].code });
+          }
+      },
     VNFOptions(val) {
       if (val.length) {
         this.spin = false;
       }
       if (val.length && !this.isEdit) {
-        this.form.setFieldsValue({ VNFType: val[0] });
+        this.form.setFieldsValue({ VNFType: val[0].code });
       }
-    }
+    },
+    testSpecSingleData(val) {
+          if (val.sutTypeCH.code!==undefined && val.vnfTypeCH.code!==undefined ) {
+              this.initSUTTypeValue = val.sutTypeCH.code;
+              this.initVNFtypeValue = val.vnfTypeCH.code;
+              this.spin = false;
+          }
+      }
   },
   methods: {
     ...mapActions("testSpecMGT", [
@@ -114,10 +129,12 @@ export default {
         "createOrEditTestSpec"
     ]),
     handleSelectSUTChange(val) {
+        console.log(val,"val")
       this.spin = true;
       this.getVNFOptions({ STUType: val })
         .then(() => {
-          this.form.setFieldsValue({ VNFType: this.VNFOptions[0] });
+            if(this.VNFOptions.length>0)this.form.setFieldsValue({ VNFType: this.VNFOptions[0] });
+
         });
     },
     dropdownVisibleChange() {
@@ -135,12 +152,11 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           let data = {
-            testSpecName: values.Name,
-            testSpecVersion: values.Version,
-            SUTType: values.SUTType,
-            VNFtype: values.VNFType,
-            PublishORG: values.PublishORG,
-            publishTime: moment(new Date()).format("YYYY-MM-DD")
+            name: values.Name,
+            version: values.Version,
+            sutType: values.SUTType,
+            type: values.VNFType,
+            publishOrg: values.PublishORG
           };
           let { isEdit } = this;
           this.createOrEditTestSpec({ isEdit, data })

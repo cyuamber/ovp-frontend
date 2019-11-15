@@ -7,12 +7,14 @@
       <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" />
     </div>
     <div class="test-spec__table">
-      <a-table :columns="columns" :dataSource="tableData" :loading="loading" rowKey="testSpecId" size="default" :pagination="pagination" @change="handleTableChange" @expand="caseMgtTableShow">
+      <a-table :columns="columns" :dataSource="tableData" :loading="loading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange" @expand="caseMgtTableShow">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="test-spec__tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
       </span>
-        <a-table class="test-case__table"
+        <a-table
+                v-if="caseMgtTableData.length>0"
+                class="test-case__table"
                 slot="expandedRowRender"
                 :columns="innerColumns"
                 :dataSource="caseMgtTableData"
@@ -23,7 +25,7 @@
         <span slot="status" slot-scope="status">
           <span
                   class="test-case__showState"
-                  :style="{backgroundColor: status===0? '#d0021b': '#7ED321'}"
+                  :style="{backgroundColor: status==='able'? '#d0021b': '#7ED321'}"
                   :title="status===0? 'Available': 'unavailable'"
           ></span>
         </span>
@@ -76,7 +78,8 @@ export default {
             "getTestSpec",
             "deleteTestSpec",
             "getPagination",
-            "clearPagination"
+            "clearPagination",
+            "getSUTOptions"
         ]),
         ...mapMutations("testSpecMGT", [
             "updatecaseMgtTableData"
@@ -89,7 +92,7 @@ export default {
             this.visible = true;
             this.isEdit = false;
             this.getTestSpec("");
-            this.getVNFOptions({STUType:'VNF'})
+            this.getSUTOptions();
         },
         handleTableChange(pagination){
             this.loading = true;
@@ -125,16 +128,17 @@ export default {
             if(item === 'Edit') {
                 this.visible = true;
                 this.isEdit = true;
+                console.log(testSpecSingleData);
                 this.getTestSpec(testSpecSingleData)
             }else {
                 this.$confirm({
                     title: 'Are you sure delete this Spec?',
-                    content: 'Id: '+testSpecSingleData.testSpecId,
+                    content: 'Id: '+testSpecSingleData.id,
                     okText: 'Yes',
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        this.deleteTestSpec({testSpecId: testSpecSingleData.testSpecId})
+                        this.deleteTestSpec(testSpecSingleData.id)
                     }
                 });
             }

@@ -1,12 +1,15 @@
-import {axiosget, axiospost} from '../../utils/http';
+import {axiosget, axiospost, axiosput} from '../../utils/http';
+import API from '../../const/apis';
 import moment from 'moment';
+import {axiosgetType} from "../../const/constant";
 
 const state = {
   tableData: [],
     caseMgtTableData: [],
+    SUTOptions: [],
   VNFOptions: [],
   testSpecSingleData: {},
-  pagination: {current: 1 , total: 0},
+  pagination: {current: 1 , total: 0, pageSize:10},
     loadingMessage: {type: '', toast: ''}
 }
 const mutations = {
@@ -28,6 +31,9 @@ const mutations = {
   updateVNFTest (state, testSpecSingleData){
     state.testSpecSingleData = testSpecSingleData
   },
+updateSUTOptions(state, Options){
+    state.SUTOptions = Options;
+},
   updateVNFOptions(state, Options){
     state.VNFOptions = Options;
   },
@@ -49,13 +55,14 @@ const mutations = {
 }
 const actions = {
   getTableData ({commit}, obj){
-    let req = {};
+      let req = {pageNum:state.pagination.current,pageSize:state.pagination.pageSize};
       Object.keys(obj).forEach(item =>{
           if(obj[item] !== '' &&obj[item] !== undefined ){
               req[item]=obj[item];
           }
       });
-    axiosget('/getTestSpec', req).then(res => {
+      let axiosrequest = axiosgetType?axiospost:axiosget;
+      axiosrequest(API.TestSpecMgt.specMgtTable, req).then(res => {
             if(res.code === 200){
                 commit('updateTableData',res);
                 if(req.publishTime || req.testSpecName ) commit('updateSuccessMessage','Successfully get table data')
@@ -71,8 +78,19 @@ const actions = {
   getTestSpec({commit},data){
     commit('updateVNFTest',data)
   },
+    getSUTOptions({commit,dispatch},obj){
+        axiosget(API.TestSpecMgt.TestSpecSUTType,obj).then(res => {
+            if(res.code === 200){
+                commit('updateSUTOptions',res.body);
+                dispatch('getVNFOptions',{STUType:res.body[0].code})
+            }else {
+                this.$message.error('Network exception, please try again');
+            }
+        })
+    },
   getVNFOptions({commit},obj){
-      axiosget('/getTestSpecVNFType',obj).then(res => {
+      let url = API.TestSpecMgt.TestSpecVNFType.replace(":flag",obj.STUType);
+      axiosget(url).then(res => {
           if(res.code === 200){
             commit('updateVNFOptions',res.body)
           }else {
@@ -89,24 +107,27 @@ const actions = {
   clearOptions({commit}){ 
     commit('updateVNFOptions', [])
   },
-    createOrEditTestSpec({commit,dispatch},{isEdit,data}){
-        let url = isEdit ? '/updateTestSpec':'/addTestSpec';
-        axiospost(url, data)
+    createOrEditTestSpec({commit,dispatch,state},{isEdit,data}){
+        let url = isEdit ? API.TestSpecMgt.specMgtUpdate:API.TestSpecMgt.specMgtInsert;
+        let axiosType = isEdit ? axiosput : axiospost;
+        axiosType(url, data)
             .then((res) => {
                     if(res.code === 200){
                         commit('updateSuccessMessage',isEdit ? 'Successfully updated' : 'Has been added successfully');
-                        dispatch('getTableData',{})
+                        let obj = {flag:state.currentTab,pageNum:state.pagination.current,pageSize:state.pagination.pageSize};
+                        dispatch('getTableData',obj)
                     }else commit('updateFailedMessage',isEdit ? 'Update failed' : 'add failed')
                 },
                 () => {
                     commit('updateFailedMessage','Network exception, please try again')
                 })
     },
-    deleteTestSpec({commit,dispatch},data){
-        axiospost('/deleteTestSpec',data).then( res => {
+    deleteTestSpec({commit,dispatch,state},id){
+        axiospost(API.TestSpecMgt.specMgtDelete.replace("id",id)).then( res => {
             if(res.code === 200){
                 commit('updateSuccessMessage','Deleted successfully');
-                dispatch('getTableData',{})
+                let obj = {flag:state.currentTab,pageNum:state.pagination.current,pageSize:state.pagination.pageSize};
+                dispatch('getTableData',obj)
             }else commit('updateFailedMessage','Network exception, please try again')
         })
     }
