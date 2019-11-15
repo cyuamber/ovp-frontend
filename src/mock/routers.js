@@ -39,6 +39,9 @@ module.exports =
         "/portal/business/sutType":"/_getTestSpecSUTType",
         ///////<-------------Test Job--------->/////
         "/portal/business/jobs":"/_getTestJobMGT",
+        "/portal/business/sutName/:code":"/getSUTName",
+        "/portal/business/spec/:type":"/getJobSpecification",
+        "/portal/business/testCase/:id":"/getTestCaseList",
         "/*/*": "/$1_$2",
         "/*/*/*": "/$1_$2_$3",
         "/*/*/*/*": "/$1_$2_$3_$4",

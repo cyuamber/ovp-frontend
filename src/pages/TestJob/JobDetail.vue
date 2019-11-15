@@ -12,7 +12,7 @@
 				:showInfo="false"
 				class="job-detail__progress"
 			/>
-			<a-button class="job-detail__refresh-btn" @click="handleRefresh" :disabled="$route.params.status === 0">
+			<a-button class="job-detail__refresh-btn" @click="handleRefresh" :disabled="$route.params.jobStatus === 'DONE'">
 				<a-icon type="sync" />Refresh
 			</a-button>
 		</div>
@@ -21,8 +21,9 @@
 				<a-card>
 					<h2 class="job-detail__info-title">Test Job Info</h2>
 					<div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
-						<p class="job-detail__item-title">{{item.title}}:</p>
-						<p class="job-detail__item-text">{{currentJob[item.dataIndex]}}</p>
+						<p class="job-detail__item-title"
+                        >{{item.title}}:</p>
+						<p class="job-detail__item-text">{{item.title !== 'VNF Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'VNF Name'?currentJob.sut.name:currentJob.spec.name)}}</p>
 					</div>
 				</a-card>
 			</div>
@@ -31,20 +32,19 @@
 					<a-card-grid style="width: 100%" :hoverable="false">
 						<h2>Test Job Detail</h2>
 						<div class="job-detail__test-env">
-							<p v-for="item in currentJob.testENV" :key="item.title">
-								<span>{{item.title}}:</span>
-								<span>{{item.text}}</span>
-							</p>
+                            <p>{{currentJob.remark}}</p>
 						</div>
 					</a-card-grid>
 					<a-card-grid
 						style="width: 100%"
-						v-for="item in currentJob.testCase"
-						:key="item"
+						v-for="(item,index) in currentJob.cases"
+						:key="index"
 						:hoverable="false"
 					>
-						{{item}}
-						<span class="job-detail__testCase-status" :style="{backgroundColor: statusColor}"></span>
+                        caseName£º{{item.name}}{{item.status}}
+						<span class="job-detail__testCase-status"
+                              :style="getCaseStatusStyle(item.status)"
+                        ></span>
 					</a-card-grid>
 				</a-card>
 			</div>
@@ -75,13 +75,15 @@ export default {
 		infoList() {
 			let list = [];
 			testJobColumns.forEach(item => {
-				if ( item.title !== "No." && item.title !== "Status" && item.title !== "Action" ) {
+				if (item.title !== "Status" && item.title !== "Action" ) {
 					list.push(item);
 				}
 			});
+			console.log(list,"list")
 			return list;
 		},
 		currentJob() {
+            console.log(this.$route.params,"this.$route.params")
 			return this.$route.params;
 		}
 	},
@@ -112,13 +114,17 @@ export default {
         ]),
         initJobDetail(){
             this.initWebSocket();
-            this.statusColor = this.$route.params.status === 0? '#979797': (this.$route.params.status === 1? '#F5A623':(this.$route.params.status === 2? '#7ED321':'#D0021B'));
+
 		},
 		handleBack() {
 			// this.$router.back()
             this.$emit('close');
 			this.$router.push("/testjobmgt");
 		},
+        getCaseStatusStyle(status){
+            let color = (status === "STARTED"? '#979797': (status === "RUNNING"? '#F5A623':(status === "DONE"? '#7ED321':'#D0021B')))
+            return {backgroundColor: color}
+        },
 		getDetailProgress() {
 			let {status } = this.$route.params;
 			console.log(status,"status");

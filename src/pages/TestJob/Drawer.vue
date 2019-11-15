@@ -30,7 +30,7 @@
           @select="((key) => selectSUTType(key))"
           class="form__select--width"
         >
-          <a-select-option v-for="type in SUTTypeList" :key="type" :value="type">{{type}}</a-select-option>
+          <a-select-option v-for="type in SUTTypeList" :key="type.code" :value="type.code">{{type.dictLabel}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'SUT Name'"
@@ -40,7 +40,7 @@
           :title="!getSUTNames ? 'Please select SUT Type first' : ''"
           @select="((key) => selectSUTName(key))"
         >
-          <a-select-option v-for="type in SUTNameList" :key="type" :value="type">{{type}}</a-select-option>
+          <a-select-option v-for="types in SUTNameList" :key="types.type" :value="types.type">{{types.dictLabel}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test Specification'"
@@ -50,7 +50,7 @@
           @select="((key)=> selectSpecification(key))"
           :title="!getSUTNames ? 'Please select SUT Type and SUT Name first' : (!getSpecifications ? 'Please select SUT Name first': '')"
         >
-          <a-select-option v-for="type in specificationList" :key="type" :value="type">{{type}}</a-select-option>
+          <a-select-option v-for="type in specificationList" :key="type.id" :value="type.id">{{type.dictLabel}}</a-select-option>
         </a-select>
         <!-- Test VNFM/VIM  -->
         <a-select
@@ -107,7 +107,7 @@
 
 <script type="text/ecmascript-6">
 import { mapState, mapActions, mapMutations } from "vuex";
-import { formList, SUTTypeList } from "./constants";
+import { formList } from "./constants";
 
 export default {
   props: ["isShow"],
@@ -117,7 +117,6 @@ export default {
       formList,
       keyList: [],
       form: this.$form.createForm(this),
-      SUTTypeList,
       selectedSUTType: "",
       selectedSUTName: "",
       selectedSpecification: "",
@@ -127,6 +126,7 @@ export default {
   },
   computed: {
     ...mapState({
+      SUTTypeList: store => store.testJob.SUTTypeList,
       SUTNameList: store => store.testJob.SUTNameList,
       nameSpin: store => store.testJob.nameSpin,
       getSUTNames: store => store.testJob.getSUTName,

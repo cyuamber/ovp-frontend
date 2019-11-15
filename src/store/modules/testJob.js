@@ -1,12 +1,16 @@
 import moment from 'moment'
+import API from '../../const/apis';
 import {
 	axiospost,
-	axiosget
+	axiosget,
+	// axiosput
 } from '../../utils/http'
+import {axiosgetType} from "../../const/constant";
 
 const state = {
 	isShow: false,
 	loadingMessage: null,
+    SUTTypeList: [],
 	SUTNameList: [],
 	getSUTName: false,
 	nameSpin: false,
@@ -41,6 +45,17 @@ const mutations = {
 			toast
 		}
 	},
+    updataSUTType(state, { list }) {
+        if (list) {
+            state.SUTTypeList = list
+        } else {
+            state.getSpecification = false
+            state.specificationSpin = false
+            state.SUTNameList = []
+            state.specificationList = []
+            state.testCaseList = []
+        }
+    },
 	updataSUTName(state, { get, spin, list }) {
 		state.getSUTName = get
 		state.nameSpin = spin
@@ -104,13 +119,14 @@ const mutations = {
 const actions = {
 	getTableData({ commit }, bool) {
 		let obj = {pageNum: state.pageNum, pageSize: state.pageSize}
-		if(state.createTime !== '') obj.createTime = state.createTime
-		axiosget('/getTestJobMGT',obj).then((res) => {
+		if(state.createTime !== '') obj.createTime = state.createTime;
+        let axiosrequest = axiosgetType?axiospost:axiosget;
+        axiosrequest(API.testJobMgt.testJobTable,obj).then((res) => {
 			if (res.code === 200) {
 				state.pagination = {
 					current: state.pageNum,
 					total: res.total
-				}
+				};
 				let tableData = res.body.map((item, index) => {
 					item.createTime = moment(item.createTime).format('YYYY-MM-DD');
 					item.index = res.body.length * (state.pagination.current - 1) + index + 1;
@@ -136,7 +152,7 @@ const actions = {
 		}
 		if (values.TestVIMENV) body.testVIMENV = values.TestVIMENV
 		if (values.TestVNFMENV) body.testVNFMENV = values.TestVNFMENV
-		axiospost('createTestJobMGT', body)
+		axiospost(API.testJobMgt.testJobInsert, body)
 			.then((res) => {
 				if (res.code === 200) {
 					commit('updateSuccessMessage', 'Has been added successfully')
@@ -146,21 +162,39 @@ const actions = {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			})
 	},
+    getSUTType({ commit }, { message }) {
+        commit('updataSUTType', {
+            get: false,
+            spin: true
+        })
+        axiosget(API.testJobMgt.testJobSUTType).then(res => {
+            if (res.code === 200) {
+                // Simulation request
+                setTimeout(() => {
+                    commit('updataSUTType', {
+                        list: res.body
+                    })
+                }, 1000)
+            } else {
+                message.error('Failed to get SUT Name list')
+            }
+        }, () => {
+            message.error('Network exception, please try again')
+        })
+    },
 	getSUTName({ commit }, { SUTType, message }) {
 		commit('updataSUTName', {
 			get: false,
 			spin: true
 		})
-		axiosget('/getSUTName', {
-			SUTType
-		}).then(res => {
+		axiosget(API.testJobMgt.testJobSUTName.replace(":code",SUTType)).then(res => {
 			if (res.code === 200) {
 				// Simulation request
 				setTimeout(() => {
 					commit('updataSUTName', {
 						get: true,
 						spin: false,
-						list: res.body.SUTName
+						list: res.body
 					})
 				}, 1000)
 			} else {
@@ -188,16 +222,14 @@ const actions = {
 			get: false,
 			spin: true
 		})
-		axiosget('/getJobSpecification', {
-			SUTName
-		}).then(res => {
+		axiosget(API.testJobMgt.testJobSpec.replace(":type",SUTName)).then(res => {
 			if (res.code === 200) {
 				// Simulation request
 				setTimeout(() => {
 					commit('updateSpecification', {
 						get: true,
 						spin: false,
-						list: res.body.JobSpecification
+						list: res.body
 					})
 				}, 1000)
 			} else {
@@ -224,9 +256,7 @@ const actions = {
 		commit('updateTestCaseList', {
 			spin: true
 		})
-		axiosget('getTestCaseList', {
-			TestSpecification
-		}).then(res => {
+		axiosget(API.testJobMgt.testJobSpec.replace(":id",TestSpecification)).then(res => {
 			if (res.code === 200) {
 				commit('updateTestCaseList', {
 					spin: false,
@@ -252,7 +282,7 @@ const actions = {
 			jobName,
 			status
 		} = data
-		axiospost('deleteTestJobMGT', {
+		axiospost(API.testJobMgt.testJobDelete, {
 			jobId,
 			VNFName,
 			jobName,
