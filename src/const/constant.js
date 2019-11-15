@@ -18,23 +18,23 @@ const mockcolumns = [{
     dataIndex: "phone"
 }
 ]
-const axiosgetType = true;
-const PackageMGTTabs =[{
-    key:"VNF",
-    val:101
-},{
-    key:"PNF",
-    val:102
+const axiosgetType = false;
+const PackageMGTTabs = [{
+    key: "VNF",
+    val: 101
+}, {
+    key: "PNF",
+    val: 102
 }]
-const TestSUTTabs =[{
-    key:"VNF",
-    val:101
-},{
-    key:"PNF",
-    val:102
-},{
-    key:"NFVI",
-    val:103
+const TestSUTTabs = [{
+    key: "VNF",
+    val: 101
+}, {
+    key: "PNF",
+    val: 102
+}, {
+    key: "NFVI",
+    val: 103
 }]
 const TestSUTColumns = [{
     title: 'ID',

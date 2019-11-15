@@ -10,14 +10,14 @@ module.exports = {
         https: false,
         hotOnly: false,
         //proxy
-        proxy: {
-            '/api': {
-                target: 'http://localhost:3004',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/api': ''
-                }
-            }
-        }
+        // proxy: {
+        //     '/api': {
+        //         target: 'http://localhost:3004',
+        //         changeOrigin: true,
+        //         pathRewrite: {
+        //             '^/api': ''
+        //         }
+        //     }
+        // }
     }
 }
