@@ -3,13 +3,13 @@
         <template>
             <a-form :form="form" @submit="handleSubmit">
                 <a-form-item label="Name"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" >
-                    <a-input v-decorator="['Name',{ rules: [{ required: true,}],initialValue:singleData.meterSysName }]"/>
+                    <a-input v-decorator="['Name',{ rules: [{ required: true,}],initialValue:singleData.name }]"/>
                 </a-form-item>
                 <a-form-item label="Vendor"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['Vendor',{ rules: [{ required: true,}],initialValue:singleData.meterSysVendor }]"/>
+                    <a-input v-decorator="['Vendor',{ rules: [{ required: true,}],initialValue:singleData.vendor }]"/>
                 </a-form-item>
                 <a-form-item label="Mnt Address"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-input v-decorator="['MntAddress',{ rules: [{ required: true,}],initialValue:singleData.meterSysUrl }]"/>
+                    <a-input v-decorator="['MntAddress',{ rules: [{ required: true,}],initialValue:singleData.mntAddress }]"/>
                 </a-form-item>
                 <a-form-item label="User"  :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input v-decorator="['User',{ rules: [{ required: true,}],initialValue:singleData.username }]"/>
@@ -58,12 +58,11 @@
                 this.form.validateFields((err, values) => {
                     if(!err){
                         let data = {
-                            meterSysName: values.Name,
-                            meterSysVendor: values.Vendor,
-                            meterSysUrl: values.MntAddress,
+                            name: values.Name,
+                            vendor: values.Vendor,
+                            mntAddress: values.MntAddress,
                             username: values.User,
-                            password: values.Password,
-                            createTime: moment(new Date()).format('YYYY-MM-DD')
+                            password: values.Password
                         };
                         let {isEdit} = this;
                         this.createOrEditTestIns({isEdit,data}).

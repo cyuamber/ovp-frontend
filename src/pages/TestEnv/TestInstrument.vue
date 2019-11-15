@@ -7,7 +7,7 @@
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
     </div>
     <div class="table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="meterSysName" size="default" :pagination="pagination" @change="handleTableChange">
+      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -75,7 +75,7 @@ export default {
             this.getPagination({pagination});
             let current = pagination.current,
                 pageSize = pagination.pageSize,
-                obj = {meterSysName: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
+                obj = {name: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
             this.getTableData(obj).then(() => this.loading = false)
         },
         // Filter by creating time
@@ -88,7 +88,7 @@ export default {
             let obj = {};
             if(isSearch) this.keyword = keyword;
             if(!(keyword === '' && this.createTime === '')) {
-                obj = {meterSysName: this.keyword, createTime: this.createTime};
+                obj = {name: this.keyword, createTime: this.createTime};
             }
             this.clearPagination();
             // Simulation request
@@ -105,12 +105,12 @@ export default {
             }else {
                 this.$confirm({
                     title: 'Are you sure delete this TTMS?',
-                    content: 'Name: '+singleData.meterSysName,
+                    content: 'Name: '+singleData.name,
                     okText: 'Yes',
                     okType: 'danger',
                     cancelText: 'No',
                     onOk: () => {
-                        this.deleteMeterSys({meterSysName: singleData.meterSysName})
+                        this.deleteMeterSys({name: singleData.name})
                     }
                 });
             }

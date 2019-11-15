@@ -260,7 +260,7 @@ const actions = {
 			if (res.code === 200) {
 				commit('updateTestCaseList', {
 					spin: false,
-					list: res.body.testCaseList
+					list: res.body
 				})
 			} else {
 				message.error('Failed to get Test Case list')

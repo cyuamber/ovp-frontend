@@ -53,7 +53,7 @@ export default {
         testJobStop:baseUrl+"/jobs/:jobId/stop",
         testJobSUTType:baseUrl+"/sutType",
         testJobSUTName:baseUrl+"/sutName/:code",
-        testJobSpec:baseUrl+"/spec/:type",
+        testJobSpec:baseUrl+"/testSpec/:type",
         testJobTestCase:baseUrl+"/testCase/:id",
     },
     TestSpecMgt:{
