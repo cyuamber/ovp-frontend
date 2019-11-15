@@ -40,8 +40,11 @@ module.exports =
         ///////<-------------Test Job--------->/////
         "/portal/business/jobs":"/_getTestJobMGT",
         "/portal/business/sutName/:code":"/getSUTName",
-        "/portal/business/spec/:type":"/getJobSpecification",
+        "/portal/business/testSpec/:type":"/getJobSpecification",
         "/portal/business/testCase/:id":"/getTestCaseList",
+        "/portal/business/jobs/insert":"/addTestSpec",
+        "/portal/business/jobs/:jobId/start":"/runTestJobMGT",
+        "/portal/business/jobs/:jobId/stop":"/stopTestJobMGT",
         "/*/*": "/$1_$2",
         "/*/*/*": "/$1_$2_$3",
         "/*/*/*/*": "/$1_$2_$3_$4",

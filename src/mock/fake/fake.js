@@ -539,37 +539,173 @@ module.exports = {
         "pageTotal": 1
     },
     getSUTName: {
-        code: 200,
-        message: 'SUCCESS',
-        body: {
-            SUTName:  [faker.name.lastName(),faker.name.firstName(),]
-        }
+        "code": 200,
+        "message": "OK",
+        "body": [
+            {
+                "id": 0,
+                "name": "1",
+                "type": 101001,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 0,
+                "fileName": null,
+                "typeCH": null
+            },
+            {
+                "id": 0,
+                "name": "1",
+                "type": 101001,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 0,
+                "fileName": null,
+                "typeCH": null
+            },
+            {
+                "id": 0,
+                "name": "Huawei_vMME",
+                "type": 101001,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 0,
+                "fileName": null,
+                "typeCH": null
+            },
+            {
+                "id": 0,
+                "name": "ZTE_vPCRF",
+                "type": 101002,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 0,
+                "fileName": null,
+                "typeCH": null
+            },
+            {
+                "id": 0,
+                "name": "Nokia_vSPGW",
+                "type": 101003,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 0,
+                "fileName": null,
+                "typeCH": null
+            },
+            {
+                "id": 0,
+                "name": "Ericsson_vFW",
+                "type": 101004,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 0,
+                "fileName": null,
+                "typeCH": null
+            },
+            {
+                "id": 0,
+                "name": "Ebupt_vDNS",
+                "type": 101005,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 0,
+                "fileName": null,
+                "typeCH": null
+            }
+        ],
+        "total": 7,
+        "pageTotal": 1
     },
     getJobSpecification: {
-        code: 200,
-        message: 'SUCCESS',
-        body: {
-            JobSpecification:  [faker.name.lastName(),faker.name.firstName()]
-        }
+        "code": 200,
+        "message": "OK",
+        "body": [
+            {
+                "id": 6,
+                "name": "11",
+                "version": null,
+                "vnfType": 0,
+                "publishOrg": null,
+                "publishTime": null,
+                "caseMgt": null,
+                "vnfTypeCH": null,
+                "sutTypeCH": null
+            },
+            {
+                "id": 8,
+                "name": "666",
+                "version": null,
+                "vnfType": 0,
+                "publishOrg": null,
+                "publishTime": null,
+                "caseMgt": null,
+                "vnfTypeCH": null,
+                "sutTypeCH": null
+            },
+            {
+                "id": 1001,
+                "name": "MME-SPEC",
+                "version": null,
+                "vnfType": 0,
+                "publishOrg": null,
+                "publishTime": null,
+                "caseMgt": null,
+                "vnfTypeCH": null,
+                "sutTypeCH": null
+            }
+        ],
+        "total": 3,
+        "pageTotal": 1
     },
     getTestCaseList: {
-        code: 200,
-        message: 'SUCCESS',
-        body: {
-            testCaseList: [{name: 'Test Case01'}, {name: 'Test Case02'}, {name: 'Test Case03'}]
-        }
+        "code": 200,
+        "message": "OK",
+        "body": [
+            {
+                "id": 1000,
+                "number": 1000,
+                "name": "vFW-Function-Policy",
+                "description": "The Firewall Policy can match the traffic's src security zone, dst security zone, src IP address, dst IP address, TCP/UDP port, and the action of policy rule can take effect right.",
+                "version": "v1.0",
+                "status": null
+            }
+        ],
+        "total": 1,
+        "pageTotal": 1
     },
     deleteTestJobMGT: {
         code: 200,
-        message: 'SUCCESS'
+        message: 'SUCCESS',
+        body:null
     },
     downloadTestJobMGT: {
         code: 200,
-        message: 'SUCCESS'
+        message: 'SUCCESS',
+        body:null
     },
     runTestJobMGT: {
         code: 200,
-        message: 'SUCCESS'
+        message: 'SUCCESS',
+        body:null
+    },
+    stopTestJobMGT: {
+        code: 200,
+        message: 'SUCCESS',
+        body:null
     },
     getProgress: {
         code: 200,

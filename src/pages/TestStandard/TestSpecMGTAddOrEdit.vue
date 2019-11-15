@@ -155,7 +155,7 @@ export default {
             name: values.Name,
             version: values.Version,
             sutType: values.SUTType,
-            type: values.VNFType,
+            vnfType: values.VNFType,
             publishOrg: values.PublishORG
           };
           let { isEdit } = this;

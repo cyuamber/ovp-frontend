@@ -40,7 +40,7 @@
           :title="!getSUTNames ? 'Please select SUT Type first' : ''"
           @select="((key) => selectSUTName(key))"
         >
-          <a-select-option v-for="types in SUTNameList" :key="types.type" :value="types.type">{{types.dictLabel}}</a-select-option>
+          <a-select-option v-for="types in SUTNameList" :key="types.type" :value="types.type">{{types.name}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test Specification'"
@@ -50,7 +50,7 @@
           @select="((key)=> selectSpecification(key))"
           :title="!getSUTNames ? 'Please select SUT Type and SUT Name first' : (!getSpecifications ? 'Please select SUT Name first': '')"
         >
-          <a-select-option v-for="type in specificationList" :key="type.id" :value="type.id">{{type.dictLabel}}</a-select-option>
+          <a-select-option v-for="type in specificationList" :key="type.id" :value="type.id">{{type.name}}</a-select-option>
         </a-select>
         <!-- Test VNFM/VIM  -->
         <a-select
@@ -90,7 +90,7 @@
                 :key="index "
                 class="form__card--padding"
               >
-                <a-checkbox :value="'case'+index" class="form__checkbox--size" />
+                <a-checkbox :value="item.id" class="form__checkbox--size" />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
               </a-card-grid>
             </a-checkbox-group>

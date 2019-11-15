@@ -46,9 +46,9 @@ export default {
     },
     testJobMgt:{
         testJobTable:baseUrl+"/jobs",
-        testJobInsert:baseUrl+"/sutMgt/:jobId/insert",
-        testJobUpdate:baseUrl+"/sutMgt/:jobId/update",
-        testJobDelete:baseUrl+"/sutMgt/:id/delete",
+        testJobInsert:baseUrl+"/jobs/insert",
+        testJobUpdate:baseUrl+"/jobs/:jobId/update",
+        testJobDelete:baseUrl+"/jobs/:jobId/delete",
         testJobStart:baseUrl+"/jobs/:jobId/start",
         testJobStop:baseUrl+"/jobs/:jobId/stop",
         testJobSUTType:baseUrl+"/sutType",
