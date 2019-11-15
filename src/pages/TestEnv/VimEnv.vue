@@ -40,8 +40,8 @@
 						</span>
 						<span slot="action" slot-scope="action,record">
 							<a-tag
-								v-for="item in action"
-								:key="item"
+								v-for="(item,index) in action"
+								:key="index"
 								:color="item === 'Edit'? 'blue' : 'red'"
 								class="tag"
 								@click="(() => showEditOrDeleteModal(item,record))"
@@ -105,6 +105,8 @@ export default {
 			"setInitValues",
         ]),
         initVimEnvTable() {
+            let date = new Date('2019-10-11');
+            console.log(date.getTime(),"----date.getTime()");
             this.loading = true;
             this.getCloudTypeOptions();
             let paramsObj = {};

@@ -1,5 +1,5 @@
 import {axiosget, axiospost, axiosput, axiosdelete} from '../../utils/http'
-import { VIMForm, VNFMForm } from "../../const/constant";
+import { VIMForm, VNFMForm, axiosgetType } from "../../const/constant";
 import API from '../../const/apis';
 import moment from 'moment'
 
@@ -26,7 +26,7 @@ const mutations = {
             total: res.total
         }
         let data = res.body.map( (item, index) => {
-            item.action = ['Edit', 'Delete']
+            item.action = ['Edit', 'Delete'];
             item.index = res.body.length * (state.pagination.current -1) + index+1;
             item.createTime = moment(item.createTime).format('YYYY-MM-DD');
             return item
@@ -105,11 +105,11 @@ const actions = {
         if(state.createTime !== '') paramsObj.createTime = state.createTime
         if(state.searchKeyword !== '') {
             if(state.currentTab === 'VIM ENV'){
-                paramsObj.cloudType = state.searchKeyword
+                paramsObj.dictLabel = state.searchKeyword
             }else paramsObj.VNFMname = state.searchKeyword
         }
         if(state.pageNum !== '') {
-            paramsObj.pageNum = state.pageNum
+            paramsObj.pageNum = state.pageNum;
             paramsObj.pageSize = state.pageSize
         }
         dispatch('getTableData',{paramsObj,isFilter: true})
@@ -118,7 +118,8 @@ const actions = {
         let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtTable: API.vimVnfmMgt.vnfmEnvMgtTable;
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
-        axiosget(url, paramsObj).then(res => {
+        let axiosrequest = axiosgetType?axiospost:axiosget;
+        axiosrequest(url, paramsObj).then(res => {
             if(res.code === 200){
                 commit('updateTableData',res)
                 if(isFilter) commit('updateSuccessMessage','Successfully get table data')
@@ -130,7 +131,7 @@ const actions = {
     },
     deleteData({dispatch,commit,state},data){
         let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtDelete: API.vimVnfmMgt.vnfmEnvMgtDelete;
-        axiosdelete(url.replace("id",data.id)).then( res => {
+        axiosdelete(url.replace(":id",data.id)).then( res => {
             if(res.code === 200){
                 commit('updateSuccessMessage','Deleted successfully')
                 let paramsObj = {pageNumstate: state.pageNum, pageSize: state.pageSize}

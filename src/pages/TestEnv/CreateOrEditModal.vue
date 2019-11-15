@@ -20,7 +20,7 @@
 				v-if="item.title !== 'Cloud Type' && item.title !== 'Password'"
 				v-decorator="[
 				item.key,
-				{ rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] },
+				{ rules: [{ required: item.key !== 'sslCacert'?true:false, message: item.title +' is required' }], initialValue: initValues[item.key] },
 				]"
 			/>
 			<a-input-password
@@ -43,11 +43,11 @@
 			<!--</a-select>-->
 			<a-select
 				v-if="item.title === 'Cloud Type'"
-				v-decorator="[item.key,{ rules: [{ required: true }], initialValue: isEdit? initValues[item.key] : cloudTypeOptions[0]}]"
+				v-decorator="[item.key,{ rules: [{ required: true }], initialValue: initCloudType}]"
 				:disabled="cloudTypeOptions.length ===0"
 				class="select"
 			>
-				<a-select-option v-for="type in cloudTypeOptions" :key="type" :value="type">{{type}}</a-select-option>
+				<a-select-option v-for="type in cloudTypeOptions" :key="type.code" :value="type.code">{{type.dictLabel}}</a-select-option>
 			</a-select>
 			<!--<a-spin :spinning="regionIdOptions.length === 0" v-if="item.title === 'Cloud Region ID'">-->
 				<!--<a-icon slot="indicator" type="loading-3-quarters" size="small" spin />-->
@@ -104,14 +104,13 @@ export default {
 			VNFMForm: VNFMForm,
 			VIMCount: 0,
 			VNFMCount: 0,
-            // selectedRegionID:""
+            initCloudType:null,
 		};
 	},
 	computed: {
 		...mapState({
 			currentTab: state => state.testENV.currentTab,
 			cloudTypeOptions: state => state.testENV.cloudTypeOptions,
-			// regionIdOptions: state => state.testENV.regionIdOptions,
 			initValues: state => state.testENV.initValues,
             visible: state => state.testENV.visible,
 		}),
@@ -136,15 +135,20 @@ export default {
 			if(val) {
                 this.form = this.$form.createForm(this);
 				if(this.currentTab === 'VIM ENV'){
-					if(!this.isEdit){
-						this.form.setFieldsValue({
-							// cloudRegionId: this.regionIdOptions[0],
-							cloudType: this.cloudTypeOptions[0]})
-					}
-                    // this.selectedRegionID = "";
+					if(!this.isEdit)this.form.setFieldsValue({cloudType: this.cloudTypeOptions[0].code})
 				}
 			}
-		}
+		},
+        cloudTypeOptions(val) {
+            if (val.length) {
+                this.initCloudType = val[0].code;
+            }
+        },
+        initValues(val) {
+            if (val.code!==undefined) {
+                this.initCloudType = val.code;
+            }
+        }
 	},
 	methods: {
         ...mapActions("testENV", [
@@ -158,14 +162,6 @@ export default {
 		handleCancel() {
             this.updateVisible(false)
 		},
-        // selectCloudRegionID(key){
-         //    if (key === this.selectedSUTName) return;
-         //    this.selectedRegionID = key;
-         //    this.getCloudTypeOptions({
-         //        selectRegionId: key
-         //    });
-         //    this.form.setFieldsValue({ cloudType: "" });
-		// },
 		handleSubmit(e) {
 			e.preventDefault();
 			this.form.validateFields((err, values) => {
