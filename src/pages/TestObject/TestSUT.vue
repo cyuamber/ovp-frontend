@@ -21,7 +21,7 @@
 			:columns="columns"
 			:dataSource="tableData"
 			bordered
-			:loading="loading"
+			:loading="tableLoading"
 			rowKey="id"
 			size="default"
 			:pagination="pagination"
@@ -59,7 +59,6 @@ export default {
 			isEdit: false,
 			currentPage: "TestSUT",
 			columns: TestSUTColumns,
-			loading: false
 		};
 	},
 	computed: {
@@ -71,6 +70,7 @@ export default {
 			visible: state => state.testSUT.visible,
 			createTime: state => state.testSUT.createTime,
             currentTab: state => state.testSUT.currentTab,
+            tableLoading: state => state.testSUT.tableLoading
 		}),
         keyword: {
             get() {
@@ -113,9 +113,8 @@ export default {
         ]),
         initTestSUTeTable() {
             this.getVNFOptions();
-            this.loading = true;
             let paramsObj = {};
-            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false));
+            this.getTableData({paramsObj,isFilter:false})
         },
 		handleCreate() {
             this.updateVisible(true);
@@ -124,9 +123,8 @@ export default {
 		handleTabsChange(key) {
             this.changeTab(key);
             this.keyword = '';
-            this.loading = true;
             let paramsObj = {};
-            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
+            this.getTableData({paramsObj,isFilter:false})
 		},
 		// Get table data by entering information or selecting time
 		serchTestSUT(keyword) {

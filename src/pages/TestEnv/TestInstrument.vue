@@ -7,7 +7,7 @@
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
     </div>
     <div class="table">
-      <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange">
+      <a-table :columns="columns" :dataSource="tableData" bordered  :loading="tableLoading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
@@ -35,7 +35,6 @@ export default {
         return{
             visible: false,
             columns: TestInsrigisterColumns,
-            loading: false,
             currentPage:'TestInstrumentMGT',
             isEdit: false,
             createTime: '',
@@ -47,7 +46,8 @@ export default {
             tableData: state => state.testInstrument.tableData,
             pagination: state => state.testInstrument.pagination,
             singleData: state => state.testInstrument.singleData,
-            loadingMessage: state => state.testInstrument.loadingMessage
+            loadingMessage: state => state.testInstrument.loadingMessage,
+            tableLoading: state => state.testInstrument.tableLoading
         }),
     },
     mounted () {
@@ -62,8 +62,7 @@ export default {
             "deleteMeterSys"
         ]),
         initTestInsTable() {
-            this.loading = true;
-            this.getTableData({}).then(() => this.loading = false)
+            this.getTableData({})
         },
         handleCreateClick(){
             this.getMeterSys("");
@@ -71,12 +70,11 @@ export default {
             this.isEdit = false;
         },
         handleTableChange(pagination){
-            this.loading = true;
             this.getPagination({pagination});
             let current = pagination.current,
                 pageSize = pagination.pageSize,
                 obj = {name: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
-            this.getTableData(obj).then(() => this.loading = false)
+            this.getTableData(obj)
         },
         // Filter by creating time
         onChange(date,d) {
@@ -84,7 +82,6 @@ export default {
             this.testInsSearch()
         },
         testInsSearch(keyword, isSearch){
-            this.loading = true;
             let obj = {};
             if(isSearch) this.keyword = keyword;
             if(!(keyword === '' && this.createTime === '')) {
@@ -92,7 +89,7 @@ export default {
             }
             this.clearPagination();
             // Simulation request
-            this.getTableData(obj).then(() => this.loading = false)
+            this.getTableData(obj)
         },
         close(){
             this.visible = false;
@@ -116,7 +113,7 @@ export default {
             }
         },
         getAllMeterSys(){
-            this.getTableData({}).then(() => this.loading = false)
+            this.getTableData({})
         }
     }
 };

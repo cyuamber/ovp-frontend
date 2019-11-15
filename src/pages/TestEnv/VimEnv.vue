@@ -24,7 +24,7 @@
 						:columns="tab === 'VIM ENV'? VIMColumns : VNFMColumns"
 						:dataSource="tab === 'VIM ENV' ? VIMTableData : VNFMTableData"
 						bordered
-						:loading="loading"
+						:loading="tableLoading"
 						rowKey="index"
 						size="default"
 						:pagination="pagination"
@@ -70,11 +70,11 @@ export default {
 			VIMColumns: testEnvVIMColumns,
 			VNFMColumns: testEvnVNFMColumns,
 			isEdit: false,
-			loading: false,
 		};
 	},
 	computed: {
 		...mapState({
+            tableLoading: state => state.testENV.tableLoading,
 			loadingMessage: state => state.testENV.loadingMessage,
 			VIMTableData: state => state.testENV.VIMTableData,
 			VNFMTableData: state => state.testENV.VNFMTableData,
@@ -107,17 +107,15 @@ export default {
         initVimEnvTable() {
             let date = new Date('2019-10-11');
             console.log(date.getTime(),"----date.getTime()");
-            this.loading = true;
             this.getCloudTypeOptions();
             let paramsObj = {};
-            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
+            this.getTableData({paramsObj,isFilter:false})
         },
 		handleTabsChange(key) {
             this.changeTab(key);
 			this.keyword = '';
-			this.loading = true;
             let paramsObj = {};
-            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
+            this.getTableData({paramsObj,isFilter:false})
 		},
 		handleRigister() {
             this.updateVisible(true);

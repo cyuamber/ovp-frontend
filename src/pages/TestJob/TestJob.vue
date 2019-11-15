@@ -10,7 +10,7 @@
         :columns="columns"
         :dataSource="tableData"
         bordered
-        :loading="loading"
+        :loading="tableLoading"
         rowKey="index"
         size="default"
         :pagination="pagination"
@@ -58,8 +58,9 @@ export default {
 			isShow: state => state.testJob.isShow,
 			loadingMessage: state => state.testJob.loadingMessage,
 			tableData: state => state.testJob.tableData,
-			pagination: state => state.testJob.pagination
-		}),
+			pagination: state => state.testJob.pagination,
+            tableLoading: state => state.testJob.tableLoading
+        }),
 	},
 	components: { Drawer, Loading },
 	mounted() {

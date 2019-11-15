@@ -19,6 +19,7 @@ const state = {
 	},
 	source: null,
 	visible: false,
+    tableLoading: false,
 	pagination: {},
 	createTime: '',
 	keyword: '',
@@ -63,6 +64,9 @@ const mutations = {
 			toast
 		}
 	},
+    updateTableLoading(state, tableLoading) {
+        state.tableLoading = tableLoading
+    },
 	updateToken(state, source) {
 		state.source = source
 	},
@@ -107,13 +111,15 @@ const actions = {
 		})
 	},
 	getTableData({ commit,state }, { paramsObj, isFilter }) {
+        commit('updateTableLoading', true);
         paramsObj.flag = state.currentTab;
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
         let axiosrequest = axiosgetType?axiospost:axiosget;
         axiosrequest(API.sutMgt.sutMgtTable,paramsObj).then(res => {
 				if (res.code === 200) {
-					commit('updateTableData', res)
+					commit('updateTableData', res);
+                    commit('updateTableLoading', false);
 					if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
 				} else {
 					if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')

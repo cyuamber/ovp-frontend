@@ -9,7 +9,7 @@
                     <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
                 </div>
                 <div class="table">
-                    <a-table :columns="columns" :dataSource="tableData" bordered :loading="loading" rowKey="id"
+                    <a-table :columns="columns" :dataSource="tableData" bordered   :loading="tableLoading" rowKey="id"
                              size="default" :pagination="pagination" @change="handleTableChange">
               <span slot="action" slot-scope="action,record">
                 <a-tag v-for="(item,index) in action" :key="index" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
@@ -42,7 +42,6 @@
                 tabss:PackageMGTTabs,
                 visible: false,
                 columns: VnfpnfSuiteColumns,
-                loading: true,
                 currentPage:'VNF/PNFSuiteMGT',
                 isEdit: false,
                 createTime: '',
@@ -56,6 +55,7 @@
                 SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
                 loadingMessage: state => state.VnfpnfSuite.loadingMessage,
                 currentTab: state => state.VnfpnfSuite.currentTab,
+                tableLoading: state => state.VnfpnfSuite.tableLoading
             }),
         },
         watch: {
@@ -81,9 +81,8 @@
                 "changeTab"
             ]),
             initVnfPnfSuiteTable() {
-                this.loading = true;
                 this.getVNFOptions();
-                this.getTableData({}).then(() =>this.loading = false)
+                this.getTableData({})
             },
             handleClick(){
                 this.visible = true;
@@ -93,16 +92,14 @@
             handleTabsChanges(key){
                 console.log(key,"key")
                 this.changeTab(key);
-                this.loading = true;
-                this.getTableData({}).then(() =>this.loading = false)
+                this.getTableData({})
             },
             handleTableChange(pagination){
-                this.loading = true;
                 this.getPagination({pagination});
                 let current = pagination.current,
                     pageSize = pagination.pageSize,
                     obj = {name: this.keyword, createTime: this.createTime,pageNum:current,pageSize:pageSize};
-                this.getTableData(obj).then(() =>this.loading = false)
+                this.getTableData(obj)
             },
             // Filter by creating time
             onChange(date,d) {
@@ -110,7 +107,6 @@
                 this.VNFSuiteSearch()
             },
             VNFSuiteSearch(keyword, isSearch){
-                this.loading = true;
                 let obj = {flag:this.currentTab};
                 if(isSearch) this.keyword = keyword;
                 if(!(keyword === '' && this.createTime === '')) {
@@ -118,7 +114,7 @@
                 }
                 this.clearPagination();
                 // Simulation request
-                this.getTableData(obj).then(() =>this.loading = false)
+                this.getTableData(obj)
             },
             close(){
                 this.visible = false;
@@ -142,7 +138,7 @@
                 }
             },
             getAllTestMeter(){
-                this.getTableData({}).then(() =>this.loading = false)
+                this.getTableData({})
             }
         },destroyed(){
             this.changeTab(101)

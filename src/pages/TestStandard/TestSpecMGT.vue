@@ -7,13 +7,12 @@
       <a-date-picker class="calendar test-spec__calendar" @change="onChange" placeholder="Select date" />
     </div>
     <div class="test-spec__table">
-      <a-table :columns="columns" :dataSource="tableData" :loading="loading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange" @expand="caseMgtTableShow">
+      <a-table :columns="columns" :dataSource="tableData" :loading="tableLoading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange" @expand="caseMgtTableShow">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="test-spec__tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>
       </span>
         <a-table
-                v-if="caseMgtTableData.length>0"
                 class="test-case__table"
                 slot="expandedRowRender"
                 :columns="innerColumns"
@@ -53,7 +52,6 @@ export default {
             visible: false,
             columns: TestSpecColumns,
             innerColumns:TestCaseColumns,
-            loading: true,
             currentPage:'TestSpecMGT',
             isEdit: false,
             publishTime: '',
@@ -66,7 +64,9 @@ export default {
             caseMgtTableData: state => state.testSpecMGT.caseMgtTableData,
             pagination: state => state.testSpecMGT.pagination,
             testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
-            loadingMessage: state => state.testSpecMGT.loadingMessage
+            loadingMessage: state => state.testSpecMGT.loadingMessage,
+            tableLoading: state => state.testSpecMGT.tableLoading
+
         }),
     },
     mounted () {
@@ -85,8 +85,7 @@ export default {
             "updatecaseMgtTableData"
         ]),
         initTestStandardTable() {
-            this.loading = true;
-            this.getTableData({}).then(() => this.loading = false)
+            this.getTableData({})
         },
         handleCreateClick(){
             this.visible = true;
@@ -95,12 +94,11 @@ export default {
             this.getSUTOptions();
         },
         handleTableChange(pagination){
-            this.loading = true;
             this.getPagination({pagination});
             let current = pagination.current,
                 pageSize = pagination.pageSize,
                 obj = {testSpecName: this.keyword, publishTime: this.publishTime,pageNum:current,pageSize:pageSize};
-            this.getTableData(obj).then(() => this.loading = false)
+            this.getTableData(obj)
         },
         caseMgtTableShow(expanded, record){
             this.updatecaseMgtTableData(record)
@@ -114,7 +112,6 @@ export default {
             this.testSpecSearch()
         },
         testSpecSearch(keyword, isSearch){
-            this.loading = true;
             let obj = {};
             if(isSearch) this.keyword = keyword;
             if(!(keyword === '' && this.publishTime === '')) {
@@ -122,7 +119,7 @@ export default {
             }
             this.clearPagination();
             // Simulation request
-            this.getTableData(obj).then(() => this.loading = false)
+            this.getTableData(obj)
         },
         showEditOrDeleteModal(item,testSpecSingleData){
             if(item === 'Edit') {
@@ -144,7 +141,7 @@ export default {
             }
         },
         getAllTestSpec(){
-            this.getTableData({}).then(() => this.loading = false)
+            this.getTableData({})
         }
     }
 };

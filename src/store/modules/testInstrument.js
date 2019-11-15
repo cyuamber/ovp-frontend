@@ -7,6 +7,7 @@ import moment from 'moment';
 const state = {
   tableData: [],
   singleData: {},
+    tableLoading: false,
   pagination: {current: 1 , total: 0},
     loadingMessage: {type: '', toast: ''}
 };
@@ -38,6 +39,9 @@ const mutations = {
             toast
         }
     },
+    updateTableLoading(state, tableLoading) {
+        state.tableLoading = tableLoading
+    },
 };
 const actions = {
   getTableData ({commit}, obj){
@@ -47,11 +51,15 @@ const actions = {
               req[item]=obj[item];
           }
       });
+      commit('updateTableLoading', true);
       let axiosrequest = axiosgetType?axiospost:axiosget;
       axiosrequest(API.instrumentMgs.instrumentMgsTable, req).then(res => {
       if(res.code === 200){
         commit('updateTableData',res);
-          if(req.createTime || req.name ) commit('updateSuccessMessage','Successfully get table data')
+          if(req.createTime || req.name ){
+              commit('updateSuccessMessage','Successfully get table data')
+              commit('updateTableLoading', false);
+          }
       }else {
           if(req.createTime || req.name ) commit('updateFailedMessage','Network exception, please try again')
       }

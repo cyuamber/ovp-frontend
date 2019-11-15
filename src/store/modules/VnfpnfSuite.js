@@ -8,6 +8,7 @@ const state = {
   tableData: [],
   VNFOptions: [],
   SuiteSingleData: {},
+    tableLoading: false,
 source: null,
 currentTab:101,
   pagination: {current: 1 , total: 0, pageSize:10},
@@ -50,6 +51,9 @@ const mutations = {
     updateToken(state,source){
         state.source = source
     },
+    updateTableLoading(state, tableLoading) {
+        state.tableLoading = tableLoading
+    },
 };
 const actions = {
   getTableData ({commit,state}, obj){
@@ -60,12 +64,14 @@ const actions = {
             req[item]=obj[item];
         }
     });
+      commit('updateTableLoading', true);
       req.flag = state.currentTab;
       console.log(req,"req");
       let axiosrequest = axiosgetType?axiospost:axiosget;
       axiosrequest(API.suiteMgt.suiteMgtTable, req).then(res => {
         if(res.code === 200){
             commit('updateTableData',res);
+            commit('updateTableLoading', false);
             if(req.createTime || req.name ) commit('updateSuccessMessage','Successfully get table data')
         }else {
             if(req.createTime || req.name ) commit('updateFailedMessage','Network exception, please try again')

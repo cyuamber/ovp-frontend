@@ -5,6 +5,7 @@ import {axiosgetType} from "../../const/constant";
 
 const state = {
   tableData: [],
+    tableLoading: false,
     caseMgtTableData: [],
     SUTOptions: [],
   VNFOptions: [],
@@ -52,6 +53,9 @@ updateSUTOptions(state, Options){
             toast
         }
     },
+    updateTableLoading(state, tableLoading) {
+        state.tableLoading = tableLoading
+    },
 }
 const actions = {
   getTableData ({commit}, obj){
@@ -61,10 +65,12 @@ const actions = {
               req[item]=obj[item];
           }
       });
+      commit('updateTableLoading', true);
       let axiosrequest = axiosgetType?axiospost:axiosget;
       axiosrequest(API.TestSpecMgt.specMgtTable, req).then(res => {
             if(res.code === 200){
                 commit('updateTableData',res);
+                commit('updateTableLoading', false);
                 if(req.publishTime || req.testSpecName ) commit('updateSuccessMessage','Successfully get table data')
             }else {
                 if(req.publishTime || req.testSpecName ) commit('updateFailedMessage','Network exception, please try again')

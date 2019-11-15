@@ -16,7 +16,8 @@ const state = {
     visible: false,
     cloudTypeOptions: [],
     regionIdOptions: [],
-    initValues: {}
+    initValues: {},
+    tableLoading: false
 }
 
 const mutations = {
@@ -38,6 +39,9 @@ const mutations = {
     },
     changeTab(state, tab){
         state.currentTab = tab
+    },
+    updateTableLoading(state, tableLoading) {
+        state.tableLoading = tableLoading
     },
     setFilterItem(state,{time, key, pageObj, isSearch, message}){
         if(isSearch){
@@ -119,9 +123,11 @@ const actions = {
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
         let axiosrequest = axiosgetType?axiospost:axiosget;
+        commit('updateTableLoading', true);
         axiosrequest(url, paramsObj).then(res => {
             if(res.code === 200){
-                commit('updateTableData',res)
+                commit('updateTableData',res);
+                commit('updateTableLoading', false);
                 if(isFilter) commit('updateSuccessMessage','Successfully get table data')
             }else {
                 if(isFilter) commit('updateFailedMessage','Failed to get form data')

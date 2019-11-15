@@ -11,6 +11,7 @@ import {axiosgetType} from "../../const/constant";
 const state = {
 	isShow: false,
 	loadingMessage: null,
+    tableLoading: false,
     SUTTypeList: [],
 	SUTNameList: [],
 	getSUTName: false,
@@ -114,7 +115,10 @@ const mutations = {
 	updateTableItemData(state, data){
 		let index = data.index-1
 		state.tableData.splice( index, 1, data )
-	}
+	},
+    updateTableLoading(state, tableLoading) {
+        state.tableLoading = tableLoading
+    },
 }
 
 const actions = {
@@ -122,6 +126,7 @@ const actions = {
 		let obj = {pageNum: state.pageNum, pageSize: state.pageSize}
 		if(state.createTime !== '') obj.createTime = state.createTime;
         let axiosrequest = axiosgetType?axiospost:axiosget;
+        commit('updateTableLoading', true);
         axiosrequest(API.testJobMgt.testJobTable,obj).then((res) => {
 			if (res.code === 200) {
 				state.pagination = {
@@ -134,6 +139,7 @@ const actions = {
 					item.actions = [item.status === 1 ? 'Stop' : 'Start', 'Delete', 'Download', 'More']
 					return item
 				})
+                commit('updateTableLoading', false);
 				commit('updateTableData', tableData)
 				if(bool) commit('updateSuccessMessage', 'Successfully get table data')
 			}else if(bool) commit('updateFailedMessage', 'Network exception, please try again')
