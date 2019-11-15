@@ -17,11 +17,11 @@
         :scroll="{x: 1630}"
         @change="handlePageChange"
       >
-        <span slot="status" slot-scope="status,record">
+        <span slot="status" slot-scope="status">
           <span
             class="test-job__showState"
-            :style="getStatusStyle(record.status)"
-            :title="getStatusTitle(record.status)"
+            :style="getStatusStyle(status)"
+            :title="getStatusTitle(status)"
           ></span>
         </span>
         <span slot="action" slot-scope="action,record">
@@ -174,10 +174,10 @@ export default {
 
 		},
 		getStatusTitle(status){
-			return status === "STARTED"? 'Pending execution': (status === "RUNNING"? 'Executing':(status === "DONE"? 'Execution completed':'Execution failed'))
+			return status === "CREATED" || status === "STARTED"? 'Pending execution': (status === "RUNNING"? 'Executing':(status === "DONE"? 'Execution completed':'Execution failed'))
 		},
 		getStatusStyle(status){
-			let color = (status === "STARTED"? '#979797': (status === "RUNNING"? '#F5A623':(status === "DONE"? '#7ED321':'#D0021B')))
+			let color = (status === "CREATED" || status === "STARTED"? '#979797': (status === "RUNNING"? '#F5A623':(status === "DONE"? '#7ED321':'#D0021B')))
 			return {backgroundColor: color}
 		},
 		getActionsColor(actions, item){

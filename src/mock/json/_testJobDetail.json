@@ -1,0 +1,27 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "createTime": 1573804777177,
+      "updateTime": 1573804788133,
+      "id": 6,
+      "jobId": 392742364387557376,
+      "caseId": 1000,
+      "caseStatus": "DONE",
+      "executionStartTime": "2019-11-15 15:59:30",
+      "consumes": 10413,
+      "jobExecutionStartTime": "2019-11-15 15:59:29",
+      "caseEntity": {
+        "id": 1000,
+        "number": 1000,
+        "name": "vFW-Function-Policy",
+        "description": null,
+        "version": "v1.0",
+        "status": null
+      }
+    }
+  ],
+  "total": 1,
+  "pageTotal": 1
+}

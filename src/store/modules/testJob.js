@@ -28,7 +28,8 @@ const state = {
 	isJobDetail: false,
 	createTime: '',
 	pageNum: 1,
-	pageSize: 10
+	pageSize: 10,
+    detailTestCase:[]
 }
 
 const mutations = {
@@ -119,6 +120,9 @@ const mutations = {
     updateTableLoading(state, tableLoading) {
         state.tableLoading = tableLoading
     },
+    updateDetailTestCase(state, detailTestCase) {
+        state.detailTestCase = detailTestCase
+    },
 }
 
 const actions = {
@@ -136,7 +140,7 @@ const actions = {
 				let tableData = res.body.map((item, index) => {
 					item.createTime = moment(item.createTime).format('YYYY-MM-DD');
 					item.index = res.body.length * (state.pagination.current - 1) + index + 1;
-					item.actions = [item.status === 1 ? 'Stop' : 'Start', 'Delete', 'Download', 'More']
+					item.actions = [item.status === "RUNNING" ? 'Stop' : 'Start', 'Delete', 'Download', 'More']
 					return item
 				})
                 commit('updateTableLoading', false);
@@ -358,9 +362,19 @@ const actions = {
                     dispatch('getTableData',true)
                 }
             });
-		commit('updateTableItemData',data);
         dispatch('getTableData',true)
-	}
+	},
+    detailTestCaseJop({dispatch,commit},data){
+        // Simulation request
+        axiosget(API.testJobMgt.testJobDetail.replace(":jobId",data.jobId).replace(":ExecutionStartTime",data.executionStartTime))
+            .then(res => {
+                if (res.code === 200) {
+                    commit('updateSuccessMessage', 'Successfully detail testing');
+                    commit('updateDetailTestCase',res.body);
+                }
+            });
+        dispatch('getTableData',true)
+    }
 
 }
 

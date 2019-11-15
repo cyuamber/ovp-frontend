@@ -7,7 +7,7 @@
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date"/>
     </div>
     <div class="table">
-      <a-table :columns="columns" :dataSource="tableData" bordered  :loading="tableLoading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange">
+      <a-table :columns="columns" :dataSource="tableData" bordered :loading="tableLoading" rowKey="id" size="default" :pagination="pagination" @change="handleTableChange">
       <span slot="action" slot-scope="action,record">
         <a-tag v-for="item in action" :key="item" :color="item === 'Edit'? 'blue' : 'red'" class="tag"
                @click="(() => showEditOrDeleteModal(item,record))">{{item}}</a-tag>

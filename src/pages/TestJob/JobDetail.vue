@@ -35,17 +35,19 @@
                             <p>{{currentJob.remark}}</p>
 						</div>
 					</a-card-grid>
-					<a-card-grid
-						style="width: 100%"
-						v-for="(item,index) in currentJob.cases"
-						:key="index"
-						:hoverable="false"
-					>
-                        caseName：{{item.name}}{{item.status}}
-						<span class="job-detail__testCase-status"
-                              :style="getCaseStatusStyle(item.status)"
-                        ></span>
-					</a-card-grid>
+                    <div v-if="detailTestCase.length >0">
+                        <a-card-grid
+                            style="width: 100%"
+                            v-for="(item,index) in detailTestCase"
+                            :key="index"
+                            :hoverable="false"
+                        >
+                            caseName：{{item.caseEntity.name}}
+                            <span class="job-detail__testCase-status" v-if="item.caseStatus!==null && item.caseStatus!==undefined"
+                                  :style="getCaseStatusStyle(item.caseStatus)"
+                            ></span>
+                        </a-card-grid>
+                    </div>
 				</a-card>
 			</div>
 		</div>
@@ -65,12 +67,14 @@ export default {
             statusColor: '',
             stompClient:'',
             timer:'',
+            caseStatusTimer:''
 		}
 	},
 	computed: {
 		...mapState({
 			percent: state => state.testJob.percent,
-			status: state => state.testJob.status
+			status: state => state.testJob.status,
+            detailTestCase: state => state.testJob.detailTestCase,
 		}),
 		infoList() {
 			let list = [];
@@ -83,7 +87,6 @@ export default {
 			return list;
 		},
 		currentJob() {
-            console.log(this.$route.params,"this.$route.params")
 			return this.$route.params;
 		}
 	},
@@ -106,7 +109,8 @@ export default {
 	},
 	methods: {
         ...mapActions("testJob", [
-			"getProgress"
+			"getProgress",
+            "detailTestCaseJop"
         ]),
         ...mapMutations("testJob", [
             "changeComponent",
@@ -114,11 +118,16 @@ export default {
         ]),
         initJobDetail(){
             this.initWebSocket();
-
+            if(this.currentJob.jobStatus!=="CREATED"){
+                this.caseStatusTimer = setInterval(() => {
+                    this.detailTestCaseJop({jobId:this.currentJob.jobId,executionStartTime:this.currentJob.executionStartTime});
+                }, 5000);
+            }
 		},
 		handleBack() {
 			// this.$router.back()
             this.$emit('close');
+            clearInterval(this.caseStatusTimer);
 			this.$router.push("/testjobmgt");
 		},
         getCaseStatusStyle(status){
@@ -163,7 +172,8 @@ export default {
             }, 5000);
         },
         connection() {
-            let socket = new SockJS('/webSocketEndPoint ');
+            let socket = new SockJS('/webSocketEndPoint');
+            // let socket = new SockJS('http://localhost:8080');
             this.stompClient = Stomp.over(socket);
             let headers = {
                 Authorization:''
@@ -189,6 +199,7 @@ export default {
     beforeDestroy: function () {
         this.disconnect();
         clearInterval(this.timer);
+        clearInterval(this.caseStatusTimer);
     },
 
 };
