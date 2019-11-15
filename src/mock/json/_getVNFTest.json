@@ -1,0 +1,103 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "id": 1,
+      "name": "Huawei_vMME",
+      "type":1,
+      "typeCH":{
+        "code": 1,
+        "dictLabel": "MME",
+        "dictValue": "MME",
+        "dictParentCode": null,
+        "status": "\u0000",
+        "remark": null,
+        "lang": null
+      },
+      "vendor": "Huawei",
+      "createTime": 1570838400000,
+      "updateTime": null,
+      "flag": 101,
+      "fileName": null
+    },
+    {
+      "id": 2,
+      "name": "ZTE_vPCRF",
+      "type":2,
+      "typeCH":{
+        "code": 2,
+        "dictLabel": "PCRF",
+        "dictValue": "PCRF",
+        "dictParentCode": null,
+        "status": "\u0000",
+        "remark": null,
+        "lang": null
+      },
+      "vendor": "ZTE",
+      "createTime": 1568160000000,
+      "updateTime": null,
+      "flag": 101,
+      "fileName": null
+    },
+    {
+      "id": 3,
+      "name": "ZTE_vPCRF",
+      "type":3,
+      "typeCH":{
+        "code": 3,
+        "dictLabel": "PCRF",
+        "dictValue": "PCRF",
+        "dictParentCode": null,
+        "status": "\u0000",
+        "remark": null,
+        "lang": null
+      },
+      "vendor": "ZTE",
+      "createTime": 1572566400000,
+      "updateTime": null,
+      "flag": 101,
+      "fileName": null
+    },
+    {
+      "id": 4,
+      "name": "ZTE_vPCRF",
+      "type":4,
+      "typeCH":{
+        "code": 4,
+        "dictLabel": "PCRF",
+        "dictValue": "PCRF",
+        "dictParentCode": null,
+        "status": "\u0000",
+        "remark": null,
+        "lang": null
+      },
+      "vendor": "ZTE",
+      "createTime": 1568160000000,
+      "updateTime": null,
+      "flag": 101,
+      "fileName": null
+    },
+    {
+      "id": 5,
+      "name": "ZTE_vPCRF",
+      "type":5,
+      "typeCH":{
+        "code": 5,
+        "dictLabel": "PCRF",
+        "dictValue": "PCRF",
+        "dictParentCode": null,
+        "status": "\u0000",
+        "remark": null,
+        "lang": null
+      },
+      "vendor": "ZTE",
+      "createTime": 1564704000000 ,
+      "updateTime": null,
+      "flag": 101,
+      "fileName": null
+    }
+  ],
+  "total": 5,
+  "pageTotal": 1
+}

@@ -11,6 +11,7 @@ export default {
         putname: '/articles',
     },
     getCurrentLanguage:"/lang/local",
+    uploadFile:baseUrl+"/files/upload",
     vimVnfmMgt:{
         vimEnvMgtTable:baseUrl+"/vimEnvMgt",
         cloudRegionID:baseUrl+"/cloudRegionID",
@@ -27,10 +28,10 @@ export default {
         instrumentMgsTable:baseUrl+"/instrumentMgs",
         instrumentMgsInsert:baseUrl+"/instrumentMgs/insert",
         instrumentMgsUpdate:baseUrl+"/instrumentMgs/update",
-        instrumentMgsDelete:baseUrl+"/instrumentMgs/:id/`delete",
+        instrumentMgsDelete:baseUrl+"/instrumentMgs/:name/delete",
     },
     suiteMgt:{
-        suiteMgt:baseUrl+"/suiteMgt",
+        suiteMgtTable:baseUrl+"/suiteMgt",
         suiteMgtInsert:baseUrl+"/suiteMgt/insert",
         suiteMgtUpdate:baseUrl+"/suiteMgt/update",
         suiteMgtDelete:baseUrl+"/suiteMgt/:id/delete",
@@ -41,18 +42,26 @@ export default {
         sutMgtInsert:baseUrl+"/sutMgt/insert",
         sutMgtUpdate:baseUrl+"/sutMgt/update",
         sutMgtDelete:baseUrl+"/sutMgt/:id/delete",
-        sutMgtType:baseUrl+"/types/:flag",
-        uploadFile:baseUrl+"/files/upload"
+        sutMgtType:baseUrl+"/types/:flag"
     },
-    testJboMgt:{
-        testJboTable:baseUrl+"/jobs",
-        testJboStart:baseUrl+"/jobs/:jobId/start",
-        testJboStop:baseUrl+"/jobs/:jobId/stop"
+    testJobMgt:{
+        testJobTable:baseUrl+"/jobs",
+        testJobInsert:baseUrl+"/sutMgt/:jobId/insert",
+        testJobUpdate:baseUrl+"/sutMgt/:jobId/update",
+        testJobDelete:baseUrl+"/sutMgt/:id/delete",
+        testJobStart:baseUrl+"/jobs/:jobId/start",
+        testJobStop:baseUrl+"/jobs/:jobId/stop",
+        testJobSUTType:baseUrl+"/sutType",
+        testJobSUTName:baseUrl+"/sutName/:code",
+        testJobSpec:baseUrl+"/sutName/:type",
+        testJobTestCase:baseUrl+"/testCase/:id",
     },
     TestSpecMgt:{
         specMgtTable:baseUrl+"/specMgt",
         specMgtInsert:baseUrl+"/specMgt/insert",
         specMgtUpdate:baseUrl+"/specMgt/update",
         specMgtDelete:baseUrl+"/specMgt/:id/delete",
+        TestSpecSUTType:baseUrl+"/sutType",
+        TestSpecVNFType:baseUrl+"/types/:flag"
     }
 }

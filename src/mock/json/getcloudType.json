@@ -1,0 +1,53 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "code": "1001",
+      "dictLabel": "openstack",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "1003",
+      "dictLabel": "vmware",
+      "dictValue": "3",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "1002",
+      "dictLabel": "Azure",
+      "dictValue": "2",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "1004",
+      "dictLabel": "FusionSphere",
+      "dictValue": "4",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "1005",
+      "dictLabel": "StarlingX",
+      "dictValue": "5",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  ],
+  "total": 5,
+  "pageTotal": 1
+}

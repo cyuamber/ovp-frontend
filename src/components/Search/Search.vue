@@ -42,27 +42,22 @@ import {axiosget} from '../../utils/http'
           break;
         case 'VIMTestEnvMGT':
           this.url = '/getVIM';
-          this.key = 'cloudRegionId';
           this.event = 'SearchVIMOrVNFM'
           break;
         case 'VNFMTestEnvMGT':
           this.url = '/getVNFM';
-          this.key = 'VNFMname';
           this.event = 'SearchVIMOrVNFM'
           break;
         case 'TestInstrumentMGT':
           this.url = '/getMeterSys';
-          this.key = 'meterSysName';
           this.event = 'testInsSearch'
           break;
         case 'VNF/PNFSuiteMGT':
           this.url = '/getTestTask';
-          this.key = 'testTaskId';
           this.event ='VNFSuiteSearch';
           break;
         case 'TestSpecMGT':
           this.url = '/GETTestSpec';
-          this.key = 'testSpecId';
           this.event ='testSpecSearch';
           break;
       }

@@ -1,13 +1,16 @@
-import {axiosget, axiospost} from '../../utils/http';
+import {axiosget, axiospost, axiosput} from '../../utils/http';
 import moment from 'moment';
+import API from '../../const/apis';
 import axios from "axios/index";
+import {axiosgetType} from "../../const/constant";
 
 const state = {
   tableData: [],
   VNFOptions: [],
   SuiteSingleData: {},
 source: null,
-  pagination: {current: 1 , total: 0},
+currentTab:101,
+  pagination: {current: 1 , total: 0, pageSize:10},
 loadingMessage: {type: '', toast: ''}
 };
 const mutations = {
@@ -29,6 +32,9 @@ const mutations = {
   updatePagination(state, Options){
       state.pagination = Options;
   },
+    changeTab(state, tab){
+        state.currentTab = tab
+    },
     updateFailedMessage(state,toast){
         state.loadingMessage = {
             type: 'failed',
@@ -46,22 +52,26 @@ const mutations = {
     },
 };
 const actions = {
-  getTableData ({commit}, obj){
-    let req = {};
+  getTableData ({commit,state}, obj){
+      console.log(obj,"obj")
+    let req = {pageNum:state.pagination.current,pageSize:state.pagination.pageSize};
     Object.keys(obj).forEach(item =>{
         if(obj[item] !== '' &&obj[item] !== undefined ){
             req[item]=obj[item];
         }
     });
-    axiosget('/getTestMeter', req).then(res => {
+      req.flag = state.currentTab;
+      console.log(req,"req");
+      let axiosrequest = axiosgetType?axiospost:axiosget;
+      axiosrequest(API.suiteMgt.suiteMgtTable, req).then(res => {
         if(res.code === 200){
             commit('updateTableData',res);
-            if(req.createTime || req.VNFTestName ) commit('updateSuccessMessage','Successfully get table data')
+            if(req.createTime || req.name ) commit('updateSuccessMessage','Successfully get table data')
         }else {
-            if(req.createTime || req.VNFTestName ) commit('updateFailedMessage','Network exception, please try again')
+            if(req.createTime || req.name ) commit('updateFailedMessage','Network exception, please try again')
         }
         },() => {
-            if(req.createTime || req.VNFTestName ) commit('updateFailedMessage','Network exception, please try again')
+            if(req.createTime || req.name ) commit('updateFailedMessage','Network exception, please try again')
         }
     )
   },
@@ -69,7 +79,8 @@ const actions = {
     commit('updateVNFTest',data)
   },
   getVNFOptions({commit}){
-      axiosget('/getTestMeterVNFType').then(res => {
+      let url = API.suiteMgt.suiteType.replace(":flag",state.currentTab);
+      axiosget(url).then(res => {
           if(res.code === 200){
               commit('updateVNFOptions',res.body)
           }else {
@@ -91,7 +102,7 @@ const actions = {
             commit('updateToken',source));
         let body = {...data};
         body.cancelToken = source.token;
-        axiospost('/uploadVNFFile',body).then( res => {
+        axiospost(API.uploadFile,{file:body},true).then( res => {
             commit('updateToken',null);
             if(res.code === 200) message.success('Upload successfully');
             else message.error('Upload failed')
@@ -100,24 +111,27 @@ const actions = {
             commit('updateToken',null)
         })
     },
-    createOrEditTestMeter({commit,dispatch},{data, isEdit}){
-        let url = isEdit ? '/updateTestMeter':'/createTestMeter';
-        axiospost(url, data)
+    createOrEditTestMeter({commit,dispatch,state},{data, isEdit}){
+        let url = isEdit ? API.suiteMgt.suiteMgtUpdate:API.suiteMgt.suiteMgtInsert;
+        let axiosType = isEdit ? axiosput : axiospost;
+        axiosType(url, data)
             .then((res) => {
                     if(res.code === 200){
                         commit('updateSuccessMessage',isEdit ? 'Successfully updated' : 'Has been added successfully');
-                        dispatch('getTableData',{})
+                        let obj = {flag:state.currentTab,pageNum:state.pagination.current,pageSize:state.pagination.pageSize};
+                        dispatch('getTableData',obj)
                     }else commit('updateFailedMessage',isEdit ? 'Update failed' : 'add failed')
                 },
                 () => {
                     commit('updateFailedMessage','Network exception, please try again')
                 })
     },
-    deleteTestMeter({commit,dispatch},data){
-        axiospost('/deleteTestMeter',data).then( res => {
+    deleteTestMeter({commit,dispatch,state},data){
+        axiospost(API.suiteMgt.suiteMgtDelete,data).then( res => {
             if(res.code === 200){
-                commit('updateSuccessMessage','Deleted successfully')
-                dispatch('getTableData',{})
+                commit('updateSuccessMessage','Deleted successfully');
+                let obj = {flag:state.currentTab,pageNum:state.pagination.current,pageSize:state.pagination.pageSize};
+                dispatch('getTableData',obj)
             }else commit('updateFailedMessage','Network exception, please try again')
         })
     }

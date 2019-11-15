@@ -18,7 +18,14 @@ const mockcolumns = [{
     dataIndex: "phone"
 }
 ]
-const axiosgetType = 'axiospost';
+const axiosgetType = true;
+const PackageMGTTabs =[{
+    key:"VNF",
+    val:101
+},{
+    key:"PNF",
+    val:102
+}]
 const TestSUTTabs =[{
     key:"VNF",
     val:101
@@ -39,11 +46,11 @@ const TestSUTColumns = [{
 },
 {
     title: 'Type',
-    dataIndex: 'type.dictLabel'
+    dataIndex: 'typeCH.dictLabel'
 },
 {
     title: 'Vendor',
-    dataIndex: 'version'
+    dataIndex: 'vendor'
 },
 {
     title: 'Create Time',
@@ -60,7 +67,7 @@ const TestSUTColumns = [{
 ]
 const testEnvVIMColumns = [
     {
-        title: 'NO.',
+        title: 'ID',
         dataIndex: 'id',
         fixed: 'left',
         width: 50,
@@ -82,7 +89,7 @@ const testEnvVIMColumns = [
     },
     {
         title: 'Cloud Type',
-        dataIndex: 'cloudType',
+        dataIndex: 'cloudTypeCH.dictLabel',
     },
     {
         title: 'Cloud Version',
@@ -120,7 +127,7 @@ const testEnvVIMColumns = [
 ]
 const testEvnVNFMColumns = [
     {
-        title: 'NO.',
+        title: 'ID',
         dataIndex: 'id',
         fixed: 'left',
         width: 50,
@@ -169,14 +176,14 @@ const testEvnVNFMColumns = [
 ];
 const testJobColumns = [
     {
-        title: 'No.',
-        dataIndex: 'index',
+        title: 'ID',
+        dataIndex: 'jobId',
         fixed: 'left',
         width: 50
     },
     {
         title: 'VNF Name',
-        dataIndex: 'VNFName',
+        dataIndex: 'sut.name',
     },
     {
         title: 'Job Name',
@@ -184,11 +191,11 @@ const testJobColumns = [
     },
     {
         title: 'Job Description',
-        dataIndex: 'jobDescription'
+        dataIndex: 'remark'
     },
     {
         title: 'Test Speciflcation',
-        dataIndex: 'testSpeciflcation'
+        dataIndex: 'spec.name'
     },
     {
         title: 'Created Time',
@@ -196,7 +203,7 @@ const testJobColumns = [
     },
     {
         title: 'Status',
-        dataIndex: 'status',
+        dataIndex: 'jobStatus',
         width: 70,
         scopedSlots: {
             customRender: 'status'
@@ -214,16 +221,20 @@ const testJobColumns = [
 ]
 const TestInsrigisterColumns = [
     {
+        title: 'ID',
+        dataIndex: 'id'
+    },
+    {
         title: 'Name',
-        dataIndex: 'meterSysName'
+        dataIndex: 'name'
     },
     {
         title: 'Vendor',
-        dataIndex: 'meterSysVendor'
+        dataIndex: 'vendor'
     },
     {
         title: 'Mnt Address',
-        dataIndex: 'meterSysUrl'
+        dataIndex: 'mntAddress'
     },
     {
         title: 'Create Time',
@@ -238,20 +249,24 @@ const TestInsrigisterColumns = [
 ]
 const VnfpnfSuiteColumns = [
     {
+        title: 'ID',
+        dataIndex: 'id'
+    },
+    {
         title: 'Name',
-        dataIndex: 'tesyMeterName'
+        dataIndex: 'name'
     },
     {
         title: 'Vendor',
-        dataIndex: 'tesyMeterVendor'
+        dataIndex: 'vendor'
     },
     {
         title: 'Version',
-        dataIndex: 'tesyMeterVersion'
+        dataIndex: 'version'
     },
     {
         title: 'Type',
-        dataIndex: 'tesyMeterType'
+        dataIndex: 'type'
     },
     {
         title: 'Create Time',
@@ -267,23 +282,23 @@ const VnfpnfSuiteColumns = [
 const TestSpecColumns = [
     {
         title: 'ID',
-        dataIndex: 'testSpecId'
+        dataIndex: 'id'
     },
     {
         title: 'Name',
-        dataIndex: 'testSpecName'
+        dataIndex: 'name'
     },
     {
         title: 'Version',
-        dataIndex: 'testSpecVersion'
+        dataIndex: 'version'
     },
     {
         title: 'SUT Type',
-        dataIndex: 'VNFtype'
+        dataIndex: 'sutTypeCH.dictLabel'
     },
     {
         title: 'Publish ORG',
-        dataIndex: 'PublishORG'
+        dataIndex: 'publishOrg'
     },
     {
         title: 'Publish Time',
@@ -411,6 +426,7 @@ const SUTType = ['VNF', 'PNF', 'XNF']
 export {
     mockcolumns,
     axiosgetType,
+    PackageMGTTabs,
     TestSUTTabs,
     TestSUTColumns,
     testEnvVIMColumns,

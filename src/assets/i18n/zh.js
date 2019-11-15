@@ -18,5 +18,11 @@ export const T = {
     "Instrument Package MGT":"测试仪表VNF/PNF包管理",
     "Test Job MGT":"测试任务管理",
     "Test Case MGT":"测试用例管理",
-    "Test Spec MGT":"测试规范管理"
+    "Test Spec MGT":"测试规范管理",
+    //Test Instrument MGT
+    "Mnt Address":"管理地址",
+    //Test Spec MGT
+    "SUT Type":"测试对象类型",
+    "Publish ORG":"发布组织",
+    "Publish Time":"发布时间",
 }

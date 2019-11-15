@@ -1,0 +1,71 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "code": 1,
+      "dictLabel": "MME",
+      "dictValue": "MME",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": 2,
+      "dictLabel": "PCRF",
+      "dictValue": "PCRF",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": 3,
+      "dictLabel": "SPGW",
+      "dictValue": "SPGW",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": 4,
+      "dictLabel": "FW",
+      "dictValue": "FW",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": 5,
+      "dictLabel": "DNS",
+      "dictValue": "DNS",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": 6,
+      "dictLabel": "TAS",
+      "dictValue": "TAS",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": 7,
+      "dictLabel": "HSS",
+      "dictValue": "HSS",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  ],
+  "total": 7,
+  "pageTotal": 1
+}

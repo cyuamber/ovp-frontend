@@ -1,0 +1,35 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "code": "10101",
+      "dictLabel": "FW",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "10102",
+      "dictLabel": "MME",
+      "dictValue": "3",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "10103",
+      "dictLabel": "PCRF",
+      "dictValue": "2",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  ],
+  "total": 3,
+  "pageTotal": 1
+}

@@ -1,0 +1,74 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "id": 1,
+      "name": "Huawei-VNFM",
+      "type": "Huaweivnfm",
+      "vendor": "Huawei",
+      "version": "V1.0",
+      "url": "http://10.43.45.18:80",
+      "vim": "Defulat-DC",
+      "createTime": 1573516800000,
+      "updateTime": null,
+      "username": "Admin",
+      "password": "demo123456!",
+      "certificateUrl": "7"
+    },{
+      "id": 2,
+      "name": "Generic-VNFM",
+      "type": "Genericvnfm",
+      "vendor": "ONAP",
+      "version": "V1.0",
+      "url": "http://10.42.12.18:8080",
+      "vim": "CPE-DC",
+      "createTime": 1569945600000,
+      "updateTime": null,
+      "username": "Admin",
+      "password": "demo123456!",
+      "certificateUrl": "7"
+    },{
+      "id": 3,
+      "name": "ZTE-VNFM",
+      "type": "Ztevnfm",
+      "vendor": "ZTE",
+      "version": "V1.0",
+      "url": "http://10.33.12.18:80",
+      "vim": "VoLTE-DC",
+      "createTime": 1564675200000,
+      "updateTime": null,
+      "username": "Admin",
+      "password": "demo123456!",
+      "certificateUrl": "7"
+    },{
+      "id": 4,
+      "name": "Nokia-VNFM",
+      "type": "Nokiavnfm",
+      "vendor": "Nokia",
+      "version": "V1.0",
+      "url": "http://10.12.32.18:8084",
+      "vim": "Defulat-DC",
+      "createTime": 1570752000000,
+      "updateTime": null,
+      "username": "Admin",
+      "password": "demo123456!",
+      "certificateUrl": "7"
+    },{
+      "id": 5,
+      "name": "Ericsson-VNFM",
+      "type": "Ericssonvnfm",
+      "vendor": "Ericsson",
+      "version": "V1.0",
+      "url": "http://10.12.32.18:8283",
+      "vim": "Defulat-DC",
+      "createTime": 1573516800000,
+      "updateTime": null,
+      "username": "Admin",
+      "password": "demo123456!",
+      "certificateUrl": "7"
+    }
+  ],
+  "total": 5,
+  "pageTotal": 1
+}
