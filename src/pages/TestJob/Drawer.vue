@@ -40,7 +40,7 @@
           :title="!getSUTNames ? 'Please select SUT Type first' : ''"
           @select="((key) => selectSUTName(key))"
         >
-          <a-select-option v-for="types in SUTNameList" :key="types.type" :value="types.type">{{types.name}}</a-select-option>
+          <a-select-option v-for="types in SUTNameList" :key="types.type+'+'+types.id" :value="types.type+'+'+types.id">{{types.name}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test Specification'"
@@ -86,8 +86,8 @@
               @change="onChange"
             >
               <a-card-grid
-                v-for="(item,index) in testCaseList"
-                :key="index "
+                v-for="item in testCaseList"
+                :key="item.id "
                 class="form__card--padding"
               >
                 <a-checkbox :value="item.id" class="form__checkbox--size" />
@@ -195,11 +195,11 @@ export default {
       this.form.setFieldsValue({ SUTName: "", TestSpecification: "" });
     },
     selectSUTName(key) {
-      if (key === this.selectedSUTName) return;
-      this.selectedSUTName = key;
+      // if (key === this.selectedSUTName) return;
+      this.selectedSUTName = key.split("+")[1];
       this.selectedSpecification = "";
       this.getSpecification({
-          SUTName: key,
+          SUTName: key.split("+")[0],
           message: this.$message
       });
       this.form.setFieldsValue({ TestSpecification: "" });

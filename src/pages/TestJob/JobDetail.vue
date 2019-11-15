@@ -41,7 +41,7 @@
 						:key="index"
 						:hoverable="false"
 					>
-                        caseName:{{item.name}}{{item.status}}
+                        caseName£º{{item.name}}{{item.status}}
 						<span class="job-detail__testCase-status"
                               :style="getCaseStatusStyle(item.status)"
                         ></span>

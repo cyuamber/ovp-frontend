@@ -151,8 +151,8 @@ const actions = {
 			jobName: values.JobName,
             remark: values.JobDescription,
 			// SUTType: values.SUTType,
-            sutId: values.SUTName,
-            specId: values.JobSpecification,
+            sutId: values.SUTName.split("+")[1],
+            specId: values.TestSpecification,
 			createrTime: moment(new Date()).format('YYYY-MM-DD'),
             caseIds: values.checkboxGroup
 		}
@@ -308,7 +308,7 @@ const actions = {
         })
     },
 	runTestJobMGT({commit,dispatch},data) {
-		axiosput(API.testJobMgt.testJobInsert.replace(":jobId",data.jobId))
+		axiosput(API.testJobMgt.testJobStart.replace(":jobId",data.jobId))
 		.then(res => {
 			if (res.code === 200) {
                 commit('updateSuccessMessage', 'Successfully started testing');

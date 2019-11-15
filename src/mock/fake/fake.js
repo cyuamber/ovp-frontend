@@ -544,42 +544,6 @@ module.exports = {
         "body": [
             {
                 "id": 0,
-                "name": "1",
-                "type": 101001,
-                "vendor": null,
-                "version": null,
-                "createTime": null,
-                "updateTime": null,
-                "flag": 0,
-                "fileName": null,
-                "typeCH": null
-            },
-            {
-                "id": 0,
-                "name": "1",
-                "type": 101001,
-                "vendor": null,
-                "version": null,
-                "createTime": null,
-                "updateTime": null,
-                "flag": 0,
-                "fileName": null,
-                "typeCH": null
-            },
-            {
-                "id": 0,
-                "name": "Huawei_vMME",
-                "type": 101001,
-                "vendor": null,
-                "version": null,
-                "createTime": null,
-                "updateTime": null,
-                "flag": 0,
-                "fileName": null,
-                "typeCH": null
-            },
-            {
-                "id": 0,
                 "name": "ZTE_vPCRF",
                 "type": 101002,
                 "vendor": null,
