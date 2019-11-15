@@ -1,23 +1,58 @@
+// module.exports = {
+//     publicPath: './',
+//     outputDir: 'dist',
+//     lintOnSave: true,
+//     productionSourceMap: false,
+//     devServer: {
+//         host: '0.0.0.0',
+//         port: '8080',
+//         disableHostCheck: true,
+//         https: false,
+//         hotOnly: false,
+//         //proxy
+//         proxy: {
+//             '/api': {
+//                 target: 'http://localhost:3004',
+//                 changeOrigin: true,
+//                 pathRewrite: {
+//                     '^/api': ''
+//                 }
+//             }
+//         }
+//     }
+// }
+
+
+const devProxy = ['/api'];  // proxy route
+let proEnv = require('./config/pro.env');
+let devEnv = require('./config/dev.env');
+const env = process.env.NODE_ENV;
+// generate proxy object
+let proxyObj = {};
+if (env === 'development') {
+    devProxy.forEach((value) => {
+        proxyObj[value] = {
+            target: devEnv.hosturl,
+            changeOrigin: true,
+            pathRewrite: {
+                [`^${value}`]: ""
+            }
+        };
+    });
+} else if (env === 'production') {
+    proxyObj = proEnv.hosturl
+}
+
 module.exports = {
     publicPath: './',
-    outputDir: 'dist',
     lintOnSave: true,
-    productionSourceMap: false,
+    outputDir: 'dist',
     devServer: {
         host: '0.0.0.0',
-        port: '8080',
+        port: 8080,
         disableHostCheck: true,
         https: false,
         hotOnly: false,
-        //proxy
-        proxy: {
-            '/api': {
-                target: 'http://localhost:3004',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/api': ''
-                }
-            }
-        }
+        proxy: proxyObj,
     }
-}
+};
