@@ -5,6 +5,7 @@ import {
     axiosdelete
 } from '../../utils/http';
 import API from '../../const/apis';
+import { axiosgetType } from "../../const/constant";
 import moment from 'moment';
 import axios from 'axios'
 
@@ -109,7 +110,8 @@ const actions = {
         paramsObj.flag = state.currentTab;
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
-		axiosget(API.sutMgt.sutMgtTable,paramsObj).then(res => {
+        let axiosrequest = axiosgetType?axiospost:axiosget;
+        axiosrequest(API.sutMgt.sutMgtTable,paramsObj).then(res => {
 				if (res.code === 200) {
 					commit('updateTableData', res)
 					if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
@@ -164,7 +166,7 @@ const actions = {
 			...data
 		};
 		body.cancelToken = source.token;
-        axiospost(API.sutMgt.uploadFile, {file:body}, true).then(res => {
+        axiospost(API.uploadFile, {file:body}, true).then(res => {
 			commit('updateToken', null)
 			if (res.code === 200) message.success('Upload successfully')
 			else message.error('Upload failed')

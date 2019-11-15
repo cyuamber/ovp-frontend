@@ -59,7 +59,7 @@
                             :beforeUpload="beforeUpload"
                             class="form__upload-float"
                             name="files"
-                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: !editUploadtextShow ? true :false,}]}]"
+                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: editUploadtextShow ? true :false,}]}]"
                     >
                         <p class="ant-upload-text form__upload-text--font-size">
                             <a-icon type="upload"/>&nbsp;&nbsp;&nbsp;
@@ -150,7 +150,7 @@
                 }
             },
             VNFTest(val) {
-                if (val.length) {
+                if (val.code!==undefined) {
                     this.initNVFTypeValue = val.code;
                     this.spin = false;
                 }
@@ -192,6 +192,7 @@
                     if (!err) {
                         // Did not implement the check if there is a change
                         const formData = new FormData();
+                        console.log(formData,"formData")
                         if(!this.isEdit ||(this.isEdit && !this.editUploadtextShow)){
                             formData.append("file", values.upload[0]);
                         }
@@ -204,13 +205,12 @@
                             createTime: this.isEdit
                                 ? this.VNFTest.createTime
                                 : moment(new Date()).format("YYYY-MM-DD"),
-                            VNFFileName: !this.editUploadtextShow ? values.upload[0].name : this.VNFTest.VNFFileName
+                            // fileName:"test.casr"
+                            fileName: !this.editUploadtextShow ? values.upload[0].name : this.VNFTest.fileName
                         };
-                        if(this.isEdit && this.editUploadtextShow){
-                            this.submitFormData(data)
-                        }
-                        else{
-                            this.handleUpload(data, formData)}
+                        // this.submitFormData(data)
+                        if(this.isEdit && this.editUploadtextShow)this.submitFormData(data);
+                        else this.handleUpload(data, formData)
                     }
                 });
             },

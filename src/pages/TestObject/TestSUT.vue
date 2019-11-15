@@ -72,14 +72,21 @@ export default {
 			createTime: state => state.testSUT.createTime,
             currentTab: state => state.testSUT.currentTab,
 		}),
-        currentTab: {
+        keyword: {
             get() {
                 return this.$store.state.testSUT.keyword;
             },
             set(val) {
-                if (!val) {
+                if (val) {
                     this.$store.state.testSUT.keyword = ""
                 }
+            }
+        }
+	},
+    watch: {
+        currentTab(val) {
+            if (val) {
+                this.getVNFOptions()
             }
         }
 	},
