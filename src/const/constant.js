@@ -18,7 +18,7 @@ const mockcolumns = [{
     dataIndex: "phone"
 }
 ]
-const axiosgetType = false;
+const axiosgetType = true;
 const PackageMGTTabs = [{
     key: "VNF",
     val: 101

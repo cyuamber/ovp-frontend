@@ -8,7 +8,7 @@ import Axios from 'axios';
 import VueI18n from 'vue-i18n'
 
 Vue.prototype.$axios = Axios;
-// Axios.defaults.baseURL = '/api';
+Axios.defaults.baseURL = '/api';
 Axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 Vue.use(VueI18n);

@@ -19,13 +19,13 @@
           <a-select
             :disabled="spin"
             class="select"
-            v-decorator="['XNFType',{ rules: [{ required: true, message: currentTab +' Type is required' }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0]}]"
+            v-decorator="['XNFType',{ rules: [{ required: true, message: currentTab +' Type is required' }],initialValue:this.isEdit ? SuiteSingleData.tesyMeterType:VNFOptions[0].dictLabel}]"
             @dropdownVisibleChange="dropdownVisibleChange"
           >
             <a-select-option
               v-for="type of VNFOptions"
               :key="type.code"
-              :value="type"
+              :value="type.code"
             >{{type.dictLabel}}</a-select-option>
           </a-select>
           <a-spin :spinning="spin" class="skip-size">
@@ -126,12 +126,11 @@ export default {
       }
     },
     VNFOptions(val) {
-      console.log(val, "-----val");
+      console.log(val);
       if (val.length !== 0) {
         this.spin = false;
       }
       if (val.length && !this.isEdit) {
-        console.log(val[0]);
         this.form.setFieldsValue({ XNFType: val[0].dictLabel });
       }
     }

@@ -1,57 +1,79 @@
 <template>
-    <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
-        <template>
-            <a-form :form="form" @submit="handleSubmit">
-                <a-form-item :label="replaceCurrentTabValue(currentTab)+' Name'" :label-col="{ span: 7 }"
-                             :wrapper-col="{ span: 12 }">
-                    <a-input
-                            v-decorator="['XNFName',{ rules: [{ required: true,message: replaceCurrentTabValue(currentTab) +' Name is required' }],initialValue:SuiteSingleData.name }]"/>
-                </a-form-item>
-                <a-form-item :label="replaceCurrentTabValue(currentTab)+'  Type'" :label-col="{ span: 7 }"
-                             :wrapper-col="{ span: 8 }">
-                    <a-select :disabled="spin" class="select"
-                              v-decorator="['XNFType',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Type is required' }],initialValue:initNVFTypeValue}]"
-                    >
-                        <a-select-option v-for="types of VNFOptions" :key="types.code" :value="types.code">
-                            {{types.dictLabel}}
-                        </a-select-option>
-                    </a-select>
-                    <a-spin :spinning="spin" class='skip-size'>
-                        <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
-                    </a-spin>
-                </a-form-item>
-                <a-form-item :label="replaceCurrentTabValue(currentTab)+' Vendor'" :label-col="{ span: 7 }"
-                             :wrapper-col="{ span: 12 }">
-                    <a-input
-                            v-decorator="['XNFVendor',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Vendor is required' }],initialValue:SuiteSingleData.vendor }]"/>
-                </a-form-item>
-                <a-form-item :label="replaceCurrentTabValue(currentTab)+' Version'" :label-col="{ span: 7 }"
-                             :wrapper-col="{ span: 12 }">
-                    <a-input
-                            v-decorator="['Version',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Version is required' }],initialValue:SuiteSingleData.version }]"/>
-                </a-form-item>
-                <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-                    <a-upload-dragger
-                            class="upload-float"
-                            :remove="handleRemove"
-                            :beforeUpload="beforeUpload"
-                            name="files"
-                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: true,}]}]"
-                    >
-                        <p class="ant-upload-text form__upload-text--font-size">Click or drag to upload</p>
-                    </a-upload-dragger>
-                    <a-spin :spinning="disabled" class='skip-size skip-float'>
-                        <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
-                    </a-spin>
-                    <br>
-                    <span v-if="isEdit && editUploadtextShow" class="form__uploadtext-height">{{this.VNFTest.VNFFileName}}</span>
-                </a-form-item>
-                <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-                    <a-button type="primary" html-type="submit" :disabled="disabled">Submit</a-button>
-                </a-form-item>
-            </a-form>
-        </template>
-    </a-modal>
+  <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
+    <template>
+      <a-form :form="form" @submit="handleSubmit">
+        <a-form-item
+          :label="replaceCurrentTabValue(currentTab)+' Name'"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="['XNFName',{ rules: [{ required: true,message: replaceCurrentTabValue(currentTab) +' Name is required' }],initialValue:SuiteSingleData.name }]"
+          />
+        </a-form-item>
+        <a-form-item
+          :label="replaceCurrentTabValue(currentTab)+'  Type'"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 8 }"
+        >
+          <a-select
+            :disabled="spin"
+            class="select"
+            v-decorator="['XNFType',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Type is required' }],initialValue:initNVFTypeValue}]"
+          >
+            <a-select-option
+              v-for="types in VNFOptions"
+              :key="types.code"
+              :value="types.code"
+            >{{types.dictLabel}}</a-select-option>
+          </a-select>
+          <a-spin :spinning="spin" class="skip-size">
+            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+          </a-spin>
+        </a-form-item>
+        <a-form-item
+          :label="replaceCurrentTabValue(currentTab)+' Vendor'"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="['XNFVendor',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Vendor is required' }],initialValue:SuiteSingleData.vendor }]"
+          />
+        </a-form-item>
+        <a-form-item
+          :label="replaceCurrentTabValue(currentTab)+' Version'"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
+          <a-input
+            v-decorator="['Version',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Version is required' }],initialValue:SuiteSingleData.version }]"
+          />
+        </a-form-item>
+        <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+          <a-upload-dragger
+            class="upload-float"
+            :remove="handleRemove"
+            :beforeUpload="beforeUpload"
+            name="files"
+            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: true,}]}]"
+          >
+            <p class="ant-upload-text form__upload-text--font-size">Click or drag to upload</p>
+          </a-upload-dragger>
+          <a-spin :spinning="disabled" class="skip-size skip-float">
+            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+          </a-spin>
+          <br />
+          <span
+            v-if="isEdit && editUploadtextShow"
+            class="form__uploadtext-height"
+          >{{this.VNFTest.VNFFileName}}</span>
+        </a-form-item>
+        <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
+          <a-button type="primary" html-type="submit" :disabled="disabled">Submit</a-button>
+        </a-form-item>
+      </a-form>
+    </template>
+  </a-modal>
 </template>
 
 <script type="text/ecmascript-6">
@@ -224,26 +246,25 @@
 </script>
 
 <style scoped>
-    .form__upload-text--font-size {
-        font-size: 12px !important;
-        line-height: 3;
-        margin: 0 !important;
-    }
+.form__upload-text--font-size {
+  font-size: 12px !important;
+  line-height: 3;
+  margin: 0 !important;
+}
 
-    .select {
-        width: 70%;
-        margin-right: 5%;
-    }
+.select {
+  width: 70%;
+  margin-right: 5%;
+}
 
-    .upload-float {
-        width: 85%;
-        margin-right: 5%;
-        float: left;
-    }
+.upload-float {
+  width: 85%;
+  margin-right: 5%;
+  float: left;
+}
 
-    .skip-float {
-        float: left;
-        line-height: 3.5;
-    }
-
+.skip-float {
+  float: left;
+  line-height: 3.5;
+}
 </style>
