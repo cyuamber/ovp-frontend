@@ -82,8 +82,8 @@ const actions = {
   getTestSpec({ commit }, data) {
     commit('updateVNFTest', data)
   },
-  getSUTOptions({ commit, dispatch }, obj) {
-    axiosget(API.TestSpecMgt.TestSpecSUTType, obj).then(res => {
+  getSUTOptions({ commit, dispatch }) {
+    axiosget(API.TestSpecMgt.TestSpecSUTType).then(res => {
       if (res.code === 200) {
         commit('updateSUTOptions', res.body);
         dispatch('getVNFOptions', { STUType: res.body[0].code })

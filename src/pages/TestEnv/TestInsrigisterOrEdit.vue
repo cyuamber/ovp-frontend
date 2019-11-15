@@ -27,7 +27,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import moment from 'moment';
     import { mapState, mapActions } from "vuex";
     export default {
         props: ['isEdit'],

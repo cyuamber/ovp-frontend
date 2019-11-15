@@ -58,6 +58,7 @@
       @close="close"
       @getAllTestSpec="getAllTestSpec"
       :isEdit="isEdit"
+      :visible="visible"
     />
   </div>
 </template>
@@ -109,13 +110,13 @@ export default {
     ]),
     ...mapMutations("testSpecMGT", ["updatecaseMgtTableData"]),
     initTestStandardTable() {
+      this.getSUTOptions();
       this.getTableData({});
     },
     handleCreateClick() {
       this.visible = true;
       this.isEdit = false;
       this.getTestSpec("");
-      this.getSUTOptions();
     },
     handleTableChange(pagination) {
       this.getPagination({ pagination });
@@ -154,7 +155,6 @@ export default {
       if (item === "Edit") {
         this.visible = true;
         this.isEdit = true;
-        console.log(testSpecSingleData, "testSpecSingleData");
         this.getTestSpec(testSpecSingleData);
       } else {
         this.$confirm({

@@ -15,8 +15,8 @@ import TestSUT from '../pages/TestObject/TestSUT.vue';
 //Test ENV MGT
 import VimEnv from '../pages/TestEnv/VimEnv.vue';
 //Test MGT
-import TestInstrument from '../pages/TestMgt/TestInstrument.vue';
-import VnfpnfSuite from '../pages/TestMgt/VnfpnfSuite.vue';
+import TestInstrument from '../pages/TestEnv/TestInstrument.vue';
+import VnfpnfSuite from '../pages/TestEnv/VnfpnfSuite.vue';
 //TestJob
 import TestJob from '../pages/TestJob/TestJob.vue';
 import JobDetail from '../pages/TestJob/JobDetail.vue'

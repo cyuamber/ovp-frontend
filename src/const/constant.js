@@ -268,7 +268,7 @@ const VnfpnfSuiteColumns = [
     },
     {
         title: 'Type',
-        dataIndex: 'type'
+        dataIndex: 'typeCH.dictLabel'
     },
     {
         title: 'Create Time',

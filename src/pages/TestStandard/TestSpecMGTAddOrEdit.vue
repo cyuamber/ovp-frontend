@@ -24,21 +24,23 @@
               :value="type.code"
             >{{type.dictLabel}}</a-select-option>
           </a-select>
-          <a-select
-            class="select"
-            v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
-            @dropdownVisibleChange="dropdownVisibleChange"
-          >
-            <a-select-option
-              v-for="type in VNFOptions"
-              :key="type.code"
-              :value="type.code"
-            >{{type.dictLabel}}</a-select-option>
-          </a-select>
           <a-spin :spinning="spin">
             <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
           </a-spin>
         </a-form-item>
+          <a-form-item label="VNF Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+              <a-select
+                      class="select"
+                      v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
+                      @dropdownVisibleChange="dropdownVisibleChange"
+              >
+                  <a-select-option
+                          v-for="type in VNFOptions"
+                          :key="type.code"
+                          :value="type.code"
+                  >{{type.dictLabel}}</a-select-option>
+              </a-select>
+          </a-form-item>
         <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
             v-decorator="['PublishORG',{ rules: [{ required: true,message:' PublishORG is required'}],initialValue:testSpecSingleData.publishOrg }]"
@@ -55,7 +57,7 @@
 <script type="text/ecmascript-6">
 import { mapState, mapActions } from "vuex";
 export default {
-  props: ["isEdit"],
+  props: ["isEdit","visible"],
   data() {
     return {
       form: this.$form.createForm(this),
@@ -85,12 +87,17 @@ export default {
           this.form.setFieldsValue({
             Name: this.testSpecSingleData.name,
             Version: this.testSpecSingleData.version,
-            SUTType: this.testSpecSingleData.sutType.code,
-            VNFType: this.testSpecSingleData.VNFtype.code,
+            SUTType: this.testSpecSingleData.SUTTypeCH.code,
+            VNFType: this.testSpecSingleData.vnfTypeCH.code,
             PublishORG: this.testSpecSingleData.publishOrg
           });
         }
-        if (!this.showModal.length && !this.isEdit) this.spin = true;
+        if (!this.showModal.length && !this.isEdit) {
+            this.spin = true;
+            this.initSUTTypeValue = this.SUTOptions[0].code;
+            this.initVNFtypeValue = this.VNFOptions[0].code;
+            console.log(this.initSUTTypeValue, this.initVNFtypeValue," this.initVNFtypeValue---")
+        }
       }
     },
     showModal(val) {
@@ -128,7 +135,7 @@ export default {
         val.sutTypeCH.code !== undefined &&
         val.vnfTypeCH.code !== undefined
       ) {
-        this.initSUTTypeValue = val.vnfTypeCH.code;
+        this.initSUTTypeValue = val.SUTTypeCH.code;
         this.initVNFtypeValue = val.vnfTypeCH.code;
         this.spin = false;
       }
@@ -152,7 +159,7 @@ export default {
       if (!this.VNFOptions.length) {
         this.spin = true;
         this.getVNFOptions({
-          SUTType: this.testSpecSingleData.SUTType
+          SUTType: this.testSpecSingleData.SUTTypeCH.code
         });
       }
     },

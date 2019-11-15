@@ -1,25 +1,25 @@
 <template>
-  <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
+  <a-modal v-bind:title="this.isEdit ? 'Edit ' + (this.currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (this.currentTab === 101?'VNF':'PNF') + 'TT'" v-model="showModal" :footer="null" @cancel="handleCancel">
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item
-          :label="replaceCurrentTabValue(currentTab)+' Name'"
+          :label="(this.currentTab === 101?'VNF':'PNF')+' Name'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['XNFName',{ rules: [{ required: true,message: replaceCurrentTabValue(currentTab) +' Name is required' }],initialValue:SuiteSingleData.name }]"
+            v-decorator="['XNFName',{ rules: [{ required: true,message: (this.currentTab === 101?'VNF':'PNF') +' Name is required' }],initialValue:SuiteSingleData.name }]"
           />
         </a-form-item>
         <a-form-item
-          :label="replaceCurrentTabValue(currentTab)+'  Type'"
+          :label="(this.currentTab === 101?'VNF':'PNF')+'  Type'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 8 }"
         >
           <a-select
             :disabled="spin"
             class="select"
-            v-decorator="['XNFType',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Type is required' }],initialValue:initNVFTypeValue}]"
+            v-decorator="['XNFType',{ rules: [{ required: true, message: (this.currentTab === 101?'VNF':'PNF') +' Type is required' }],initialValue:isEdit?SuiteSingleData.typeCH.dictLabel : this.VNFOptions[0].code}]"
           >
             <a-select-option
               v-for="types in VNFOptions"
@@ -32,21 +32,21 @@
           </a-spin>
         </a-form-item>
         <a-form-item
-          :label="replaceCurrentTabValue(currentTab)+' Vendor'"
+          :label="(this.currentTab === 101?'VNF':'PNF')+' Vendor'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['XNFVendor',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Vendor is required' }],initialValue:SuiteSingleData.vendor }]"
+            v-decorator="['XNFVendor',{ rules: [{ required: true, message: (this.currentTab === 101?'VNF':'PNF') +' Vendor is required' }],initialValue:SuiteSingleData.vendor }]"
           />
         </a-form-item>
         <a-form-item
-          :label="replaceCurrentTabValue(currentTab)+' Version'"
+          :label="(this.currentTab === 101?'VNF':'PNF')+' Version'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['Version',{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Version is required' }],initialValue:SuiteSingleData.version }]"
+            v-decorator="['Version',{ rules: [{ required: true, message: (this.currentTab === 101?'VNF':'PNF') +' Version is required' }],initialValue:SuiteSingleData.version }]"
           />
         </a-form-item>
         <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -66,7 +66,7 @@
           <span
             v-if="isEdit && editUploadtextShow"
             class="form__uploadtext-height"
-          >{{this.VNFTest.VNFFileName}}</span>
+          >{{SuiteSingleData.fileName}}</span>
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
           <a-button type="primary" html-type="submit" :disabled="disabled">Submit</a-button>
@@ -78,7 +78,6 @@
 
 <script type="text/ecmascript-6">
     import {mapState, mapActions} from "vuex";
-    import {PackageMGTTabs} from "../../const/constant";
     import {axiosCancelToken} from '../../utils/http'
     export default {
         props: ['isEdit', 'visible'],
@@ -86,7 +85,6 @@
             return {
                 form: this.$form.createForm(this),
                 showModal: true,
-                title: this.isEdit ? 'Edit ' + this.replaceCurrentTabValue(this.currentTab) + ' TT' : 'Create ' + this.replaceCurrentTabValue(this.currentTab) + 'TT',
                 spin: false,
                 count: 0,
                 disabled: false,
@@ -103,6 +101,7 @@
         },
         watch: {
             visible(val) {
+                console.log(val, "-----");
                 if (val) {
                     if (!this.isEdit) {
                         this.editUploadtextShow = false;
@@ -111,7 +110,7 @@
                     }
                     this.showModal = val;
                     this.count++;
-                    if (!this.showModal.length && this.isEdit && this.count !== 1) {
+                    if (!this.showModal.length && this.isEdit && this.count > 1) {
                         this.form.setFieldsValue({
                             XNFName: this.SuiteSingleData.name,
                             XNFType: this.SuiteSingleData.type,
@@ -159,17 +158,6 @@
                 "uploadVNFFile",
                 "createOrEditTestMeter"
             ]),
-            dropdownVisibleChange(){
-                if(!this.VNFOptions.length) {
-                    this.spin = true;
-                    this.getVNFOptions().then(() => {this.spin = true})
-                }
-            replaceCurrentTabValue(currentTab) {
-                let keyWord = PackageMGTTabs.find((item) => {
-                    return item.val === currentTab
-                }).key;
-                return keyWord
-            },
             normFile(e) {
                 if (Array.isArray(e)) {
                     return e;
