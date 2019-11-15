@@ -1,0 +1,34 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [{
+      "code": "10101",
+      "dictLabel": "VNF",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "10102",
+      "dictLabel": "PNF",
+      "dictValue": "3",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "10103",
+      "dictLabel": "NFVI",
+      "dictValue": "2",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  ],
+  "total": 3,
+  "pageTotal": 1
+}

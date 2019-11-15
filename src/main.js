@@ -18,10 +18,10 @@ Vue.use(HighchartsVue);
 Vue.config.productionTip = false;
 
 const i18n = new VueI18n({
-  locale: 'EN',
+  locale: 'en_US',
   messages: {
-    'ZH': require('./assets/i18n/zh'),
-    'EN': require('./assets/i18n/en')
+    'zh_CN': require('./assets/i18n/zh'),
+    'en_US': require('./assets/i18n/en')
   }
 });
 

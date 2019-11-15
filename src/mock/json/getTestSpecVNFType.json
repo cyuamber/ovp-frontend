@@ -1,0 +1,35 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "code": "101001",
+      "dictLabel": "test01",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "101002",
+      "dictLabel": "test02",
+      "dictValue": "3",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "101003",
+      "dictLabel": "test03",
+      "dictValue": "2",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  ],
+  "total": 3,
+  "pageTotal": 1
+}

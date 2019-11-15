@@ -18,12 +18,12 @@
       <a-table
         :columns="columns"
         :dataSource="tableData"
-        bordered
         :loading="loading"
-        rowKey="testSpecId"
+        rowKey="id"
         size="default"
         :pagination="pagination"
         @change="handleTableChange"
+        @expand="caseMgtTableShow"
       >
         <span slot="action" slot-scope="action,record">
           <a-tag
@@ -34,6 +34,23 @@
             @click="(() => showEditOrDeleteModal(item,record))"
           >{{item}}</a-tag>
         </span>
+        <a-table
+          class="test-case__table"
+          slot="expandedRowRender"
+          :columns="innerColumns"
+          :dataSource="caseMgtTableData"
+          rowKey="id"
+          size="default"
+          :pagination="false"
+        >
+          <span slot="status" slot-scope="status">
+            <span
+              class="test-case__showState"
+              :style="{backgroundColor: status==='able'? '#d0021b': '#7ED321'}"
+              :title="status===0? 'Available': 'unavailable'"
+            ></span>
+          </span>
+        </a-table>
       </a-table>
     </div>
     <TestSpecMGTAddOrEdit
@@ -46,8 +63,8 @@
 </template>
 <script>
 import Search from "../../components/Search/Search";
-import { TestSpecColumns } from "../../const/constant";
-import { mapState, mapActions } from "vuex";
+import { TestSpecColumns, TestCaseColumns } from "../../const/constant";
+import { mapState, mapActions, mapMutations } from "vuex";
 import Loading from "../../components/Loading/Loading";
 import TestSpecMGTAddOrEdit from "./TestSpecMGTAddOrEdit";
 export default {
@@ -61,6 +78,7 @@ export default {
     return {
       visible: false,
       columns: TestSpecColumns,
+      innerColumns: TestCaseColumns,
       loading: true,
       currentPage: "TestSpecMGT",
       isEdit: false,
@@ -71,6 +89,7 @@ export default {
   computed: {
     ...mapState({
       tableData: state => state.testSpecMGT.tableData,
+      caseMgtTableData: state => state.testSpecMGT.caseMgtTableData,
       pagination: state => state.testSpecMGT.pagination,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
       loadingMessage: state => state.testSpecMGT.loadingMessage
@@ -85,8 +104,10 @@ export default {
       "getTestSpec",
       "deleteTestSpec",
       "getPagination",
-      "clearPagination"
+      "clearPagination",
+      "getSUTOptions"
     ]),
+    ...mapMutations("testSpecMGT", ["updatecaseMgtTableData"]),
     initTestStandardTable() {
       this.loading = true;
       this.getTableData({}).then(() => (this.loading = false));
@@ -95,7 +116,7 @@ export default {
       this.visible = true;
       this.isEdit = false;
       this.getTestSpec("");
-      this.getVNFOptions({ STUType: "VNF" });
+      this.getSUTOptions();
     },
     handleTableChange(pagination) {
       this.loading = true;
@@ -109,6 +130,9 @@ export default {
           pageSize: pageSize
         };
       this.getTableData(obj).then(() => (this.loading = false));
+    },
+    caseMgtTableShow(expanded, record) {
+      this.updatecaseMgtTableData(record);
     },
     close() {
       this.visible = false;
@@ -133,16 +157,17 @@ export default {
       if (item === "Edit") {
         this.visible = true;
         this.isEdit = true;
+        console.log(testSpecSingleData);
         this.getTestSpec(testSpecSingleData);
       } else {
         this.$confirm({
           title: "Are you sure delete this Spec?",
-          content: "Id: " + testSpecSingleData.testSpecId,
+          content: "Id: " + testSpecSingleData.id,
           okText: "Yes",
           okType: "danger",
           cancelText: "No",
           onOk: () => {
-            this.deleteTestSpec({ testSpecId: testSpecSingleData.testSpecId });
+            this.deleteTestSpec(testSpecSingleData.id);
           }
         });
       }
@@ -170,6 +195,15 @@ export default {
   .test-spec__tag {
     padding: 0 8px;
     border-radius: 12px;
+  }
+  .test-case__table {
+    .test-case__showState {
+      display: block;
+      margin: 0 auto;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+    }
   }
 }
 </style>

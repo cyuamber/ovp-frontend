@@ -1,6 +1,6 @@
 <template>
     <a-modal
-            :title="(isEdit === true ? 'Edit ': 'Create ') + currentTab + ' SUT'"
+            :title="(isEdit === true ? 'Edit ': 'Create ') + replaceCurrentTabValue(currentTab) + ' SUT'"
             v-model="visible"
             :footer="null"
             @cancel="handleCancel"
@@ -8,49 +8,48 @@
         <template>
             <a-form :form="form" @submit="handleSubmit" class="form">
                 <a-form-item
-                        :label=" currentTab +' Name'"
+                        :label=" replaceCurrentTabValue(currentTab) +' Name'"
                         :label-col="{ span: 7 }"
                         :wrapper-col="{ span: 12 }"
                 >
                     <a-input
                             v-decorator="[
-							'testName',
-							{ rules: [{ required: true, message: currentTab +' Name is required' }], initialValue: VNFTest.VNFTestName },
+							'name',
+							{ rules: [{ required: true, message: replaceCurrentTabValue(currentTab) +' Name is required' }], initialValue: VNFTest.name },
 						]"
                     />
                 </a-form-item>
                 <a-form-item
-                        :label="currentTab + ' Type'"
+                        :label="replaceCurrentTabValue(currentTab) + ' Type'"
                         :label-col="{ span: 7 }"
                         :wrapper-col="{ span: 8 }"
                 >
-                    <!-- @dropdownVisibleChange="handleExpand"  -->
                     <a-select
                             class="form__select"
                             :disabled="spin"
-                            v-decorator="['typeName',{ rules: [{ required: true, }],initialValue: this.isEdit ? VNFTest.VNFTypeName:VNFOptions[0]}]"
+                            v-decorator="['type',{ rules: [{ required: true, }],initialValue: initNVFTypeValue}]"
                     >
-                        <a-select-option v-for="type in VNFOptions" :key="type" :value="type">{{type}}</a-select-option>
+                        <a-select-option v-for="types in VNFOptions" :key="types.code" :value="types.code">{{types.dictLabel}}</a-select-option>
                     </a-select>
                     <a-spin :spinning="spin">
                         <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
                     </a-spin>
                 </a-form-item>
                 <a-form-item
-                        :label="currentTab + ' Vendor'"
+                        :label="replaceCurrentTabValue(currentTab) + ' Vendor'"
                         :label-col="{ span: 7 }"
                         :wrapper-col="{ span: 12 }"
                 >
                     <a-input
                             v-decorator="[
-							'vendor', { rules: [{ required: true, message: 'Vendor is required' }], initialValue: VNFTest.VNFTestVendor},
+							'vendor', { rules: [{ required: true, message: 'Vendor is required' }], initialValue: VNFTest.vendor},
 						]"
                     />
                 </a-form-item>
                 <a-form-item label="Version" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
                     <a-input
                             v-decorator="[
-					'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.VNFTestVersion},
+					'version', { rules: [{ required: true, message: 'Version is required' }], initialValue: VNFTest.version},
 				]"
                     />
                 </a-form-item>
@@ -60,7 +59,7 @@
                             :beforeUpload="beforeUpload"
                             class="form__upload-float"
                             name="files"
-                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: true,}]}]"
+                            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: editUploadtextShow ? true :false,}]}]"
                     >
                         <p class="ant-upload-text form__upload-text--font-size">
                             <a-icon type="upload"/>&nbsp;&nbsp;&nbsp;
@@ -70,6 +69,8 @@
                     <a-spin :spinning="uploading" class="skip-size form__skip-float">
                         <a-icon slot="indicator" type="loading-3-quarters" size="small" spin/>
                     </a-spin>
+                    <br>
+                    <span v-if="isEdit && editUploadtextShow" class="form__uploadtext-height" >{{this.VNFTest.VNFFileName}}</span>
                 </a-form-item>
                 <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
                     <a-button type="primary" html-type="submit" :disabled="uploading">Submit</a-button>
@@ -81,24 +82,28 @@
 
 <script type="text/ecmascript-6">
     import moment from "moment";
+    import { TestSUTTabs } from "../../const/constant";
     import {axiosCancelToken} from "../../utils/http";
     import {mapState, mapActions, mapMutations} from "vuex";
 
     export default {
-        props: ["isEdit", "currentTab"],
+        props: ["isEdit"],
         data() {
             return {
                 form: this.$form.createForm(this),
                 selected: "",
                 count: 0,
                 spin: true,
-                uploading: false
+                initNVFTypeValue:null,
+                uploading: false,
+                editUploadtextShow: true
             };
         },
         computed: {
             ...mapState({
                 VNFOptions: state => state.testSUT.VNFOptions,
-                VNFTest: state => state.testSUT.VNFTest
+                VNFTest: state => state.testSUT.VNFTest,
+                currentTab: state => state.testSUT.currentTab,
             }),
             visible: {
                 get() {
@@ -108,10 +113,10 @@
                     if (!val) {
                         this.updateVNFTest({});
                         this.form.setFieldsValue({
-                            testName: "",
+                            name: "",
                             version: "",
                             vendor: "",
-                            typeName: ""
+                            type: ""
                         });
                     }
                 }
@@ -120,21 +125,33 @@
         watch: {
             visible(val) {
                 if (val) {
+                    if(!this.isEdit){
+                        this.editUploadtextShow = false;
+                    }else{
+                        this.editUploadtextShow = true;
+                    }
                     this.count++;
                     if (this.isEdit && this.count > 1) {
                         this.form.setFieldsValue({
-                            testName: this.VNFTest.VNFTestName,
-                            vendor: this.VNFTest.VNFTestVendor,
-                            version: this.VNFTest.VNFTestVersion,
-                            typeName: this.VNFTest.VNFTypeName
+                            name: this.VNFTest.name,
+                            vendor: this.VNFTest.vendor,
+                            version: this.VNFTest.version,
+                            type: this.VNFTest.type.code
                         });
                     } else if (!this.isEdit && this.count > 1) {
-                        this.form.setFieldsValue({typeName: this.VNFOptions[0]});
+                        this.form.setFieldsValue({type: this.VNFOptions[0].code});
                     }
                 }
             },
             VNFOptions(val) {
                 if (val.length) {
+                    this.initNVFTypeValue = val[0].code;
+                    this.spin = false;
+                }
+            },
+            VNFTest(val) {
+                if (val.code!==undefined) {
+                    this.initNVFTypeValue = val.code;
                     this.spin = false;
                 }
             }
@@ -163,24 +180,37 @@
                 }
                 return e && e.fileList;
             },
+            replaceCurrentTabValue(currentTab){
+                let keyWord = TestSUTTabs.find((item)=>{
+                        return item.val === currentTab
+                }).key;
+                return keyWord
+            },
             handleSubmit(e) {
                 e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
                         // Did not implement the check if there is a change
                         const formData = new FormData();
-                        formData.append("files", values.upload[0]);
+                        console.log(formData,"formData")
+                        if(!this.isEdit ||(this.isEdit && !this.editUploadtextShow)){
+                            formData.append("file", values.upload[0]);
+                        }
                         let data = {
-                            VNFTestName: values.testName,
-                            VNFTestVendor: values.vendor,
-                            VNFTestVersion: values.version,
-                            VNFTypeName: this.selected,
+                            flag:this.currentTab,
+                            name: values.name,
+                            vendor: values.vendor,
+                            version: values.version,
+                            type: values.type,
                             createTime: this.isEdit
                                 ? this.VNFTest.createTime
                                 : moment(new Date()).format("YYYY-MM-DD"),
-                            VNFFileName: formData
+                            // fileName:"test.casr"
+                            fileName: !this.editUploadtextShow ? values.upload[0].name : this.VNFTest.fileName
                         };
-                        this.handleUpload(data, formData);
+                        // this.submitFormData(data)
+                        if(this.isEdit && this.editUploadtextShow)this.submitFormData(data);
+                        else this.handleUpload(data, formData)
                     }
                 });
             },
@@ -191,7 +221,6 @@
                         () => {
                             this.submitFormData(data);
                             this.uploading = false;
-                            this.fileList = [];
                         },
                         () => {
                             this.uploading = false;
@@ -205,6 +234,7 @@
                         () => {
                             this.updateVisible(false);
                             this.form.resetFields();
+                            this.updateVNFTest({});
                         },
                         () => {
                             this.updateVisible(false)
@@ -213,7 +243,7 @@
             },
             handleRemove() {
                 if (this.uploading) {
-                    axiosCancelToken("/uploadVNFFile").then(res => {
+                    axiosCancelToken("/portal/business/files/upload").then(res => {
                         if (res.code === 200) {
                             this.uploading = false;
                             this.$message.success("cancel upload successfully.");
@@ -224,6 +254,7 @@
                 }
             },
             beforeUpload() {
+                this.editUploadtextShow = false;
                 return false;
             }
         }
@@ -249,6 +280,11 @@
         .form__skip-float {
             float: left;
             line-height: 3.5;
+        }
+        .form__uploadtext-height{
+            width: 100%;
+            line-height: 10px;
+            display: inline-block;
         }
     }
 </style>

@@ -1,12 +1,17 @@
 import moment from 'moment'
+import API from '../../const/apis';
 import {
 	axiospost,
-	axiosget
+	axiosget,
+	axiosput,
+    axiosdelete
 } from '../../utils/http'
+import {axiosgetType} from "../../const/constant";
 
 const state = {
 	isShow: false,
 	loadingMessage: null,
+    SUTTypeList: [],
 	SUTNameList: [],
 	getSUTName: false,
 	nameSpin: false,
@@ -41,6 +46,17 @@ const mutations = {
 			toast
 		}
 	},
+    updataSUTType(state, { list }) {
+        if (list) {
+            state.SUTTypeList = list
+        } else {
+            state.getSpecification = false
+            state.specificationSpin = false
+            state.SUTNameList = []
+            state.specificationList = []
+            state.testCaseList = []
+        }
+    },
 	updataSUTName(state, { get, spin, list }) {
 		state.getSUTName = get
 		state.nameSpin = spin
@@ -104,13 +120,14 @@ const mutations = {
 const actions = {
 	getTableData({ commit }, bool) {
 		let obj = {pageNum: state.pageNum, pageSize: state.pageSize}
-		if(state.createTime !== '') obj.createTime = state.createTime
-		axiosget('/getTestJobMGT',obj).then((res) => {
+		if(state.createTime !== '') obj.createTime = state.createTime;
+        let axiosrequest = axiosgetType?axiospost:axiosget;
+        axiosrequest(API.testJobMgt.testJobTable,obj).then((res) => {
 			if (res.code === 200) {
 				state.pagination = {
 					current: state.pageNum,
 					total: res.total
-				}
+				};
 				let tableData = res.body.map((item, index) => {
 					item.createTime = moment(item.createTime).format('YYYY-MM-DD');
 					item.index = res.body.length * (state.pagination.current - 1) + index + 1;
@@ -126,17 +143,22 @@ const actions = {
 	},
 	createrTestJobMGT({ commit }, values) {
 		let body = {
+            cronExpression:"",
+            endpoint: "/portal/business/jobs/case/start",
+            executionType: "ONCE",
+            fixedExecutionInterval: "0",
+            fixedExecutionUnit: "",
 			jobName: values.JobName,
-			jobDescription: values.JobDescription,
-			SUTType: values.SUTType,
-			SUTName: values.SUTName,
-			jobSpecification: values.JobSpecification,
+            remark: values.JobDescription,
+			// SUTType: values.SUTType,
+            sutId: values.SUTName,
+            specId: values.JobSpecification,
 			createrTime: moment(new Date()).format('YYYY-MM-DD'),
-			testCase: values.checkboxGroup
+            caseIds: values.checkboxGroup
 		}
 		if (values.TestVIMENV) body.testVIMENV = values.TestVIMENV
 		if (values.TestVNFMENV) body.testVNFMENV = values.TestVNFMENV
-		axiospost('createTestJobMGT', body)
+		axiospost(API.testJobMgt.testJobInsert, body)
 			.then((res) => {
 				if (res.code === 200) {
 					commit('updateSuccessMessage', 'Has been added successfully')
@@ -146,21 +168,39 @@ const actions = {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			})
 	},
+    getSUTType({ commit }, { message }) {
+        commit('updataSUTType', {
+            get: false,
+            spin: true
+        })
+        axiosget(API.testJobMgt.testJobSUTType).then(res => {
+            if (res.code === 200) {
+                // Simulation request
+                setTimeout(() => {
+                    commit('updataSUTType', {
+                        list: res.body
+                    })
+                }, 1000)
+            } else {
+                message.error('Failed to get SUT Name list')
+            }
+        }, () => {
+            message.error('Network exception, please try again')
+        })
+    },
 	getSUTName({ commit }, { SUTType, message }) {
 		commit('updataSUTName', {
 			get: false,
 			spin: true
 		})
-		axiosget('/getSUTName', {
-			SUTType
-		}).then(res => {
+		axiosget(API.testJobMgt.testJobSUTName.replace(":code",SUTType)).then(res => {
 			if (res.code === 200) {
 				// Simulation request
 				setTimeout(() => {
 					commit('updataSUTName', {
 						get: true,
 						spin: false,
-						list: res.body.SUTName
+						list: res.body
 					})
 				}, 1000)
 			} else {
@@ -188,16 +228,14 @@ const actions = {
 			get: false,
 			spin: true
 		})
-		axiosget('/getJobSpecification', {
-			SUTName
-		}).then(res => {
+		axiosget(API.testJobMgt.testJobSpec.replace(":type",SUTName)).then(res => {
 			if (res.code === 200) {
 				// Simulation request
 				setTimeout(() => {
 					commit('updateSpecification', {
 						get: true,
 						spin: false,
-						list: res.body.JobSpecification
+						list: res.body
 					})
 				}, 1000)
 			} else {
@@ -224,13 +262,11 @@ const actions = {
 		commit('updateTestCaseList', {
 			spin: true
 		})
-		axiosget('getTestCaseList', {
-			TestSpecification
-		}).then(res => {
+		axiosget(API.testJobMgt.testJobTestCase.replace(":id",TestSpecification)).then(res => {
 			if (res.code === 200) {
 				commit('updateTestCaseList', {
 					spin: false,
-					list: res.body.testCaseList
+					list: res.body
 				})
 			} else {
 				message.error('Failed to get Test Case list')
@@ -246,18 +282,7 @@ const actions = {
 		})
 	},
 	delete({ dispatch, commit }, data) {
-		let {
-			jobId,
-			VNFName,
-			jobName,
-			status
-		} = data
-		axiospost('deleteTestJobMGT', {
-			jobId,
-			VNFName,
-			jobName,
-			status
-		}).then(res => {
+		axiosdelete(API.testJobMgt.testJobDelete.replace(":jobId",data.jobId)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
 				dispatch('getTableData')
@@ -283,22 +308,11 @@ const actions = {
         })
     },
 	runTestJobMGT({commit,dispatch},data) {
-		let {
-			jobId,
-			VNFName,
-			jobName,
-			status
-		} = data;
-		axiospost('runTestJobMGT', {
-			jobId,
-			VNFName,
-			jobName,
-			status
-		})
+		axiosput(API.testJobMgt.testJobInsert.replace(":jobId",data.jobId))
 		.then(res => {
 			if (res.code === 200) {
-                commit('updateSuccessMessage', 'download Successfully started testing');
-                data.status = 1;
+                commit('updateSuccessMessage', 'Successfully started testing');
+                data.status = "RUNNING";
                 data.actions[0] = 'Stop';
                 commit('updateTableItemData',data);
                 dispatch('getTableData',true)
@@ -328,8 +342,16 @@ const actions = {
 	},
 	stopJop({dispatch,commit},data){
 		// Simulation request
-		data.status = 0
-		data.actions[0] = 'Start'
+        axiosput(API.testJobMgt.testJobStop.replace(":jobId",data.jobId))
+            .then(res => {
+                if (res.code === 200) {
+                    commit('updateSuccessMessage', 'Successfully stoped testing');
+                    data.status = "STOPPED";
+                    data.actions[0] = 'Start';
+                    commit('updateTableItemData',data);
+                    dispatch('getTableData',true)
+                }
+            });
 		commit('updateTableItemData',data);
         dispatch('getTableData',true)
 	}

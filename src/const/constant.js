@@ -18,21 +18,39 @@ const mockcolumns = [{
     dataIndex: "phone"
 }
 ]
+const axiosgetType = true;
+const PackageMGTTabs = [{
+    key: "VNF",
+    val: 101
+}, {
+    key: "PNF",
+    val: 102
+}]
+const TestSUTTabs = [{
+    key: "VNF",
+    val: 101
+}, {
+    key: "PNF",
+    val: 102
+}, {
+    key: "NFVI",
+    val: 103
+}]
 const TestSUTColumns = [{
     title: 'ID',
-    dataIndex: 'index'
+    dataIndex: 'id'
 },
 {
     title: 'Name',
-    dataIndex: 'VNFTestName'
+    dataIndex: 'name'
 },
 {
     title: 'Type',
-    dataIndex: 'VNFTypeName'
+    dataIndex: 'typeCH.dictLabel'
 },
 {
     title: 'Vendor',
-    dataIndex: 'VNFTestVersion'
+    dataIndex: 'vendor'
 },
 {
     title: 'Create Time',
@@ -49,8 +67,8 @@ const TestSUTColumns = [{
 ]
 const testEnvVIMColumns = [
     {
-        title: 'NO.',
-        dataIndex: 'index',
+        title: 'ID',
+        dataIndex: 'id',
         fixed: 'left',
         width: 50,
     },
@@ -71,7 +89,7 @@ const testEnvVIMColumns = [
     },
     {
         title: 'Cloud Type',
-        dataIndex: 'cloudType',
+        dataIndex: 'cloudTypeCH.dictLabel',
     },
     {
         title: 'Cloud Version',
@@ -79,7 +97,7 @@ const testEnvVIMColumns = [
     },
     {
         title: 'User Name',
-        dataIndex: 'userName'
+        dataIndex: 'username'
     },
     {
         title: 'Default Tenant',
@@ -93,10 +111,10 @@ const testEnvVIMColumns = [
         title: 'Auth URL',
         dataIndex: 'authUrl'
     },
-    {
-        title: 'Tenant',
-        dataIndex: 'tenant'
-    },
+    // {
+    //     title: 'Tenant',
+    //     dataIndex: 'tenant'
+    // },
     {
         title: 'Action',
         dataIndex: 'action',
@@ -109,26 +127,26 @@ const testEnvVIMColumns = [
 ]
 const testEvnVNFMColumns = [
     {
-        title: 'NO.',
-        dataIndex: 'index',
+        title: 'ID',
+        dataIndex: 'id',
         fixed: 'left',
         width: 50,
     },
     {
         title: 'Name',
-        dataIndex: 'VNFMname',
+        dataIndex: 'name',
     },
     {
         title: 'Type',
-        dataIndex: 'VNFMtype'
+        dataIndex: 'type'
     },
     {
         title: 'Vendor',
-        dataIndex: 'VNFMvendor'
+        dataIndex: 'vendor'
     },
     {
         title: 'Version',
-        dataIndex: 'VNFMversion'
+        dataIndex: 'version'
     },
     {
         title: 'URL',
@@ -158,14 +176,14 @@ const testEvnVNFMColumns = [
 ];
 const testJobColumns = [
     {
-        title: 'No.',
-        dataIndex: 'index',
+        title: 'ID',
+        dataIndex: 'jobId',
         fixed: 'left',
         width: 50
     },
     {
         title: 'VNF Name',
-        dataIndex: 'VNFName',
+        dataIndex: 'sut.name',
     },
     {
         title: 'Job Name',
@@ -173,11 +191,11 @@ const testJobColumns = [
     },
     {
         title: 'Job Description',
-        dataIndex: 'jobDescription'
+        dataIndex: 'remark'
     },
     {
         title: 'Test Speciflcation',
-        dataIndex: 'testSpeciflcation'
+        dataIndex: 'spec.name'
     },
     {
         title: 'Created Time',
@@ -185,7 +203,7 @@ const testJobColumns = [
     },
     {
         title: 'Status',
-        dataIndex: 'status',
+        dataIndex: 'jobStatus',
         width: 70,
         scopedSlots: {
             customRender: 'status'
@@ -203,16 +221,20 @@ const testJobColumns = [
 ]
 const TestInsrigisterColumns = [
     {
+        title: 'ID',
+        dataIndex: 'id'
+    },
+    {
         title: 'Name',
-        dataIndex: 'meterSysName'
+        dataIndex: 'name'
     },
     {
         title: 'Vendor',
-        dataIndex: 'meterSysVendor'
+        dataIndex: 'vendor'
     },
     {
         title: 'Mnt Address',
-        dataIndex: 'meterSysUrl'
+        dataIndex: 'mntAddress'
     },
     {
         title: 'Create Time',
@@ -227,20 +249,24 @@ const TestInsrigisterColumns = [
 ]
 const VnfpnfSuiteColumns = [
     {
+        title: 'ID',
+        dataIndex: 'id'
+    },
+    {
         title: 'Name',
-        dataIndex: 'tesyMeterName'
+        dataIndex: 'name'
     },
     {
         title: 'Vendor',
-        dataIndex: 'tesyMeterVendor'
+        dataIndex: 'vendor'
     },
     {
         title: 'Version',
-        dataIndex: 'tesyMeterVersion'
+        dataIndex: 'version'
     },
     {
         title: 'Type',
-        dataIndex: 'tesyMeterType'
+        dataIndex: 'type'
     },
     {
         title: 'Create Time',
@@ -256,23 +282,23 @@ const VnfpnfSuiteColumns = [
 const TestSpecColumns = [
     {
         title: 'ID',
-        dataIndex: 'testSpecId'
+        dataIndex: 'id'
     },
     {
         title: 'Name',
-        dataIndex: 'testSpecName'
+        dataIndex: 'name'
     },
     {
         title: 'Version',
-        dataIndex: 'testSpecVersion'
+        dataIndex: 'version'
     },
     {
         title: 'SUT Type',
-        dataIndex: 'VNFtype'
+        dataIndex: 'vnfType'
     },
     {
         title: 'Publish ORG',
-        dataIndex: 'PublishORG'
+        dataIndex: 'publishOrg'
     },
     {
         title: 'Publish Time',
@@ -287,27 +313,27 @@ const TestSpecColumns = [
 ]
 const TestCaseColumns = [
     {
-        title: 'Number',
-        dataIndex: 'testCaseNm'
+        title: 'ID',
+        dataIndex: 'id'
     },
     {
         title: 'Name',
-        dataIndex: 'testCaseName'
+        dataIndex: 'name'
     },
     {
         title: 'Description',
-        dataIndex: 'testCaseDes'
+        dataIndex: 'description'
     },
-    {
-        title: 'Version',
-        dataIndex: 'testCaseVersion'
-    },
+    // {
+    //     title: 'Version',
+    //     dataIndex: 'testCaseVersion'
+    // },
     {
         title: 'Status',
-        dataIndex: 'testCaseState',
-        width: 120,
+        dataIndex: 'status',
+        width: 180,
         scopedSlots: {
-            customRender: 'testCaseState'
+            customRender: 'status'
         },
     },
 ]
@@ -330,11 +356,11 @@ const VIMForm = [
     },
     {
         title: 'User Name',
-        key: 'userName'
+        key: 'username'
     },
     {
         title: 'Password',
-        key: 'passwd'
+        key: 'password'
     },
     {
         title: 'Auth URL',
@@ -360,19 +386,19 @@ const VIMForm = [
 const VNFMForm = [
     {
         title: 'Name',
-        key: 'VNFMname'
+        key: 'name'
     },
     {
         title: 'Type',
-        key: 'VNFMtype'
+        key: 'type'
     },
     {
         title: 'Vendor',
-        key: 'VNFMvendor',
+        key: 'vendor',
     },
     {
         title: 'Version',
-        key: 'VNFMversion',
+        key: 'version',
     },
     {
         title: 'URL',
@@ -384,7 +410,7 @@ const VNFMForm = [
     },
     {
         title: 'Certificate URL',
-        key: 'authUrl',
+        key: 'certificateUrl',
     },
     {
         title: 'User Name',
@@ -399,6 +425,9 @@ const SUTType = ['VNF', 'PNF', 'XNF']
 
 export {
     mockcolumns,
+    axiosgetType,
+    PackageMGTTabs,
+    TestSUTTabs,
     TestSUTColumns,
     testEnvVIMColumns,
     testEvnVNFMColumns,

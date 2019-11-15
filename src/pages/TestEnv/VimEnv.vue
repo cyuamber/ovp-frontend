@@ -31,17 +31,17 @@
 						:scroll="{x: 1630}"
 						@change="pageChange"
 					>
-						<span slot="state" slot-scope="state,record">
+						<span slot="state" slot-scope="state">
 							<span
 								class="showState"
-								:style="{backgroundColor: record.isOnline? '#52C41A': '#F5222D'}"
-								:title="record.isOnline? 'online': 'offline'"
+								:style="{backgroundColor: state===0 ? '#52C41A': '#F5222D'}"
+								:title="state===0 ? 'online': 'offline'"
 							></span>
 						</span>
 						<span slot="action" slot-scope="action,record">
 							<a-tag
-								v-for="item in action"
-								:key="item"
+								v-for="(item,index) in action"
+								:key="index"
 								:color="item === 'Edit'? 'blue' : 'red'"
 								class="tag"
 								@click="(() => showEditOrDeleteModal(item,record))"
@@ -96,7 +96,7 @@ export default {
             "getTableData",
 			"setParams",
 			"deleteData",
-			"getOptionList"
+			"getCloudTypeOptions"
         ]),
         ...mapMutations("testENV", [
             "changeTab",
@@ -105,15 +105,19 @@ export default {
 			"setInitValues",
         ]),
         initVimEnvTable() {
+            let date = new Date('2019-10-11');
+            console.log(date.getTime(),"----date.getTime()");
             this.loading = true;
-            this.getOptionList();
-            this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
+            this.getCloudTypeOptions();
+            let paramsObj = {};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
         },
 		handleTabsChange(key) {
             this.changeTab(key);
 			this.keyword = '';
 			this.loading = true;
-            this.getTableData({}).then(() => (this.loading = false), () => (this.loading = false));
+            let paramsObj = {};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
 		},
 		handleRigister() {
             this.updateVisible(true);

@@ -1,4 +1,7 @@
-import {axiosget, axiospost} from '../../utils/http';
+import {axiosget, axiospost, axiosput} from '../../utils/http';
+import API from '../../const/apis';
+import { axiosgetType } from "../../const/constant";
+
 import moment from 'moment';
 
 const state = {
@@ -44,16 +47,17 @@ const actions = {
               req[item]=obj[item];
           }
       });
-    axiosget('/getMeterSys', req).then(res => {
+      let axiosrequest = axiosgetType?axiospost:axiosget;
+      axiosrequest(API.instrumentMgs.instrumentMgsTable, req).then(res => {
       if(res.code === 200){
         commit('updateTableData',res);
-          if(req.createTime || req.meterSysName ) commit('updateSuccessMessage','Successfully get table data')
+          if(req.createTime || req.name ) commit('updateSuccessMessage','Successfully get table data')
       }else {
-          if(req.createTime || req.meterSysName ) commit('updateFailedMessage','Network exception, please try again')
+          if(req.createTime || req.name ) commit('updateFailedMessage','Network exception, please try again')
       }
     },
     () => {
-        if(req.createTime || req.meterSysName ) commit('updateFailedMessage','Network exception, please try again')
+        if(req.createTime || req.name ) commit('updateFailedMessage','Network exception, please try again')
     }
     )
   },
@@ -67,8 +71,9 @@ const actions = {
         commit('updatePagination', {current: 1 , total: 0})
     },
     createOrEditTestIns({commit,dispatch},{isEdit,data}){
-        let url = isEdit ? '/updateMeterSys':'/loginMeterSys';
-        axiospost(url, data)
+        let url = isEdit ? API.instrumentMgs.instrumentMgsUpdate:API.instrumentMgs.instrumentMgsInsert;
+        let axiosType = isEdit ? axiosput : axiospost;
+        axiosType(url, data)
             .then((res) => {
                     if(res.code === 200){
                         commit('updateSuccessMessage',isEdit ? 'Successfully updated' : 'Has been added successfully');
@@ -80,7 +85,7 @@ const actions = {
                 })
     },
     deleteMeterSys({commit,dispatch},data){
-        axiospost('/deleteMeterSys',data).then( res => {
+        axiospost(API.instrumentMgs.instrumentMgsDelete.replace(":name",data.name)).then( res => {
             if(res.code === 200){
                 commit('updateSuccessMessage','Deleted successfully')
                 dispatch('getTableData',{})

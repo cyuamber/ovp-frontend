@@ -3,12 +3,12 @@ module.exports = {
     //Mock json
     'customer_info': fakeData.customer,
     'home': fakeData.home,
-    'createVNFType': fakeData.createVNFType,
+    'getCurrentLanguage': fakeData.getCurrentLanguage,
     'getVNFType': fakeData.getVNFType,
-    'updateVNFType': fakeData.updateVNFType,
-    'deleteVNFType': fakeData.deleteVNFType,
     'getVNFTest': fakeData.getVNFTest,
     'deleteVNFTest': fakeData.deleteVNFTest,
+    'createVNFTest': fakeData.createVNFTest,
+    'updateVNFTest': fakeData.updateVNFTest,
     'uploadVNFFile': fakeData.uploadVNFFile,
     'getMeterSys': fakeData.getMeterSys,
     'loginMeterSys': fakeData.loginMeterSys,
@@ -24,10 +24,9 @@ module.exports = {
     'addTestSpec': fakeData.addTestSpec,
     'updateTestSpec': fakeData.updateTestSpec,
     'deleteTestSpec': fakeData.deleteTestSpec,
-    'createVNFTest': fakeData.createVNFTest,
-    'updateVNFTest': fakeData.updateVNFTest,
     'getVIM': fakeData.getVIM,
     'getVNFM': fakeData.getVNFM,
+    'getcloudType':fakeData.getcloudType,
     'loginVIM': fakeData.loginVIM,
     'updateVIM': fakeData.updateVIM,
     'loginVNFM': fakeData.loginVNFM,
@@ -43,6 +42,6 @@ module.exports = {
     'deleteTestJobMGT': fakeData.deleteTestJobMGT,
     'downloadTestJobMGT': fakeData.downloadTestJobMGT,
     'runTestJobMGT': fakeData.runTestJobMGT,
-    'getProgress': fakeData.getProgress,
-    'getCurrentLanguage':fakeData.getCurrentLanguage
+    'stopTestJobMGT': fakeData.stopTestJobMGT,
+    'getProgress': fakeData.getProgress
 }

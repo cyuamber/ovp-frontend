@@ -9,6 +9,26 @@ export default {
                 children: null
             },
             {
+                auth: ['admin'],
+                name: 'Test ENV MGT',
+                iconType: 'upload',
+                isChildren: true,
+                children: [{
+                    auth: ['admin', 'customer'],
+                    name: 'VIM/VNFM ENV MGT',
+                    iconType: '',
+                },{
+                    auth: ['admin','customer'],
+                    name: 'Instrument MGS MGT',
+                    iconType: '',
+                },
+                    {
+                        auth: ['admin', 'customer'],
+                        name: 'Instrument Package MGT',
+                        iconType: '',
+                    }]
+            },
+            {
                 auth: ['admin', 'customer'],
                 name: 'Test Objects MGT',
                 iconType: 'laptop',
@@ -19,33 +39,22 @@ export default {
                     iconType: '',
                 }]
             },
-            {
-                auth: ['admin'],
-                name: 'Test ENV MGT',
-                iconType: 'upload',
-                isChildren: true,
-                children: [{
-                    auth: ['admin', 'customer'],
-                    name: 'VIM/VNFM ENV MGT',
-                    iconType: '',
-                }]
-            },
-            {
-                auth: ['admin', 'customer'],
-                name: 'Test Instrument MGT',
-                iconType: 'bar-chart',
-                isChildren: true,
-                children: [{
-                    auth: ['admin'],
-                    name: 'Instrument MGS MGT',
-                    iconType: '',
-                },
-                {
-                    auth: ['admin', 'customer'],
-                    name: 'Instrument Package MGT',
-                    iconType: '',
-                }]
-            },
+            // {
+            //     auth: ['admin', 'customer'],
+            //     name: 'Test Instrument MGT',
+            //     iconType: 'bar-chart',
+            //     isChildren: true,
+            //     children: [{
+            //         auth: ['admin'],
+            //         name: 'Instrument MGS MGT',
+            //         iconType: '',
+            //     },
+            //     {
+            //         auth: ['admin', 'customer'],
+            //         name: 'Instrument Package MGT',
+            //         iconType: '',
+            //     }]
+            // },
             {
                 auth: ['admin'],
                 name: 'Test Job MGT',
@@ -53,13 +62,13 @@ export default {
                 isChildren: false,
                 children: null
             },
-            {
-                auth: ['admin'],
-                name: 'Test Case MGT',
-                iconType: 'appstore-o',
-                isChildren: false,
-                children: null
-            },
+            // {
+            //     auth: ['admin'],
+            //     name: 'Test Case MGT',
+            //     iconType: 'appstore-o',
+            //     isChildren: false,
+            //     children: null
+            // },
             {
                 auth: ['admin', 'customer'],
                 name: 'Test Spec MGT',

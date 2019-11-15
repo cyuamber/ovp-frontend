@@ -19,5 +19,10 @@ export const T = {
     "Test Job MGT":"Test Job MGT",
     "Test Case MGT":"Test Case MGT",
     "Test Spec MGT":"Test Spec MGT",
-
+    //Test Instrument MGT
+    "Mnt Address":"Mnt Address",
+    //Test Spec MGT
+    "SUT Type":"SUT Type",
+    "Publish ORG":"Publish ORG",
+    "Publish Time":"Publish Time",
 }

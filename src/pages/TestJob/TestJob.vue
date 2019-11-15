@@ -71,7 +71,8 @@ export default {
             "runTestJobMGT",
             "delete",
             "download",
-            "stopJop"
+            "stopJop",
+            "getSUTType"
         ]),
         ...mapMutations("testJob", [
             "setIsShow",
@@ -81,7 +82,10 @@ export default {
             this.getTableData();
         },
 		handleCreate() {
-            this.setIsShow(true)
+            this.setIsShow(true);
+            this.getSUTType({
+                message: this.$message
+            });
 		},
 		handleSelectCreateTime(date, d) {
             this.setFilter({ time: d });
@@ -169,10 +173,10 @@ export default {
 
 		},
 		getStatusTitle(status){
-			return status === 0? 'Pending execution': (status === 1? 'Executing':(status === 2? 'Execution completed':'Execution failed'))
+			return status === "STARTED"? 'Pending execution': (status === "RUNNING"? 'Executing':(status === "DONE"? 'Execution completed':'Execution failed'))
 		},
 		getStatusStyle(status){
-			let color = status === 0? '#979797': (status === 1? '#F5A623':(status === 2? '#7ED321':'#D0021B'))
+			let color = (status === "STARTED"? '#979797': (status === "RUNNING"? '#F5A623':(status === "DONE"? '#7ED321':'#D0021B')))
 			return {backgroundColor: color}
 		},
 		getActionsColor(actions, item){

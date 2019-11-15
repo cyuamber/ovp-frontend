@@ -1,10 +1,11 @@
 import { axiosget } from '../../utils/http';
+import API from '../../const/apis';
 const router = {
     state: {
         breadcrumbArr: [],
         currentMenu: [],
         langList: [],
-        language: 'EN'
+        language: 'en_US'
     },
     mutations: {
         setBreadcrumb(state, data) {
@@ -24,14 +25,14 @@ const router = {
     },
     actions: {
         getCurrentLanguage({ commit }, obj) {
-            axiosget('/getCurrentLanguage', obj).then(res => {
-                if (res.code === 200) {
-                    if (Object.keys(obj).length === 0) commit('updateLanguage', res.body.language);
+            axiosget(API.getCurrentLanguage, obj).then(res => {
+                if (res.statusCode === "100") {
+                    if (Object.keys(obj).length === 0) commit('updateLanguage', res.body);
                     else commit('updateLanguage', obj.language)
-                } else this.$message.error('Network exception, please try again');
+                }
             },
                 () => {
-                    this.$message.error('Network exception, please try again');
+                    console.error('Network exception, please try again');
                 }
             )
         }

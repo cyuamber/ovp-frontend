@@ -1,0 +1,58 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "id": 1,
+      "jobId": 392392180810989600,
+      "jobName": "job1",
+      "jobStatus": "DONE",
+      "remark": "job1 test",
+      "executionStartTime": "2019-11-15 10:41:10",
+      "createTime": "2019-11-14",
+      "sut": {
+        "id": 1,
+        "name": "sut1",
+        "type": 1,
+        "vendor": null,
+        "version": null,
+        "createTime": null,
+        "updateTime": null,
+        "flag": 1,
+        "fileName": null,
+        "typeCH": null
+      },
+      "spec": {
+        "id": 1,
+        "name": "spec1",
+        "version": null,
+        "vnfType": 1,
+        "publishOrg": null,
+        "publishTime": null,
+        "caseMgt": null,
+        "vnfTypeCH": null,
+        "sutTypeCH": null
+      },
+      "cases": [
+        {
+          "id": 66666,
+          "number": 1,
+          "name": "case66666",
+          "description": null,
+          "version": "1",
+          "status": "DONE"
+        },
+        {
+          "id": 66668,
+          "number": 2,
+          "name": "case66668",
+          "description": null,
+          "version": "2",
+          "status": "STARTED"
+        }
+      ]
+    }
+  ],
+  "total": 1,
+  "pageTotal": 1
+}

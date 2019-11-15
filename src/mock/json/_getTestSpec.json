@@ -1,0 +1,217 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [{
+    "id": 1,
+    "name": "FW-SPEC",
+    "version": "V1.0",
+    "vnfType": "FW",
+    "publishOrg": "CMCC",
+    "publishTime": 1573516800000,
+    "caseMgt": [{
+      "id": 1,
+      "name": "vFW-Function-Policy",
+      "description": "The Firewall Policy can match the traffic's src security zone, dst security zone, src IP address, dst IP address, TCP/UDP port, and the action of policy rule can take effect right.",
+      "status": "enable"
+    }, {
+      "id": 2,
+      "name": "vFW-Function-Web-Proxy",
+      "description": "vFirewall can match and inspect HTTP traffic and HTTPS traffic, corresponding actions can take effect.",
+      "status": "enable"
+    }, {
+      "id": 3,
+      "name": "vFW-Function-Mail-Proxy",
+      "description": "vFirewall can match and inspect SMTP/IMAP/POP3 traffic, corresponding actions can take effect.",
+      "status": "enable"
+    }, {
+      "id": 4,
+      "name": "vFW-Function-DNS-Proxy",
+      "description": "vFirewall can match and inspect DNS traffic, corresponding actions can take effect.",
+      "status": "enable"
+    }, {
+      "id": 5,
+      "name": "vFW-Function-VoIP-Proxy",
+      "description": "vFirewall can match and handle SIP/H.323 VoIP traffic and the media traffic.",
+      "status": "enable"
+    }],
+    "SUTTypeCH": {
+      "code": "10101",
+      "dictLabel": "FW",
+      "dictValue": "1",
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "vnfTypeCH": {
+      "code": "101001",
+      "dictLabel": "test01",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  }, {
+    "id": 2,
+    "name": "MME-SPEC",
+    "version": "V1.0",
+    "vnfType": "SPGW",
+    "publishOrg": "CMCC",
+    "publishTime": 1569945600000,
+    "caseMgt": [{
+      "id": 6,
+      "name": "vFW-Function-ALG",
+      "description": "vFirewal can create pinhole for FTP data connection or VoIP media traffic ; can modify the message field correctly when NAT enabled.",
+      "status": "enable"
+    }, {
+      "id": 7,
+      "name": "vFW-Function-AntiVirus",
+      "description": "vFirewall can scan and find the Virus and take action.",
+      "status": "enable"
+    }, {
+      "id": 8,
+      "name": "vFW-Function-DDoS",
+      "description": "vFirewall can detect the DDoS attacking and take action.",
+      "status": "enable"
+    }, {
+      "id": 9,
+      "name": "vFW-Function-IPS",
+      "description": "vFirewall can detect the intrusion attacking and take action.",
+      "status": "enable"
+    }, {
+      "id": 10,
+      "name": "vFW-Function-NAT",
+      "description": "SNAT and DNAT can take effect on the traffic.",
+      "status": "enable"
+    }],
+    "SUTTypeCH": {
+      "code": "10102",
+      "dictLabel": "MME",
+      "dictValue": "1",
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "vnfTypeCH": {
+      "code": "101002",
+      "dictLabel": "test02",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  }, {
+    "id": 3,
+    "name": "PCRF-SPEC",
+    "version": "V1.0",
+    "vnfType": "MME",
+    "publishOrg": "CMCC",
+    "publishTime": 1564675200000,
+    "caseMgt": [{
+      "id": 11,
+      "name": "vFW-Function-Static-Route",
+      "description": "Static Route can work right for Layer3 forwarding.",
+      "status": "enable"
+    }, {
+      "id": 12,
+      "name": "vFW-Function-Dynymic-Routing",
+      "description": "Dynamic Routing prototol can work right for route learning and layer3 forwarding.",
+      "status": "enable"
+    }, {
+      "id": 13,
+      "name": "vFW-Function-Authentication",
+      "description": "Traffic go through firewall can be handled when authentication is needed.",
+      "status": "enable"
+    }, {
+      "id": 14,
+      "name": "vFW-Function-HA",
+      "description": "HA can work right in A-P mode and A-A mode.",
+      "status": "enable"
+    }],
+    "SUTTypeCH": {
+      "code": "10103",
+      "dictLabel": "PCRF",
+      "dictValue": "1",
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "vnfTypeCH": {
+      "code": "101003",
+      "dictLabel": "test03",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  }, {
+    "id": 4,
+    "name": "FW-SPEC",
+    "version": "V1.0",
+    "vnfType": "PCRF",
+    "publishOrg": "CMCC",
+    "publishTime": 1570752000000,
+    "caseMgt": [{
+      "id": 15,
+      "name": "vFW-Function-Logging",
+      "description": "Log can be generated and recorded correctly.",
+      "status": "enable"
+    }, {
+      "id": 16,
+      "name": "vFW-Function-VPN",
+      "description": "VPN tunnel can be established via vFirewall and access successfully.",
+      "status": "enable"
+    }, {
+      "id": 17,
+      "name": "vFW-Performance-Throughput",
+      "description": "Test the Throughput benchmark for vFirewall.",
+      "status": "enable"
+    }, {
+      "id": 18,
+      "name": "vFW-Performance-Packet-Loss-Rate",
+      "description": "Test the Packet-Loss-Rate benchmark for vFirewall.",
+      "status": "enable"
+    }, {
+      "id": 19,
+      "name": "vFW-Performance-Latency",
+      "description": "Test the Latency benchmark for vFirewall.",
+      "status": "enable"
+    }, {
+      "id": 20,
+      "name": "vFW-Performance-Back-to-Back",
+      "description": "Test the Back-to-Back benchmark for vFirewall.",
+      "status": "enable"
+    }, {
+      "id": 21,
+      "name": "vFW-Performance-Max-Concurrent-Connections",
+      "description": "Test TCP/HTTP Maximum Concurrent Connections for vFirewall.",
+      "status": "enable"
+    }, {
+      "id": 22,
+      "name": "vFW-Performance-Max-Connection-establishment",
+      "description": "Test TCP/HTTP Maximum Connection establishment per second for vFirewall.",
+      "status": "enable"
+    }],
+    "SUTTypeCH": {
+      "code": "10101",
+      "dictLabel": "FW",
+      "dictValue": "1",
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "vnfTypeCH": {
+      "code": "101001",
+      "dictLabel": "test01",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  }],
+  "total": 1,
+  "pageTotal": 1
+}

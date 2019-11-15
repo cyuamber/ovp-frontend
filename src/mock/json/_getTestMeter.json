@@ -1,0 +1,47 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "id": 1,
+      "name": "STVc-FW",
+      "vendor": "Spirent",
+      "version": "V1.0",
+      "type": 101001,
+      "createTime": 1573516800000,
+      "updateTime": null,
+      "fileName": null,
+      "flag": 0,
+      "typeCH": {
+        "code": "101001",
+        "dictLabel": "FW",
+        "dictValue": "1",
+        "dictParentCode": null,
+        "status": "\u0000",
+        "remark": null,
+        "lang": null
+      }
+    },{
+      "id": 1,
+      "name": "STVc-DNS",
+      "vendor": "Spirent",
+      "version": "V1.0",
+      "type": 101002,
+      "createTime": 1570492800000,
+      "updateTime": null,
+      "fileName": null,
+      "flag": 0,
+      "typeCH": {
+        "code": "101002",
+        "dictLabel": "DNS",
+        "dictValue": "1",
+        "dictParentCode": null,
+        "status": "\u0000",
+        "remark": null,
+        "lang": null
+      }
+    }
+  ],
+  "total": 1,
+  "pageTotal": 1
+}

@@ -2,9 +2,9 @@
 	<div>
 	<Loading :loadingMessage="loadingMessage" />
 	<a-tabs @change="handleTabsChange">
-		<a-tab-pane v-for="tab in tabs" :key="tab" :tab="tab">
+		<a-tab-pane v-for="tab in tabs" :key="tab.val" :tab="tab.key">
 		<div class="tab-content tab-content--margin">
-			<a-button type="primary" @click="handleCreate">Create {{tab}} SUT</a-button>
+			<a-button type="primary" @click="handleCreate">Create {{tab.key}} SUT</a-button>
 			<Search
 			class="tab-content__button"
 			@serchTestSUT="serchTestSUT"
@@ -33,21 +33,21 @@
 				:key="item"
 				:color="item === 'Edit'? 'blue': (item === 'Delete'?'red': 'green')"
 				class="table__tag"
-				@click="(() => showEditOrDeleteModal(item,tab,record))"
+				@click="(() => showEditOrDeleteModal(item,record))"
 				>{{item}}</a-tag>
 			</span>
 			</a-table>
 		</div>
 		</a-tab-pane>
 	</a-tabs>
-	<SUTCreateOrEdit :isEdit="isEdit" :currentTab="currentTab" />
+	<SUTCreateOrEdit :isEdit="isEdit"/>
 	</div>
 </template>
 
 <script>
 import Search from "../../components/Search/Search";
 import SUTCreateOrEdit from "./SUTCreateOrEdit";
-import { TestSUTColumns } from "../../const/constant";
+import { TestSUTTabs, TestSUTColumns } from "../../const/constant";
 import Loading from "../../components/Loading/Loading";
 import { mapState, mapActions, mapMutations } from "vuex";
 
@@ -55,8 +55,7 @@ export default {
 	name: "VnfTypeobject",
 	data() {
 		return {
-			tabs: ["VNF", "PNF", "NFVI"],
-			currentTab: "VNF",
+			tabs:TestSUTTabs,
 			isEdit: false,
 			currentPage: "TestSUT",
 			columns: TestSUTColumns,
@@ -71,8 +70,25 @@ export default {
 			loadingMessage: state => state.testSUT.loadingMessage,
 			visible: state => state.testSUT.visible,
 			createTime: state => state.testSUT.createTime,
-			keyword: state => state.testSUT.keyword
-		})
+            currentTab: state => state.testSUT.currentTab,
+		}),
+        keyword: {
+            get() {
+                return this.$store.state.testSUT.keyword;
+            },
+            set(val) {
+                if (val) {
+                    this.$store.state.testSUT.keyword = ""
+                }
+            }
+        }
+	},
+    watch: {
+        currentTab(val) {
+            if (val) {
+                this.getVNFOptions()
+            }
+        }
 	},
 	components: {
 		SUTCreateOrEdit,
@@ -92,19 +108,25 @@ export default {
         ...mapMutations("testSUT", [
             "updateVisible",
             "setFilterItem",
-            "updateVNFTest"
+            "updateVNFTest",
+			"changeTab"
         ]),
         initTestSUTeTable() {
             this.getVNFOptions();
             this.loading = true;
-            this.getTableData({}).then(() => (this.loading = false));
+            let paramsObj = {};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false));
         },
 		handleCreate() {
             this.updateVisible(true);
 			this.isEdit = false;
 		},
 		handleTabsChange(key) {
-			this.currentTab = key;
+            this.changeTab(key);
+            this.keyword = '';
+            this.loading = true;
+            let paramsObj = {};
+            this.getTableData({paramsObj,isFilter:false}).then(() => (this.loading = false), () => (this.loading = false));
 		},
 		// Get table data by entering information or selecting time
 		serchTestSUT(keyword) {
@@ -120,11 +142,10 @@ export default {
             this.setFilterItem({ time: d });
             this.setParams(true);
 		},
-		showEditOrDeleteModal(item, tab, VNFTest) {
+		showEditOrDeleteModal(item,VNFTest) {
 			console.log(VNFTest);
 			if (item === "Edit") {
 				this.isEdit = true;
-				this.currentTab = tab;
                 this.updateVNFTest(VNFTest);
                 this.updateVisible(true);
 			} else if (item === "Delete")
@@ -140,7 +161,7 @@ export default {
 				cancelText: "No",
 				onOk: () => {
 					if (item === "Delete") this.deleteVNFTest({
-                        VNFFileName: VNFTest.VNFFileName
+                        id: VNFTest.id
                     });
 					else console.log("下载");
 				}
@@ -150,7 +171,10 @@ export default {
             this.setFilterItem({ pageObj });
             this.setParams(true);
 		}
-	}
+	},
+    destroyed(){
+        this.changeTab(101)
+    }
 };
 </script>
 
