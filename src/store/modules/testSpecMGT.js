@@ -6,6 +6,7 @@ import { axiosgetType } from "../../const/constant";
 const state = {
   tableData: [],
   tableLoading: false,
+  visible: false,
   caseMgtTableData: [],
   SUTOptions: [],
   VNFOptions: [],
@@ -29,6 +30,7 @@ const mutations = {
   },
   updateVNFTest(state, testSpecSingleData) {
     state.testSpecSingleData = testSpecSingleData
+      console.log(state.testSpecSingleData,"state.testSpecSingleData")
   },
   updateSUTOptions(state, Options) {
     state.SUTOptions = Options;
@@ -53,6 +55,9 @@ const mutations = {
   },
   updateTableLoading(state, tableLoading) {
     state.tableLoading = tableLoading
+  },
+  updateVisible(state, bool) {
+      state.visible = bool
   },
 }
 const actions = {

@@ -1,25 +1,25 @@
 <template>
-  <a-modal v-bind:title="this.isEdit ? 'Edit ' + (this.currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (this.currentTab === 101?'VNF':'PNF') + 'TT'" v-model="showModal" :footer="null" @cancel="handleCancel">
+  <a-modal v-bind:title="this.isEdit ? 'Edit ' + (currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (currentTab === 101?'VNF':'PNF') + 'TT'" v-model="visible" :footer="null"  @cancel="handleCancel">
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item
-          :label="(this.currentTab === 101?'VNF':'PNF')+' Name'"
+          :label="(currentTab === 101?'VNF':'PNF')+' Name'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['XNFName',{ rules: [{ required: true,message: (this.currentTab === 101?'VNF':'PNF') +' Name is required' }],initialValue:SuiteSingleData.name }]"
+            v-decorator="['XNFName',{ rules: [{ required: true,message: (currentTab === 101?'VNF':'PNF') +' Name is required' }],initialValue:SuiteSingleData.name }]"
           />
         </a-form-item>
         <a-form-item
-          :label="(this.currentTab === 101?'VNF':'PNF')+'  Type'"
+          :label="(currentTab === 101?'VNF':'PNF')+'  Type'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 8 }"
         >
           <a-select
             :disabled="spin"
             class="select"
-            v-decorator="['XNFType',{ rules: [{ required: true, message: (this.currentTab === 101?'VNF':'PNF') +' Type is required' }],initialValue:isEdit?SuiteSingleData.typeCH.dictLabel : this.VNFOptions[0].code}]"
+            v-decorator="['XNFType',{ rules: [{ required: true, message: (currentTab === 101?'VNF':'PNF') +' Type is required' }],initialValue:initNVFTypeValue}]"
           >
             <a-select-option
               v-for="types in VNFOptions"
@@ -32,21 +32,21 @@
           </a-spin>
         </a-form-item>
         <a-form-item
-          :label="(this.currentTab === 101?'VNF':'PNF')+' Vendor'"
+          :label="(currentTab === 101?'VNF':'PNF')+' Vendor'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['XNFVendor',{ rules: [{ required: true, message: (this.currentTab === 101?'VNF':'PNF') +' Vendor is required' }],initialValue:SuiteSingleData.vendor }]"
+            v-decorator="['XNFVendor',{ rules: [{ required: true, message: (currentTab === 101?'VNF':'PNF') +' Vendor is required' }],initialValue:SuiteSingleData.vendor }]"
           />
         </a-form-item>
         <a-form-item
-          :label="(this.currentTab === 101?'VNF':'PNF')+' Version'"
+          :label="(currentTab === 101?'VNF':'PNF')+' Version'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['Version',{ rules: [{ required: true, message: (this.currentTab === 101?'VNF':'PNF') +' Version is required' }],initialValue:SuiteSingleData.version }]"
+            v-decorator="['Version',{ rules: [{ required: true, message: (currentTab === 101?'VNF':'PNF') +' Version is required' }],initialValue:SuiteSingleData.version }]"
           />
         </a-form-item>
         <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -55,7 +55,7 @@
             :remove="handleRemove"
             :beforeUpload="beforeUpload"
             name="files"
-            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: true,}]}]"
+            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: isEdit && editUploadtextShow?false:true,}]}]"
           >
             <p class="ant-upload-text form__upload-text--font-size">Click or drag to upload</p>
           </a-upload-dragger>
@@ -77,14 +77,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {mapState, mapActions} from "vuex";
+    import {mapState, mapActions, mapMutations} from "vuex";
     import {axiosCancelToken} from '../../utils/http'
     export default {
-        props: ['isEdit', 'visible'],
+        props: ['isEdit'],
         data() {
             return {
                 form: this.$form.createForm(this),
-                showModal: true,
                 spin: false,
                 count: 0,
                 disabled: false,
@@ -96,42 +95,39 @@
             ...mapState({
                 VNFOptions: state => state.VnfpnfSuite.VNFOptions,
                 SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
-                currentTab: state => state.VnfpnfSuite.currentTab,
-            })
+                currentTab: state => state.VnfpnfSuite.currentTab
+            }),
+            visible: {
+                get() {
+                    return this.$store.state.VnfpnfSuite.visible;
+                },
+                set(val) {
+                    if (!val) {
+                        this.updateVNFTest({});
+                        this.form.setFieldsValue({XNFName: '', XNFType: '', XNFVendor: '', Version: ''});
+                    }
+                }
+            }
         },
         watch: {
             visible(val) {
-                console.log(val, "-----");
                 if (val) {
-                    if (!this.isEdit) {
+                    if(!this.isEdit) {
                         this.editUploadtextShow = false;
                     } else {
                         this.editUploadtextShow = true;
                     }
-                    this.showModal = val;
                     this.count++;
-                    if (!this.showModal.length && this.isEdit && this.count > 1) {
+                    if (this.isEdit && this.count > 1) {
                         this.form.setFieldsValue({
                             XNFName: this.SuiteSingleData.name,
-                            XNFType: this.SuiteSingleData.type,
+                            XNFType: this.SuiteSingleData.typeCH.code,
                             XNFVendor: this.SuiteSingleData.vendor,
                             Version: this.SuiteSingleData.version,
-                            type: this.SuiteSingleData.code
                         })
+                    }else if (!this.isEdit && this.count > 1) {
+                        this.form.setFieldsValue({XNFType: this.VNFOptions[0].code});
                     }
-                    if (!this.showModal.length && !this.isEdit) {
-                        this.spin = true;
-                        this.initNVFTypeValue = this.VNFOptions[0].code;
-                        console.log(this.initNVFTypeValue, "--------")
-                    }
-                }
-            },
-            showModal(val) {
-                if (!val) {
-                    this.$emit('close');
-                    this.clearOptions();
-                    this.getTestMeter({});
-                    this.form.setFieldsValue({XNFName: '', XNFType: '', XNFVendor: '', Version: '', type: ''})
                 }
             },
             VNFOptions(val) {
@@ -144,19 +140,23 @@
                 }
             },
             SuiteSingleData(val) {
-                if (val.code !== undefined) {
-                    this.initNVFTypeValue = val.code;
+                console.log(val,'val')
+                if (Object.keys(val).length > 0) {
+                    this.initNVFTypeValue = val.type;
                     this.spin = false;
                 }
             }
         },
         methods: {
             ...mapActions("VnfpnfSuite", [
-                "getTestMeter",
                 "getVNFOptions",
                 "clearOptions",
                 "uploadVNFFile",
                 "createOrEditTestMeter"
+            ]),
+            ...mapMutations("VnfpnfSuite", [
+                "updateVNFTest",
+                "updateVisible"
             ]),
             normFile(e) {
                 if (Array.isArray(e)) {
@@ -191,16 +191,17 @@
                     );
             },
             handleCancel() {
+                this.updateVisible(false);
                 if (!this.disabled) {
                     this.handleRemove();
                 }
-                this.$emit('close');
             },
-            handleSubmit() {
+            handleSubmit(e) {
+                e.preventDefault();
                 this.form.validateFields((err, values) => {
                     if (!err) {
                         const formData = new FormData();
-                        console.log(formData, "formData")
+                        console.log(formData, "formData");
                         if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
                             formData.append("file", values.upload[0]);
                         }
@@ -223,9 +224,11 @@
             submitFormData(data) {
                 this.createOrEditTestMeter({isEdit: this.isEdit, data})
                     .then(() => {
-                        this.$emit('close');
+                        this.updateVisible(false);
+                        this.form.resetFields();
+                        this.updateVNFTest({});
                     }, () => {
-                        this.$emit('close');
+                        this.updateVisible(false)
                     })
 
             }
@@ -254,5 +257,9 @@
 .skip-float {
   float: left;
   line-height: 3.5;
+}
+.form__uploadtext-height{
+  display: inline-block;
+  line-height: 20px;
 }
 </style>

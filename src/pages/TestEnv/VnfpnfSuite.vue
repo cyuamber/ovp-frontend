@@ -19,7 +19,7 @@
                 </div>
             </a-tab-pane>
         </a-tabs>
-        <xNFCreateOrEdit v-if="visible" @close="close" @getAllTestMeter="getAllTestMeter" :isEdit="isEdit" :visible="visible"/>
+        <xNFCreateOrEdit :isEdit="isEdit"/>
     </div>
 </template>
 
@@ -40,7 +40,6 @@
         data() {
             return {
                 tabss:PackageMGTTabs,
-                visible: false,
                 columns: VnfpnfSuiteColumns,
                 currentPage:'VNF/PNFSuiteMGT',
                 isEdit: false,
@@ -71,23 +70,24 @@
         methods: {
             ...mapActions("VnfpnfSuite", [
                 "getTableData",
-                "getTestMeter",
                 "getVNFOptions",
                 "getPagination",
                 "clearPagination",
                 "deleteTestMeter"
             ]),
             ...mapMutations("VnfpnfSuite", [
-                "changeTab"
+                "changeTab",
+                "updateVisible",
+                "updateVNFTest"
             ]),
             initVnfPnfSuiteTable() {
                 this.getVNFOptions();
                 this.getTableData({})
             },
             handleClick(){
-                this.visible = true;
+                this.updateVisible(true);
                 this.isEdit = false;
-                this.getTestMeter("");
+                this.updateVNFTest({});
             },
             handleTabsChanges(key){
                 console.log(key,"key")
@@ -116,14 +116,11 @@
                 // Simulation request
                 this.getTableData(obj)
             },
-            close(){
-                this.visible = false;
-            },
             showEditOrDeleteModal(item,SuiteSingleData){
                 if(item === 'Edit') {
-                    this.visible = true;
+                    this.updateVisible(true);
                     this.isEdit = true;
-                    this.getTestMeter(SuiteSingleData)
+                    this.updateVNFTest(SuiteSingleData)
                 }else {
                     this.$confirm({
                         title: 'Are you sure delete this xNF TT?',
@@ -137,9 +134,6 @@
                     });
                 }
             },
-            getAllTestMeter(){
-                this.getTableData({})
-            }
         },destroyed(){
             this.changeTab(101)
         }

@@ -296,7 +296,7 @@ const TestSpecColumns = [
     },
     {
         title: 'SUT Type',
-        dataIndex: 'sutTypeCH.dictLabel'
+        dataIndex: 'SUTTypeCH.dictLabel'
     },
     {
         title: 'Publish ORG',

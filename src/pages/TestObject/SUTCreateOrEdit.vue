@@ -136,7 +136,7 @@
                             name: this.VNFTest.name,
                             vendor: this.VNFTest.vendor,
                             version: this.VNFTest.version,
-                            type: this.VNFTest.type.code
+                            type: this.VNFTest.typeCH.code
                         });
                     } else if (!this.isEdit && this.count > 1) {
                         this.form.setFieldsValue({type: this.VNFOptions[0].code});

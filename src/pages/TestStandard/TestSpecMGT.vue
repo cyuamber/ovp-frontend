@@ -54,11 +54,7 @@
       </a-table>
     </div>
     <TestSpecMGTAddOrEdit
-      v-if="visible"
-      @close="close"
-      @getAllTestSpec="getAllTestSpec"
       :isEdit="isEdit"
-      :visible="visible"
     />
   </div>
 </template>
@@ -77,7 +73,6 @@ export default {
   },
   data() {
     return {
-      visible: false,
       columns: TestSpecColumns,
       innerColumns: TestCaseColumns,
       currentPage: "TestSpecMGT",
@@ -93,7 +88,8 @@ export default {
       pagination: state => state.testSpecMGT.pagination,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
       loadingMessage: state => state.testSpecMGT.loadingMessage,
-      tableLoading: state => state.testSpecMGT.tableLoading
+      tableLoading: state => state.testSpecMGT.tableLoading,
+        visible: state => state.testSpecMGT.visible
     })
   },
   mounted() {
@@ -108,13 +104,13 @@ export default {
       "clearPagination",
       "getSUTOptions"
     ]),
-    ...mapMutations("testSpecMGT", ["updatecaseMgtTableData"]),
+    ...mapMutations("testSpecMGT", ["updatecaseMgtTableData","updateVisible"]),
     initTestStandardTable() {
       this.getSUTOptions();
       this.getTableData({});
     },
     handleCreateClick() {
-      this.visible = true;
+        this.updateVisible(true);
       this.isEdit = false;
       this.getTestSpec("");
     },
@@ -133,9 +129,6 @@ export default {
     caseMgtTableShow(expanded, record) {
       this.updatecaseMgtTableData(record);
     },
-    close() {
-      this.visible = false;
-    },
     // Filter by creating time
     onChange(date, d) {
       this.publishTime = d;
@@ -153,7 +146,7 @@ export default {
     },
     showEditOrDeleteModal(item, testSpecSingleData) {
       if (item === "Edit") {
-        this.visible = true;
+          this.updateVisible(true);
         this.isEdit = true;
         this.getTestSpec(testSpecSingleData);
       } else {
@@ -168,9 +161,6 @@ export default {
           }
         });
       }
-    },
-    getAllTestSpec() {
-      this.getTableData({});
     }
   }
 };

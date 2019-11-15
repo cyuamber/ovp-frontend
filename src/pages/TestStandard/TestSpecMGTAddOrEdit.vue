@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
+  <a-modal v-bind:title="title" v-model="visible" :footer="null" @cancel="handleCancel">
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item label="Name" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -55,9 +55,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
-  props: ["isEdit","visible"],
+  props: ["isEdit"],
   data() {
     return {
       form: this.$form.createForm(this),
@@ -74,16 +74,31 @@ export default {
       SUTOptions: state => state.testSpecMGT.SUTOptions,
       VNFOptions: state => state.testSpecMGT.VNFOptions,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData
-    })
+    }),
+      visible: {
+          get() {
+              return this.$store.state.testSpecMGT.visible;
+          },
+          set(val) {
+              if (!val) {
+                  this.clearOptions();
+                  this.getTestSpec({});
+                  this.form.setFieldsValue({
+                      Name: "",
+                      Version: "",
+                      SUTType: "",
+                      VNFType: "",
+                      PublishORG: ""
+                  });
+              }
+          }
+      }
   },
   watch: {
     visible(val) {
-      console.log(val, "-----");
       if (val) {
-        this.showModal = val;
         this.count++;
-        console.log(this.testSpecSingleData, "===>this.testSpecSingleData");
-        if (!this.showModal.length && this.isEdit && this.count !== 1) {
+        if (this.isEdit && this.count > 1) {
           this.form.setFieldsValue({
             Name: this.testSpecSingleData.name,
             Version: this.testSpecSingleData.version,
@@ -91,8 +106,7 @@ export default {
             VNFType: this.testSpecSingleData.vnfTypeCH.code,
             PublishORG: this.testSpecSingleData.publishOrg
           });
-        }
-        if (!this.showModal.length && !this.isEdit) {
+        } else if (!this.isEdit && this.count > 1) {
             this.spin = true;
             this.initSUTTypeValue = this.SUTOptions[0].code;
             this.initVNFtypeValue = this.VNFOptions[0].code;
@@ -100,26 +114,12 @@ export default {
         }
       }
     },
-    showModal(val) {
-      if (!val) {
-        this.$emit("close");
-        this.clearOptions();
-        this.getTestSpec({});
-        this.form.setFieldsValue({
-          Name: "",
-          Version: "",
-          SUTType: "",
-          VNFType: "",
-          PublishORG: ""
-        });
-      }
-    },
     SUTOptions(val) {
       if (val.length) {
         this.spin = false;
       }
       if (val.length && !this.isEdit) {
-        this.form.setFieldsValue({ SUTType: val[0].code });
+          this.initSUTTypeValue = this.SUTOptions[0].code;
       }
     },
     VNFOptions(val) {
@@ -127,14 +127,11 @@ export default {
         this.spin = false;
       }
       if (val.length && !this.isEdit) {
-        this.form.setFieldsValue({ VNFType: val[0].code });
+          this.initVNFtypeValue = this.VNFOptions[0].code;
       }
     },
     testSpecSingleData(val) {
-      if (
-        val.sutTypeCH.code !== undefined &&
-        val.vnfTypeCH.code !== undefined
-      ) {
+      if (Object.keys(val).length > 0) {
         this.initSUTTypeValue = val.SUTTypeCH.code;
         this.initVNFtypeValue = val.vnfTypeCH.code;
         this.spin = false;
@@ -147,6 +144,9 @@ export default {
       "getTestSpec",
       "getVNFOptions",
       "createOrEditTestSpec"
+    ]),
+    ...mapMutations("testSpecMGT", [
+        "updateVisible"
     ]),
     handleSelectSUTChange(val) {
       this.spin = true;
@@ -164,7 +164,7 @@ export default {
       }
     },
     handleCancel() {
-      this.$emit("close");
+        this.updateVisible(false);
     },
     handleSubmit() {
       this.form.validateFields((err, values) => {
@@ -179,10 +179,12 @@ export default {
           let { isEdit } = this;
           this.createOrEditTestSpec({ isEdit, data }).then(
             () => {
-              this.$emit("close");
+                this.form.resetFields();
+                this.getTestSpec({});
+                this.updateVisible(false);
             },
             () => {
-              this.$emit("close");
+                this.updateVisible(false);
             }
           );
         }

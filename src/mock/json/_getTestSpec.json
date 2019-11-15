@@ -6,7 +6,7 @@
       "id": 1,
       "name": "FW-SPEC",
       "version": "V1.0",
-      "vnfType": 101001,
+      "vnfType": 1,
       "publishOrg": "CMCC",
       "publishTime": 1573516800000,
       "caseMgt": [
@@ -46,8 +46,8 @@
         "lang": null
       },
       "vnfTypeCH": {
-        "code": "101001",
-        "dictLabel": "test01",
+        "code": "1",
+        "dictLabel": "MME",
         "dictValue": "1",
         "dictParentCode": null,
         "status": "\u0000",
@@ -58,7 +58,7 @@
       "id": 2,
       "name": "MME-SPEC",
       "version": "V1.0",
-      "vnfType": 101002,
+      "vnfType": 1,
       "publishOrg": "CMCC",
       "publishTime": 1569945600000,
       "caseMgt": [{
@@ -96,8 +96,8 @@
         "lang": null
       },
       "vnfTypeCH": {
-        "code": "101002",
-        "dictLabel": "test02",
+        "code": "1",
+        "dictLabel": "MME",
         "dictValue": "1",
         "dictParentCode": null,
         "status": "\u0000",
@@ -108,7 +108,7 @@
       "id": 3,
       "name": "PCRF-SPEC",
       "version": "V1.0",
-      "vnfType": 101003,
+      "vnfType": 3,
       "publishOrg": "CMCC",
       "publishTime": 1564675200000,
       "caseMgt": [{
@@ -138,7 +138,7 @@
         "status": "enable"
       }],
       "SUTTypeCH": {
-        "code": "10103",
+        "code": "10101",
         "dictLabel": "PCRF",
         "dictValue": "1",
         "status": "\u0000",
@@ -146,8 +146,8 @@
         "lang": null
       },
       "vnfTypeCH": {
-        "code": "101003",
-        "dictLabel": "test03",
+        "code": "3",
+        "dictLabel": "SPGW",
         "dictValue": "1",
         "dictParentCode": null,
         "status": "\u0000",
@@ -206,8 +206,8 @@
         "lang": null
       },
       "vnfTypeCH": {
-        "code": "101001",
-        "dictLabel": "test01",
+        "code": "4",
+        "dictLabel": "FW",
         "dictValue": "1",
         "dictParentCode": null,
         "status": "\u0000",

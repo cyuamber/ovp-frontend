@@ -10,6 +10,7 @@ const state = {
   SuiteSingleData: {},
     tableLoading: false,
 source: null,
+visible: false,
 currentTab:101,
   pagination: {current: 1 , total: 0, pageSize:10},
 loadingMessage: {type: '', toast: ''}
@@ -54,6 +55,9 @@ const mutations = {
     updateTableLoading(state, tableLoading) {
         state.tableLoading = tableLoading
     },
+    updateVisible(state, bool){
+        state.visible = bool
+    },
 };
 const actions = {
   getTableData ({commit,state}, obj){
@@ -80,9 +84,6 @@ const actions = {
             if(req.createTime || req.name ) commit('updateFailedMessage','Network exception, please try again')
         }
     )
-  },
-  getTestMeter({commit},data){
-    commit('updateVNFTest',data)
   },
   getVNFOptions({commit}){
       let url = API.suiteMgt.suiteType.replace(":flag",state.currentTab);
