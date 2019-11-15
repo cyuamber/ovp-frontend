@@ -1,3 +1,6 @@
+const env = process.env.NODE_ENV;
+const axiosgetType = env === "development" ? true : false;
+
 const mockcolumns = [{
     title: "Avatar",
     key: "avatar",
@@ -18,7 +21,6 @@ const mockcolumns = [{
     dataIndex: "phone"
 }
 ]
-const axiosgetType = true;
 const PackageMGTTabs = [{
     key: "VNF",
     val: 101
