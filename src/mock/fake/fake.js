@@ -142,7 +142,7 @@ module.exports = {
         total: 50,
         body: _.times(10, function (n) {
             return {
-                id:n + 1,
+                id: n + 1,
                 name: faker.name.findName(),
                 vendor: faker.company.companyName(),
                 mntAddress: faker.internet.url(),
@@ -156,17 +156,17 @@ module.exports = {
     loginMeterSys: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     updateMeterSys: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     deleteMeterSys: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     getTestMeter: {
         code: 200,
@@ -175,16 +175,16 @@ module.exports = {
         body: _.times(10, function (n) {
             return {
                 id: n + 1,
-                name:faker.name.findName(),
+                name: faker.name.findName(),
                 vendor: faker.company.companyName(),
                 version: faker.random.number(),
                 type: faker.database.type(),
                 createTime: faker.date.recent(),
                 updateTime: null,
-                fileName:"test.casr",
+                fileName: "test.casr",
                 flag: 0,
                 "typeCH": {
-                    "code": n+101001,
+                    "code": n + 101001,
                     "dictLabel": "FW",
                     "dictValue": "1",
                     "dictParentCode": null,
@@ -240,28 +240,28 @@ module.exports = {
                 testSpecId: n + 1,
                 testSpecName: faker.commerce.productName(),
                 testSpecVersion: faker.random.number(),
-                SUTType:faker.database.type(),
+                SUTType: faker.database.type(),
                 VNFtype: faker.database.type(),
                 PublishORG: faker.company.companyName(),
                 publishTime: faker.date.recent(),
-                caseMgt:[
+                caseMgt: [
                     {
-                        id: n+12,
+                        id: n + 12,
                         name: 'testCase01',
                         description: 'This is Description name',
-                        status: n>1?0:1,
+                        status: n > 1 ? 0 : 1,
                     },
                     {
-                        id: n+13,
+                        id: n + 13,
                         name: 'testCase02',
                         description: 'This is Description name',
-                        status: n>1?0:1,
+                        status: n > 1 ? 0 : 1,
                     }
                 ]
             }
         })
     },
-    getTestSpecSUTType:{
+    getTestSpecSUTType: {
         code: 200,
         message: "OK",
         body: [
@@ -300,22 +300,22 @@ module.exports = {
         code: 200,
         message: 'SUCCESS',
         total: 50,
-        body: ['VNF01','PNF01','XNF01','NFVI01']
+        body: ['VNF01', 'PNF01', 'XNF01', 'NFVI01']
     },
     addTestSpec: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     updateTestSpec: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     deleteTestSpec: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     getVIM: {
         code: 200,
@@ -323,8 +323,8 @@ module.exports = {
         total: 50,
         body: _.times(10, function (n) {
             return {
-                id:n+1,
-                status: (n+1)%2===0 ? 0:1,
+                id: n + 1,
+                status: (n + 1) % 2 === 0 ? 0 : 1,
                 cloudOwner: faker.name.firstName(),
                 cloudRegionId: faker.random.number().toString(),
                 cloudType: faker.random.word(),
@@ -332,9 +332,9 @@ module.exports = {
                 username: faker.internet.userName(),
                 password: faker.internet.password(),
                 authUrl: faker.internet.url(),
-                sslCacert:faker.internet.protocol(),
-                sslInsecure:faker.internet.ipv6(),
-                cloudDomain:faker.internet.domainName(),
+                sslCacert: faker.internet.protocol(),
+                sslInsecure: faker.internet.ipv6(),
+                cloudDomain: faker.internet.domainName(),
                 tenant: faker.internet.userName(),
                 createTime: faker.date.recent(),
                 updateTime: null,
@@ -407,17 +407,17 @@ module.exports = {
     loginVIM: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     updateVIM: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     deleteVIM: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     getVNFM: {
         code: 200,
@@ -425,7 +425,7 @@ module.exports = {
         total: 50,
         body: _.times(26, function (n) {
             return {
-                id:n+1,
+                id: n + 1,
                 name: faker.name.firstName(),
                 type: faker.random.word(),
                 vendor: faker.random.word(),
@@ -443,24 +443,24 @@ module.exports = {
     loginVNFM: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     updateVNFM: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     deleteVNFM: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     getTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
         total: 20,
-        body: _.times(10, function (n){
-            if(n>3){
+        body: _.times(10, function (n) {
+            if (n > 3) {
                 n = 0
             }
             return {
@@ -471,19 +471,19 @@ module.exports = {
                 status: n,
                 testSpeciflcation: faker.random.word(),
                 jobDescription: faker.random.word(),
-                testENV: [{title: 'Test VIM ENV', text: 'name'},{title: 'Test VNFM ENV', text: 'name'}],
+                testENV: [{ title: 'Test VIM ENV', text: 'name' }, { title: 'Test VNFM ENV', text: 'name' }],
                 testCase: ['Test Case01', 'Test Case02', 'Test Case03']
             }
         })
     },
-    getTestCaseMGTs:{
+    getTestCaseMGTs: {
         code: 200,
         message: 'SUCCESS',
         total: 25,
-        body: _.times(10, function (n){
-            if(n%2 === 0){
+        body: _.times(10, function (n) {
+            if (n % 2 === 0) {
                 n = 0
-            }else n = 1;
+            } else n = 1;
             return {
                 testCaseNm: faker.random.number(),
                 testCaseName: faker.name.firstName(),
@@ -503,7 +503,7 @@ module.exports = {
             jobName: faker.name.lastName(),
         }
     },
-    getTestJobSUTType:{
+    getTestJobSUTType: {
         "code": 200,
         "message": "OK",
         "body": [
@@ -654,22 +654,65 @@ module.exports = {
     deleteTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     downloadTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     runTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: {
+            "createTime": 1573907509154,
+            "updateTime": 1573915021597,
+            "id": 26,
+            "jobId": 393178433819721700,
+            "jobName": "Demo-Job-01",
+            "jobStatus": "STARTED",
+            "jobProgress": 100,
+            "executionType": "ONCE",
+            "fixedExecutionInterval": null,
+            "fixedExecutionUnit": null,
+            "cronExpression": null,
+            "executionStartTime": "2019-11-16 14:40:36",
+            "lastSuccessExecutionStartTime": "2019-11-16 14:36:36",
+            "lastFailExecutionStartTime": null,
+            "successExecutionCount": 6,
+            "failExecutionCount": 0,
+            "endpoint": "/portal/business/jobs/case/start",
+            "remark": "Demo-Job-01",
+            "sut": {
+                "id": 1003,
+                "name": "vFW",
+                "type": 101004,
+                "vendor": null,
+                "version": null,
+                "createTime": null,
+                "updateTime": null,
+                "flag": 101,
+                "fileName": null,
+                "typeCH": null
+            },
+            "spec": {
+                "id": 1000,
+                "name": "FW-SPEC",
+                "version": null,
+                "vnfType": 101004,
+                "publishOrg": null,
+                "publishTime": null,
+                "caseMgt": null,
+                "vnfTypeCH": null,
+                "sutTypeCH": null
+            }
+
+        }
     },
     stopTestJobMGT: {
         code: 200,
         message: 'SUCCESS',
-        body:null
+        body: null
     },
     getProgress: {
         code: 200,

@@ -58,9 +58,9 @@
           <a-upload-dragger
             enctype="multipart/form-data"
             class="upload-float"
+            action="/portal/business/files/upload"
             :remove="handleRemove"
-            :beforeUpload="beforeUpload"
-            name="files"
+            name="file"
             v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: isEdit && editUploadtextShow?false:true,}]}]"
           >
             <p class="ant-upload-text form__upload-text--font-size">Click or drag to upload</p>
@@ -226,9 +226,9 @@ export default {
               ? values.upload[0].name
               : this.SuiteSingleData.fileName
           };
-          // this.submitFormData(data)
-          if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
-          else this.handleUpload(data, formData);
+          this.submitFormData(data);
+          // if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
+          // else this.handleUpload(data, formData);
         }
       });
     },

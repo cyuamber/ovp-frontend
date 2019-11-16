@@ -59,10 +59,10 @@
         </a-form-item>
         <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-upload-dragger
+            action="/portal/business/files/upload"
             :remove="handleRemove"
-            :beforeUpload="beforeUpload"
             class="form__upload-float"
-            name="files"
+            name="file"
             v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: editUploadtextShow ? true :false,}]}]"
           >
             <p class="ant-upload-text form__upload-text--font-size">
@@ -212,9 +212,9 @@ export default {
               ? values.upload[0].name
               : this.VNFTest.fileName
           };
-          // this.submitFormData(data)
-          if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
-          else this.handleUpload(data, formData);
+          this.submitFormData(data);
+          // if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
+          // else this.handleUpload(data, formData);
         }
       });
     },

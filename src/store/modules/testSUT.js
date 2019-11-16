@@ -157,7 +157,7 @@ const actions = {
 				})
 	},
 	deleteVNFTest({ commit, dispatch }, data) {
-		axiosdelete(API.sutMgt.sutMgtDelete.replace("id", data.id)).then(res => {
+		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", data.id)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
 				let paramsObj = { flag: state.currentTab };
