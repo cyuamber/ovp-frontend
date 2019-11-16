@@ -1,5 +1,6 @@
 import moment from 'moment'
 import API from '../../const/apis';
+import router from "../../router/router"
 import {
 	axiospost,
 	axiosget,
@@ -332,10 +333,34 @@ const actions = {
 					commit('updateSuccessMessage', 'Successfully started testing');
 					data.status = "RUNNING";
 					data.actions[0] = 'Stop';
+					data.jobId = res.body.jobId;
+					data.executionStartTime = res.body.executionStartTime;
 					commit('updateTableItemData', data);
-					dispatch('getTableData', true)
+					setTimeout(() => {
+						router.push({ name: "JobDetail", params: data })
+					}, 5000)
 				}
 			})
+	},
+	detailTestCaseJop({ commit }, data) {
+		// Simulation request
+		axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", data.executionStartTime))
+			.then(res => {
+				if (res.code === 200) {
+					commit('updateSuccessMessage', 'Successfully detail testing');
+					commit('updateDetailTestCase', res.body);
+				}
+			});
+		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
+			.then(res => {
+				if (res.code === 200) {
+					commit('updateSuccessMessage', 'Successfully detail testing');
+					commit('updateProgress', {
+						percent: res.body.jobProgress,
+						status: res.body.jobStatus
+					})
+				}
+			});
 	},
 	getProgress({ commit, dispatch, state }) {
 		axiosget('/getProgress').then((res) => {
@@ -371,26 +396,6 @@ const actions = {
 				}
 			});
 		dispatch('getTableData', true)
-	},
-	detailTestCaseJop({ commit }, data) {
-		// Simulation request
-		axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", data.executionStartTime))
-			.then(res => {
-				if (res.code === 200) {
-					commit('updateSuccessMessage', 'Successfully detail testing');
-					commit('updateDetailTestCase', res.body);
-				}
-			});
-		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
-			.then(res => {
-				if (res.code === 200) {
-					commit('updateSuccessMessage', 'Successfully detail testing');
-					commit('updateProgress', {
-						percent: res.body.jobProgress,
-						status: res.body.jobStatus
-					})
-				}
-			});
 	},
 	getVNFMOption({ commit }, { message }) {
 		axiosget(API.vimVnfmMgt.vnfmEnvMgtTable).then(res => {
