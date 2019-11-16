@@ -37,7 +37,7 @@
           "status": "enable"
         }
       ],
-      "SUTTypeCH": {
+      "sutTypeCH": {
         "code": "10101",
         "dictLabel": "FW",
         "dictValue": "1",
@@ -87,7 +87,7 @@
       "description": "SNAT and DNAT can take effect on the traffic.",
       "status": "enable"
     }],
-      "SUTTypeCH": {
+      "sutTypeCH": {
         "code": "10102",
         "dictLabel": "MME",
         "dictValue": "1",
@@ -137,7 +137,7 @@
         "description": "Log can be generated and recorded correctly.",
         "status": "enable"
       }],
-      "SUTTypeCH": {
+      "sutTypeCH": {
         "code": "10101",
         "dictLabel": "PCRF",
         "dictValue": "1",
@@ -197,7 +197,7 @@
       "description": "Test TCP/HTTP Maximum Connection establishment per second for vFirewall.",
       "status": "enable"
     }],
-      "SUTTypeCH": {
+      "sutTypeCH": {
         "code": "10101",
         "dictLabel": "FW",
         "dictValue": "1",

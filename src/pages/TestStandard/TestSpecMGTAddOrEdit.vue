@@ -102,7 +102,7 @@ export default {
           this.form.setFieldsValue({
             Name: this.testSpecSingleData.name,
             Version: this.testSpecSingleData.version,
-            SUTType: this.testSpecSingleData.SUTTypeCH.code,
+            SUTType: this.testSpecSingleData.sutTypeCH.code,
             VNFType: this.testSpecSingleData.vnfTypeCH.code,
             PublishORG: this.testSpecSingleData.publishOrg
           });
@@ -132,7 +132,7 @@ export default {
     },
     testSpecSingleData(val) {
       if (Object.keys(val).length > 0) {
-        this.initSUTTypeValue = val.SUTTypeCH.code;
+        this.initSUTTypeValue = val.sutTypeCH.code;
         this.initVNFtypeValue = val.vnfTypeCH.code;
         this.spin = false;
       }
@@ -159,7 +159,7 @@ export default {
       if (!this.VNFOptions.length) {
         this.spin = true;
         this.getVNFOptions({
-          SUTType: this.testSpecSingleData.SUTTypeCH.code
+          SUTType: this.testSpecSingleData.sutTypeCH.code
         });
       }
     },

@@ -119,6 +119,7 @@ export default {
         initJobDetail(){
             // this.initWebSocket();
             if(this.currentJob.jobStatus!=="CREATED"){
+                this.detailTestCaseJop({jobId:this.currentJob.jobId,executionStartTime:this.currentJob.executionStartTime});
                 this.caseStatusTimer = setInterval(() => {
                     this.detailTestCaseJop({jobId:this.currentJob.jobId,executionStartTime:this.currentJob.executionStartTime});
                 }, 5000);
