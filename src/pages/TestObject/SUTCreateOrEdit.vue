@@ -210,13 +210,13 @@
                         };
                         // this.submitFormData(data)
                         if(this.isEdit && this.editUploadtextShow)this.submitFormData(data);
-                        else this.handleUpload(data, formData)
+                        else this.handleUpload(data, values.upload[0])
                     }
                 });
             },
             handleUpload(data, formData) {
                 this.uploading = true;
-                console.log(formData.get("file"),"file------");
+                console.log(formData,"file------");
                 this.upload({formData, message: this.$message})
                     .then(
                         () => {

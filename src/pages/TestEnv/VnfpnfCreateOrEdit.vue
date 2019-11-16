@@ -51,6 +51,7 @@
         </a-form-item>
         <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-upload-dragger
+              enctype="multipart/form-data"
             class="upload-float"
             :remove="handleRemove"
             :beforeUpload="beforeUpload"
