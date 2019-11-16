@@ -1,12 +1,13 @@
 import {
 	axiosget,
 	axiospost,
-    axiosput,
-    axiosdelete
+	axiosput,
+	axiosdelete
 } from '../../utils/http';
 import API from '../../const/apis';
 import { axiosgetType } from "../../const/constant";
 import moment from 'moment';
+import reqwest from 'reqwest';
 
 const state = {
 	tableData: [],
@@ -18,13 +19,13 @@ const state = {
 	},
 	source: null,
 	visible: false,
-    tableLoading: false,
+	tableLoading: false,
 	pagination: {},
 	createTime: '',
 	keyword: '',
 	pageNum: 1,
 	pageSize: 10,
-    currentTab: 101,
+	currentTab: 101,
 }
 const mutations = {
 	updateTableData(state, tableData) {
@@ -42,9 +43,9 @@ const mutations = {
 	updateVisible(state, bool) {
 		state.visible = bool
 	},
-    changeTab(state, tab){
-        state.currentTab = tab
-    },
+	changeTab(state, tab) {
+		state.currentTab = tab
+	},
 	updateVNFTest(state, VNFTest) {
 		state.VNFTest = VNFTest
 	},
@@ -63,9 +64,9 @@ const mutations = {
 			toast
 		}
 	},
-    updateTableLoading(state, tableLoading) {
-        state.tableLoading = tableLoading
-    },
+	updateTableLoading(state, tableLoading) {
+		state.tableLoading = tableLoading
+	},
 	updateToken(state, source) {
 		state.source = source
 	},
@@ -103,77 +104,91 @@ const actions = {
 			paramsObj.pageNum = state.pageNum
 			paramsObj.pageSize = state.pageSize
 		}
-        paramsObj.flag = state.currentTab;
+		paramsObj.flag = state.currentTab;
 		dispatch('getTableData', {
 			paramsObj,
 			isFilter
 		})
 	},
-	getTableData({ commit,state }, { paramsObj, isFilter }) {
-        commit('updateTableLoading', true);
-        paramsObj.flag = state.currentTab;
-        paramsObj.pageNum = state.pageNum;
-        paramsObj.pageSize = state.pageSize;
-        let axiosrequest = axiosgetType?axiospost:axiosget;
-        axiosrequest(API.sutMgt.sutMgtTable,paramsObj).then(res => {
-				if (res.code === 200) {
-					commit('updateTableData', res);
-                    commit('updateTableLoading', false);
-					if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
-				} else {
-					if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')
-				}
-			}, () => {
+	getTableData({ commit, state }, { paramsObj, isFilter }) {
+		commit('updateTableLoading', true);
+		paramsObj.flag = state.currentTab;
+		paramsObj.pageNum = state.pageNum;
+		paramsObj.pageSize = state.pageSize;
+		let axiosrequest = axiosgetType ? axiospost : axiosget;
+		axiosrequest(API.sutMgt.sutMgtTable, paramsObj).then(res => {
+			if (res.code === 200) {
+				commit('updateTableData', res);
+				commit('updateTableLoading', false);
+				if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
+			} else {
 				if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')
 			}
+		}, () => {
+			if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')
+		}
 
 		)
 	},
-	getVNFOptions({ commit,state }) {
-        let url = API.sutMgt.sutMgtType.replace(":flag",state.currentTab);
-        axiosget(url).then(res => {
-            if(res.code === 200){
-                commit('updateVNFOptions',res.body)
-            }else {
-                this.$message.error('Network exception, please try again');
-            }
-        })
+	getVNFOptions({ commit, state }) {
+		let url = API.sutMgt.sutMgtType.replace(":flag", state.currentTab);
+		axiosget(url).then(res => {
+			if (res.code === 200) {
+				commit('updateVNFOptions', res.body)
+			} else {
+				this.$message.error('Network exception, please try again');
+			}
+		})
 	},
-	createOrEditVNFTest({ commit,state, dispatch }, { data, isEdit }) {
-        if(isEdit) data.id = state.VNFTest.id;
-		let url = isEdit ? API.sutMgt.sutMgtUpdate: API.sutMgt.sutMgtInsert;
-		let apiType = isEdit ? axiosput:axiospost;
-        apiType(url, data)
+	createOrEditVNFTest({ commit, state, dispatch }, { data, isEdit }) {
+		if (isEdit) data.id = state.VNFTest.id;
+		let url = isEdit ? API.sutMgt.sutMgtUpdate : API.sutMgt.sutMgtInsert;
+		let apiType = isEdit ? axiosput : axiospost;
+		apiType(url, data)
 			.then((res) => {
-					if (res.code === 200) {
-						commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
-                        let paramsObj = {flag:state.currentTab};
-						dispatch('getTableData', {paramsObj,isFilter:false})
-					} else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
-				},
+				if (res.code === 200) {
+					commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
+					let paramsObj = { flag: state.currentTab };
+					dispatch('getTableData', { paramsObj, isFilter: false })
+				} else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
+			},
 				() => {
 					commit('updateFailedMessage', 'Network exception, please try again')
 				})
 	},
 	deleteVNFTest({ commit, dispatch }, data) {
-        axiosdelete(API.sutMgt.sutMgtDelete.replace("id",data.id)).then(res => {
+		axiosdelete(API.sutMgt.sutMgtDelete.replace("id", data.id)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
-                let paramsObj = {flag:state.currentTab};
-                dispatch('getTableData', {paramsObj,isFilter:false})
+				let paramsObj = { flag: state.currentTab };
+				dispatch('getTableData', { paramsObj, isFilter: false })
 			} else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
 	upload({ commit }, { formData, message }) {
-		console.log(formData.get("file"),"SUT---upload");
-        axiospost(API.uploadFile, {file:formData}, true).then(res => {
-			commit('updateToken', null)
-			if (res.code === 200) message.success('Upload successfully')
-			else message.error('Upload failed')
-		}, () => {
-			message.error('Network exception, please try again')
-			commit('updateToken', null)
+		console.log(formData, "SUT---upload");
+		reqwest({
+			url: API.uploadFile,
+			method: 'post',
+			processData: false,
+			data: formData,
+			success: () => {
+				message.success('Upload successfully');
+				commit('updateToken', null)
+			},
+			error: () => {
+				message.error('Upload failed');
+				commit('updateToken', null)
+			},
 		})
+		// axiospost(API.uploadFile, { file: formData }, true).then(res => {
+		// 	commit('updateToken', null)
+		// 	if (res.code === 200) message.success('Upload successfully')
+		// 	else message.error('Upload failed')
+		// }, () => {
+		// 	message.error('Network exception, please try again')
+		// 	commit('updateToken', null)
+		// })
 	}
 
 }

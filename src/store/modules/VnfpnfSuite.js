@@ -1,4 +1,4 @@
-import { axiosget, axiospost, axiosput } from '../../utils/http';
+import { axiosget, axiospost, axiosput, axiosdelete } from '../../utils/http';
 import moment from 'moment';
 import API from '../../const/apis';
 import { axiosgetType } from "../../const/constant";
@@ -131,7 +131,7 @@ const actions = {
     },
     deleteTestMeter({ commit, dispatch, state }, data) {
         let url = API.suiteMgt.suiteMgtDelete.replace(":id", data.id);
-        axiospost(url).then(res => {
+        axiosdelete(url).then(res => {
             if (res.code === 200) {
                 commit('updateSuccessMessage', 'Deleted successfully');
                 let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };

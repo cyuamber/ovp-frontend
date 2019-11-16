@@ -119,7 +119,6 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.runTestJobMGT(data);
-          this.handleOpenDetail(data);
         },
         onCancel() {
           console.log("Cancel");

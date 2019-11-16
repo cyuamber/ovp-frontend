@@ -78,7 +78,7 @@ const testEnvVIMColumns = [
         title: 'Status',
         dataIndex: 'status',
         scopedSlots: {
-            customRender: 'state'
+            customRender: 'status'
         },
     },
     {
