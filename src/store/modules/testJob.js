@@ -172,7 +172,7 @@ const actions = {
             sutId: values.SUTName.split("+")[1],
             specId: values.TestSpecification,
 			createrTime: moment(new Date()).format('YYYY-MM-DD'),
-            caseIds: values.checkboxGroup
+            caseIds: values.checkboxGroup ? values.checkboxGroup:[]
 		}
 		if (values.TestVIMENV) body.testVIMENV = values.TestVIMENV
 		if (values.TestVNFMENV) body.testVNFMENV = values.TestVNFMENV

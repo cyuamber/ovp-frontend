@@ -1,7 +1,6 @@
 import {axiosget, axiospost, axiosput} from '../../utils/http';
 import moment from 'moment';
 import API from '../../const/apis';
-import axios from "axios/index";
 import {axiosgetType} from "../../const/constant";
 
 const state = {
@@ -104,12 +103,9 @@ const actions = {
   clearPagination({commit}){
       commit('updatePagination', {current: 1 , total: 0})
   },
-    uploadVNFFile({commit},{data, message}){
-        let source = axios.CancelToken.source(
-            commit('updateToken',source));
-        let body = {...data};
-        body.cancelToken = source.token;
-        axiospost(API.uploadFile,{file:body},true).then( res => {
+    uploadVNFFile({commit},{formData, message}){
+        console.log(formData.get("file"),"uploadVNFFile------");
+        axiospost(API.uploadFile,{file:formData},true).then( res => {
             commit('updateToken',null);
             if(res.code === 200) message.success('Upload successfully');
             else message.error('Upload failed')

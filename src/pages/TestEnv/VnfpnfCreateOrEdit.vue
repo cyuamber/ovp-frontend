@@ -140,7 +140,6 @@
                 }
             },
             SuiteSingleData(val) {
-                console.log(val,'val')
                 if (Object.keys(val).length > 0) {
                     this.initNVFTypeValue = val.type;
                     this.spin = false;
@@ -169,7 +168,7 @@
             },
             handleRemove() {
                 if (this.disabled) {
-                    axiosCancelToken("/uploadVNFFile").then(res => {
+                    axiosCancelToken("/portal/business/files/upload").then(res => {
                         if (res.code === 200) {
                             this.disabled = false;
                             this.$message.success('cancel upload successfully.');
@@ -184,6 +183,7 @@
             },
             handleUpload(data, formData) {
                 this.disabled = true;
+                console.log(formData.get("file"),"file------");
                 this.uploadVNFFile({formData, message: this.$message})
                     .then(
                     () => { this.submitFormData(data)},
@@ -201,7 +201,6 @@
                 this.form.validateFields((err, values) => {
                     if (!err) {
                         const formData = new FormData();
-                        console.log(formData, "formData");
                         if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
                             formData.append("file", values.upload[0]);
                         }

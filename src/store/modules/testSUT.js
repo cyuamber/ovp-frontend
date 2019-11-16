@@ -7,7 +7,6 @@ import {
 import API from '../../const/apis';
 import { axiosgetType } from "../../const/constant";
 import moment from 'moment';
-import axios from 'axios'
 
 const state = {
 	tableData: [],
@@ -165,14 +164,9 @@ const actions = {
 			} else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
-	upload({ commit }, { data, message }) {
-		let source = axios.CancelToken.source(
-			commit('updateToken', source))
-		let body = {
-			...data
-		};
-		body.cancelToken = source.token;
-        axiospost(API.uploadFile, {file:body}, true).then(res => {
+	upload({ commit }, { formData, message }) {
+		console.log(formData.get("file"),"SUT---upload");
+        axiospost(API.uploadFile, {file:formData}, true).then(res => {
 			commit('updateToken', null)
 			if (res.code === 200) message.success('Upload successfully')
 			else message.error('Upload failed')

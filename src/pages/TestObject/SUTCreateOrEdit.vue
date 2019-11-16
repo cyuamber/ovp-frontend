@@ -216,6 +216,7 @@
             },
             handleUpload(data, formData) {
                 this.uploading = true;
+                console.log(formData.get("file"),"file------");
                 this.upload({formData, message: this.$message})
                     .then(
                         () => {
