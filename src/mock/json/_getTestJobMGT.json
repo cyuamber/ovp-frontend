@@ -7,6 +7,7 @@
       "jobId": 392392180810989600,
       "jobName": "job1",
       "jobStatus": "DONE",
+      "jobProgress": 100,
       "remark": "job1 test",
       "executionStartTime": "2019-11-15 10:41:10",
       "createTime": "2019-11-14",

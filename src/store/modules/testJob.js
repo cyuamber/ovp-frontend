@@ -29,7 +29,9 @@ const state = {
 	createTime: '',
 	pageNum: 1,
 	pageSize: 10,
-    detailTestCase:[]
+    detailTestCase:[],
+    VNFMOption: [],
+    VIMOption: []
 }
 
 const mutations = {
@@ -122,6 +124,12 @@ const mutations = {
     },
     updateDetailTestCase(state, detailTestCase) {
         state.detailTestCase = detailTestCase
+    },
+    updateVNFMOption(state, options) {
+        state.VNFMOption = options;
+    },
+    updateVIMOption(state, options) {
+        state.VIMOption = options;
     },
 }
 
@@ -364,7 +372,7 @@ const actions = {
             });
         dispatch('getTableData',true)
 	},
-    detailTestCaseJop({dispatch,commit},data){
+    detailTestCaseJop({commit},data){
         // Simulation request
         axiosget(API.testJobMgt.testJobDetail.replace(":jobId",data.jobId).replace(":ExecutionStartTime",data.executionStartTime))
             .then(res => {
@@ -373,8 +381,41 @@ const actions = {
                     commit('updateDetailTestCase',res.body);
                 }
             });
-        dispatch('getTableData',true)
-    }
+        axiosget(API.testJobMgt.testJobProgress.replace(":jobId",data.jobId))
+            .then(res => {
+                if (res.code === 200) {
+                    commit('updateSuccessMessage', 'Successfully detail testing');
+                    commit('updateProgress', {
+                        percent: res.body.jobProgress,
+                        status: res.body.jobStatus
+                    })
+                }
+            });
+    },
+    getVNFMOption({ commit }, { message }) {
+        axiosget(API.vimVnfmMgt.vnfmEnvMgtTable).then(res => {
+            if (res.code === 200) {
+                // Simulation request
+                commit('updateVNFMOption',res.body)
+            } else {
+                message.error('Failed to get SUT Name list')
+            }
+        }, () => {
+            message.error('Network exception, please try again')
+        })
+    },
+    getVIMOption({ commit }, { message }) {
+        axiosget(API.vimVnfmMgt.vimEnvMgtTable).then(res => {
+            if (res.code === 200) {
+                // Simulation request
+                commit('updateVIMOption',res.body)
+            } else {
+                message.error('Failed to get SUT Name list')
+            }
+        }, () => {
+            message.error('Network exception, please try again')
+        })
+    },
 
 }
 

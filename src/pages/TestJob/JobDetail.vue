@@ -117,7 +117,7 @@ export default {
 			"updateProgress"
         ]),
         initJobDetail(){
-            this.initWebSocket();
+            // this.initWebSocket();
             if(this.currentJob.jobStatus!=="CREATED"){
                 this.caseStatusTimer = setInterval(() => {
                     this.detailTestCaseJop({jobId:this.currentJob.jobId,executionStartTime:this.currentJob.executionStartTime});
@@ -197,7 +197,7 @@ export default {
         },
     },
     beforeDestroy: function () {
-        this.disconnect();
+        // this.disconnect();
         clearInterval(this.timer);
         clearInterval(this.caseStatusTimer);
     },

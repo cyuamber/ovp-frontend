@@ -51,6 +51,7 @@ export default {
 		return {
 			columns: testJobColumns,
 			loading: false,
+            tableQueryTimer:""
 		};
 	},
 	computed: {
@@ -73,7 +74,9 @@ export default {
             "delete",
             "download",
             "stopJop",
-            "getSUTType"
+            "getSUTType",
+            "getVNFMOption",
+            "getVIMOption"
         ]),
         ...mapMutations("testJob", [
             "setIsShow",
@@ -81,10 +84,19 @@ export default {
         ]),
         initTestJobTable() {
             this.getTableData();
+            this.tableQueryTimer = setInterval(() => {
+                this.getTableData();
+            }, 5000);
         },
 		handleCreate() {
             this.setIsShow(true);
             this.getSUTType({
+                message: this.$message
+            });
+            this.getVNFMOption({
+                message: this.$message
+            });
+            this.getVIMOption({
                 message: this.$message
             });
 		},
@@ -183,7 +195,10 @@ export default {
 		getActionsColor(actions, item){
 			return item === actions[0]? 'blue': (item === actions[1]? 'red':(item === actions[2]? 'green': 'purple'))
 		}
-	}
+	},
+    beforeDestroy: function () {
+        clearInterval(this.tableQueryTimer);
+    },
 };
 </script>
 <style lang="less" scope>

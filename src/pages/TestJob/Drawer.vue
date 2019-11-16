@@ -58,14 +58,14 @@
           v-decorator="[keyList[i]]"
           class="form__select--width"
         >
-          <a-select-option v-for="type in VNFMOption" :key="type" :value="type">{{type}}</a-select-option>
+          <a-select-option v-for="type in VNFMOption" :key="type.name" :value="type.name">{{type.name}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test VIM ENV'"
           v-decorator="[keyList[i]]"
           class="form__select--width"
         >
-          <a-select-option v-for="type in VNFMOption" :key="type" :value="type">{{type}}</a-select-option>
+          <a-select-option v-for="type in VNFMOption" :key="type.name" :value="type.name">{{type.name}}</a-select-option>
         </a-select>
         <!-- loading -->
         <a-spin :spinning="nameSpin" v-if="item === 'SUT Name'">
@@ -120,14 +120,14 @@ export default {
       selectedSUTType: "",
       selectedSUTName: "",
       selectedSpecification: "",
-      VNFMOption: ["111", "ssss", "sss"],
-      VIMOption: ["111", "ssss", "sss"]
     };
   },
   computed: {
     ...mapState({
       SUTTypeList: store => store.testJob.SUTTypeList,
       SUTNameList: store => store.testJob.SUTNameList,
+      VNFMOption: store => store.testJob.VNFMOption,
+      VIMOption: store => store.testJob.VIMOption,
       nameSpin: store => store.testJob.nameSpin,
       getSUTNames: store => store.testJob.getSUTName,
       specificationSpin: store => store.testJob.specificationSpin,

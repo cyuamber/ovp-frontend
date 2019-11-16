@@ -51,6 +51,7 @@ export default {
         testJobDelete:baseUrl+"/jobs/:jobId/delete",
         testJobStart:baseUrl+"/jobs/:jobId/start",
         testJobStop:baseUrl+"/jobs/:jobId/stop",
+        testJobProgress:baseUrl+"/jobs/:jobId",
         testJobDetail:baseUrl+"/jobs/cases/:jobId/:ExecutionStartTime",
         testJobSUTType:baseUrl+"/sutType",
         testJobSUTName:baseUrl+"/sutName/:code",

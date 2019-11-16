@@ -45,6 +45,7 @@ module.exports =
         "/portal/business/jobs/insert":"/addTestSpec",
         "/portal/business/jobs/:jobId/start":"/runTestJobMGT",
         "/portal/business/jobs/:jobId/stop":"/stopTestJobMGT",
+        "/portal/business/jobs/:jobId":"/_getJobProgress",
         "/portal/business/jobs/cases/:jobId/:ExecutionStartTime":"/_testJobDetail",
         "/*/*": "/$1_$2",
         "/*/*/*": "/$1_$2_$3",
