@@ -30,7 +30,11 @@
           @select="((key) => selectSUTType(key))"
           class="form__select--width"
         >
-          <a-select-option v-for="type in SUTTypeList" :key="type.code" :value="type.code">{{type.dictLabel}}</a-select-option>
+          <a-select-option
+            v-for="type in SUTTypeList"
+            :key="type.code"
+            :value="type.code"
+          >{{type.dictLabel}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'SUT Name'"
@@ -40,7 +44,11 @@
           :title="!getSUTNames ? 'Please select SUT Type first' : ''"
           @select="((key) => selectSUTName(key))"
         >
-          <a-select-option v-for="types in SUTNameList" :key="types.type+'+'+types.id" :value="types.type+'+'+types.id">{{types.name}}</a-select-option>
+          <a-select-option
+            v-for="types in SUTNameList"
+            :key="types.type+'+'+types.id"
+            :value="types.type+'+'+types.id"
+          >{{types.name}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test Specification'"
@@ -50,7 +58,11 @@
           @select="((key)=> selectSpecification(key))"
           :title="!getSUTNames ? 'Please select SUT Type and SUT Name first' : (!getSpecifications ? 'Please select SUT Name first': '')"
         >
-          <a-select-option v-for="type in specificationList" :key="type.id" :value="type.id">{{type.name}}</a-select-option>
+          <a-select-option
+            v-for="type in specificationList"
+            :key="type.id"
+            :value="type.id"
+          >{{type.name}}</a-select-option>
         </a-select>
         <!-- Test VNFM/VIM  -->
         <a-select
@@ -58,14 +70,22 @@
           v-decorator="[keyList[i]]"
           class="form__select--width"
         >
-          <a-select-option v-for="type in VNFMOption" :key="type.name" :value="type.name">{{type.name}}</a-select-option>
+          <a-select-option
+            v-for="type in VNFMOption"
+            :key="type.name"
+            :value="type.name"
+          >{{type.name}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test VIM ENV'"
           v-decorator="[keyList[i]]"
           class="form__select--width"
         >
-          <a-select-option v-for="type in VNFMOption" :key="type.name" :value="type.name">{{type.name}}</a-select-option>
+          <a-select-option
+            v-for="type in VIMOption"
+            :key="type.cloudRegionId"
+            :value="type.cloudOwner"
+          >{{type.cloudOwner}}</a-select-option>
         </a-select>
         <!-- loading -->
         <a-spin :spinning="nameSpin" v-if="item === 'SUT Name'">
@@ -85,11 +105,7 @@
               v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}]}]"
               @change="onChange"
             >
-              <a-card-grid
-                v-for="item in testCaseList"
-                :key="item.id "
-                class="form__card--padding"
-              >
+              <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
                 <a-checkbox :value="item.id" class="form__checkbox--size" />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
               </a-card-grid>
@@ -119,7 +135,7 @@ export default {
       form: this.$form.createForm(this),
       selectedSUTType: "",
       selectedSUTName: "",
-      selectedSpecification: "",
+      selectedSpecification: ""
     };
   },
   computed: {
@@ -163,14 +179,12 @@ export default {
   },
   methods: {
     ...mapActions("testJob", [
-        "createrTestJobMGT",
-        "getSUTName",
-        "getSpecification",
-        "getTestCase"
+      "createrTestJobMGT",
+      "getSUTName",
+      "getSpecification",
+      "getTestCase"
     ]),
-    ...mapMutations("testJob", [
-        "clean"
-    ]),
+    ...mapMutations("testJob", ["clean"]),
     onClose() {
       this.visible = false;
       this.$emit("close");
@@ -178,7 +192,7 @@ export default {
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
-          this.createrTestJobMGT(values)
+          this.createrTestJobMGT(values);
           this.visible = false;
           this.$emit("close");
         }
@@ -189,8 +203,8 @@ export default {
       this.selectedSUTName = "";
       this.selectedSpecification = "";
       this.getSUTName({
-          SUTType: key,
-          message: this.$message
+        SUTType: key,
+        message: this.$message
       });
       this.form.setFieldsValue({ SUTName: "", TestSpecification: "" });
     },
@@ -199,8 +213,8 @@ export default {
       this.selectedSUTName = key.split("+")[1];
       this.selectedSpecification = "";
       this.getSpecification({
-          SUTName: key.split("+")[0],
-          message: this.$message
+        SUTName: key.split("+")[0],
+        message: this.$message
       });
       this.form.setFieldsValue({ TestSpecification: "" });
     },
@@ -208,9 +222,9 @@ export default {
       if (key === this.selectedSpecification) return;
       this.selectedSpecification = key;
       this.getTestCase({
-          TestSpecification: key,
-          message: this.$message
-      })
+        TestSpecification: key,
+        message: this.$message
+      });
     },
     onChange(e) {
       console.log(e.target, e);
@@ -243,7 +257,7 @@ export default {
     padding: 14px;
     text-indent: 0.5em;
   }
-  .form__checkboxgroup--margin{
+  .form__checkboxgroup--margin {
     width: 100%;
     margin-bottom: 30px;
   }
@@ -256,8 +270,8 @@ export default {
   .ant-btn {
     width: 50%;
     border-radius: 0;
-    height: 50px!important;
-    line-height: 50px!important;
+    height: 50px !important;
+    line-height: 50px !important;
   }
 }
 </style>

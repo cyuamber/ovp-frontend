@@ -1,5 +1,10 @@
 <template>
-  <a-modal v-bind:title="this.isEdit ? 'Edit ' + (currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (currentTab === 101?'VNF':'PNF') + 'TT'" v-model="visible" :footer="null"  @cancel="handleCancel">
+  <a-modal
+    v-bind:title="this.isEdit ? 'Edit ' + (currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (currentTab === 101?'VNF':'PNF') + 'TT'"
+    v-model="visible"
+    :footer="null"
+    @cancel="handleCancel"
+  >
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item
@@ -51,7 +56,7 @@
         </a-form-item>
         <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-upload-dragger
-              enctype="multipart/form-data"
+            enctype="multipart/form-data"
             class="upload-float"
             :remove="handleRemove"
             :beforeUpload="beforeUpload"
@@ -78,162 +83,169 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {mapState, mapActions, mapMutations} from "vuex";
-    import {axiosCancelToken} from '../../utils/http'
-    export default {
-        props: ['isEdit'],
-        data() {
-            return {
-                form: this.$form.createForm(this),
-                spin: false,
-                count: 0,
-                disabled: false,
-                initNVFTypeValue: null,
-                editUploadtextShow: true
-            }
-        },
-        computed: {
-            ...mapState({
-                VNFOptions: state => state.VnfpnfSuite.VNFOptions,
-                SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
-                currentTab: state => state.VnfpnfSuite.currentTab
-            }),
-            visible: {
-                get() {
-                    return this.$store.state.VnfpnfSuite.visible;
-                },
-                set(val) {
-                    if (!val) {
-                        this.updateVNFTest({});
-                        this.form.setFieldsValue({XNFName: '', XNFType: '', XNFVendor: '', Version: ''});
-                    }
-                }
-            }
-        },
-        watch: {
-            visible(val) {
-                if (val) {
-                    if(!this.isEdit) {
-                        this.editUploadtextShow = false;
-                    } else {
-                        this.editUploadtextShow = true;
-                    }
-                    this.count++;
-                    if (this.isEdit && this.count > 1) {
-                        this.form.setFieldsValue({
-                            XNFName: this.SuiteSingleData.name,
-                            XNFType: this.SuiteSingleData.typeCH.code,
-                            XNFVendor: this.SuiteSingleData.vendor,
-                            Version: this.SuiteSingleData.version,
-                        })
-                    }else if (!this.isEdit && this.count > 1) {
-                        this.form.setFieldsValue({XNFType: this.VNFOptions[0].code});
-                    }
-                }
-            },
-            VNFOptions(val) {
-                if (val.length) {
-                    this.spin = false
-                }
-                if (val.length && !this.isEdit) {
-                    this.initNVFTypeValue = val[0].code;
-                    console.log(this.initNVFTypeValue, "this.initNVFTypeValue")
-                }
-            },
-            SuiteSingleData(val) {
-                if (Object.keys(val).length > 0) {
-                    this.initNVFTypeValue = val.type;
-                    this.spin = false;
-                }
-            }
-        },
-        methods: {
-            ...mapActions("VnfpnfSuite", [
-                "getVNFOptions",
-                "clearOptions",
-                "uploadVNFFile",
-                "createOrEditTestMeter"
-            ]),
-            ...mapMutations("VnfpnfSuite", [
-                "updateVNFTest",
-                "updateVisible"
-            ]),
-            normFile(e) {
-                if (Array.isArray(e)) {
-                    return e;
-                }
-                if (e.fileList.length > 1) {
-                    e.fileList.splice(0, e.fileList.length - 1)
-                }
-                return e && e.fileList;
-            },
-            handleRemove() {
-                if (this.disabled) {
-                    axiosCancelToken("/portal/business/files/upload").then(res => {
-                        if (res.code === 200) {
-                            this.disabled = false;
-                            this.$message.success('cancel upload successfully.');
-                        } else {
-                            this.$message.error('cancel upload failed.');
-                        }
-                    });
-                }
-            },
-            beforeUpload() {
-                return false;
-            },
-            handleUpload(data, formData) {
-                this.disabled = true;
-                console.log(formData.get("file"),"file------");
-                this.uploadVNFFile({formData, message: this.$message})
-                    .then(
-                    () => { this.submitFormData(data)},
-                    () => { this.disabled = false;}
-                    );
-            },
-            handleCancel() {
-                this.updateVisible(false);
-                if (!this.disabled) {
-                    this.handleRemove();
-                }
-            },
-            handleSubmit(e) {
-                e.preventDefault();
-                this.form.validateFields((err, values) => {
-                    if (!err) {
-                        const formData = new FormData();
-                        if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
-                            formData.append("file", values.upload[0]);
-                        }
-                        let data = {
-                            flag: this.currentTab,
-                            name: values.XNFName,
-                            type: values.XNFType,
-                            vendor: values.XNFVendor,
-                            version: values.Version,
-                            // fileName:"test.casr"
-                            fileName: !this.editUploadtextShow ? values.upload[0].name : this.SuiteSingleData.fileName
-                        };
-                        // this.submitFormData(data)
-                        if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
-                        else this.handleUpload(data, formData)
-                    }
-                });
-
-            },
-            submitFormData(data) {
-                this.createOrEditTestMeter({isEdit: this.isEdit, data})
-                    .then(() => {
-                        this.updateVisible(false);
-                        this.form.resetFields();
-                        this.updateVNFTest({});
-                    }, () => {
-                        this.updateVisible(false)
-                    })
-
-            }
+import { mapState, mapActions, mapMutations } from "vuex";
+import { axiosCancelToken } from "../../utils/http";
+export default {
+  props: ["isEdit"],
+  data() {
+    return {
+      form: this.$form.createForm(this),
+      spin: false,
+      count: 0,
+      disabled: false,
+      initNVFTypeValue: null,
+      editUploadtextShow: true
+    };
+  },
+  computed: {
+    ...mapState({
+      VNFOptions: state => state.VnfpnfSuite.VNFOptions,
+      SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
+      currentTab: state => state.VnfpnfSuite.currentTab
+    }),
+    visible: {
+      get() {
+        return this.$store.state.VnfpnfSuite.visible;
+      },
+      set(val) {
+        if (!val) {
+          this.updateVNFTest({});
+          this.form.setFieldsValue({
+            XNFName: "",
+            XNFType: "",
+            XNFVendor: "",
+            Version: ""
+          });
         }
+      }
     }
+  },
+  watch: {
+    visible(val) {
+      if (val) {
+        if (!this.isEdit) {
+          this.editUploadtextShow = false;
+        } else {
+          this.editUploadtextShow = true;
+        }
+        this.count++;
+        if (this.isEdit && this.count > 1) {
+          this.form.setFieldsValue({
+            XNFName: this.SuiteSingleData.name,
+            XNFType: this.SuiteSingleData.typeCH.code,
+            XNFVendor: this.SuiteSingleData.vendor,
+            Version: this.SuiteSingleData.version
+          });
+        } else if (!this.isEdit && this.count > 1) {
+          this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
+        }
+      }
+    },
+    VNFOptions(val) {
+      if (val.length) {
+        this.spin = false;
+      }
+      if (val.length && !this.isEdit) {
+        this.initNVFTypeValue = val[0].code;
+        console.log(this.initNVFTypeValue, "this.initNVFTypeValue");
+      }
+    },
+    SuiteSingleData(val) {
+      if (Object.keys(val).length > 0) {
+        this.initNVFTypeValue = val.type;
+        this.spin = false;
+      }
+    }
+  },
+  methods: {
+    ...mapActions("VnfpnfSuite", [
+      "getVNFOptions",
+      "clearOptions",
+      "uploadVNFFile",
+      "createOrEditTestMeter"
+    ]),
+    ...mapMutations("VnfpnfSuite", ["updateVNFTest", "updateVisible"]),
+    normFile(e) {
+      if (Array.isArray(e)) {
+        return e;
+      }
+      if (e.fileList.length > 1) {
+        e.fileList.splice(0, e.fileList.length - 1);
+      }
+      return e && e.fileList;
+    },
+    handleRemove() {
+      if (this.disabled) {
+        axiosCancelToken("/portal/business/files/upload").then(res => {
+          if (res.code === 200) {
+            this.disabled = false;
+            this.$message.success("cancel upload successfully.");
+          } else {
+            this.$message.error("cancel upload failed.");
+          }
+        });
+      }
+    },
+    beforeUpload() {
+      return false;
+    },
+    handleUpload(data, formData) {
+      this.disabled = true;
+      console.log(formData.get("file"), "file------");
+      this.uploadVNFFile({ formData, message: this.$message }).then(
+        () => {
+          this.submitFormData(data);
+        },
+        () => {
+          this.disabled = false;
+        }
+      );
+    },
+    handleCancel() {
+      this.updateVisible(false);
+      if (!this.disabled) {
+        this.handleRemove();
+      }
+    },
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          const formData = new FormData();
+          if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
+            formData.append("file", values.upload[0]);
+          }
+          let data = {
+            flag: this.currentTab,
+            name: values.XNFName,
+            type: values.XNFType,
+            vendor: values.XNFVendor,
+            version: values.Version,
+            // fileName:"test.casr"
+            fileName: !this.editUploadtextShow
+              ? values.upload[0].name
+              : this.SuiteSingleData.fileName
+          };
+          // this.submitFormData(data)
+          if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
+          else this.handleUpload(data, formData);
+        }
+      });
+    },
+    submitFormData(data) {
+      this.createOrEditTestMeter({ isEdit: this.isEdit, data }).then(
+        () => {
+          this.updateVisible(false);
+          this.form.resetFields();
+          this.updateVNFTest({});
+        },
+        () => {
+          this.updateVisible(false);
+        }
+      );
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -258,7 +270,7 @@
   float: left;
   line-height: 3.5;
 }
-.form__uploadtext-height{
+.form__uploadtext-height {
   display: inline-block;
   line-height: 20px;
 }

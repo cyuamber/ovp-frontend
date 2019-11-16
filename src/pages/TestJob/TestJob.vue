@@ -46,159 +46,175 @@ import Drawer from "./Drawer";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
-	name: "TestJob",
-	data() {
-		return {
-			columns: testJobColumns,
-			loading: false,
-            tableQueryTimer:""
-		};
-	},
-	computed: {
-		...mapState({
-			isShow: state => state.testJob.isShow,
-			loadingMessage: state => state.testJob.loadingMessage,
-			tableData: state => state.testJob.tableData,
-			pagination: state => state.testJob.pagination,
-            tableLoading: state => state.testJob.tableLoading
-        }),
-	},
-	components: { Drawer, Loading },
-	mounted() {
-		this.initTestJobTable()
-	},
-	methods: {
-        ...mapActions("testJob", [
-            "getTableData",
-            "runTestJobMGT",
-            "delete",
-            "download",
-            "stopJop",
-            "getSUTType",
-            "getVNFMOption",
-            "getVIMOption"
-        ]),
-        ...mapMutations("testJob", [
-            "setIsShow",
-            "setFilter"
-        ]),
-        initTestJobTable() {
-            this.getTableData();
-            this.tableQueryTimer = setInterval(() => {
-                this.getTableData();
-            }, 5000);
-        },
-		handleCreate() {
-            this.setIsShow(true);
-            this.getSUTType({
-                message: this.$message
-            });
-            this.getVNFMOption({
-                message: this.$message
-            });
-            this.getVIMOption({
-                message: this.$message
-            });
-		},
-		handleSelectCreateTime(date, d) {
-            this.setFilter({ time: d });
-            this.getTableData(true);
-		},
-		handleActions(action, data) {
-			if ( action === "Start" ) this.handleStart(data);
-			else if (action === "Delete") this.handleDelete(data);
-			else if (action === "More") this.handleOpenDetail(data);
-			else if (action === 'Download') this.handleDownload(data);
-			else if (action === 'Stop') this.handleStop(data)
-		},
-		handleStart(data) {
-			data.currentAction = 'Start';
-			this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
-			this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
-            this.$confirm({
-                title: "Are you sure start this task?",
-                okText: "Yes",
-                okType: "danger",
-                cancelText: "No",
-                onOk: () => {
-                    this.runTestJobMGT(data)
-                },
-                onCancel() {
-                    console.log("Cancel");
-                }
-            });
-		},
-		handleDelete(data) {
-			this.$confirm({
-				title: "Are you sure delete this task?",
-				okText: "Yes",
-				okType: "danger",
-				cancelText: "No",
-				onOk: () => {
-                    this.delete(data)
-				},
-				onCancel() {
-				console.log("Cancel");
-				}
-			});
-		},
-		handleDownload(data) {
-			console.log('Download');
-            this.$confirm({
-                title: "Are you sure download this task?",
-                okText: "Yes",
-                okType: "danger",
-                cancelText: "No",
-                onOk: () => {
-                    this.download(data)
-                },
-                onCancel() {
-                    console.log("Cancel");
-                }
-            });
-		},
-		handleOpenDetail(data) {
-			data.currentAction = "More";
-			this.$router.push({ name: "JobDetail", params: data });
-		},
-		close() {
-            this.setIsShow(false);
-            this.getTableData()
-		},
-		handlePageChange(pageObj) {
-            this.setFilter({ pageObj });
-            this.getTableData(true)
-        },
-		handleStop(data){
-			// The analog call interface changes a single piece of data in a single table
-            this.$confirm({
-                title: "Are you sure stop this task?",
-                okText: "Yes",
-                okType: "danger",
-                cancelText: "No",
-                onOk: () => {
-                    this.stopJop(data)
-                },
-                onCancel() {
-                    console.log("Cancel");
-                }
-            });
-
-		},
-		getStatusTitle(status){
-			return status === "CREATED" || status === "STARTED"? 'Pending execution': (status === "RUNNING"? 'Executing':(status === "DONE"? 'Execution completed':'Execution failed'))
-		},
-		getStatusStyle(status){
-			let color = (status === "CREATED" || status === "STARTED"? '#979797': (status === "RUNNING"? '#F5A623':(status === "DONE"? '#7ED321':'#D0021B')))
-			return {backgroundColor: color}
-		},
-		getActionsColor(actions, item){
-			return item === actions[0]? 'blue': (item === actions[1]? 'red':(item === actions[2]? 'green': 'purple'))
-		}
-	},
-    beforeDestroy: function () {
-        clearInterval(this.tableQueryTimer);
+  name: "TestJob",
+  data() {
+    return {
+      columns: testJobColumns,
+      loading: false,
+      tableQueryTimer: ""
+    };
+  },
+  computed: {
+    ...mapState({
+      isShow: state => state.testJob.isShow,
+      loadingMessage: state => state.testJob.loadingMessage,
+      tableData: state => state.testJob.tableData,
+      pagination: state => state.testJob.pagination,
+      tableLoading: state => state.testJob.tableLoading
+    })
+  },
+  components: { Drawer, Loading },
+  mounted() {
+    this.initTestJobTable();
+  },
+  methods: {
+    ...mapActions("testJob", [
+      "getTableData",
+      "runTestJobMGT",
+      "delete",
+      "download",
+      "stopJop",
+      "getSUTType",
+      "getVNFMOption",
+      "getVIMOption"
+    ]),
+    ...mapMutations("testJob", ["setIsShow", "setFilter"]),
+    initTestJobTable() {
+      this.getTableData();
+      this.tableQueryTimer = setInterval(() => {
+        this.getTableData();
+      }, 5000);
     },
+    handleCreate() {
+      this.setIsShow(true);
+      this.getSUTType({
+        message: this.$message
+      });
+      this.getVNFMOption({
+        message: this.$message
+      });
+      this.getVIMOption({
+        message: this.$message
+      });
+    },
+    handleSelectCreateTime(date, d) {
+      this.setFilter({ time: d });
+      this.getTableData(true);
+    },
+    handleActions(action, data) {
+      if (action === "Start") this.handleStart(data);
+      else if (action === "Delete") this.handleDelete(data);
+      else if (action === "More") this.handleOpenDetail(data);
+      else if (action === "Download") this.handleDownload(data);
+      else if (action === "Stop") this.handleStop(data);
+    },
+    handleStart(data) {
+      data.currentAction = "Start";
+      this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
+      this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+      this.$confirm({
+        title: "Are you sure start this task?",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: () => {
+          this.runTestJobMGT(data);
+          this.handleOpenDetail(data);
+        },
+        onCancel() {
+          console.log("Cancel");
+        }
+      });
+    },
+    handleDelete(data) {
+      this.$confirm({
+        title: "Are you sure delete this task?",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: () => {
+          this.delete(data);
+        },
+        onCancel() {
+          console.log("Cancel");
+        }
+      });
+    },
+    handleDownload(data) {
+      console.log("Download");
+      this.$confirm({
+        title: "Are you sure download this task?",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: () => {
+          this.download(data);
+        },
+        onCancel() {
+          console.log("Cancel");
+        }
+      });
+    },
+    handleOpenDetail(data) {
+      data.currentAction = "More";
+      this.$router.push({ name: "JobDetail", params: data });
+    },
+    close() {
+      this.setIsShow(false);
+      this.getTableData();
+    },
+    handlePageChange(pageObj) {
+      this.setFilter({ pageObj });
+      this.getTableData(true);
+    },
+    handleStop(data) {
+      // The analog call interface changes a single piece of data in a single table
+      this.$confirm({
+        title: "Are you sure stop this task?",
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: () => {
+          this.stopJop(data);
+        },
+        onCancel() {
+          console.log("Cancel");
+        }
+      });
+    },
+    getStatusTitle(status) {
+      return status === "CREATED" || status === "STARTED"
+        ? "Pending execution"
+        : status === "RUNNING"
+        ? "Executing"
+        : status === "DONE"
+        ? "Execution completed"
+        : "Execution failed";
+    },
+    getStatusStyle(status) {
+      let color =
+        status === "CREATED" || status === "STARTED"
+          ? "#979797"
+          : status === "RUNNING"
+          ? "#F5A623"
+          : status === "DONE"
+          ? "#7ED321"
+          : "#D0021B";
+      return { backgroundColor: color };
+    },
+    getActionsColor(actions, item) {
+      return item === actions[0]
+        ? "blue"
+        : item === actions[1]
+        ? "red"
+        : item === actions[2]
+        ? "green"
+        : "purple";
+    }
+  },
+  beforeDestroy: function() {
+    clearInterval(this.tableQueryTimer);
+  }
 };
 </script>
 <style lang="less" scope>
