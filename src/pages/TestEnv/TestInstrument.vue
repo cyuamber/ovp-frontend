@@ -2,7 +2,7 @@
   <div class="test-ins__container">
     <Loading :loadingMessage="loadingMessage" />
     <div class="top">
-      <a-button type="primary" @click="handleCreateClick">Rigister TTMS</a-button>
+      <a-button type="primary" @click="handleCreateClick">Register TTMS</a-button>
       <Search class="search" @testInsSearch="testInsSearch" :currentPage="currentPage" />
       <a-date-picker class="calendar" @change="onChange" placeholder="Select date" />
     </div>

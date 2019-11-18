@@ -139,7 +139,7 @@ const actions = {
 		let obj = { pageNum: state.pageNum, pageSize: state.pageSize }
 		if (state.createTime !== '') obj.createTime = state.createTime;
 		let axiosrequest = axiosgetType ? axiospost : axiosget;
-		commit('updateTableLoading', true);
+		// commit('updateTableLoading', true);
 		axiosrequest(API.testJobMgt.testJobTable, obj).then((res) => {
 			if (res.code === 200) {
 				state.pagination = {
@@ -152,7 +152,7 @@ const actions = {
 					item.actions = [item.status === "RUNNING" ? 'Stop' : 'Start', 'Delete', 'Download', 'More']
 					return item
 				})
-				commit('updateTableLoading', false);
+				// commit('updateTableLoading', false);
 				commit('updateTableData', tableData)
 				if (bool) commit('updateSuccessMessage', 'Successfully get table data')
 			} else if (bool) commit('updateFailedMessage', 'Network exception, please try again')

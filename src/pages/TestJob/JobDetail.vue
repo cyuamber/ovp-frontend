@@ -9,7 +9,7 @@
       <a-progress
         :percent="percent"
         :status="status"
-        :showInfo="false"
+        :showInfo="true"
         class="job-detail__progress"
       />
       <a-button
