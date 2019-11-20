@@ -27,6 +27,7 @@ const state = {
 	percent: 0,
 	status: 'normal',
 	isJobDetail: false,
+    searchKeyword:'',
 	createTime: '',
 	pageNum: 1,
 	pageSize: 10,
@@ -109,8 +110,25 @@ const mutations = {
 	changeComponent(state, bool) {
 		state.isJobDetail = bool
 	},
-	setFilter(state, { time, pageObj }) {
-		if (time !== undefined) state.createTime = time
+	setFilter(state,{time, key, pageObj, isSearch, message}) {
+        if(isSearch){
+            if(key === '' && state.createTime === '' && state.searchKeyword === '') {
+                message.warning('Please enter valid search information')
+                return
+            }
+        }
+		if (time !== undefined){
+            state.createTime = time;
+            if(state.pageNum !== 1){
+                state.pageNum = 1
+            }
+        }
+        if(key !== undefined) {
+            state.searchKeyword = key;
+            if(state.pageNum !== 1){
+                state.pageNum = 1
+            }
+        }
 		if (pageObj !== undefined) {
 			state.pageNum = pageObj.current;
 			state.pageSize = pageObj.pageSize;
@@ -136,10 +154,12 @@ const mutations = {
 
 const actions = {
 	getTableData({ commit }, bool) {
-		let obj = { pageNum: state.pageNum, pageSize: state.pageSize }
+		let obj = { pageNum: state.pageNum, pageSize: state.pageSize };
 		if (state.createTime !== '') obj.createTime = state.createTime;
+		if (state.searchKeyword !== '') obj.jobStatus = state.createTime;
 		let axiosrequest = axiosgetType ? axiospost : axiosget;
 		// commit('updateTableLoading', true);
+        console.log(obj,"getTableData => obj----");
 		axiosrequest(API.testJobMgt.testJobTable, obj).then((res) => {
 			if (res.code === 200) {
 				state.pagination = {
@@ -326,7 +346,7 @@ const actions = {
 			}
 		})
 	},
-	runTestJobMGT({ commit, dispatch }, data) {
+	runTestJobMGT({ commit }, data) {
 		axiosput(API.testJobMgt.testJobStart.replace(":jobId", data.jobId))
 			.then(res => {
 				if (res.code === 200) {

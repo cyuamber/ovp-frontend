@@ -50,6 +50,15 @@
               :title="status===0? 'Available': 'unavailable'"
             ></span>
           </span>
+          <span slot="action" slot-scope="action,record">
+          <a-tag
+                  v-for="item in action"
+                  :key="item"
+                  :color="item === 'activation'? 'blue' : 'blue'"
+                  class="test-spec__tag"
+                  @click="(() => activationModal(item,record))"
+          >{{item}}</a-tag>
+        </span>
         </a-table>
       </a-table>
     </div>
@@ -102,7 +111,8 @@ export default {
       "deleteTestSpec",
       "getPagination",
       "clearPagination",
-      "getSUTOptions"
+      "getSUTOptions",
+        "activateTestCase"
     ]),
     ...mapMutations("testSpecMGT", ["updatecaseMgtTableData","updateVisible"]),
     initTestStandardTable() {
@@ -161,7 +171,20 @@ export default {
           }
         });
       }
-    }
+    },
+      activationModal(item, testCaseSingleData){
+        console.log(item);
+          this.$confirm({
+              title: "Are you sure activate this Case?",
+              content: "Id: " + testCaseSingleData.id,
+              okText: "Yes",
+              okType: "danger",
+              cancelText: "No",
+              onOk: () => {
+                  this.activateTestCase(testCaseSingleData.id);
+              }
+          });
+      }
   }
 };
 </script>

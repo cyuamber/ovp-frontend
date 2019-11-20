@@ -3,6 +3,14 @@
     <Loading :loadingMessage="loadingMessage" />
     <div class="test-job__top">
       <a-button type="primary" @click="handleCreate">Create Test Job</a-button>
+        <a-input
+                class="tab-content__button"
+                placeholder="status"
+                @keyup.enter="searchTypeID"
+                v-model="keyword"
+        >
+            <a-icon slot="prefix" type="search" />
+        </a-input>
       <a-date-picker class="calendar" @change="handleSelectCreateTime" placeholder="Select date" />
     </div>
     <div class="test-job__table">
@@ -51,7 +59,8 @@ export default {
     return {
       columns: testJobColumns,
       loading: false,
-      tableQueryTimer: ""
+      tableQueryTimer: "",
+        keyword:""
     };
   },
   computed: {
@@ -101,6 +110,14 @@ export default {
       this.setFilter({ time: d });
       this.getTableData(true);
     },
+      searchTypeID() {
+          this.setFilter({
+              key: this.keyword,
+              isSearch: true,
+              message: this.$message
+          });
+        this.getTableData(true);
+      },
     handleActions(action, data) {
       if (action === "Start") this.handleStart(data);
       else if (action === "Delete") this.handleDelete(data);
@@ -260,5 +277,13 @@ export default {
       font-size: 14px;
     }
   }
+    .tab-content__button {
+        display: inline-block;
+        width: 240px;
+        margin-left: 40px;
+        /deep/ .ant-input {
+            border-radius: 20px;
+        }
+    }
 }
 </style>

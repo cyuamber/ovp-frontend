@@ -64,6 +64,7 @@ export default {
         specMgtUpdate: baseUrl + "/specMgt/update",
         specMgtDelete: baseUrl + "/specMgt/:id/delete",
         TestSpecSUTType: baseUrl + "/sutType",
-        TestSpecVNFType: baseUrl + "/types/:flag"
+        TestSpecVNFType: baseUrl + "/types/:flag",
+        specMgtCaseActivate:baseUrl + "/specMgt/:id/delete",
     }
 }

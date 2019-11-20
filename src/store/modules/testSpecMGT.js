@@ -26,7 +26,10 @@ const mutations = {
   },
   updatecaseMgtTableData(state, record) {
     state.caseMgtTableData = [];
-    state.caseMgtTableData = [].concat(record.caseMgt);
+    state.caseMgtTableData = [].concat(record.caseMgt).map((item) => {
+        item.action = ['activation'];
+        return item
+    });
   },
   updateVNFTest(state, testSpecSingleData) {
     state.testSpecSingleData = testSpecSingleData
@@ -139,7 +142,16 @@ const actions = {
         dispatch('getTableData', obj)
       } else commit('updateFailedMessage', 'Network exception, please try again')
     })
-  }
+  },
+    activateTestCase({ commit, dispatch, state }, id){
+        axiospost(API.TestSpecMgt.specMgtCaseActivate.replace("id", id)).then(res => {
+            if (res.code === 200) {
+                commit('updateSuccessMessage', 'Deleted successfully');
+                let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
+                dispatch('getTableData', obj)
+            } else commit('updateFailedMessage', 'Network exception, please try again')
+        })
+    }
 
 }
 const getters = {

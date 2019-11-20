@@ -28,6 +28,19 @@
             <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
           </a-spin>
         </a-form-item>
+          <a-form-item label="Sub SUT type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+              <a-select
+                      class="select"
+                      v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
+                      @dropdownVisibleChange="dropdownVisibleChange"
+              >
+                  <a-select-option
+                          v-for="type in VNFOptions"
+                          :key="type.code"
+                          :value="type.code"
+                  >{{type.dictLabel}}</a-select-option>
+              </a-select>
+          </a-form-item>
         <a-form-item label="Sub SUT Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
           <a-select
             class="select"
@@ -41,6 +54,7 @@
             >{{type.dictLabel}}</a-select-option>
           </a-select>
         </a-form-item>
+>>>>>>> origin
         <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
             v-decorator="['PublishORG',{ rules: [{ required: true,message:' PublishORG is required'}],initialValue:testSpecSingleData.publishOrg }]"
