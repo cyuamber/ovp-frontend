@@ -6,7 +6,7 @@ module.exports =
         "/lang/local?language=:language": "/getCurrentLanguage",
         ///////<-------------VimEnv--------->/////
         "/portal/business/vimEnvMgt":"/_getVIM",
-        "/portal/business/cloudType":"/getcloudType",
+        "/portal/business/cloudType/1000":"/getcloudType",
         "/portal/business/vimEnvMgt/insert":"/loginVIM",
         "/portal/business/vimEnvMgt/update":"/updateVIM",
         "/portal/business/vimEnvMgt/:id/delete":"/deleteVIM",
@@ -36,7 +36,7 @@ module.exports =
         "/portal/business/specMgt/insert":"/addTestSpec",
         "/portal/business/specMgt/update":"/updateTestSpec",
         "/portal/business/specMgt/:id/delete":"/deleteTestSpec",
-        "/portal/business/sutType":"/_getTestSpecSUTType",
+        "/portal/business/sutType/100":"/_getTestSpecSUTType",
         ///////<-------------Test Job--------->/////
         "/portal/business/jobs":"/_getTestJobMGT",
         "/portal/business/sutName/:code":"/getSUTName",

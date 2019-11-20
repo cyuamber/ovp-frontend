@@ -28,8 +28,13 @@
             <p class="job-detail__item-title">{{item.title}}:</p>
             <p
               class="job-detail__item-text"
-            >{{item.title !== 'VNF Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'VNF Name'?currentJob.sut.name:currentJob.spec.name)}}</p>
+            >{{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}</p>
           </div>
+            <div class="job-detail__item-container">
+                <p class="job-detail__item-title">Test Job Status:</p>
+                <p class="job-detail__item-text">{{status}}</p>
+            </div>
+            <testCasePie />
         </a-card>
       </div>
       <div class="job-detail__detail">
@@ -62,26 +67,29 @@
 </template>
 
 <script type="text/ecmascript-6">
+import testCasePie from "./testCasePie";
 import { testJobColumns } from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-
 export default {
   name: "JobDetail",
+    components: { testCasePie },
   data() {
     return {
       statusColor: "",
       stompClient: "",
       timer: "",
-      caseStatusTimer: ""
+      caseStatusTimer: "",
+    progressTimer:""
     };
   },
   computed: {
     ...mapState({
       percent: state => state.testJob.percent,
       status: state => state.testJob.status,
-      detailTestCase: state => state.testJob.detailTestCase
+      detailTestCase: state => state.testJob.detailTestCase,
+        executionStartTime: state => state.testJob.executionStartTime,
     }),
     infoList() {
       let list = [];
@@ -90,7 +98,6 @@ export default {
           list.push(item);
         }
       });
-      console.log(list, "list");
       return list;
     },
     currentJob() {
@@ -116,14 +123,16 @@ export default {
   },
   methods: {
     ...mapActions("testJob", ["getProgress", "detailTestCaseJop"]),
-    ...mapMutations("testJob", ["changeComponent", "updateProgress"]),
+    ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime"]),
     initJobDetail() {
       // this.initWebSocket();
       if (this.currentJob.jobStatus !== "CREATED") {
-        this.detailTestCaseJop({
-          jobId: this.currentJob.jobId,
-          executionStartTime: this.currentJob.executionStartTime
-        });
+        this.getProgress({jobId: this.currentJob.jobId});
+          this.progressTimer = setInterval(() => {
+              this.getProgress({jobId: this.currentJob.jobId});
+          }, 5000);
+        this.detailTestCaseJop({jobId: this.currentJob.jobId});
+
         this.caseStatusTimer = setInterval(() => {
           this.detailTestCaseJop({
             jobId: this.currentJob.jobId,
@@ -135,7 +144,9 @@ export default {
     handleBack() {
       // this.$router.back()
       this.$emit("close");
+      clearInterval(this.progressTimer);
       clearInterval(this.caseStatusTimer);
+        this.updateExecutionStartTime('');
       this.$router.push("/testjobmgt");
     },
     getCaseStatusStyle(status) {
@@ -172,7 +183,8 @@ export default {
       }
     },
     handleRefresh() {
-      this.initWebSocket();
+      // this.initWebSocket();
+        this.getProgress({jobId: this.currentJob.jobId});
     },
     initWebSocket() {
       //initialization weosocket
@@ -222,8 +234,10 @@ export default {
   },
   beforeDestroy: function() {
     // this.disconnect();
-    clearInterval(this.timer);
+    // clearInterval(this.timer);
+    clearInterval(this.progressTimer);
     clearInterval(this.caseStatusTimer);
+    this.updateExecutionStartTime('');
   }
 };
 </script>

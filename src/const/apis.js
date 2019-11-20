@@ -15,7 +15,7 @@ export default {
     vimVnfmMgt: {
         vimEnvMgtTable: baseUrl + "/vimEnvMgt",
         cloudRegionID: baseUrl + "/cloudRegionID",
-        cloudType: baseUrl + "/cloudType",
+        cloudType: baseUrl + "/sutType/1000",
         vimEnvMgtInsert: baseUrl + "/vimEnvMgt/insert",
         vimEnvMgtUpdate: baseUrl + "/vimEnvMgt/update",
         vimEnvMgtDelete: baseUrl + "/vimEnvMgt/:id/delete",
@@ -53,7 +53,7 @@ export default {
         testJobStop: baseUrl + "/jobs/:jobId/stop",
         testJobProgress: baseUrl + "/jobs/:jobId",
         testJobDetail: baseUrl + "/jobs/cases/:jobId/:ExecutionStartTime",
-        testJobSUTType: baseUrl + "/sutType",
+        testJobSUTType: baseUrl + "/sutType/100",
         testJobSUTName: baseUrl + "/sutName/:code",
         testJobSpec: baseUrl + "/testSpec/:type",
         testJobTestCase: baseUrl + "/testCase/:id",
@@ -63,7 +63,7 @@ export default {
         specMgtInsert: baseUrl + "/specMgt/insert",
         specMgtUpdate: baseUrl + "/specMgt/update",
         specMgtDelete: baseUrl + "/specMgt/:id/delete",
-        TestSpecSUTType: baseUrl + "/sutType",
+        TestSpecSUTType: baseUrl + "/sutType/100",
         TestSpecVNFType: baseUrl + "/types/:flag",
         specMgtCaseActivate:baseUrl + "/specMgt/:id/delete",
     }

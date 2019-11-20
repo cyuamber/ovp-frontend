@@ -15,7 +15,7 @@
 </template>
 <script>
 import { Chart } from "highcharts-vue";
-
+import { mapGetters } from "vuex";
 export default {
   name: "Doughnut",
   components: {
@@ -116,7 +116,10 @@ export default {
                 operator: ">",
                 value: 4
               }
-            }
+            },
+              events: {
+                  click: ((e)=>this.chartJobsClick(e.point.name))
+              }
           }
         },
         series: [
@@ -199,7 +202,20 @@ export default {
         ]
       }
     };
-  }
+  },
+    computed: {
+        ...mapGetters(["updateBread"])
+    },
+    methods: {
+        chartJobsClick(name){
+            console.log(name,"----=>chartJobsClick")
+            if(name === 'Success'){
+                this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
+                this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+                this.$router.push({ path: "testjobmgt" });
+            }
+        }
+    }
 };
 </script>
 
