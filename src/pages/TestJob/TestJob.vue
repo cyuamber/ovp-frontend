@@ -199,23 +199,43 @@ export default {
       });
     },
     getStatusTitle(status) {
-      return status === "CREATED" || status === "STARTED"
-        ? "Pending execution"
-        : status === "RUNNING"
-        ? "Executing"
-        : status === "DONE"
-        ? "Execution completed"
-        : "Execution failed";
+      switch (status) {
+        case "CREATED":
+          status = "Waiting to execute";
+          break;
+        case "STARTED":
+          status = "Waiting to execute";
+          break;
+        case "RUNNING":
+          status = "Executing";
+          break;
+        case "DONE":
+          status = "Execution completed";
+          break;
+        case "FAILED":
+          status = "Execution failed";
+          break;
+        default:
+          status = "";
+          break;
+      }
+      return status;
     },
     getStatusStyle(status) {
-      let color =
-        status === "CREATED" || status === "STARTED"
-          ? "#979797"
-          : status === "RUNNING"
-          ? "#F5A623"
-          : status === "DONE"
-          ? "#7ED321"
-          : "#D0021B";
+      let color = "#979797";
+      switch (status) {
+        case "RUNNING":
+          color = "#F5A623";
+          break;
+        case "DONE":
+          color = "#7ED321";
+          break;
+        case "FAILED":
+          color = "#D0021B";
+          break;
+        default:
+          break;
+      }
       return { backgroundColor: color };
     },
     getActionsColor(actions, item) {

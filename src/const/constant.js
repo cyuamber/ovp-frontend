@@ -184,7 +184,7 @@ const testJobColumns = [
         width: 50
     },
     {
-        title: 'VNF Name',
+        title: 'SUT Name',
         dataIndex: 'sut.name',
     },
     {

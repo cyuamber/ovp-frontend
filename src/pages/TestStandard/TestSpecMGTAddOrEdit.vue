@@ -41,6 +41,20 @@
                   >{{type.dictLabel}}</a-select-option>
               </a-select>
           </a-form-item>
+        <a-form-item label="Sub SUT Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+          <a-select
+            class="select"
+            v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
+            @dropdownVisibleChange="dropdownVisibleChange"
+          >
+            <a-select-option
+              v-for="type in VNFOptions"
+              :key="type.code"
+              :value="type.code"
+            >{{type.dictLabel}}</a-select-option>
+          </a-select>
+        </a-form-item>
+>>>>>>> origin
         <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
             v-decorator="['PublishORG',{ rules: [{ required: true,message:' PublishORG is required'}],initialValue:testSpecSingleData.publishOrg }]"
@@ -75,24 +89,24 @@ export default {
       VNFOptions: state => state.testSpecMGT.VNFOptions,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData
     }),
-      visible: {
-          get() {
-              return this.$store.state.testSpecMGT.visible;
-          },
-          set(val) {
-              if (!val) {
-                  this.clearOptions();
-                  this.getTestSpec({});
-                  this.form.setFieldsValue({
-                      Name: "",
-                      Version: "",
-                      SUTType: "",
-                      VNFType: "",
-                      PublishORG: ""
-                  });
-              }
-          }
+    visible: {
+      get() {
+        return this.$store.state.testSpecMGT.visible;
+      },
+      set(val) {
+        if (!val) {
+          this.clearOptions();
+          this.getTestSpec({});
+          this.form.setFieldsValue({
+            Name: "",
+            Version: "",
+            SUTType: "",
+            VNFType: "",
+            PublishORG: ""
+          });
+        }
       }
+    }
   },
   watch: {
     visible(val) {
@@ -107,10 +121,14 @@ export default {
             PublishORG: this.testSpecSingleData.publishOrg
           });
         } else if (!this.isEdit && this.count > 1) {
-            this.spin = true;
-            this.initSUTTypeValue = this.SUTOptions[0].code;
-            this.initVNFtypeValue = this.VNFOptions[0].code;
-            console.log(this.initSUTTypeValue, this.initVNFtypeValue," this.initVNFtypeValue---")
+          this.spin = true;
+          this.initSUTTypeValue = this.SUTOptions[0].code;
+          this.initVNFtypeValue = this.VNFOptions[0].code;
+          console.log(
+            this.initSUTTypeValue,
+            this.initVNFtypeValue,
+            " this.initVNFtypeValue---"
+          );
         }
       }
     },
@@ -119,7 +137,7 @@ export default {
         this.spin = false;
       }
       if (val.length && !this.isEdit) {
-          this.initSUTTypeValue = this.SUTOptions[0].code;
+        this.initSUTTypeValue = this.SUTOptions[0].code;
       }
     },
     VNFOptions(val) {
@@ -127,7 +145,7 @@ export default {
         this.spin = false;
       }
       if (val.length && !this.isEdit) {
-          this.initVNFtypeValue = this.VNFOptions[0].code;
+        this.initVNFtypeValue = this.VNFOptions[0].code;
       }
     },
     testSpecSingleData(val) {
@@ -145,9 +163,7 @@ export default {
       "getVNFOptions",
       "createOrEditTestSpec"
     ]),
-    ...mapMutations("testSpecMGT", [
-        "updateVisible"
-    ]),
+    ...mapMutations("testSpecMGT", ["updateVisible"]),
     handleSelectSUTChange(val) {
       this.spin = true;
       this.getVNFOptions({ STUType: val }).then(() => {
@@ -164,7 +180,7 @@ export default {
       }
     },
     handleCancel() {
-        this.updateVisible(false);
+      this.updateVisible(false);
     },
     handleSubmit() {
       this.form.validateFields((err, values) => {
@@ -179,12 +195,12 @@ export default {
           let { isEdit } = this;
           this.createOrEditTestSpec({ isEdit, data }).then(
             () => {
-                this.form.resetFields();
-                this.getTestSpec({});
-                this.updateVisible(false);
+              this.form.resetFields();
+              this.getTestSpec({});
+              this.updateVisible(false);
             },
             () => {
-                this.updateVisible(false);
+              this.updateVisible(false);
             }
           );
         }
