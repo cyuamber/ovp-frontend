@@ -106,8 +106,8 @@
               @change="onChange"
             >
               <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
-                <a-checkbox :value="item.id" class="form__checkbox--size" />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
+                <a-checkbox :value="item.id" class="form__checkbox--size"/>
+                <span :title="item.description" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>
               </a-card-grid>
             </a-checkbox-group>
           </a-form-item>
@@ -247,6 +247,7 @@ export default {
   }
   .form__checkbox--size {
     font-size: 20px;
+    cursor: pointer;
   }
   .form__spin-content {
     width: 100%;

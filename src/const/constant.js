@@ -296,7 +296,7 @@ const TestSpecColumns = [
     },
     {
         title: 'SUT Type',
-        dataIndex: 'SUTTypeCH.dictLabel'
+        dataIndex: 'sutTypeCH.dictLabel'
     },
     {
         title: 'Publish ORG',
@@ -326,18 +326,19 @@ const TestCaseColumns = [
         title: 'Description',
         dataIndex: 'description'
     },
-    // {
-    //     title: 'Version',
-    //     dataIndex: 'testCaseVersion'
-    // },
     {
         title: 'Status',
         dataIndex: 'status',
-        width: 180,
         scopedSlots: {
             customRender: 'status'
         },
     },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        width: 180,
+        scopedSlots: { customRender: 'action' }
+    }
 ]
 const VIMForm = [
     {

@@ -28,7 +28,7 @@
             <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
           </a-spin>
         </a-form-item>
-          <a-form-item label="VNF Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+          <a-form-item label="Sub SUT type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
               <a-select
                       class="select"
                       v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
