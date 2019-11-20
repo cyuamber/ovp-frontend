@@ -5,7 +5,7 @@
       <a-button type="primary" @click="handleCreate">Create Test Job</a-button>
         <a-input
                 class="tab-content__button"
-                placeholder="status"
+                placeholder="Input Status"
                 @keyup.enter="searchTypeID"
                 v-model="keyword"
         >
