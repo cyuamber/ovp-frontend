@@ -22,6 +22,13 @@ export default {
   components: {
     doughnutchart: Chart
   },
+  methods: {
+    clickChart(type) {
+      console.log("click:", type);
+      window.location.href =
+        window.location.origin + "/#/testjobmgt?status=" + type;
+    }
+  },
   data() {
     return {
       chartSut: {
@@ -116,9 +123,28 @@ export default {
         series: [
           {
             name: "Jobs Amount",
+            allowPointSelect: true,
             data: [
-              { name: "Success", y: 20, color: "#cae76e" },
-              { name: "Failed", y: 2, color: "#e94e75" }
+              {
+                name: "Success",
+                y: 20,
+                color: "#cae76e",
+                events: {
+                  click: () => {
+                    this.clickChart("success");
+                  }
+                }
+              },
+              {
+                name: "Failed",
+                y: 2,
+                color: "#e94e75",
+                events: {
+                  click: () => {
+                    this.clickChart("fail");
+                  }
+                }
+              }
             ]
           }
         ]
