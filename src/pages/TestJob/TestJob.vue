@@ -160,11 +160,12 @@ export default {
       console.log("Download");
       this.$confirm({
         title: "Are you sure download this task?",
+        content: "jobId: " + data.jobId,
         okText: "Yes",
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          this.download(data);
+          this.download({jobId:data.jobId});
         },
         onCancel() {
           console.log("Cancel");

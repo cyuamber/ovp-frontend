@@ -24,6 +24,7 @@ module.exports =
         "/portal/business/suiteMgt/insert":"/loginMeterSys",
         "/portal/business/suiteMgt/update":"/updateMeterSys",
         "/portal/business/suiteMgt/:name/delete":"/deleteMeterSys",
+        "/portal/business/files/:filename":"/_downloadFile",
         ///////<-------------TestSUT--------->/////
         "/portal/business/sutMgt":"/_getVNFTest",
         "/portal/business/sutMgt/insert":"/createVNFTest",
@@ -47,6 +48,7 @@ module.exports =
         "/portal/business/jobs/:jobId/stop":"/stopTestJobMGT",
         "/portal/business/jobs/:jobId":"/_getJobProgress",
         "/portal/business/jobs/cases/:jobId/:ExecutionStartTime":"/_testJobDetail",
+        "/portal/business/jobs/cases/download/:jobId":"/_downloadFile",
         "/*/*": "/$1_$2",
         "/*/*/*": "/$1_$2_$3",
         "/*/*/*/*": "/$1_$2_$3_$4",

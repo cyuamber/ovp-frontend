@@ -341,21 +341,11 @@ const actions = {
 		})
 	},
 	download({ commit }, data) {
-		let {
-			jobId,
-			VNFName,
-			jobName,
-			status
-		} = data
-		axiospost('downloadTestJobMGT', {
-			jobId,
-			VNFName,
-			jobName,
-			status
-		}).then(res => {
+        let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId);
+		axiospost(url).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'download successfully')
-			}
+			} else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
 	runTestJobMGT({ commit }, data) {

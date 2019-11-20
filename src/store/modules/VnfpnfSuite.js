@@ -20,7 +20,7 @@ const mutations = {
         state.tableData = tableData.body.map((item, index) => {
             item.createTime = moment(item.createTime).format('YYYY-MM-DD');
             item.index = tableData.body.length * (state.pagination.current - 1) + index + 1;
-            item.action = ['Edit', 'Delete'];
+            item.action = ['Edit', 'Delete','Download'];
             return item
         })
     },
@@ -136,6 +136,14 @@ const actions = {
                 commit('updateSuccessMessage', 'Deleted successfully');
                 let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
                 dispatch('getTableData', obj)
+            } else commit('updateFailedMessage', 'Network exception, please try again')
+        })
+    },
+    downloadFile({ commit }, data){
+        let url = API.downloadFile.replace(":filename", data.fileName);
+        axiosdelete(url).then(res => {
+            if (res.code === 200) {
+                commit('updateSuccessMessage', 'DownLoad File successfully');
             } else commit('updateFailedMessage', 'Network exception, please try again')
         })
     }

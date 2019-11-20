@@ -103,7 +103,8 @@ export default {
             "getTableData",
             "setParams",
             "getVNFOptions",
-            "deleteVNFTest"
+            "deleteVNFTest",
+			"downloadFile"
         ]),
         ...mapMutations("testSUT", [
             "updateVisible",
@@ -148,7 +149,18 @@ export default {
                 this.updateVisible(true);
 			} else if (item === "Delete")
 				this.showConfirm(item, "Are you sure delete this task?", VNFTest);
-			else this.showConfirm(item, "Whether to confirm the download？", VNFTest);
+			else {
+                this.$confirm({
+                    title: "Are you sure download this Spec?",
+                    content: "fileName: " + VNFTest.fileName,
+                    okText: "Yes",
+                    okType: "danger",
+                    cancelText: "No",
+                    onOk: () => {
+                        this.downloadFile({ fileName: VNFTest.fileName });
+                    }
+                });
+            }
 		},
 		showConfirm(item, title, VNFTest) {
 			this.$confirm({
@@ -158,10 +170,9 @@ export default {
 				okType: "danger",
 				cancelText: "No",
 				onOk: () => {
-					if (item === "Delete") this.deleteVNFTest({
+					this.deleteVNFTest({
                         id: VNFTest.id
                     });
-					else console.log("下载");
 				}
 			});
 		},

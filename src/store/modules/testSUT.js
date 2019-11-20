@@ -181,15 +181,15 @@ const actions = {
 				commit('updateToken', null)
 			},
 		})
-		// axiospost(API.uploadFile, { file: formData }, true).then(res => {
-		// 	commit('updateToken', null)
-		// 	if (res.code === 200) message.success('Upload successfully')
-		// 	else message.error('Upload failed')
-		// }, () => {
-		// 	message.error('Network exception, please try again')
-		// 	commit('updateToken', null)
-		// })
-	}
+	},
+    downloadFile({ commit }, data){
+        let url = API.downloadFile.replace(":filename", data.fileName);
+        axiosdelete(url).then(res => {
+            if (res.code === 200) {
+                commit('updateSuccessMessage', 'DownLoad File successfully');
+            } else commit('updateFailedMessage', 'Network exception, please try again')
+        })
+    }
 
 }
 const getters = {

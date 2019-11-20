@@ -54,7 +54,7 @@
           <a-tag
                   v-for="item in action"
                   :key="item"
-                  :color="item === 'activation'? 'blue' : 'blue'"
+                  :color="item === 'activate'? 'blue' : 'blue'"
                   class="test-spec__tag"
                   @click="(() => activationModal(item,record))"
           >{{item}}</a-tag>

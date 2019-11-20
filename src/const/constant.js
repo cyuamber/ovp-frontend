@@ -277,7 +277,7 @@ const VnfpnfSuiteColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
-        width: 180,
+        width: 220,
         scopedSlots: { customRender: 'action' }
     }
 ]
@@ -309,7 +309,7 @@ const TestSpecColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
-        width: 180,
+        width: 220,
         scopedSlots: { customRender: 'action' }
     }
 ]

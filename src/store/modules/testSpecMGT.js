@@ -1,4 +1,4 @@
-import { axiosget, axiospost, axiosput } from '../../utils/http';
+import {axiosdelete, axiosget, axiospost, axiosput} from '../../utils/http';
 import API from '../../const/apis';
 import moment from 'moment';
 import { axiosgetType } from "../../const/constant";
@@ -27,7 +27,7 @@ const mutations = {
   updatecaseMgtTableData(state, record) {
     state.caseMgtTableData = [];
     state.caseMgtTableData = [].concat(record.caseMgt).map((item) => {
-        item.action = ['activation'];
+        item.action = ['activate'];
         return item
     });
   },
@@ -135,7 +135,7 @@ const actions = {
         })
   },
   deleteTestSpec({ commit, dispatch, state }, id) {
-    axiospost(API.TestSpecMgt.specMgtDelete.replace("id", id)).then(res => {
+    axiosdelete(API.TestSpecMgt.specMgtDelete.replace("id", id)).then(res => {
       if (res.code === 200) {
         commit('updateSuccessMessage', 'Deleted successfully');
         let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
@@ -152,7 +152,6 @@ const actions = {
             } else commit('updateFailedMessage', 'Network exception, please try again')
         })
     }
-
 }
 const getters = {
 

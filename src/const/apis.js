@@ -12,6 +12,7 @@ export default {
     },
     getCurrentLanguage: "/lang/local",
     uploadFile: baseUrl + "/files/upload",
+    downloadFile: baseUrl + "/files/:filename",
     vimVnfmMgt: {
         vimEnvMgtTable: baseUrl + "/vimEnvMgt",
         cloudRegionID: baseUrl + "/cloudRegionID",
@@ -57,6 +58,7 @@ export default {
         testJobSUTName: baseUrl + "/sutName/:code",
         testJobSpec: baseUrl + "/testSpec/:type",
         testJobTestCase: baseUrl + "/testCase/:id",
+        testJobDownLoad:baseUrl+"/jobs/cases/download/:jobId"
     },
     TestSpecMgt: {
         specMgtTable: baseUrl + "/specMgt",
