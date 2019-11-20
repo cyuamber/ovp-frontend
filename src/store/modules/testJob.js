@@ -34,7 +34,11 @@ const state = {
 	detailTestCase: [],
 	VNFMOption: [],
 	VIMOption: [],
-    executionStartTime:''
+    executionStartTime:'',
+    testCasePieData:[
+        { name: "DONE", y: 0, color: "#cae76e" },
+        { name: "FAILED", y: 0, color: "#e94e75" }
+    ]
 }
 
 const mutations = {
@@ -154,6 +158,10 @@ const mutations = {
     updateExecutionStartTime(state, options) {
         state.executionStartTime = options;
     },
+    updateTestCasePieData(state, {doneCaseNum,failedCaseNum}) {
+        state.testCasePieData[0].y = doneCaseNum;
+        state.testCasePieData[1].y = failedCaseNum;
+    }
 }
 
 const actions = {
@@ -388,6 +396,15 @@ const actions = {
                     if (res.code === 200) {
                         commit('updateSuccessMessage', 'Successfully detail testing');
                         commit('updateDetailTestCase', res.body);
+                        let doneCaseNum=0,failedCaseNum=0;
+                        res.body.forEach((item)=>{
+                            if(item.caseStatus === 'DONE'){
+                                doneCaseNum++
+                            }else if(item.caseStatus === 'FAILED'){
+                                failedCaseNum++
+                            }
+                        });
+                        commit('updateTestCasePieData', {doneCaseNum,failedCaseNum});
                     }
                 });
         }

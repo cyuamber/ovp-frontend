@@ -31,15 +31,13 @@
 
 <script>
 import Circles from "./components/Circles";
-import Column from "./components/Column";
 import Doughnut from "./components/Doughnut";
 import Lines from "./components/Lines";
-import Row from "./components/Row";
 import Live from "./components/Star";
 
 export default {
   name: "Dashboard",
-  components: { Circles, Column, Doughnut, Lines, Row, Live }
+  components: { Circles, Doughnut, Lines, Live }
 };
 </script>
 <style lang="less" scoped>

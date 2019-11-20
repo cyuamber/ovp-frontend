@@ -34,6 +34,7 @@
                 <p class="job-detail__item-title">Test Job Status:</p>
                 <p class="job-detail__item-text">{{status}}</p>
             </div>
+            <testCasePie />
         </a-card>
       </div>
       <div class="job-detail__detail">
@@ -66,13 +67,14 @@
 </template>
 
 <script type="text/ecmascript-6">
+import testCasePie from "./testCasePie";
 import { testJobColumns } from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-
 export default {
   name: "JobDetail",
+    components: { testCasePie },
   data() {
     return {
       statusColor: "",
@@ -96,7 +98,6 @@ export default {
           list.push(item);
         }
       });
-      console.log(list, "list");
       return list;
     },
     currentJob() {
