@@ -33,7 +33,8 @@ const state = {
 	pageSize: 10,
 	detailTestCase: [],
 	VNFMOption: [],
-	VIMOption: []
+	VIMOption: [],
+    executionStartTime:''
 }
 
 const mutations = {
@@ -148,8 +149,11 @@ const mutations = {
 		state.VNFMOption = options;
 	},
 	updateVIMOption(state, options) {
-		state.VIMOption = options;
-	},
+        state.VIMOption = options;
+    },
+    updateExecutionStartTime(state, options) {
+        state.executionStartTime = options;
+    },
 }
 
 const actions = {
@@ -362,46 +366,32 @@ const actions = {
 				}
 			})
 	},
-	detailTestCaseJop({ commit }, data) {
-		// Simulation request
-		axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", data.executionStartTime))
-			.then(res => {
-				if (res.code === 200) {
-					commit('updateSuccessMessage', 'Successfully detail testing');
-					commit('updateDetailTestCase', res.body);
-				}
-			});
-		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
-			.then(res => {
-				if (res.code === 200) {
-					commit('updateSuccessMessage', 'Successfully detail testing');
-					commit('updateProgress', {
-						percent: res.body.jobProgress,
-						status: res.body.jobStatus
-					})
-				}
-			});
-	},
-	getProgress({ commit, dispatch, state }) {
-		axiosget('/getProgress').then((res) => {
-			if (!state.isJobDetail) return
-			if (res.code === 200) {
-				if (res.body.progress === 100) {
-					commit('updateProgress', {
-						percent: 100,
-						status: 'success'
-					})
-				} else {
-					commit('updateProgress', {
-						percent: res.body.progress,
-						status: 'active'
-					})
-					setTimeout(() => {
-						dispatch('getProgress')
-					}, 3000)
-				}
-			}
-		})
+    getProgress({ commit },data) {
+        axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
+            .then(res => {
+                if (res.code === 200) {
+                    commit('updateSuccessMessage', 'Successfully detail testing');
+                    commit('updateProgress', {
+                        percent: res.body.jobProgress,
+                        status: res.body.jobStatus
+                    });
+                    commit('updateExecutionStartTime', res.body.executionStartTime)
+                }
+            });
+    },
+	detailTestCaseJop({ commit, state }, data) {
+        if(state.executionStartTime ==="")return false
+        else {
+            // Simulation request
+            axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", state.executionStartTime))
+                .then(res => {
+                    if (res.code === 200) {
+                        commit('updateSuccessMessage', 'Successfully detail testing');
+                        commit('updateDetailTestCase', res.body);
+                    }
+                });
+        }
+
 	},
 	stopJop({ dispatch, commit }, data) {
 		// Simulation request
