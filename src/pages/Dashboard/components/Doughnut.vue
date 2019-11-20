@@ -15,7 +15,6 @@
 </template>
 <script>
 import { Chart } from "highcharts-vue";
-import Highcharts from "highcharts";
 
 export default {
   name: "Doughnut",

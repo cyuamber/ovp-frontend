@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import moment from "moment";
+// import moment from "moment";
 import util from "../../../utils/utils";
 import { Chart } from "highcharts-vue";
 export default {
