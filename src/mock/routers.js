@@ -4,6 +4,8 @@ module.exports =
         "/:resource/:id/show": "/:resource/:id",
         "/lang/local": "/getCurrentLanguage",
         "/lang/local?language=:language": "/getCurrentLanguage",
+        ///////<-------------Dashboard--------->/////
+        "/portal/business/dashboard/statisticPassCaseAmount7Days":"/_getPassCaseAmount7Days",
         ///////<-------------VimEnv--------->/////
         "/portal/business/vimEnvMgt":"/_getVIM",
         "/portal/business/cloudType/1000":"/getcloudType",

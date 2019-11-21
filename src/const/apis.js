@@ -13,6 +13,14 @@ export default {
     getCurrentLanguage: "/lang/local",
     uploadFile: baseUrl + "/files/upload",
     downloadFile: baseUrl + "/files/:filename",
+    dashboard:{
+        liveCaseAmount:baseUrl + "/dashboard/statisticLiveCaseAmount",
+        PassCaseAmount7Days:baseUrl + "/dashboard/statisticPassCaseAmount7Days",
+        jobsFlowAmount:baseUrl + "/dashboard/statisticJobsFlowAmount",
+        sutAmount:baseUrl + "/dashboard/sutAmount",
+        jobsAmount:baseUrl + "/dashboard/statisticJobsAmount",
+        testEnvAmount:baseUrl + "/dashboard/testEnvAmount",
+    },
     vimVnfmMgt: {
         vimEnvMgtTable: baseUrl + "/vimEnvMgt",
         cloudRegionID: baseUrl + "/cloudRegionID",

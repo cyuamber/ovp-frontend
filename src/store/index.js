@@ -9,6 +9,7 @@ import testSUT from './modules/testSUT'
 import testCase from './modules/testCase'
 import testJob from './modules/testJob'
 import testENV from './modules/testENV'
+import dashBoard from './modules/dashBoard'
 
 Vue.use(Vuex);
 
@@ -22,7 +23,8 @@ const store = new Vuex.Store({
     testSUT,
     testCase,
     testJob,
-    testENV
+    testENV,
+    dashBoard
   },
 
 })

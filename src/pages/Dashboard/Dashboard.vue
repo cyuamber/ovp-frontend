@@ -26,10 +26,31 @@ import Circles from "./components/Circles";
 import Doughnut from "./components/Doughnut";
 import Lines from "./components/Lines";
 import Live from "./components/Star";
-
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "Dashboard",
-  components: { Circles, Doughnut, Lines, Live }
+  components: { Circles, Doughnut, Lines, Live },
+    computed: {
+        ...mapState({
+            linesData: state => state.dashBoard.linesData,
+        })
+    },
+    mounted() {
+        this.initDashBoard();
+    },
+    methods: {
+        ...mapActions("dashBoard", [
+            "getLinesData",
+        ]),
+        ...mapMutations("dashBoard", [
+
+        ]),
+        initDashBoard() {
+            this.getLinesData({
+                message: this.$message
+            });
+        },
+    }
 };
 </script>
 <style lang="less" scoped>
