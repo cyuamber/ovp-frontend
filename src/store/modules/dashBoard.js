@@ -9,6 +9,13 @@ const state = {
         series:[]
     },
     testJobCirclesData:[],
+    SUTAmountData:[],
+    SUTAmountColors:["#46b8e0","#ffca52","#34314b"],
+    jobAmountData:[],
+    jobAmountColors:["#cae76e","#e94e75"],
+    jobAmountClickText:["success","fail"],
+    testEnvAmountData:[],
+    testEnvAmountColors:["#ea9e9f","#f9ebc9","#a89c8e"],
 };
 const mutations = {
     updateLinesData(state, data) {
@@ -45,6 +52,47 @@ const mutations = {
         }
         console.log(state.testJobCirclesData,"----> state.testJobCirclesData")
     },
+    updateSUTAmountData(state, data) {
+        if(Object.keys(data).length > 0){
+            Object.keys(data).forEach((item,index)=>{
+                state.SUTAmountData.push({
+                    name:item,
+                    y:data[item],
+                    color:state.SUTAmountColors[index]
+                });
+            });
+        }
+        console.log(state.SUTAmountData,"----> state.SUTAmountData")
+    },
+    updateJobAmountData(state, data) {
+        if(Object.keys(data).length > 0){
+            Object.keys(data).forEach((item,index)=>{
+                state.jobAmountData.push({
+                    name:item,
+                    y:data[item],
+                    color:state.jobAmountColors[index],
+                    events: {
+                        click: () => {
+                            this.clickChart(state.jobAmountClickText[index]);
+                        }
+                    }
+                });
+            });
+        }
+        console.log(state.jobAmountData,"----> state.jobAmountData")
+    },
+    updateTestEnvAmountData(state, data) {
+        if(Object.keys(data).length > 0){
+            Object.keys(data).forEach((item,index)=>{
+                state.testEnvAmountData.push({
+                    name:item,
+                    y:data[item],
+                    color:state.testEnvAmountColors[index]
+                });
+            });
+        }
+        console.log(state.testEnvAmountData,"----> state.testEnvAmountData")
+    },
 
 };
 const actions = {
@@ -63,6 +111,39 @@ const actions = {
         axiosget(API.dashboard.jobsFlowAmount).then(res => {
                 if (res.code === 200) {
                     commit('updateTestJobCirclesData', res.body);
+                } else message.error('Network exception, please try again')
+            },
+            () => {
+                message.error('Network exception, please try again')
+            }
+        )
+    },
+    getSUTAmountData({ commit },{ message }) {
+        axiosget(API.dashboard.sutAmount).then(res => {
+                if (res.code === 200) {
+                    commit('updateSUTAmountData', res.body);
+                } else message.error('Network exception, please try again')
+            },
+            () => {
+                message.error('Network exception, please try again')
+            }
+        )
+    },
+    getJobAmountData({ commit },{ message }) {
+        axiosget(API.dashboard.jobsAmount).then(res => {
+                if (res.code === 200) {
+                    commit('updateJobAmountData', res.body);
+                } else message.error('Network exception, please try again')
+            },
+            () => {
+                message.error('Network exception, please try again')
+            }
+        )
+    },
+    getTestEnvAmountData({ commit },{ message }) {
+        axiosget(API.dashboard.testEnvAmount).then(res => {
+                if (res.code === 200) {
+                    commit('updateTestEnvAmountData', res.body);
                 } else message.error('Network exception, please try again')
             },
             () => {

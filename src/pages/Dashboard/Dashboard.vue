@@ -37,12 +37,24 @@ export default {
         ...mapActions("dashBoard", [
             "getLinesData",
             "getTestJobCirclesData",
+            "getSUTAmountData",
+            "getJobAmountData",
+            "getTestEnvAmountData"
         ]),
         initDashBoard() {
             this.getLinesData({
                 message: this.$message
             });
             this.getTestJobCirclesData({
+                message: this.$message
+            });
+            this.getSUTAmountData({
+                message: this.$message
+            });
+            this.getJobAmountData({
+                message: this.$message
+            });
+            this.getTestEnvAmountData({
                 message: this.$message
             });
         },

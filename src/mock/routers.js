@@ -7,6 +7,9 @@ module.exports =
         ///////<-------------Dashboard--------->/////
         "/portal/business/dashboard/statisticPassCaseAmount7Days":"/_getPassCaseAmount7Days",
         "/portal/business/dashboard/statisticJobsFlowAmount":"/_getJobsFlowAmount",
+        "/portal/business/dashboard/sutAmount":"/_getSutAmount",
+        "/portal/business/dashboard/statisticJobsAmount":"/_getJobAmount",
+        "/portal/business/dashboard/testEnvAmount":"/_getTestEnvAmount",
         ///////<-------------VimEnv--------->/////
         "/portal/business/vimEnvMgt":"/_getVIM",
         "/portal/business/cloudType/1000":"/getcloudType",
