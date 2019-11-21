@@ -342,11 +342,12 @@ const actions = {
 	},
 	download({ commit }, data) {
         let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId);
-		axiospost(url).then(res => {
-			if (res.code === 200) {
-				commit('updateSuccessMessage', 'download successfully')
-			} else commit('updateFailedMessage', 'Network exception, please try again')
-		})
+		axiospost(url).then(() => {
+                commit('updateSuccessMessage', 'DownLoad  successfully');
+            },
+            () => {
+                commit('updateFailedMessage', 'Network exception, please try again')
+            })
 	},
 	runTestJobMGT({ commit }, data) {
 		axiosput(API.testJobMgt.testJobStart.replace(":jobId", data.jobId))

@@ -184,11 +184,12 @@ const actions = {
 	},
     downloadFile({ commit }, data){
         let url = API.downloadFile.replace(":filename", data.fileName);
-        axiosdelete(url).then(res => {
-            if (res.code === 200) {
+        axiosdelete(url).then(() => {
                 commit('updateSuccessMessage', 'DownLoad File successfully');
-            } else commit('updateFailedMessage', 'Network exception, please try again')
-        })
+            },
+            () => {
+                commit('updateFailedMessage', 'Network exception, please try again')
+            })
     }
 
 }
