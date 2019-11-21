@@ -26,27 +26,23 @@ import Circles from "./components/Circles";
 import Doughnut from "./components/Doughnut";
 import Lines from "./components/Lines";
 import Live from "./components/Star";
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "Dashboard",
   components: { Circles, Doughnut, Lines, Live },
-    computed: {
-        ...mapState({
-            linesData: state => state.dashBoard.linesData,
-        })
-    },
     mounted() {
         this.initDashBoard();
     },
     methods: {
         ...mapActions("dashBoard", [
             "getLinesData",
-        ]),
-        ...mapMutations("dashBoard", [
-
+            "getTestJobCirclesData",
         ]),
         initDashBoard() {
             this.getLinesData({
+                message: this.$message
+            });
+            this.getTestJobCirclesData({
                 message: this.$message
             });
         },

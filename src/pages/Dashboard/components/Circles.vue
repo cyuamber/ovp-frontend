@@ -16,66 +16,76 @@
 </template>
 <script>
 import { Chart } from "highcharts-vue";
+import { mapState } from "vuex";
 export default {
   name: "Circles",
   components: {
     circleschart: Chart
   },
-  data() {
+    computed: {
+        ...mapState({
+            testJobCirclesData: state => state.dashBoard.testJobCirclesData,
+        })
+    },
+    mounted() {
+        this.initcircles();
+    },
+    data() {
     return {
-      chartOPtions: {
-        chart: {
-          plotBackgroundColor: null,
-          plotBorderWidth: 0,
-          plotShadow: false
-        },
-        title: {
-          text: "Test job",
-          align: "center",
-          verticalAlign: "middle",
-          y: 60
-        },
-        credits: {
-          enabled: false
-        },
-        tooltip: {
-          pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
-        },
-        plotOptions: {
-          pie: {
-            allowPointSelect: true,
-            cursor: "pointer",
-            dataLabels: {
-              enabled: true,
-              format: "<b>{point.name}</b>: {point.y:1f} ",
-              distance: 50,
-              style: {
-                color: "white",
-                fontSize: 14
-              }
-            },
-            startAngle: -90,
-            endAngle: 90,
-            center: ["50%", "75%"],
-            size: "110%"
-          }
-        },
-        series: [
-          {
-            type: "pie",
-            name: "Browser share",
-            colorByPoint: true,
-            innerSize: "50%",
-            data: [
-              ["Unexecuted job", 10],
-              ["Executing job", 8],
-              ["Finished job", 5]
-            ]
-          }
-        ]
-      }
+      chartOPtions: {}
     };
-  }
+  },
+    methods: {
+        initcircles(){
+            this.chartOPtions = {
+                chart: {
+                    plotBackgroundColor: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false
+                },
+                title: {
+                    text: "Test job",
+                        align: "center",
+                        verticalAlign: "middle",
+                        y: 60
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                            cursor: "pointer",
+                            dataLabels: {
+                            enabled: true,
+                                format: "<b>{point.name}</b>: {point.y:1f} ",
+                                distance: 50,
+                                style: {
+                                color: "white",
+                                    fontSize: 14
+                            }
+                        },
+                        startAngle: -90,
+                            endAngle: 90,
+                            center: ["50%", "75%"],
+                            size: "110%"
+                    }
+                },
+                series: [
+                    {
+                        type: "pie",
+                        name: "Browser share",
+                        colorByPoint: true,
+                        innerSize: "50%",
+                        data: this.testJobCirclesData
+                    }
+                ]
+            }
+        }
+    }
 };
 </script>
 

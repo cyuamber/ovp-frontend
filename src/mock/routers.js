@@ -6,6 +6,7 @@ module.exports =
         "/lang/local?language=:language": "/getCurrentLanguage",
         ///////<-------------Dashboard--------->/////
         "/portal/business/dashboard/statisticPassCaseAmount7Days":"/_getPassCaseAmount7Days",
+        "/portal/business/dashboard/statisticJobsFlowAmount":"/_getJobsFlowAmount",
         ///////<-------------VimEnv--------->/////
         "/portal/business/vimEnvMgt":"/_getVIM",
         "/portal/business/cloudType/1000":"/getcloudType",

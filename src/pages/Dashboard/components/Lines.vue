@@ -13,6 +13,11 @@ export default {
   components: {
     linechart: Chart
   },
+  data() {
+      return {
+          chartOptions: {}
+      };
+  },
   computed: {
       ...mapState({
           linesData: state => state.dashBoard.linesData,
@@ -21,16 +26,11 @@ export default {
   mounted() {
       this.initlines();
   },
-  data() {
-    return {
-      chartOptions: {}
-    };
-  },
   methods: {
       initlines(){
           this.chartOptions = {
               title: {
-                  text: "Passed Test Case Amount in 7 Days"
+                  text: "Passed Test Case Amount in "+this.linesData.xAxis.length+" Days"
               },
               credits: {
                   enabled: false
