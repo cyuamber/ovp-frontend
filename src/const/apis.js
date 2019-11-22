@@ -70,11 +70,13 @@ export default {
     },
     TestSpecMgt: {
         specMgtTable: baseUrl + "/specMgt",
+        testCaseTable: baseUrl + "/testCase/:specId",
         specMgtInsert: baseUrl + "/specMgt/insert",
         specMgtUpdate: baseUrl + "/specMgt/update",
         specMgtDelete: baseUrl + "/specMgt/:id/delete",
         TestSpecSUTType: baseUrl + "/sutType/100",
         TestSpecVNFType: baseUrl + "/types/:flag",
+        testCaseList: baseUrl + "/testCase/box/:flag/:subSutType",
         specMgtCaseActivate:baseUrl + "/specMgt/:id/delete",
     }
 }

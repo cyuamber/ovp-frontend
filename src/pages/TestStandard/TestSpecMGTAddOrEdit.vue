@@ -31,7 +31,7 @@
           <a-form-item label="Sub SUT type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
               <a-select
                       class="select"
-                      v-decorator="['VNFType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
+                      v-decorator="['subSutType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
                       @dropdownVisibleChange="dropdownVisibleChange"
               >
                   <a-select-option
@@ -87,7 +87,7 @@ export default {
             Name: "",
             Version: "",
             SUTType: "",
-            VNFType: "",
+            subSutType: "",
             PublishORG: ""
           });
         }
@@ -103,7 +103,7 @@ export default {
             Name: this.testSpecSingleData.name,
             Version: this.testSpecSingleData.version,
             SUTType: this.testSpecSingleData.sutTypeCH.code,
-            VNFType: this.testSpecSingleData.vnfTypeCH.code,
+            subSutType: this.testSpecSingleData.subSutTypeCH.code,
             PublishORG: this.testSpecSingleData.publishOrg
           });
         } else if (!this.isEdit && this.count > 1) {
@@ -137,7 +137,7 @@ export default {
     testSpecSingleData(val) {
       if (Object.keys(val).length > 0) {
         this.initSUTTypeValue = val.sutTypeCH.code;
-        this.initVNFtypeValue = val.vnfTypeCH.code;
+        this.initVNFtypeValue = val.subSutTypeCH.code;
         this.spin = false;
       }
     }
@@ -154,7 +154,7 @@ export default {
       this.spin = true;
       this.getVNFOptions({ STUType: val }).then(() => {
         if (this.VNFOptions.length > 0)
-          this.form.setFieldsValue({ VNFType: this.VNFOptions[0] });
+          this.form.setFieldsValue({ subSutType: this.VNFOptions[0] });
       });
     },
     dropdownVisibleChange() {
@@ -175,7 +175,7 @@ export default {
             name: values.Name,
             version: values.Version,
             sutType: values.SUTType,
-            vnfType: values.VNFType,
+            subSutType: values.subSutType,
             publishOrg: values.PublishORG
           };
           let { isEdit } = this;

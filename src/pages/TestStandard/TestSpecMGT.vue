@@ -37,8 +37,10 @@
         <a-table
           class="test-case__table"
           slot="expandedRowRender"
+          slot-scope="record"
+          :loading="testCasetableLoading"
           :columns="innerColumns"
-          :dataSource="caseMgtTableData"
+          :dataSource="record.caseMgt"
           rowKey="id"
           size="default"
           :pagination="false"
@@ -46,15 +48,15 @@
           <span slot="status" slot-scope="status">
             <span
               class="test-case__showState"
-              :style="{backgroundColor: status==='able'? '#d0021b': '#7ED321'}"
-              :title="status===0? 'Available': 'unavailable'"
+              :style="{backgroundColor: status==='able'? '#7ED321': '#d0021b'}"
+              :title="status=== 'able'? 'Available': 'unavailable'"
             ></span>
           </span>
           <span slot="action" slot-scope="action,record">
           <a-tag
                   v-for="item in action"
                   :key="item"
-                  :color="item === 'activate'? 'blue' : 'blue'"
+                  color="blue"
                   class="test-spec__tag"
                   @click="(() => activationModal(item,record))"
           >{{item}}</a-tag>
@@ -93,11 +95,11 @@ export default {
   computed: {
     ...mapState({
       tableData: state => state.testSpecMGT.tableData,
-      caseMgtTableData: state => state.testSpecMGT.caseMgtTableData,
       pagination: state => state.testSpecMGT.pagination,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
       loadingMessage: state => state.testSpecMGT.loadingMessage,
       tableLoading: state => state.testSpecMGT.tableLoading,
+      testCasetableLoading: state => state.testSpecMGT.testCasetableLoading,
         visible: state => state.testSpecMGT.visible
     })
   },
@@ -107,6 +109,7 @@ export default {
   methods: {
     ...mapActions("testSpecMGT", [
       "getTableData",
+      "getTestCaseTableData",
       "getTestSpec",
       "deleteTestSpec",
       "getPagination",
@@ -137,7 +140,7 @@ export default {
       this.getTableData(obj);
     },
     caseMgtTableShow(expanded, record) {
-      this.updatecaseMgtTableData(record);
+        this.getTestCaseTableData(record);
     },
     // Filter by creating time
     onChange(date, d) {

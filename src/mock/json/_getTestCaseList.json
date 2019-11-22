@@ -1,0 +1,48 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "id": 4,
+      "number": 4,
+      "name": "4",
+      "description": "4",
+      "version": "4",
+      "status": "4",
+      "sutType": 101,
+      "subSutType": 101001,
+      "sutTypeCH": null,
+      "subSutTypeCH": {
+        "code": null,
+        "dictLabel": null,
+        "dictValue": null,
+        "dictParentCode": null,
+        "status": "4",
+        "remark": null,
+        "lang": null
+      }
+    },
+    {
+      "id": 7,
+      "number": 7,
+      "name": "7",
+      "description": "7",
+      "version": "7",
+      "status": "7",
+      "sutType": 101,
+      "subSutType": 101001,
+      "sutTypeCH": null,
+      "subSutTypeCH": {
+        "code": null,
+        "dictLabel": null,
+        "dictValue": null,
+        "dictParentCode": null,
+        "status": "7",
+        "remark": null,
+        "lang": null
+      }
+    }
+  ],
+  "total": 2,
+  "pageTotal": 1
+}

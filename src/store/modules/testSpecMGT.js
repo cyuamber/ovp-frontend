@@ -4,10 +4,14 @@ import moment from 'moment';
 import { axiosgetType } from "../../const/constant";
 
 const state = {
-  tableData: [],
+  tableData: [
+      {
+          caseMgt:[]
+      }
+  ],
   tableLoading: false,
+    testCasetableLoading: false,
   visible: false,
-  caseMgtTableData: [],
   SUTOptions: [],
   VNFOptions: [],
   testSpecSingleData: {},
@@ -19,20 +23,22 @@ const mutations = {
     state.pagination.total = tableData.total;
     state.tableData = tableData.body.map((item, index) => {
       item.publishTime = moment(item.publishTime).format('YYYY-MM-DD');
-      item.index = tableData.body.length * (state.pagination.current - 1) + index + 1;
+      item.index = tableData.body.length * (state.pagination.current - 1) + index;
+      item.caseMgt = [];
       item.action = ['Edit', 'Delete'];
       return item
     })
   },
-  updatecaseMgtTableData(state, record) {
-    state.caseMgtTableData = [];
-    state.caseMgtTableData = [].concat(record.caseMgt).map((item) => {
+  updatecaseMgtTableData(state, {testCaseData,record}) {
+    let index = record.index;
+    state.tableData[index].caseMgt = testCaseData.map((item) => {
         item.action = ['activate'];
         return item
     });
+    console.log(state.tableData,"-----> caseMgtTableData")
   },
   updateVNFTest(state, testSpecSingleData) {
-    state.testSpecSingleData = testSpecSingleData
+    state.testSpecSingleData = testSpecSingleData;
       console.log(state.testSpecSingleData,"state.testSpecSingleData")
   },
   updateSUTOptions(state, Options) {
@@ -59,6 +65,9 @@ const mutations = {
   updateTableLoading(state, tableLoading) {
     state.tableLoading = tableLoading
   },
+    updateTestCaseTableLoading(state, testCasetableLoading) {
+        state.testCasetableLoading = testCasetableLoading
+    },
   updateVisible(state, bool) {
       state.visible = bool
   },
@@ -86,6 +95,21 @@ const actions = {
         if (req.publishTime || req.testSpecName) commit('updateFailedMessage', 'Network exception, please try again')
       }
     )
+  },
+  getTestCaseTableData({ commit }, record){
+      commit('updateTestCaseTableLoading', true);
+      axiosget(API.TestSpecMgt.testCaseTable.replace(":specId",record.id)).then(res => {
+              if (res.code === 200) {
+                  commit('updatecaseMgtTableData', {testCaseData:res.body,record});
+                  commit('updateTestCaseTableLoading', false);
+              } else {
+                  commit('updateFailedMessage', 'Network exception, please try again')
+              }
+          },
+          () => {
+              commit('updateFailedMessage', 'Network exception, please try again')
+          }
+      )
   },
   getTestSpec({ commit }, data) {
     commit('updateVNFTest', data)
