@@ -23,8 +23,12 @@ export default {
           linesData: state => state.dashBoard.linesData,
       })
   },
-  mounted() {
-      this.initlines();
+  watch:{
+      linesData(val){
+          if(val){
+              this.initlines();
+          }
+      }
   },
   methods: {
       initlines(){

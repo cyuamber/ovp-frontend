@@ -28,11 +28,25 @@ export default {
             testEnvAmountData: state => state.dashBoard.testEnvAmountData
         })
     },
-    mounted() {
-        this.initDoughnut();
+    watch:{
+        SUTAmountData(val){
+            if(val){
+                this.initSUTAmount();
+            }
+        },
+        jobAmountData(val){
+            if(val){
+                this.initjobAmount();
+            }
+        },
+        testEnvAmountData(val){
+            if(val){
+                this.initTestEnvAmount();
+            }
+        }
     },
   methods: {
-      initDoughnut(){
+      initSUTAmount(){
           this.chartSut = {
               chart: {
                   plotBackgroundColor: null,
@@ -78,7 +92,9 @@ export default {
                       data: this.SUTAmountData
                   }
               ]
-          },
+          }
+      },
+      initjobAmount(){
           this.chartJobs = {
               chart: {
                   plotBackgroundColor: null,
@@ -126,6 +142,8 @@ export default {
                   }
               ]
           }
+      },
+      initTestEnvAmount(){
           this.chartEnv = {
               chart: {
                   plotBackgroundColor: null,
@@ -172,12 +190,7 @@ export default {
                   }
               ]
           }
-      },
-    clickChart(type) {
-      console.log("click:", type);
-      window.location.href =
-        window.location.origin + "/#/testjobmgt?status=" + type;
-    }
+      }
   },
   data() {
     return {

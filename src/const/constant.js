@@ -215,7 +215,7 @@ const testJobColumns = [
         title: 'Action',
         dataIndex: 'action',
         fixed: 'right',
-        width: 350,
+        width: 380,
         scopedSlots: {
             customRender: 'action'
         },

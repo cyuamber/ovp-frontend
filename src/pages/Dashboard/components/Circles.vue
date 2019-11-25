@@ -27,8 +27,12 @@ export default {
             testJobCirclesData: state => state.dashBoard.testJobCirclesData,
         })
     },
-    mounted() {
-        this.initcircles();
+    watch:{
+        testJobCirclesData(val){
+            if(val){
+                this.initcircles();
+            }
+        }
     },
     data() {
     return {

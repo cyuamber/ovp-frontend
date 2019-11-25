@@ -39,6 +39,12 @@ const mutations = {
                     }
                 })
             });
+        }else {
+            state.linesData = {
+                xAxis:[],
+                legend:[],
+                series:[]
+            };
         }
         console.log(state.linesData,"----> state.linesData")
     },
@@ -49,7 +55,7 @@ const mutations = {
                 singleData.push(item,data[item]);
                 state.testJobCirclesData.push(singleData)
             });
-        }
+        }else state.testJobCirclesData = [];
         console.log(state.testJobCirclesData,"----> state.testJobCirclesData")
     },
     updateSUTAmountData(state, data) {
@@ -61,7 +67,7 @@ const mutations = {
                     color:state.SUTAmountColors[index]
                 });
             });
-        }
+        }else state.SUTAmountData = [];
         console.log(state.SUTAmountData,"----> state.SUTAmountData")
     },
     updateJobAmountData(state, data) {
@@ -73,12 +79,14 @@ const mutations = {
                     color:state.jobAmountColors[index],
                     events: {
                         click: () => {
-                            this.clickChart(state.jobAmountClickText[index]);
+                            console.log("click:", state.jobAmountClickText[index]);
+                            window.location.href =
+                                window.location.origin + "/#/testjobmgt?status=" + state.jobAmountClickText[index];
                         }
                     }
                 });
             });
-        }
+        }else state.jobAmountData = [];
         console.log(state.jobAmountData,"----> state.jobAmountData")
     },
     updateTestEnvAmountData(state, data) {
@@ -90,7 +98,7 @@ const mutations = {
                     color:state.testEnvAmountColors[index]
                 });
             });
-        }
+        }else state.testEnvAmountData = [];
         console.log(state.testEnvAmountData,"----> state.testEnvAmountData")
     },
 
@@ -150,8 +158,7 @@ const actions = {
                 message.error('Network exception, please try again')
             }
         )
-    },
-
+    }
 };
 const getters = {
 
