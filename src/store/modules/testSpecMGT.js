@@ -14,7 +14,9 @@ const state = {
   visible: false,
   SUTOptions: [],
   VNFOptions: [],
+    testCaseList:[],
   testSpecSingleData: {},
+    initcheckboxGroup:[],
   pagination: { current: 1, total: 0, pageSize: 10 },
   loadingMessage: { type: '', toast: '' }
 }
@@ -35,7 +37,6 @@ const mutations = {
         item.action = ['activate'];
         return item
     });
-    console.log(state.tableData,"-----> caseMgtTableData")
   },
   updateVNFTest(state, testSpecSingleData) {
     state.testSpecSingleData = testSpecSingleData;
@@ -47,6 +48,14 @@ const mutations = {
   updateVNFOptions(state, Options) {
     state.VNFOptions = Options;
   },
+    updateTestCaseList(state, { list }) {
+        if (list) state.testCaseList = list
+    },
+    updateCheckboxGroup(state, {testCaseData}){
+        state.initcheckboxGroup = testCaseData.map((item) => {
+           return item.id
+        });
+    },
   updatePagination(state, Options) {
     state.pagination = Options;
   },
@@ -134,6 +143,17 @@ const actions = {
       }
     })
   },
+    getTestCaseList({ commit },{sutCode,subSutCode,message}){
+        axiosget(API.TestSpecMgt.testCaseList.replace(":flag", sutCode).replace(":subSutType", subSutCode)).then(res => {
+            if (res.code === 200) {
+                commit('updateTestCaseList', {list: res.body})
+            } else {
+                message.error('Failed to get Test Case list')
+            }
+        }, () => {
+            message.error('Network exception, please try again')
+        })
+    },
   getPagination({ commit }, { pagination }) {
     commit('updatePagination', pagination)
   },
@@ -141,7 +161,8 @@ const actions = {
     commit('updatePagination', { current: 1, total: 0 })
   },
   clearOptions({ commit }) {
-    commit('updateVNFOptions', [])
+    commit('updateVNFOptions', []);
+    commit('updateTestCaseList', []);
   },
   createOrEditTestSpec({ commit, dispatch, state }, { isEdit, data }) {
     let url = isEdit ? API.TestSpecMgt.specMgtUpdate : API.TestSpecMgt.specMgtInsert;

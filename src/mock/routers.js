@@ -40,15 +40,17 @@ module.exports =
         "/portal/business/files/upload":"/updateVNFTest",
         ///////<-------------Test Spec MGT--------->/////
         "/portal/business/specMgt":"/_getTestSpec",
+        "/portal/business/testCase/:specId":"/_getTestCaseTable",
         "/portal/business/specMgt/insert":"/addTestSpec",
         "/portal/business/specMgt/update":"/updateTestSpec",
         "/portal/business/specMgt/:id/delete":"/deleteTestSpec",
         "/portal/business/sutType/100":"/_getTestSpecSUTType",
+        "/portal/business/testCase/box/:flag/:subSutType":"/_getTestCaseList",
         ///////<-------------Test Job--------->/////
         "/portal/business/jobs":"/_getTestJobMGT",
         "/portal/business/sutName/:code":"/getSUTName",
         "/portal/business/testSpec/:type":"/getJobSpecification",
-        "/portal/business/testCase/:id":"/getTestCaseList",
+        "/portal/business/testCase/jobCase/:id":"/getTestCaseList",
         "/portal/business/jobs/insert":"/addTestSpec",
         "/portal/business/jobs/:jobId/start":"/runTestJobMGT",
         "/portal/business/jobs/:jobId/stop":"/stopTestJobMGT",

@@ -48,18 +48,18 @@
           <span slot="status" slot-scope="status">
             <span
               class="test-case__showState"
-              :style="{backgroundColor: status==='able'? '#7ED321': '#d0021b'}"
-              :title="status=== 'able'? 'Available': 'unavailable'"
+              :style="{backgroundColor: status==='disable'? '#7ED321': '#d0021b'}"
+              :title="status=== 'disable'? 'Available': 'unavailable'"
             ></span>
           </span>
           <span slot="action" slot-scope="action,record">
           <a-tag
                   v-for="item in action"
-                  :key="item"
+                  :key="record.status=== 'disable'? item: 'unavailable'"
                   color="blue"
                   class="test-spec__tag"
                   @click="(() => activationModal(item,record))"
-          >{{item}}</a-tag>
+          >{{record.status=== 'disable'? 'Available': 'unavailable'}}</a-tag>
         </span>
         </a-table>
       </a-table>
@@ -115,6 +115,7 @@ export default {
       "getPagination",
       "clearPagination",
       "getSUTOptions",
+        "getVNFOptions",
         "activateTestCase"
     ]),
     ...mapMutations("testSpecMGT", ["updatecaseMgtTableData","updateVisible"]),
@@ -161,6 +162,7 @@ export default {
       if (item === "Edit") {
           this.updateVisible(true);
         this.isEdit = true;
+        this.getTestCaseTableData(testSpecSingleData);
         this.getTestSpec(testSpecSingleData);
       } else {
         this.$confirm({

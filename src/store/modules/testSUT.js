@@ -184,7 +184,7 @@ const actions = {
 	},
     downloadFile({ commit }, data){
         let url = API.downloadFile.replace(":filename", data.fileName);
-        axiosdelete(url).then(() => {
+        axiosget(url).then(() => {
                 commit('updateSuccessMessage', 'DownLoad File successfully');
             },
             () => {

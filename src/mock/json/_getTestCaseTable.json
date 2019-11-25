@@ -35,7 +35,7 @@
       "name": "vFW-Function-Web-Proxy",
       "description": "vFirewall can match and inspect HTTP traffic and HTTPS traffic, corresponding actions can take effect.",
       "version": "5",
-      "status": "able",
+      "status": "disable",
       "sutType": 101,
       "subSutType": 101002,
       "sutTypeCH": {
@@ -62,7 +62,7 @@
       "name": "vFW-Function-Mail-Proxy",
       "description":  "vFirewall can match and inspect SMTP/IMAP/POP3 traffic, corresponding actions can take effect.",
       "version": "5",
-      "status": "able",
+      "status": "disable",
       "sutType": 101,
       "subSutType": 101002,
       "sutTypeCH": {
@@ -109,35 +109,8 @@
         "remark": null,
         "lang": null
       }
-    },
-    {
-      "id": 5,
-      "number": 5,
-      "name": "vFW-Function-VoIP-Proxy",
-      "description": "vFirewall can match and handle SIP/H.323 VoIP traffic and the media traffic.",
-      "version": "5",
-      "status": "able",
-      "sutType": 101,
-      "subSutType": 101002,
-      "sutTypeCH": {
-        "code": "101002",
-        "dictLabel": "PCRF",
-        "dictValue": "2",
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      },
-      "subSutTypeCH": {
-        "code": "101",
-        "dictLabel": "VNF",
-        "dictValue": "1",
-        "dictParentCode": null,
-        "status": "5",
-        "remark": null,
-        "lang": null
-      }
     }
   ],
-  "total": 5,
+  "total": 4,
   "pageTotal": 1
 }

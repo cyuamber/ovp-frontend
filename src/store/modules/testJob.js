@@ -342,7 +342,7 @@ const actions = {
 	},
 	download({ commit }, data) {
         let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId);
-		axiospost(url).then(() => {
+        axiosget(url).then(() => {
                 commit('updateSuccessMessage', 'DownLoad  successfully');
             },
             () => {
