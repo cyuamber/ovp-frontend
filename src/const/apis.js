@@ -77,6 +77,6 @@ export default {
         TestSpecSUTType: baseUrl + "/sutType/100",
         TestSpecVNFType: baseUrl + "/types/:flag",
         testCaseList: baseUrl + "/testCase/box/:flag/:subSutType",
-        specMgtCaseActivate:baseUrl + "/specMgt/:id/delete",
+        specMgtCaseActivate:baseUrl + "/testCase/updateStatus/:id/:status",
     }
 }

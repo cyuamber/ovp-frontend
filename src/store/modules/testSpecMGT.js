@@ -188,8 +188,8 @@ const actions = {
       } else commit('updateFailedMessage', 'Network exception, please try again')
     })
   },
-    activateTestCase({ commit, dispatch, state }, id){
-        axiospost(API.TestSpecMgt.specMgtCaseActivate.replace("id", id)).then(res => {
+    activateTestCase({ commit, dispatch, state }, obj){
+        axiosput(API.TestSpecMgt.specMgtCaseActivate.replace(":id", obj.id).replace(":status", obj.status)).then(res => {
             if (res.code === 200) {
                 commit('updateSuccessMessage', 'Deleted successfully');
                 let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };

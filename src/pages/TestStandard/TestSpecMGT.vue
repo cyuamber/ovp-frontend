@@ -186,7 +186,7 @@ export default {
               okType: "danger",
               cancelText: "No",
               onOk: () => {
-                  this.activateTestCase(testCaseSingleData.id);
+                  this.activateTestCase(testCaseSingleData);
               }
           });
       }

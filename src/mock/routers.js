@@ -44,6 +44,7 @@ module.exports =
         "/portal/business/specMgt/insert":"/addTestSpec",
         "/portal/business/specMgt/update":"/updateTestSpec",
         "/portal/business/specMgt/:id/delete":"/deleteTestSpec",
+        "/portal/business/testCase/updateStatus/:id/:status":"/updateTestSpec",
         "/portal/business/sutType/100":"/_getTestSpecSUTType",
         "/portal/business/testCase/box/:flag/:subSutType":"/_getTestCaseList",
         ///////<-------------Test Job--------->/////
