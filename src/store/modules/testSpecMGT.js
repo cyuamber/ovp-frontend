@@ -17,6 +17,8 @@ const state = {
     testCaseList:[],
   testSpecSingleData: {},
     initcheckboxGroup:[],
+    dropdownSpec:[],
+    dropdownSpecIndex:0,
   pagination: { current: 1, total: 0, pageSize: 10 },
   loadingMessage: { type: '', toast: '' }
 }
@@ -34,7 +36,7 @@ const mutations = {
   updatecaseMgtTableData(state, {testCaseData,record}) {
     let index = record.index;
     state.tableData[index].caseMgt = testCaseData.map((item) => {
-        item.action = ['activate'];
+        item.action = 'activate';
         return item
     });
   },
@@ -105,11 +107,14 @@ const actions = {
       }
     )
   },
-  getTestCaseTableData({ commit }, record){
+  getTestCaseTableData({ commit,state }, record){
       commit('updateTestCaseTableLoading', true);
+      state.dropdownSpec[record.index] = Object.assign({},record);
+      state.dropdownSpecIndex = record.index;
       axiosget(API.TestSpecMgt.testCaseTable.replace(":specId",record.id)).then(res => {
               if (res.code === 200) {
                   commit('updatecaseMgtTableData', {testCaseData:res.body,record});
+                  commit('updateCheckboxGroup', {testCaseData:res.body});
                   commit('updateTestCaseTableLoading', false);
               } else {
                   commit('updateFailedMessage', 'Network exception, please try again')
@@ -192,8 +197,7 @@ const actions = {
         axiosput(API.TestSpecMgt.specMgtCaseActivate.replace(":id", obj.id).replace(":status", obj.status)).then(res => {
             if (res.code === 200) {
                 commit('updateSuccessMessage', 'Deleted successfully');
-                let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
-                dispatch('getTableData', obj)
+                dispatch('getTestCaseTableData', state.dropdownSpec[state.dropdownSpecIndex])
             } else commit('updateFailedMessage', 'Network exception, please try again')
         })
     }

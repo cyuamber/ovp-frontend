@@ -53,13 +53,12 @@
             ></span>
           </span>
           <span slot="action" slot-scope="action,record">
-          <a-tag
-                  v-for="item in action"
-                  :key="record.status=== 'disable'? item: 'unavailable'"
-                  color="blue"
-                  class="test-spec__tag"
-                  @click="(() => activationModal(item,record))"
-          >{{record.status=== 'disable'? 'Available': 'unavailable'}}</a-tag>
+            <a-switch
+                    checkedChildren="Available"
+                    unCheckedChildren="unavailable"
+                    :defaultChecked="record.status=== 'disable'"
+                    @change="(() => activationModal(record))"
+            />
         </span>
         </a-table>
       </a-table>
@@ -177,8 +176,7 @@ export default {
         });
       }
     },
-      activationModal(item, testCaseSingleData){
-        console.log(item);
+      activationModal(testCaseSingleData){
           this.$confirm({
               title: "Are you sure activate this Case?",
               content: "Id: " + testCaseSingleData.id,
