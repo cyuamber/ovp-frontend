@@ -3,14 +3,17 @@
     <Loading :loadingMessage="loadingMessage" />
     <div class="test-job__top">
       <a-button type="primary" @click="handleCreate">Create Test Job</a-button>
-        <a-input
-                class="tab-content__button"
-                placeholder="Input Status"
-                @keyup.enter="searchTypeID"
-                v-model="keyword"
+        <a-select
+                class="select"
+                placeholder="Select a status"
+                @change="handleSelectStatusChange"
         >
-            <a-icon slot="prefix" type="search" />
-        </a-input>
+            <a-select-option
+                    v-for="status of statusOptions"
+                    :key="status"
+                    :value="status"
+            >{{status}}</a-select-option>
+        </a-select>
       <a-date-picker class="calendar" @change="handleSelectCreateTime" placeholder="Select date" />
     </div>
     <div class="test-job__table">
@@ -49,6 +52,7 @@
 
 <script>
 import { testJobColumns } from "../../const/constant.js";
+import { statusOptions } from "./constants";
 import Loading from "../../components/Loading/Loading";
 import Drawer from "./Drawer";
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -58,9 +62,9 @@ export default {
   data() {
     return {
       columns: testJobColumns,
+        statusOptions: statusOptions,
       loading: false,
-      tableQueryTimer: "",
-        keyword:""
+      tableQueryTimer: ""
     };
   },
   computed: {
@@ -110,9 +114,9 @@ export default {
       this.setFilter({ time: d });
       this.getTableData(true);
     },
-      searchTypeID() {
+      handleSelectStatusChange(val){
           this.setFilter({
-              key: this.keyword,
+              key: val,
               isSearch: true,
               message: this.$message
           });
@@ -120,6 +124,7 @@ export default {
       },
     handleActions(action, data) {
       if (action === "Start") this.handleStart(data);
+      else if (action === "Edit") this.handleEdit(data);
       else if (action === "Delete") this.handleDelete(data);
       else if (action === "More") this.handleOpenDetail(data);
       else if (action === "Download") this.handleDownload(data);
@@ -142,6 +147,19 @@ export default {
         }
       });
     },
+      handleEdit(data){
+        console.log(data);
+          this.setIsShow(true);
+          this.getSUTType({
+              message: this.$message
+          });
+          this.getVNFMOption({
+              message: this.$message
+          });
+          this.getVIMOption({
+              message: this.$message
+          });
+      },
     handleDelete(data) {
       this.$confirm({
         title: "Are you sure delete this task?",
@@ -243,10 +261,12 @@ export default {
       return item === actions[0]
         ? "blue"
         : item === actions[1]
-        ? "red"
-        : item === actions[2]
         ? "green"
-        : "purple";
+        : item === actions[2]
+        ? "red"
+        : item === actions[3]
+        ? "#D3B230"
+        :"purple";
     }
   },
   beforeDestroy: function() {
@@ -258,6 +278,10 @@ export default {
 .test-job__container {
   .test-job__top {
     margin-bottom: 30px;
+    .select{
+        width: 150px;
+        margin-left: 30px;
+    }
     .calendar {
       float: right;
       width: 280px;

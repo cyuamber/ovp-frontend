@@ -181,7 +181,7 @@ const actions = {
 				let tableData = res.body.map((item, index) => {
 					item.createTime = moment(item.createTime).format('YYYY-MM-DD');
 					item.index = res.body.length * (state.pagination.current - 1) + index + 1;
-					item.actions = [item.status === "RUNNING" ? 'Stop' : 'Start', 'Delete', 'Download', 'More']
+					item.actions = [item.status === "RUNNING" ? 'Stop' : 'Start','Edit', 'Delete', 'Download', 'More']
 					return item
 				})
 				// commit('updateTableLoading', false);
