@@ -30,11 +30,17 @@ import { mapActions } from "vuex";
 export default {
   name: "Dashboard",
   components: { Circles, Doughnut, Lines, Live },
+    data() {
+        return {
+            liveChartsTimer: "",
+        };
+    },
     mounted() {
         this.initDashBoard();
     },
     methods: {
         ...mapActions("dashBoard", [
+            "getLiveData",
             "getLinesData",
             "getTestJobCirclesData",
             "getSUTAmountData",
@@ -44,6 +50,14 @@ export default {
         ]),
         initDashBoard() {
             this.clearData();
+            this.getLiveData({
+                message: this.$message
+            });
+            this.liveChartsTimer = setInterval(() => {
+                this.getLiveData({
+                    message: this.$message
+                });
+            }, 30000);
             this.getLinesData({
                 message: this.$message
             });
@@ -60,6 +74,9 @@ export default {
                 message: this.$message
             });
         },
+    },
+    beforeDestroy: function() {
+        clearInterval(this.liveChartsTimer);
     }
 };
 </script>

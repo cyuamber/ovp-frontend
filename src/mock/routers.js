@@ -5,6 +5,7 @@ module.exports =
         "/lang/local": "/getCurrentLanguage",
         "/lang/local?language=:language": "/getCurrentLanguage",
         ///////<-------------Dashboard--------->/////
+        "/portal/business/dashboard/statisticLiveCaseAmount":"/_getLiveCaseAmount",
         "/portal/business/dashboard/statisticPassCaseAmount7Days":"/_getPassCaseAmount7Days",
         "/portal/business/dashboard/statisticJobsFlowAmount":"/_getJobsFlowAmount",
         "/portal/business/dashboard/sutAmount":"/_getSutAmount",

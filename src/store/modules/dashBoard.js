@@ -3,6 +3,7 @@ import API from '../../const/apis';
 // import moment from 'moment';
 
 const state = {
+    liveData:0,
     linesData:{
         xAxis:[],
         legend:[],
@@ -18,6 +19,9 @@ const state = {
     testEnvAmountColors:["#ea9e9f","#f9ebc9","#a89c8e"],
 };
 const mutations = {
+    updateLiveData(state,data) {
+        state.liveData = data.livecount
+    },
     updateLinesData(state, data) {
         if(data.length > 0){
             data.forEach((item)=>{
@@ -104,6 +108,17 @@ const mutations = {
 
 };
 const actions = {
+    getLiveData({ commit },{ message }) {
+        axiosget(API.dashboard.liveCaseAmount).then(res => {
+                if (res.code === 200) {
+                    commit('updateLiveData', res.body);
+                } else message.error('Network exception, please try again')
+            },
+            () => {
+                message.error('Network exception, please try again')
+            }
+        )
+    },
     getLinesData({ commit },{ message }) {
         axiosget(API.dashboard.PassCaseAmount7Days).then(res => {
             if (res.code === 200) {
@@ -160,6 +175,7 @@ const actions = {
         )
     },
     clearData({ commit }){
+        commit('updateLiveData', 0);
         commit('updateLinesData', []);
         commit('updateTestJobCirclesData', []);
         commit('updateSUTAmountData', []);

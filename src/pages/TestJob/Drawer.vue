@@ -264,10 +264,9 @@ export default {
         if(isEdit){
             values.SUTName = (values.SUTName === this.initSUTName.name)?this.initSUTName.name+'+'+this.initSUTName.code:values.SUTName;
             values.TestSpecification = (values.TestSpecification === this.initSpecification.name)?this.initSpecification.code:values.TestSpecification;
-            console.log(values.TestVIMENV,this.initTestVIMENV.name,"vallll=======")
             values.TestVIMENV = (values.TestVIMENV === this.initTestVIMENV.name)?this.initTestVIMENV.code:values.TestVIMENV;
             values.TestVNFMENV = (values.TestVNFMENV === this.initTestVNFMENV.name)?this.initTestVNFMENV.code:values.TestVNFMENV;
-        	console.log(values,"handleSubmit----")
+            console.log(values,"handleSubmit----")
 	}
           this.createrTestJobMGT({isEdit,values});
           this.visible = false;
