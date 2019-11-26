@@ -61,6 +61,7 @@
           <a-upload-dragger
             action="/portal/business/files/upload"
             :remove="handleRemove"
+            @change="handleChange"
             class="form__upload-float"
             name="file"
             v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: editUploadtextShow ? true :false,}]}]"
@@ -77,7 +78,7 @@
           <span
             v-if="isEdit && editUploadtextShow"
             class="form__uploadtext-height"
-          >{{this.VNFTest.VNFFileName}}</span>
+          >{{this.VNFTest.fileName}}</span>
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
           <a-button type="primary" html-type="submit" :disabled="uploading">Submit</a-button>
@@ -172,6 +173,10 @@ export default {
       }
       this.updateVisible(false);
     },
+      handleChange(info) {
+          console.log(info,"fileInfo");
+          this.editUploadtextShow = false;
+      },
     normFile(e) {
       if (Array.isArray(e)) {
         return e;
@@ -256,7 +261,6 @@ export default {
       }
     },
     beforeUpload() {
-      this.editUploadtextShow = false;
       return false;
     }
   }

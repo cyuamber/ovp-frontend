@@ -26,7 +26,7 @@ const mutations = {
   updateTableData(state, tableData) {
     state.pagination.total = tableData.total;
     state.tableData = tableData.body.map((item, index) => {
-      item.publishTime = moment(item.publishTime).format('YYYY-MM-DD');
+      item.publishTime = item.publishTime !== null ? moment(item.publishTime).format('YYYY-MM-DD'):item.publishTime;
       item.index = tableData.body.length * (state.pagination.current - 1) + index;
       item.caseMgt = [];
       item.action = ['Edit', 'Delete'];
@@ -35,14 +35,15 @@ const mutations = {
   },
   updatecaseMgtTableData(state, {testCaseData,record}) {
     let index = record.index;
-    state.tableData[index].caseMgt = testCaseData.map((item) => {
-        item.action = 'activate';
-        return item
-    });
+    if(testCaseData.length > 0){
+        state.tableData[index].caseMgt = testCaseData.map((item) => {
+            item.action = 'activate';
+            return item
+        });
+    }
   },
   updateVNFTest(state, testSpecSingleData) {
     state.testSpecSingleData = testSpecSingleData;
-      console.log(state.testSpecSingleData,"state.testSpecSingleData")
   },
   updateSUTOptions(state, Options) {
     state.SUTOptions = Options;
@@ -51,6 +52,7 @@ const mutations = {
     state.VNFOptions = Options;
   },
     updateTestCaseList(state, { list }) {
+        state.testCaseList = [];
         if (list) state.testCaseList = list
     },
     updateCheckboxGroup(state, {testCaseData}){
@@ -132,14 +134,14 @@ const actions = {
     axiosget(API.TestSpecMgt.TestSpecSUTType).then(res => {
       if (res.code === 200) {
         commit('updateSUTOptions', res.body);
-        dispatch('getVNFOptions', { STUType: res.body[0].code })
+        dispatch('getVNFOptions', { SUTType: res.body[0].code })
       } else {
         this.$message.error('Network exception, please try again');
       }
     })
   },
   getVNFOptions({ commit }, obj) {
-    let url = API.TestSpecMgt.TestSpecVNFType.replace(":flag", obj.STUType);
+    let url = API.TestSpecMgt.TestSpecVNFType.replace(":flag", obj.SUTType);
     axiosget(url).then(res => {
       if (res.code === 200) {
         commit('updateVNFOptions', res.body)

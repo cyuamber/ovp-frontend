@@ -64,6 +64,7 @@
                             password: values.Password
                         };
                         let {isEdit} = this;
+                        if(this.isEdit)data.id = this.singleData.id;
                         this.createOrEditTestIns({isEdit,data}).
                             then(
                                 ()=>{this.$emit('close');},

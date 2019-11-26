@@ -29,7 +29,7 @@ const mutations = {
         let data = res.body.map( (item, index) => {
             item.action = ['Edit', 'Delete'];
             item.index = res.body.length * (state.pagination.current -1) + index+1;
-            item.createTime = moment(item.createTime).format('YYYY-MM-DD');
+            item.createTime = item.createTime!==null?moment(item.createTime).format('YYYY-MM-DD'):item.createTime;
             return item
         })
         if(state.currentTab === 'VIM ENV') {
@@ -110,7 +110,7 @@ const actions = {
         if(state.searchKeyword !== '') {
             if(state.currentTab === 'VIM ENV'){
                 paramsObj.dictLabel = state.searchKeyword
-            }else paramsObj.VNFMname = state.searchKeyword
+            }else paramsObj.name = state.searchKeyword
         }
         if(state.pageNum !== '') {
             paramsObj.pageNum = state.pageNum;

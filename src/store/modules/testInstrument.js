@@ -1,4 +1,4 @@
-import { axiosget, axiospost, axiosput } from '../../utils/http';
+import {axiosdelete, axiosget, axiospost, axiosput} from '../../utils/http';
 import API from '../../const/apis';
 import { axiosgetType } from "../../const/constant";
 
@@ -15,7 +15,7 @@ const mutations = {
   updateTableData(state, tableData) {
     state.pagination.total = tableData.total;
     state.tableData = tableData.body.map((item, index) => {
-      item.createTime = moment(item.createTime).format('YYYY-MM-DD');
+        item.createTime = item.createTime!==null?moment(item.createTime).format('YYYY-MM-DD'):item.createTime;
       item.index = tableData.body.length * (state.pagination.current - 1) + index + 1;
       item.action = ['Edit', 'Delete'];
       return item
@@ -93,8 +93,7 @@ const actions = {
         })
   },
   deleteMeterSys({ commit, dispatch }, data) {
-    console.log(API.instrumentMgs.instrumentMgsDelete, data, "--->delete param")
-    axiospost(API.instrumentMgs.instrumentMgsDelete.replace(":name", data.name)).then(res => {
+    axiosdelete(API.instrumentMgs.instrumentMgsDelete.replace(":id", data.id)).then(res => {
       if (res.code === 200) {
         commit('updateSuccessMessage', 'Deleted successfully')
         dispatch('getTableData', {})

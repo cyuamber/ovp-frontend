@@ -60,6 +60,7 @@
             class="upload-float"
             action="/portal/business/files/upload"
             :remove="handleRemove"
+            @change="handleChange"
             name="file"
             v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: isEdit && editUploadtextShow?false:true,}]}]"
           >
@@ -165,6 +166,10 @@ export default {
       "createOrEditTestMeter"
     ]),
     ...mapMutations("VnfpnfSuite", ["updateVNFTest", "updateVisible"]),
+      handleChange(info) {
+        console.log(info,"fileInfo");
+          this.editUploadtextShow = false;
+      },
     normFile(e) {
       if (Array.isArray(e)) {
         return e;
@@ -226,6 +231,7 @@ export default {
               ? values.upload[0].name
               : this.SuiteSingleData.fileName
           };
+          if(this.isEdit)data.id = this.SuiteSingleData.id;
           this.submitFormData(data);
           // if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
           // else this.handleUpload(data, formData);

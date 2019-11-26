@@ -126,12 +126,12 @@ export default {
       } else {
         this.$confirm({
           title: "Are you sure delete this TTMS?",
-          content: "Name: " + singleData.name,
+          content: "Id: " + singleData.id,
           okText: "Yes",
           okType: "danger",
           cancelText: "No",
           onOk: () => {
-            this.deleteMeterSys({ name: singleData.name });
+            this.deleteMeterSys({ id: singleData.id });
           }
         });
       }

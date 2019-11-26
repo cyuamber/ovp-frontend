@@ -30,7 +30,7 @@ module.exports =
         "/portal/business/suiteMgt":"/_getTestMeter",
         "/portal/business/suiteMgt/insert":"/loginMeterSys",
         "/portal/business/suiteMgt/update":"/updateMeterSys",
-        "/portal/business/suiteMgt/:name/delete":"/deleteMeterSys",
+        "/portal/business/suiteMgt/:id/delete":"/deleteMeterSys",
         "/portal/business/files/:filename":"/_downloadFile",
         ///////<-------------TestSUT--------->/////
         "/portal/business/sutMgt":"/_getVNFTest",
@@ -46,7 +46,7 @@ module.exports =
         "/portal/business/specMgt/update":"/updateTestSpec",
         "/portal/business/specMgt/:id/delete":"/deleteTestSpec",
         "/portal/business/testCase/updateStatus/:id/:status":"/updateTestSpec",
-        "/portal/business/sutType/100":"/_getTestSpecSUTType",
+        "/portal/business/types/100":"/_getTestSpecSUTType",
         "/portal/business/testCase/box/:flag/:subSutType":"/_getTestCaseList",
         ///////<-------------Test Job--------->/////
         "/portal/business/jobs":"/_getTestJobMGT",

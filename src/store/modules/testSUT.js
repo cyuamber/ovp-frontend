@@ -34,7 +34,7 @@ const mutations = {
 			total: tableData.total
 		}
 		state.tableData = tableData.body.map((item, index) => {
-			item.createTime = moment(item.createTime).format('YYYY-MM-DD')
+			item.createTime = item.createTime !==null?moment(item.createTime).format('YYYY-MM-DD'):item.createTime;
 			item.index = tableData.body.length * (state.pagination.current - 1) + index + 1;
 			item.action = ['Edit', 'Delete', 'Download']
 			return item
@@ -184,12 +184,9 @@ const actions = {
 	},
     downloadFile({ commit }, data){
         let url = API.downloadFile.replace(":filename", data.fileName);
-        axiosget(url).then(() => {
-                commit('updateSuccessMessage', 'DownLoad File successfully');
-            },
-            () => {
-                commit('updateFailedMessage', 'Network exception, please try again')
-            })
+        console.log(window.location.protocol+"//"+window.location.host+url,"window.location.protocol");
+        window.open(window.location.protocol+"//"+window.location.host+url);
+        commit('updateSuccessMessage', 'DownLoad File successfully');
     }
 
 }

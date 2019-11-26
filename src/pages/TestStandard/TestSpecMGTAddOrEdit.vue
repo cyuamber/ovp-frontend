@@ -43,7 +43,7 @@
               <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
             </a-spin>
           </a-form-item>
-          <a-form-item v-if="testCaseList.length !== 0">
+          <a-form-item v-if="testCaseList.length>0">
             <h3 class="form__checkboxtitle--size"><span>*</span>Test Case List:</h3>
             <a-checkbox-group
                     class="form__checkboxgroup--margin"
@@ -172,9 +172,14 @@ export default {
         if(Object.keys(val).length > 0){
             this.initSUTTypeValue = val.sutTypeCH.dictLabel;
             this.initVNFtypeValue = val.subSutTypeCH.dictLabel;
+            this.getTestCaseList({
+                sutCode:val.sutTypeCH.code,
+                subSutCode:val.subSutTypeCH.code,
+                message: this.$message
+            });
             this.spin = false;
         }
-    }
+    },
   },
   methods: {
     ...mapActions("testSpecMGT", [
@@ -186,14 +191,17 @@ export default {
       "createOrEditTestSpec",
         "getTestCaseList",
     ]),
-    ...mapMutations("testSpecMGT", ["updateVisible"]),
+    ...mapMutations("testSpecMGT", ["updateVisible","updateTestCaseList"]),
     handleSelectSUTChange(val) {
       this.spin = true;
-      this.getVNFOptions({ STUType: val })
+      this.clearOptions();
+      this.initVNFtypeValue = '';
+      this.form.setFieldsValue({subSutType:''})
+      this.getVNFOptions({ SUTType: val })
     },
       handleSelectSubSUTTypeChange(val){
           this.getTestCaseList({
-              sutCode:this.form.getFieldValue("SUTType"),
+              sutCode:this.form.getFieldValue("SUTType") === this.initSUTTypeValue?this.codeConversion(this.form.getFieldValue("SUTType"),this.SUTOptions):this.form.getFieldValue("SUTType"),
               subSutCode:val,
               message: this.$message
           });
