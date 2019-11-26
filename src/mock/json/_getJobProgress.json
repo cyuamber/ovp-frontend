@@ -2,7 +2,7 @@
   "code": 200,
   "message": "OK",
   "body": {
-    "id": 9,
+    "id": "9",
     "jobId": "392799791654584320",
     "jobName": "test",
     "jobStatus": "DONE",
@@ -11,37 +11,73 @@
     "executionStartTime": "2019-11-15 15:43:29",
     "createTime": "2019-11-15",
     "sut": {
-      "id": 1003,
-      "name": "Ericsson_vFW",
-      "type": 101004,
+      "id": 2,
+      "name": "Nokia_vSPGW",
+      "type": "101004",
       "vendor": null,
       "version": null,
       "createTime": null,
       "updateTime": null,
-      "flag": 101,
+      "flag": "101",
+      "flagName":"sut1",
       "fileName": null,
       "typeCH": null
     },
     "spec": {
-      "id": 1003,
-      "name": "FW-SPEC",
+      "id": 1001,
+      "name": "MME-SPEC",
       "version": null,
-      "vnfType": 101004,
+      "sutType": "101",
+      "subSutType": null,
       "publishOrg": null,
       "publishTime": null,
-      "caseMgt": null,
-      "vnfTypeCH": null,
-      "sutTypeCH": null
+      "subSutTypeCH": null,
+      "sutTypeCH": null,
+      "caseId": null
     },
     "cases": [
       {
-        "id": 1003,
-        "number": 1000,
+        "id": 1000,
+        "number": "1000",
         "name": "vFW-Function-DNS-Proxy",
         "description": null,
         "version": "v1.0",
         "status": null
       }
-    ]
+    ],
+    "vim": {
+      "id": 1,
+      "status": "0",
+      "cloudOwner": "FW-DC",
+      "cloudRegionId": null,
+      "createTime": null,
+      "updateTime": null,
+      "cloudType": null,
+      "cloudVersion": null,
+      "cloudDomain": null,
+      "username": null,
+      "password": null,
+      "defaultTenant": null,
+      "authUrl": null,
+      "tenant": null,
+      "sslCacert": null,
+      "sslInsecure": null,
+      "cloudTypeCH": null
+    },
+    "vnfm": {
+      "id": 2,
+      "name": "Generic-VNFM",
+      "type": null,
+      "vendor": null,
+      "version": null,
+      "url": null,
+      "vim": null,
+      "createTime": null,
+      "updateTime": null,
+      "username": null,
+      "password": null,
+      "certificateUrl": null,
+      "typeCH": null
+    }
   }
 }

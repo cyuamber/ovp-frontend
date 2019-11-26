@@ -53,6 +53,7 @@ module.exports =
         "/portal/business/testSpec/:type":"/getJobSpecification",
         "/portal/business/testCase/jobCase/:id":"/getTestCaseList",
         "/portal/business/jobs/insert":"/addTestSpec",
+        "/portal/business/jobs/:jobId/update":"/addTestSpec",
         "/portal/business/jobs/:jobId/start":"/runTestJobMGT",
         "/portal/business/jobs/:jobId/stop":"/stopTestJobMGT",
         "/portal/business/jobs/:jobId":"/_getJobProgress",

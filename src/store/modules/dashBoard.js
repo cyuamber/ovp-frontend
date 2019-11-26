@@ -13,7 +13,7 @@ const state = {
     SUTAmountColors:["#46b8e0","#ffca52","#34314b"],
     jobAmountData:[],
     jobAmountColors:["#cae76e","#e94e75"],
-    jobAmountClickText:["success","fail"],
+    jobAmountClickText:["DONE","FAILED"],
     testEnvAmountData:[],
     testEnvAmountColors:["#ea9e9f","#f9ebc9","#a89c8e"],
 };
@@ -158,6 +158,13 @@ const actions = {
                 message.error('Network exception, please try again')
             }
         )
+    },
+    clearData({ commit }){
+        commit('updateLinesData', []);
+        commit('updateTestJobCirclesData', []);
+        commit('updateSUTAmountData', []);
+        commit('updateJobAmountData', []);
+        commit('updateTestEnvAmountData', []);
     }
 };
 const getters = {

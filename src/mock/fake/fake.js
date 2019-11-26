@@ -543,7 +543,7 @@ module.exports = {
         "message": "OK",
         "body": [
             {
-                "id": 0,
+                "id": 1,
                 "name": "ZTE_vPCRF",
                 "type": 101002,
                 "vendor": null,
@@ -555,7 +555,7 @@ module.exports = {
                 "typeCH": null
             },
             {
-                "id": 0,
+                "id": 2,
                 "name": "Nokia_vSPGW",
                 "type": 101003,
                 "vendor": null,
@@ -567,7 +567,7 @@ module.exports = {
                 "typeCH": null
             },
             {
-                "id": 0,
+                "id": 3,
                 "name": "Ericsson_vFW",
                 "type": 101004,
                 "vendor": null,
@@ -579,7 +579,7 @@ module.exports = {
                 "typeCH": null
             },
             {
-                "id": 0,
+                "id": 4,
                 "name": "Ebupt_vDNS",
                 "type": 101005,
                 "vendor": null,
@@ -591,7 +591,7 @@ module.exports = {
                 "typeCH": null
             }
         ],
-        "total": 7,
+        "total": 4,
         "pageTotal": 1
     },
     getJobSpecification: {
@@ -646,9 +646,16 @@ module.exports = {
                 "description": "The Firewall Policy can match the traffic's src security zone, dst security zone, src IP address, dst IP address, TCP/UDP port, and the action of policy rule can take effect right.",
                 "version": "v1.0",
                 "status": null
-            }
+            },
+            {
+                "id": 2000,
+                "number": 2000,
+                "name": "vFW-Function-Web-Proxy",
+                "description": "vFirewall can match and inspect HTTP traffic and HTTPS traffic, corresponding actions can take effect.",
+                "version": "v1.0"
+            },
         ],
-        "total": 1,
+        "total": 2,
         "pageTotal": 1
     },
     deleteTestJobMGT: {

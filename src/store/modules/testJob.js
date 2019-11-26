@@ -38,7 +38,10 @@ const state = {
     testCasePieData:[
         { name: "DONE", y: 0, color: "#cae76e" },
         { name: "FAILED", y: 0, color: "#e94e75" }
-    ]
+    ],
+	testJobSingleData:{},
+	dashboardJumpStatus:null,
+    initcheckboxGroup:[]
 }
 
 const mutations = {
@@ -104,6 +107,8 @@ const mutations = {
 		state.specificationSpin = false
 		state.testCaseList = []
 		state.testCaseSpin = false
+        state.VNFMOption = []
+		state.VIMOption = []
 	},
 	updateTableData(state, tableData) {
 		state.tableData = tableData
@@ -130,6 +135,7 @@ const mutations = {
         }
         if(key !== undefined) {
             state.searchKeyword = key;
+            state.dashboardJumpStatus = null;
             if(state.pageNum !== 1){
                 state.pageNum = 1
             }
@@ -161,6 +167,16 @@ const mutations = {
     updateTestCasePieData(state, {doneCaseNum,failedCaseNum}) {
         state.testCasePieData[0].y = doneCaseNum;
         state.testCasePieData[1].y = failedCaseNum;
+    },
+    updateTestJobSingleData(state, data) {
+        state.testJobSingleData = data;
+        state.initcheckboxGroup = data.cases.map((item) => {
+            return item.id
+        });
+        console.log(state.initcheckboxGroup,"state.initcheckboxGroup")
+    },
+    updateDashboardJumpStatus(state, data) {
+        state.dashboardJumpStatus = data;
     }
 }
 
@@ -168,8 +184,9 @@ const actions = {
 	getTableData({ commit }, bool) {
 		let obj = { pageNum: state.pageNum, pageSize: state.pageSize };
 		if (state.createTime !== '') obj.createTime = state.createTime;
-		if (state.searchKeyword !== '') obj.jobStatus = state.createTime;
-		let axiosrequest = axiosgetType ? axiospost : axiosget;
+		if (state.searchKeyword !== '' && state.dashboardJumpStatus === null) obj.jobStatus= state.searchKeyword;
+		if(state.searchKeyword === '' && state.dashboardJumpStatus!==null) obj.jobStatus = state.dashboardJumpStatus;
+        let axiosrequest = axiosgetType ? axiospost : axiosget;
 		// commit('updateTableLoading', true);
         console.log(obj,"getTableData => obj----");
 		axiosrequest(API.testJobMgt.testJobTable, obj).then((res) => {
@@ -192,7 +209,7 @@ const actions = {
 			if (bool) commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
-	createrTestJobMGT({ commit }, values) {
+	createrTestJobMGT({ dispatch, commit,state }, { isEdit, values }) {
 		let body = {
 			cronExpression: "",
 			endpoint: "/portal/business/jobs/case/start",
@@ -206,14 +223,19 @@ const actions = {
 			specId: values.TestSpecification,
 			createrTime: moment(new Date()).format('YYYY-MM-DD'),
 			caseIds: values.checkboxGroup ? values.checkboxGroup : []
-		}
-		if (values.TestVIMENV) body.testVIMENV = values.TestVIMENV
-		if (values.TestVNFMENV) body.testVNFMENV = values.TestVNFMENV
-		axiospost(API.testJobMgt.testJobInsert, body)
+		};
+		if (values.TestVIMENV) body.vimId = values.TestVIMENV;
+		if (values.TestVNFMENV) body.vnfmId = values.TestVNFMENV;
+		let jobId = isEdit ? state.testJobSingleData.jobId : "";
+        let url = isEdit ? API.testJobMgt.testJobUpdate.replace(":jobId",jobId) : API.testJobMgt.testJobInsert;
+        let axiosType = isEdit ? axiosput : axiospost;
+        axiosType(url, body)
 			.then((res) => {
 				if (res.code === 200) {
 					commit('updateSuccessMessage', 'Has been added successfully')
-				} else commit('updateFailedMessage', 'add failed')
+				} else commit('updateFailedMessage', 'add failed');
+                commit('setIsShow',false);
+                dispatch('getTableData',false)
 			})
 			.catch(() => {
 				commit('updateFailedMessage', 'Network exception, please try again')
@@ -439,6 +461,17 @@ const actions = {
 			message.error('Network exception, please try again')
 		})
 	},
+	getEditTestJob({ dispatch, commit }, data){
+        axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
+            .then(res => {
+                if (res.code === 200) {
+                    commit('updateTestJobSingleData', res.body);
+                    dispatch("getTestCase",{TestSpecification: res.body.spec.id, message: this.$message})
+                }
+            }, () => {
+                commit('updateFailedMessage', 'Network exception, please try again')
+            });
+	}
 
 }
 

@@ -1,6 +1,6 @@
 <template>
   <a-drawer
-    title="Create Test Job"
+    :title="title"
     :width="580"
     @close="onClose"
     :visible="visible"
@@ -17,16 +17,17 @@
       >
         <a-input
           v-if="item === formList[0]"
-          v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}]}]"
+          :disabled="isEdit"
+          v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}],initialValue:testJobSingleData.jobName}]"
         />
         <a-textarea
           v-if="item === formList[1]"
-          v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}]}]"
+          v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}],initialValue:testJobSingleData.remark}]"
           :autosize="{minRows: 3}"
         />
         <a-select
           v-else-if="item === 'SUT Type'"
-          v-decorator="[keyList[i],{ rules: [{ required: true, }]}]"
+          v-decorator="[keyList[i],{ rules: [{ required: true, }],initialValue:initSUTType.name}]"
           @select="((key) => selectSUTType(key))"
           class="form__select--width"
         >
@@ -40,7 +41,7 @@
           v-else-if="item === 'SUT Name'"
           :disabled="!getSUTNames"
           class="form__select--width"
-          v-decorator="[keyList[i],{ rules: [{ required: true }]}]"
+          v-decorator="[keyList[i],{ rules: [{ required: true }],initialValue:initSUTName.name}]"
           :title="!getSUTNames ? 'Please select SUT Type first' : ''"
           @select="((key) => selectSUTName(key))"
         >
@@ -54,7 +55,7 @@
           v-else-if="item === 'Test Specification'"
           :disabled="!getSpecifications"
           class="form__select--width"
-          v-decorator="[keyList[i],{ rules: [{ required: true }]}]"
+          v-decorator="[keyList[i],{ rules: [{ required: true }],initialValue:initSpecification.name}]"
           @select="((key)=> selectSpecification(key))"
           :title="!getSUTNames ? 'Please select SUT Type and SUT Name first' : (!getSpecifications ? 'Please select SUT Name first': '')"
         >
@@ -67,24 +68,24 @@
         <!-- Test VNFM/VIM  -->
         <a-select
           v-else-if="item === 'Test VNFM ENV'"
-          v-decorator="[keyList[i]]"
+          v-decorator="[keyList[i],{initialValue:initTestVNFMENV.name}]"
           class="form__select--width"
         >
           <a-select-option
             v-for="type in VNFMOption"
-            :key="type.name"
-            :value="type.name"
+            :key="type.id"
+            :value="type.id"
           >{{type.name}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test VIM ENV'"
-          v-decorator="[keyList[i]]"
+          v-decorator="[keyList[i],{initialValue:initTestVIMENV.name}]"
           class="form__select--width"
         >
           <a-select-option
             v-for="type in VIMOption"
-            :key="type.cloudRegionId"
-            :value="type.cloudOwner"
+            :key="type.id"
+            :value="type.id"
           >{{type.cloudOwner}}</a-select-option>
         </a-select>
         <!-- loading -->
@@ -102,12 +103,15 @@
             <h3>Test Case List:</h3>
             <a-checkbox-group
               class="form__checkboxgroup--margin"
-              v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}]}]"
+              v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
               @change="onChange"
             >
               <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
-                <a-checkbox :value="item.id" class="form__checkbox--size"/>
-                <span :title="item.description" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>
+                <a-checkbox :value="item.id"
+                            :checked="initcheckboxGroup.includes(item.id)"
+                            class="form__checkbox--size"/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
+                  <a-icon :title="item.description"  type="info-circle" class="form__info-cursor" />
               </a-card-grid>
             </a-checkbox-group>
           </a-form-item>
@@ -126,16 +130,38 @@ import { mapState, mapActions, mapMutations } from "vuex";
 import { formList } from "./constants";
 
 export default {
-  props: ["isShow"],
+  props: ["isShow","isEdit"],
   data() {
     return {
       visible: this.isShow,
+        title: this.isEdit ? "Edit Test Job" : "Create Test Job",
       formList,
       keyList: [],
       form: this.$form.createForm(this),
       selectedSUTType: "",
       selectedSUTName: "",
-      selectedSpecification: ""
+      selectedSpecification: "",
+        initSUTType:{
+          name:null,
+            code:null
+        },
+        initSUTName:{
+            name:null,
+            code:null
+        },
+        initSpecification:{
+            name:null,
+            code:null
+        },
+      initTestVIMENV:{
+          name:null,
+          code:null
+      },
+      initTestVNFMENV:{
+          name:null,
+          code:null
+      },
+        count: 0
     };
   },
   computed: {
@@ -150,7 +176,9 @@ export default {
       getSpecifications: store => store.testJob.getSpecification,
       specificationList: store => store.testJob.specificationList,
       testCaseSpin: store => store.testJob.testCaseSpin,
-      testCaseList: store => store.testJob.testCaseList
+      testCaseList: store => store.testJob.testCaseList,
+        testJobSingleData: state => state.testJob.testJobSingleData,
+        initcheckboxGroup: state => state.testJob.initcheckboxGroup
     })
   },
   watch: {
@@ -165,11 +193,50 @@ export default {
         this.selectedSUTType = "";
         this.selectedSUTName = "";
         this.selectedSpecification = "";
+      this.getEditTestJob({});
         this.keyList.forEach(item => {
           this.form.setFieldsValue({ [item]: "" });
         });
+      }else {
+          this.count++;
+          if (this.isEdit && this.count > 1) {
+              this.form.setFieldsValue({
+                  JobName: this.testJobSingleData.jobName,
+                  JobDescription: this.testJobSingleData.remark,
+                  SUTType: this.testJobSingleData.sut.flagName,
+                  SUTName: this.testJobSingleData.sut.name,
+                  TestSpecification:this.testJobSingleData.spec.name,
+                  TestVIMENV: this.testJobSingleData.vim.cloudOwner,
+                  TestVNFMENV: this.testJobSingleData.vnfm.name,
+                  checkboxGroup:this.initcheckboxGroup
+              });
+          }
       }
-    }
+    },
+      testJobSingleData(val) {
+          if(Object.keys(val).length > 0){
+              this.initSUTType = {
+                  name:this.testJobSingleData.sut.flagName,
+                  code:this.testJobSingleData.sut.flag
+              };
+              this.initSUTName = {
+                  name:this.testJobSingleData.sut.name,
+                  code:this.testJobSingleData.sut.id,
+              };
+              this.initSpecification = {
+                  name:this.testJobSingleData.spec.name,
+                  code:this.testJobSingleData.spec.id
+              };
+              this.initTestVIMENV = {
+                  name: this.testJobSingleData.vim.cloudOwner,
+                  code: this.testJobSingleData.vim.id
+              };
+              this.initTestVNFMENV = {
+                  name:this.testJobSingleData.vnfm.name,
+                  code:this.testJobSingleData.vnfm.id
+              };
+          }
+      }
   },
   created() {
     this.keyList = this.formList.map(item => {
@@ -182,7 +249,8 @@ export default {
       "createrTestJobMGT",
       "getSUTName",
       "getSpecification",
-      "getTestCase"
+      "getTestCase",
+        "getEditTestJob"
     ]),
     ...mapMutations("testJob", ["clean"]),
     onClose() {
@@ -192,9 +260,17 @@ export default {
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
-          this.createrTestJobMGT(values);
+        let { isEdit } = this;
+        if(isEdit){
+            values.SUTName = (values.SUTName === this.initSUTName.name)?this.initSUTName.name+'+'+this.initSUTName.code:values.SUTName;
+            values.TestSpecification = (values.TestSpecification === this.initSpecification.name)?this.initSpecification.code:values.TestSpecification;
+            console.log(values.TestVIMENV,this.initTestVIMENV.name,"vallll=======")
+            values.TestVIMENV = (values.TestVIMENV === this.initTestVIMENV.name)?this.initTestVIMENV.code:values.TestVIMENV;
+            values.TestVNFMENV = (values.TestVNFMENV === this.initTestVNFMENV.name)?this.initTestVNFMENV.code:values.TestVNFMENV;
+        	console.log(values,"handleSubmit----")
+	}
+          this.createrTestJobMGT({isEdit,values});
           this.visible = false;
-          this.$emit("close");
         }
       });
     },
@@ -257,6 +333,9 @@ export default {
     width: 100%;
     padding: 14px;
     text-indent: 0.5em;
+      .form__info-cursor{
+          cursor:pointer;
+      }
   }
   .form__checkboxgroup--margin {
     width: 100%;

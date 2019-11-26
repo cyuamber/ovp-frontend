@@ -39,9 +39,11 @@ export default {
             "getTestJobCirclesData",
             "getSUTAmountData",
             "getJobAmountData",
-            "getTestEnvAmountData"
+            "getTestEnvAmountData",
+            "clearData"
         ]),
         initDashBoard() {
+            this.clearData();
             this.getLinesData({
                 message: this.$message
             });

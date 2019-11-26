@@ -5,8 +5,9 @@
       <a-button type="primary" @click="handleCreate">Create Test Job</a-button>
         <a-select
                 class="select"
-                placeholder="Select a status"
+                :defaultValue="dashboardJumpStatus"
                 @change="handleSelectStatusChange"
+                allowClear
         >
             <a-select-option
                     v-for="status of statusOptions"
@@ -46,7 +47,7 @@
         </span>
       </a-table>
     </div>
-    <Drawer :isShow="isShow" @close="close" />
+    <Drawer :isShow="isShow" :isEdit="isEdit"/>
   </div>
 </template>
 
@@ -64,7 +65,9 @@ export default {
       columns: testJobColumns,
         statusOptions: statusOptions,
       loading: false,
-      tableQueryTimer: ""
+      tableQueryTimer: "",
+        isEdit: false,
+        dashboardJumpStatus:null
     };
   },
   computed: {
@@ -73,10 +76,19 @@ export default {
       loadingMessage: state => state.testJob.loadingMessage,
       tableData: state => state.testJob.tableData,
       pagination: state => state.testJob.pagination,
-      tableLoading: state => state.testJob.tableLoading
+      tableLoading: state => state.testJob.tableLoading,
+        testJobSingleData: state => state.testJob.testJobSingleData
     })
   },
   components: { Drawer, Loading },
+    created(){
+        if(window.location.href.includes("?")){
+            console.log(window.location.href.split("?")[1].split("=")[1])
+            this.dashboardJumpStatus = window.location.href.split("?")[1].split("=")[1];
+            this.updateDashboardJumpStatus(this.dashboardJumpStatus)
+        }
+        console.log( window.location.href," window.location.href")
+    },
   mounted() {
     this.initTestJobTable();
   },
@@ -89,9 +101,10 @@ export default {
       "stopJop",
       "getSUTType",
       "getVNFMOption",
-      "getVIMOption"
+      "getVIMOption",
+        "getEditTestJob"
     ]),
-    ...mapMutations("testJob", ["setIsShow", "setFilter"]),
+    ...mapMutations("testJob", ["setIsShow", "setFilter","updateDashboardJumpStatus"]),
     initTestJobTable() {
       this.getTableData();
       this.tableQueryTimer = setInterval(() => {
@@ -99,6 +112,7 @@ export default {
       }, 5000);
     },
     handleCreate() {
+        this.isEdit = false;
       this.setIsShow(true);
       this.getSUTType({
         message: this.$message
@@ -149,7 +163,9 @@ export default {
     },
       handleEdit(data){
         console.log(data);
+          this.isEdit = true;
           this.setIsShow(true);
+          this.getEditTestJob(data);
           this.getSUTType({
               message: this.$message
           });
@@ -193,10 +209,6 @@ export default {
     handleOpenDetail(data) {
       data.currentAction = "More";
       this.$router.push({ name: "JobDetail", params: data });
-    },
-    close() {
-      this.setIsShow(false);
-      this.getTableData();
     },
     handlePageChange(pageObj) {
       this.setFilter({ pageObj });

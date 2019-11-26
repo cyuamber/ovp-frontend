@@ -160,28 +160,6 @@ export default {
           : "#D0021B";
       return { backgroundColor: color };
     },
-    getDetailProgress() {
-      let { status } = this.$route.params;
-      console.log(status, "status");
-      // If not executed, start the test first.
-      if (status === 1) this.getProgress();
-      else if (status === 2) {
-        this.updateProgress({
-          percent: 100,
-          status: "success"
-        });
-      } else if (status === 3) {
-        this.updateProgress({
-          percent: 90,
-          status: "exception"
-        });
-      } else {
-        this.updateProgress({
-          percent: 0,
-          status: "normal"
-        });
-      }
-    },
     handleRefresh() {
       // this.initWebSocket();
         this.getProgress({jobId: this.currentJob.jobId});
