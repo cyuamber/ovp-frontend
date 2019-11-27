@@ -146,11 +146,11 @@ export default {
         this.spin = false;
       }
       if (val.length && !this.isEdit) {
-        this.initSUTTypeValue = this.SUTOptions[0].code;
+          this.initSUTTypeValue = this.SUTOptions[0].code;
+          if(this.count > 1){
+              this.form.setFieldsValue({SUTType: this.SUTOptions[0].code})
+          }
       }
-        if(this.count > 1){
-            this.form.setFieldsValue({SUTType: this.SUTOptions[0].code})
-        }
     },
     VNFOptions(val) {
       if (val.length) {
@@ -230,12 +230,13 @@ export default {
     handleSubmit() {
       this.form.validateFields((err, values) => {
         if (!err) {
+            console.log(values.SUTType,this.initSUTTypeValue,"handleSubmit.data---")
           let data = {
             name: values.Name,
             version: values.Version,
-            sutType: values.SUTType === this.initSUTTypeValue?this.codeConversion(values.SUTType,this.SUTOptions):values.SUTType,
-            subSutType: values.subSutType === this.initVNFtypeValue?this.codeConversion(values.SUTType,this.VNFOptions):values.subSutType,
-            caseId:values.checkboxGroup,
+            sutType: (values.SUTType === this.initSUTTypeValue) && this.isEdit?this.codeConversion(values.SUTType,this.SUTOptions):values.SUTType,
+            subSutType: (values.subSutType === this.initVNFtypeValue) && this.isEdit?this.codeConversion(values.SUTType,this.VNFOptions):values.subSutType,
+            caseId:values.checkboxGroup ||[],
             publishOrg: values.PublishORG
           };
           let { isEdit } = this;
