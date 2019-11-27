@@ -364,12 +364,9 @@ const actions = {
 	},
 	download({ commit }, data) {
         let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId);
-        axiosget(url).then(() => {
-                commit('updateSuccessMessage', 'DownLoad  successfully');
-            },
-            () => {
-                commit('updateFailedMessage', 'Network exception, please try again')
-            })
+        console.log(window.location.protocol+"//"+window.location.host+url,"window.location.protocol--testJobDownLoad");
+        window.open(window.location.protocol+"//"+window.location.host+url);
+        commit('updateSuccessMessage', 'DownLoad File successfully');
 	},
 	runTestJobMGT({ commit }, data) {
 		axiosput(API.testJobMgt.testJobStart.replace(":jobId", data.jobId))
