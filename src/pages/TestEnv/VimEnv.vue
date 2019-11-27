@@ -105,8 +105,6 @@ export default {
       "setInitValues"
     ]),
     initVimEnvTable() {
-      let date = new Date("2019-10-11");
-      console.log(date.getTime(), "----date.getTime()");
       this.getCloudTypeOptions();
       let paramsObj = {};
       this.getTableData({ paramsObj, isFilter: false });

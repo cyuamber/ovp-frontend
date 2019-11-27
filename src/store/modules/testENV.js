@@ -1,5 +1,5 @@
 import {axiosget, axiospost, axiosput, axiosdelete} from '../../utils/http'
-import { VIMForm, VNFMForm, axiosgetType } from "../../const/constant";
+import {  axiosgetType } from "../../const/constant";
 import API from '../../const/apis';
 import moment from 'moment'
 
@@ -90,15 +90,17 @@ const mutations = {
         state.cloudTypeOptions = CloudTypeList
     },
     setInitValues(state, values){
+        console.log(values,"values")
         if(values.item !== "Edit"){
             state.initValues = values;
         }else {
-            if(state.currentTab === "VIM ENV")VIMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
-            else {
-                VNFMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
-                console.log(state.initValues,"state.initValues")
-            }
-            state.initValues.id = values.record.id;
+            state.initValues = values.record
+            // if(state.currentTab === "VIM ENV")VIMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
+            // else {
+            //     VNFMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
+            //     console.log(state.initValues,"state.initValues")
+            // }
+            // state.initValues.id = values.record.id;
         }
     }
 }

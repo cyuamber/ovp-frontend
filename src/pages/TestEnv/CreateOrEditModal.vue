@@ -43,7 +43,7 @@
 			<!--</a-select>-->
 			<a-select
 				v-if="item.title === 'Cloud Type'"
-				v-decorator="[item.key,{ rules: [{ required: true }], initialValue: initCloudType}]"
+				v-decorator="[item.key,{ rules: [{ required: true }], initialValue: initCloudType.name}]"
 				:disabled="cloudTypeOptions.length ===0"
 				class="select"
 			>
@@ -104,7 +104,10 @@ export default {
 			VNFMForm: VNFMForm,
 			VIMCount: 0,
 			VNFMCount: 0,
-            initCloudType:null,
+            initCloudType:{
+                name:null,
+                code:null
+            },
 		};
 	},
 	computed: {
@@ -121,6 +124,7 @@ export default {
 			set(val) {
 				if (!val) {
 					let list = this.currentTab === "VIM ENV" ? this.VIMForm : this.VNFMForm;
+                    this.initCloudType = {name:null,code:null}
 					this.setInitValues({});
 					list.forEach(item => {
 						this.form.setFieldsValue({ [item.key]: '' });
@@ -135,18 +139,42 @@ export default {
 			if(val) {
                 this.form = this.$form.createForm(this);
 				if(this.currentTab === 'VIM ENV'){
-					if(!this.isEdit)this.form.setFieldsValue({cloudType: this.cloudTypeOptions[0].code})
+                    this.VIMCount++;
+                    if(!this.isEdit && this.VIMCount >1){
+                        // this.form.setFieldsValue({cloudType: this.cloudTypeOptions[0].code})
+                        this.initCloudType = {
+                            name: this.cloudTypeOptions[0].dictLabel,
+                            code: this.cloudTypeOptions[0].code
+                        }
+                    }
+                    else if(this.isEdit && this.VIMCount >1){
+                        this.initCloudType = {
+                            name: this.initValues.cloudTypeCH.dictLabel,
+                            code: this.initValues.cloudTypeCH.code
+                        }
+                        // this.form.setFieldsValue({cloudType: this.initValues.cloudTypeCH.dictLabel})
+                    }
 				}
 			}
 		},
         cloudTypeOptions(val) {
             if (val.length) {
-                this.initCloudType = val[0].code;
+                if(!this.isEdit) {
+                    this.initCloudType = {
+                        name: val[0].dictLabel,
+                        code: val[0].code
+                    }
+                }
             }
         },
         initValues(val) {
-            if (val.code!==undefined) {
-                this.initCloudType = val.code;
+            if (this.currentTab === 'VIM ENV') {
+                if (Object.keys(val).length > 0) {
+                    this.initCloudType = {
+                        name: val.cloudTypeCH.dictLabel,
+                        code: val.cloudType
+                    }
+                }
             }
         }
 	},
@@ -170,7 +198,9 @@ export default {
 				let data = {};
 				if (this.currentTab === "VIM ENV") {
 					this.VIMForm.forEach(item => {
-                        data[item.key] = values[item.key]
+                        if(item.title === 'Cloud Type'){
+                            data[item.key] = values[item.key] === this.initCloudType.name? this.initCloudType.code:values[item.key];
+                        }else  data[item.key] = values[item.key]
 					});
 				} else {
                     this.VNFMForm.forEach(item => {
