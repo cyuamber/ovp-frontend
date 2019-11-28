@@ -277,7 +277,7 @@ const VnfpnfSuiteColumns = [
     {
         title: 'Action',
         dataIndex: 'action',
-        width: 220,
+        width: 300,
         scopedSlots: { customRender: 'action' }
     }
 ]

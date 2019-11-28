@@ -111,7 +111,9 @@
                             :checked="initcheckboxGroup.includes(item.id)"
                             class="form__checkbox--size"/>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
-                  <a-icon :title="item.description"  type="info-circle" class="form__info-cursor" />
+                <a-tooltip placement="topLeft" :title="item.description">
+                  <a-icon  type="info-circle" class="form__info-cursor" />
+                </a-tooltip>
               </a-card-grid>
             </a-checkbox-group>
           </a-form-item>
@@ -134,7 +136,7 @@ export default {
   data() {
     return {
       visible: this.isShow,
-        title: this.isEdit ? "Edit Test Job" : "Create Test Job",
+        title: "Create Test Job",
       formList,
       keyList: [],
       form: this.$form.createForm(this),
@@ -200,6 +202,11 @@ export default {
       }else {
           this.count++;
 
+      }
+      if(this.isEdit){
+          this.title = "Edit Test Job"
+      }else {
+          this.title = "Create Test Job"
       }
     },
       testJobSingleData(val) {

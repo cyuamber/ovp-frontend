@@ -3,7 +3,10 @@ import API from '../../const/apis';
 // import moment from 'moment';
 
 const state = {
-    liveData:0,
+    liveData:{
+        x:null,
+        y:null
+    },
     linesData:{
         xAxis:[],
         legend:[],
@@ -20,7 +23,9 @@ const state = {
 };
 const mutations = {
     updateLiveData(state,data) {
-        state.liveData = data.livecount
+        state.liveData.x = data.x
+        state.liveData.y = data.y
+        console.log(state.liveData,"state.liveData")
     },
     updateLinesData(state, data) {
         if(data.length > 0){
@@ -111,7 +116,8 @@ const actions = {
     getLiveData({ commit },{ message }) {
         axiosget(API.dashboard.liveCaseAmount).then(res => {
                 if (res.code === 200) {
-                    commit('updateLiveData', res.body);
+                    let x = (new Date()).getTime();
+                    commit('updateLiveData', {x,y:res.body.livecount});
                 } else message.error('Network exception, please try again')
             },
             () => {
@@ -175,7 +181,7 @@ const actions = {
         )
     },
     clearData({ commit }){
-        commit('updateLiveData', 0);
+        commit('updateLiveData',{x:null,y:null});
         commit('updateLinesData', []);
         commit('updateTestJobCirclesData', []);
         commit('updateSUTAmountData', []);

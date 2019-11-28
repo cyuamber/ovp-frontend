@@ -7,7 +7,6 @@
                 class="select"
                 :defaultValue="dashboardJumpStatus"
                 @change="handleSelectStatusChange"
-                allowClear
         >
             <a-select-option
                     v-for="status of statusOptions"
@@ -67,7 +66,7 @@ export default {
       loading: false,
       tableQueryTimer: "",
         isEdit: false,
-        dashboardJumpStatus:null
+        dashboardJumpStatus:statusOptions[0]
     };
   },
   computed: {
@@ -87,7 +86,6 @@ export default {
             this.dashboardJumpStatus = window.location.href.split("?")[1].split("=")[1];
             this.updateDashboardJumpStatus(this.dashboardJumpStatus)
         }
-        console.log( window.location.href," window.location.href")
     },
   mounted() {
     this.initTestJobTable();
@@ -130,17 +128,12 @@ export default {
     },
       handleSelectStatusChange(val){
         console.log(val,"val---")
-          if(val!==undefined){
-              this.setFilter({
-                  key: val,
-                  isSearch: true,
-                  message: this.$message
-              });
-          }else {
-              this.clearSearchKeyword('');
-              this.getTableData(true);
-          }
-
+          this.updateDashboardJumpStatus("全部")
+          if(val === '全部')this.clearSearchKeyword(val);
+          this.setFilter({
+              key: val
+          });
+          this.getTableData(true);
       },
     handleActions(action, data) {
       if (action === "Start") this.handleStart(data);

@@ -56,8 +56,8 @@
             <a-switch
                     checkedChildren="enable"
                     unCheckedChildren="disable"
-                    :defaultChecked="record.status=== 'enable'"
-                    @change="(() => activationModal(record))"
+                    :checked="record.status=== 'enable'"
+                    @click="(() => activationModal(record))"
             />
         </span>
         </a-table>

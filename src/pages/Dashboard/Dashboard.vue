@@ -57,7 +57,7 @@ export default {
                 this.getLiveData({
                     message: this.$message
                 });
-            }, 30000);
+            }, 10000);
             this.getLinesData({
                 message: this.$message
             });

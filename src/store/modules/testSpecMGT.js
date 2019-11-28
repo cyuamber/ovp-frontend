@@ -27,7 +27,7 @@ const mutations = {
     state.pagination.total = tableData.total;
     state.tableData = tableData.body.map((item, index) => {
       item.publishTime = item.publishTime !== null ? moment(item.publishTime).format('YYYY-MM-DD'):item.publishTime;
-      item.index = tableData.body.length * (state.pagination.current - 1) + index;
+      item.index = index;
       item.caseMgt = [];
       item.action = ['Edit', 'Delete'];
       return item

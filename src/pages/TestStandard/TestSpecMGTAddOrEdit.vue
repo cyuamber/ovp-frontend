@@ -143,9 +143,6 @@ export default {
       }
     },
     SUTOptions(val) {
-      if (val.length) {
-        this.spin = false;
-      }
       if (val.length && !this.isEdit) {
           this.initSUTTypeValue = this.SUTOptions[0].code;
           if(this.count > 1){
@@ -154,9 +151,7 @@ export default {
       }
     },
     VNFOptions(val) {
-      if (val.length) {
         this.spin = false;
-      }
       if (val.length && !this.isEdit) {
         this.initVNFtypeValue = this.VNFOptions[0].code;
           this.getTestCaseList({
@@ -214,7 +209,6 @@ export default {
       },
     dropdownVisibleChange() {
       if (!this.VNFOptions.length) {
-        this.spin = true;
         this.getVNFOptions({
           SUTType: this.testSpecSingleData.sutTypeCH.code
         });

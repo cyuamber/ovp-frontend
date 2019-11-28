@@ -27,7 +27,7 @@ const state = {
 	percent: 0,
 	statusText: 'normal',
 	isJobDetail: false,
-    searchKeyword:'',
+    searchKeyword:'全部',
 	createTime: '',
 	pageNum: 1,
 	pageSize: 10,
@@ -122,22 +122,16 @@ const mutations = {
 	changeComponent(state, bool) {
 		state.isJobDetail = bool
 	},
-	setFilter(state,{time, key, pageObj, isSearch, message}) {
-        if(isSearch){
-            if(key === '' && state.createTime === '' && state.searchKeyword === '') {
-                message.warning('Please enter valid search information')
-                return
-            }
-        }
+	setFilter(state,{time, key, pageObj}) {
 		if (time !== undefined){
             state.createTime = time;
             if(state.pageNum !== 1){
                 state.pageNum = 1
             }
         }
-        if(key !== undefined) {
+        if(key !== "全部") {
             state.searchKeyword = key;
-            state.dashboardJumpStatus = null;
+            state.dashboardJumpStatus = "全部";
             if(state.pageNum !== 1){
                 state.pageNum = 1
             }
@@ -193,8 +187,8 @@ const actions = {
 	getTableData({ commit }, bool) {
 		let obj = { pageNum: state.pageNum, pageSize: state.pageSize };
 		if (state.createTime !== '') obj.createTime = state.createTime;
-		if (state.searchKeyword !== '' && state.dashboardJumpStatus === null) obj.jobStatus= state.searchKeyword;
-		if(state.searchKeyword === '' && state.dashboardJumpStatus!==null) obj.jobStatus = state.dashboardJumpStatus;
+		if (state.searchKeyword !== '全部' && state.dashboardJumpStatus === "全部") obj.jobStatus= state.searchKeyword;
+		if(state.searchKeyword === '全部' && state.dashboardJumpStatus!=="全部") obj.jobStatus = state.dashboardJumpStatus;
         let axiosrequest = axiosgetType ? axiospost : axiosget;
 		// commit('updateTableLoading', true);
         console.log(obj,"getTableData => obj----");

@@ -52,7 +52,7 @@
               :key="index"
               :hoverable="false"
             >
-              caseName：{{item.caseEntity.name}}
+              Case Name：{{item.caseEntity.name}}
               <span
                 class="job-detail__testCase-status"
                 v-if="item.caseStatus!==null && item.caseStatus!==undefined"
