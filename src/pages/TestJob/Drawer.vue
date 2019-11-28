@@ -200,8 +200,8 @@ export default {
         });
         console.log(this.testJobSingleData,"visible----this.testJobSingleData")
       }else {
+          console.log(this.count,"this.count++")
           this.count++;
-
       }
       if(this.isEdit){
           this.title = "Edit Test Job"
@@ -210,6 +210,7 @@ export default {
       }
     },
       testJobSingleData(val) {
+          console.log(this.count,"this.count---testJobSingleData")
           if(Object.keys(val).length > 0){
               console.log(this.testJobSingleData,"val---testJobSingleData")
               this.initSUTType = {
@@ -261,7 +262,11 @@ export default {
       item = item.replace(" ", "").replace(" ", "");
       return item;
     });
+    console.log(this.isShow,"this.isShow----created")
   },
+    mounted(){
+        console.log(this.isShow,"this.isShow----mounted")
+    },
   methods: {
     ...mapActions("testJob", [
       "createrTestJobMGT",

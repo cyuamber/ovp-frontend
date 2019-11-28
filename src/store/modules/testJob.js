@@ -27,7 +27,7 @@ const state = {
 	percent: 0,
 	statusText: 'normal',
 	isJobDetail: false,
-    searchKeyword:'全部',
+    searchKeyword:'All',
 	createTime: '',
 	pageNum: 1,
 	pageSize: 10,
@@ -129,9 +129,9 @@ const mutations = {
                 state.pageNum = 1
             }
         }
-        if(key !== "全部") {
+        if(key !== "All") {
             state.searchKeyword = key;
-            state.dashboardJumpStatus = "全部";
+            state.dashboardJumpStatus = "All";
             if(state.pageNum !== 1){
                 state.pageNum = 1
             }
@@ -187,8 +187,8 @@ const actions = {
 	getTableData({ commit }, bool) {
 		let obj = { pageNum: state.pageNum, pageSize: state.pageSize };
 		if (state.createTime !== '') obj.createTime = state.createTime;
-		if (state.searchKeyword !== '全部' && state.dashboardJumpStatus === "全部") obj.jobStatus= state.searchKeyword;
-		if(state.searchKeyword === '全部' && state.dashboardJumpStatus!=="全部") obj.jobStatus = state.dashboardJumpStatus;
+		if (state.searchKeyword !== 'All' && state.dashboardJumpStatus === "All") obj.jobStatus= state.searchKeyword;
+		if(state.searchKeyword === 'All' && state.dashboardJumpStatus!=="All") obj.jobStatus = state.dashboardJumpStatus;
         let axiosrequest = axiosgetType ? axiospost : axiosget;
 		// commit('updateTableLoading', true);
         console.log(obj,"getTableData => obj----");

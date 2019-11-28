@@ -71,7 +71,7 @@ const mutations = {
         if(Object.keys(data).length > 0){
             Object.keys(data).forEach((item,index)=>{
                 state.SUTAmountData.push({
-                    name:item,
+                    name:item ==='pnfcount'?'PNF Count':(item ==='nvficount'?'NFVI Count':'VNF Count'),
                     y:data[item],
                     color:state.SUTAmountColors[index]
                 });
@@ -83,14 +83,14 @@ const mutations = {
         if(Object.keys(data).length > 0){
             Object.keys(data).forEach((item,index)=>{
                 state.jobAmountData.push({
-                    name:item,
+                    name:item ==='successcount'?'DONE':'FAILED',
                     y:data[item],
                     color:state.jobAmountColors[index],
                     events: {
                         click: () => {
                             console.log("click:", state.jobAmountClickText[index]);
                             window.location.href =
-                                window.location.origin + "/#/testjobmgt?status=" + state.jobAmountClickText[index];
+                                window.location.origin +window.location.pathname+ "/#/testjobmgt?status=" + state.jobAmountClickText[index];
                         }
                     }
                 });
@@ -102,7 +102,7 @@ const mutations = {
         if(Object.keys(data).length > 0){
             Object.keys(data).forEach((item,index)=>{
                 state.testEnvAmountData.push({
-                    name:item,
+                    name:item ==='instcount'?'INST Count':(item ==='vimcount'?'VIM Count':'VNFM Count'),
                     y:data[item],
                     color:state.testEnvAmountColors[index]
                 });

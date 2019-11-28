@@ -128,8 +128,8 @@ export default {
     },
       handleSelectStatusChange(val){
         console.log(val,"val---")
-          this.updateDashboardJumpStatus("全部")
-          if(val === '全部')this.clearSearchKeyword(val);
+          this.updateDashboardJumpStatus("All")
+          if(val === 'All')this.clearSearchKeyword(val);
           this.setFilter({
               key: val
           });
