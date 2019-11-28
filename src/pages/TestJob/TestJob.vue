@@ -104,10 +104,10 @@ export default {
     ]),
     ...mapMutations("testJob", ["setIsShow", "setFilter","updateDashboardJumpStatus","clearSearchKeyword"]),
     initTestJobTable() {
-      this.getTableData();
-      // this.tableQueryTimer = setInterval(() => {
-      //   this.getTableData();
-      // }, 5000);
+      this.getTableData({bool:false});
+      this.tableQueryTimer = setInterval(() => {
+        this.getTableData({bool:false,loading:false});
+      }, 5000);
     },
     handleCreate() {
         this.isEdit = false;
@@ -124,7 +124,7 @@ export default {
     },
     handleSelectCreateTime(date, d) {
       this.setFilter({ time: d });
-      this.getTableData(true);
+      this.getTableData({bool:true});
     },
       handleSelectStatusChange(val){
         console.log(val,"val---")
@@ -133,7 +133,7 @@ export default {
           this.setFilter({
               key: val
           });
-          this.getTableData(true);
+          this.getTableData({bool:true});
       },
     handleActions(action, data) {
       if (action === "Start") this.handleStart(data);
@@ -211,7 +211,7 @@ export default {
     },
     handlePageChange(pageObj) {
       this.setFilter({ pageObj });
-      this.getTableData(true);
+      this.getTableData({bool:true});
     },
     handleStop(data) {
       // The analog call interface changes a single piece of data in a single table

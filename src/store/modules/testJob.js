@@ -184,15 +184,15 @@ const mutations = {
 }
 
 const actions = {
-	getTableData({ commit }, bool) {
+	getTableData({ commit }, {bool,loading = true}) {
 		let obj = { pageNum: state.pageNum, pageSize: state.pageSize };
 		if (state.createTime !== '') obj.createTime = state.createTime;
 		if (state.searchKeyword !== 'All' && state.dashboardJumpStatus === "All") obj.jobStatus= state.searchKeyword;
 		if(state.searchKeyword === 'All' && state.dashboardJumpStatus!=="All") obj.jobStatus = state.dashboardJumpStatus;
         let axiosrequest = axiosgetType ? axiospost : axiosget;
-		// commit('updateTableLoading', true);
-        console.log(obj,"getTableData => obj----");
+		if(loading)commit('updateTableLoading', true);
 		axiosrequest(API.testJobMgt.testJobTable, obj).then((res) => {
+            if(loading)commit('updateTableLoading', false);
 			if (res.code === 200) {
 				state.pagination = {
 					current: state.pageNum,
@@ -204,7 +204,6 @@ const actions = {
 					item.actions = [item.status === "RUNNING" ? 'Stop' : 'Start','Edit', 'Delete', 'Download', 'More']
 					return item
 				})
-				// commit('updateTableLoading', false);
 				commit('updateTableData', tableData)
 				if (bool) commit('updateSuccessMessage', 'Successfully get table data')
 			} else if (bool) commit('updateFailedMessage', 'Network exception, please try again')
