@@ -193,28 +193,18 @@ export default {
         this.selectedSUTType = "";
         this.selectedSUTName = "";
         this.selectedSpecification = "";
-      this.getEditTestJob({});
         this.keyList.forEach(item => {
           this.form.setFieldsValue({ [item]: "" });
         });
+        console.log(this.testJobSingleData,"visible----this.testJobSingleData")
       }else {
           this.count++;
-          if (this.isEdit && this.count > 1) {
-              this.form.setFieldsValue({
-                  JobName: this.testJobSingleData.jobName,
-                  JobDescription: this.testJobSingleData.remark,
-                  SUTType: this.testJobSingleData.sut.flagName,
-                  SUTName: this.testJobSingleData.sut.name,
-                  TestSpecification:this.testJobSingleData.spec.name,
-                  TestVIMENV: this.testJobSingleData.vim.cloudOwner,
-                  TestVNFMENV: this.testJobSingleData.vnfm.name,
-                  checkboxGroup:this.initcheckboxGroup
-              });
-          }
+
       }
     },
       testJobSingleData(val) {
           if(Object.keys(val).length > 0){
+              console.log(this.testJobSingleData,"val---testJobSingleData")
               this.initSUTType = {
                   name:this.testJobSingleData.sut.flagName,
                   code:this.testJobSingleData.sut.flag
@@ -228,15 +218,36 @@ export default {
                   code:this.testJobSingleData.spec.id
               };
               this.initTestVIMENV = {
-                  name: this.testJobSingleData.vim.cloudOwner,
-                  code: this.testJobSingleData.vim.id
+                  name: this.testJobSingleData.vim?this.testJobSingleData.vim.cloudOwner:'',
+                  code: this.testJobSingleData.vim?this.testJobSingleData.vim.id: ''
               };
               this.initTestVNFMENV = {
-                  name:this.testJobSingleData.vnfm.name,
-                  code:this.testJobSingleData.vnfm.id
+                  name:this.testJobSingleData.vnfm?this.testJobSingleData.vnfm.name: '',
+                  code:this.testJobSingleData.vnfm?this.testJobSingleData.vnfm.id: ''
               };
+              // setTimeout()
+              if (this.isEdit && this.count > 1) {
+                  console.log(this.testJobSingleData,"vibiliti---this.testJobSingleData")
+                  this.form.setFieldsValue({
+                      JobName: this.testJobSingleData.jobName,
+                      JobDescription: this.testJobSingleData.remark,
+                      SUTType: this.testJobSingleData.sut.flagName,
+                      SUTName: this.testJobSingleData.sut.name,
+                      TestSpecification:this.testJobSingleData.spec.name,
+                      TestVIMENV: this.testJobSingleData.vim?this.testJobSingleData.vim.cloudOwner:'',
+                      TestVNFMENV: this.testJobSingleData.vnfm?this.testJobSingleData.vnfm.name: ''
+                  });
+              }
           }
-      }
+      },
+      // initcheckboxGroup(val){
+      //     if(val.length>0 && this.isEdit && this.count > 1){
+      //         console.log(val,"val--initcheckboxGroup")
+      //         this.form.setFieldsValue({
+      //             checkboxGroup:val
+      //         });
+      //     }
+      // }
   },
   created() {
     this.keyList = this.formList.map(item => {
@@ -252,10 +263,10 @@ export default {
       "getTestCase",
         "getEditTestJob"
     ]),
-    ...mapMutations("testJob", ["clean"]),
+    ...mapMutations("testJob", ["clean","setIsShow"]),
     onClose() {
       this.visible = false;
-      this.$emit("close");
+      this.setIsShow(false);
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
@@ -266,7 +277,6 @@ export default {
             values.TestSpecification = (values.TestSpecification === this.initSpecification.name)?this.initSpecification.code:values.TestSpecification;
             values.TestVIMENV = (values.TestVIMENV === this.initTestVIMENV.name)?this.initTestVIMENV.code:values.TestVIMENV;
             values.TestVNFMENV = (values.TestVNFMENV === this.initTestVNFMENV.name)?this.initTestVNFMENV.code:values.TestVNFMENV;
-            console.log(values,"handleSubmit----")
 	}
           this.createrTestJobMGT({isEdit,values});
           this.visible = false;

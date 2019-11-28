@@ -25,7 +25,7 @@ const state = {
 	tableData: [],
 	pagination: {},
 	percent: 0,
-	status: 'normal',
+	statusText: 'normal',
 	isJobDetail: false,
     searchKeyword:'',
 	createTime: '',
@@ -107,6 +107,8 @@ const mutations = {
 		state.specificationSpin = false
 		state.testCaseList = []
 		state.testCaseSpin = false
+        state.testJobSingleData = {}
+        state.initcheckboxGroup = []
         state.VNFMOption = []
 		state.VIMOption = []
 	},
@@ -115,7 +117,7 @@ const mutations = {
 	},
 	updateProgress(state, { percent, status }) {
 		if (state.percent !== percent) state.percent = percent
-		if (state.status !== status) state.status = status
+		if (state.statusText !== status) state.statusText = status
 	},
 	changeComponent(state, bool) {
 		state.isJobDetail = bool
@@ -170,14 +172,21 @@ const mutations = {
     },
     updateTestJobSingleData(state, data) {
         state.testJobSingleData = data;
-        state.initcheckboxGroup = data.cases.map((item) => {
-            return item.id
-        });
-        console.log(state.initcheckboxGroup,"state.initcheckboxGroup")
+        if(Object.keys(data).length>0){
+            state.initcheckboxGroup = data.cases.map((item) => {
+                return item.id
+            });
+        }
     },
     updateDashboardJumpStatus(state, data) {
         state.dashboardJumpStatus = data;
-    }
+    },
+    clearSearchKeyword(state, data){
+        state.searchKeyword = data
+	},
+	updateInitcheckboxGroup(state, data){
+        state.initcheckboxGroup = data;
+	}
 }
 
 const actions = {
@@ -227,6 +236,7 @@ const actions = {
 		if (values.TestVIMENV) body.vimId = values.TestVIMENV;
 		if (values.TestVNFMENV) body.vnfmId = values.TestVNFMENV;
 		let jobId = isEdit ? state.testJobSingleData.jobId : "";
+		if(isEdit)body.jobId =jobId;
         let url = isEdit ? API.testJobMgt.testJobUpdate.replace(":jobId",jobId) : API.testJobMgt.testJobInsert;
         let axiosType = isEdit ? axiosput : axiospost;
         axiosType(url, body)
@@ -374,6 +384,7 @@ const actions = {
 				if (res.code === 200) {
 					commit('updateSuccessMessage', 'Successfully started testing');
 					data.status = "RUNNING";
+					data.jobStatus = "STARTED";
 					data.actions[0] = 'Stop';
 					data.jobId = res.body.jobId;
 					data.executionStartTime = res.body.executionStartTime;
@@ -462,6 +473,7 @@ const actions = {
         axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
             .then(res => {
                 if (res.code === 200) {
+                    console.log(res.body,"res.body")
                     commit('updateTestJobSingleData', res.body);
                     dispatch("getTestCase",{TestSpecification: res.body.spec.id, message: this.$message})
                 }

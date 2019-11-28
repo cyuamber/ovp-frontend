@@ -104,12 +104,12 @@ export default {
       "getVIMOption",
         "getEditTestJob"
     ]),
-    ...mapMutations("testJob", ["setIsShow", "setFilter","updateDashboardJumpStatus"]),
+    ...mapMutations("testJob", ["setIsShow", "setFilter","updateDashboardJumpStatus","clearSearchKeyword"]),
     initTestJobTable() {
       this.getTableData();
-      this.tableQueryTimer = setInterval(() => {
-        this.getTableData();
-      }, 5000);
+      // this.tableQueryTimer = setInterval(() => {
+      //   this.getTableData();
+      // }, 5000);
     },
     handleCreate() {
         this.isEdit = false;
@@ -129,12 +129,18 @@ export default {
       this.getTableData(true);
     },
       handleSelectStatusChange(val){
-          this.setFilter({
-              key: val,
-              isSearch: true,
-              message: this.$message
-          });
-        this.getTableData(true);
+        console.log(val,"val---")
+          if(val!==undefined){
+              this.setFilter({
+                  key: val,
+                  isSearch: true,
+                  message: this.$message
+              });
+          }else {
+              this.clearSearchKeyword('');
+              this.getTableData(true);
+          }
+
       },
     handleActions(action, data) {
       if (action === "Start") this.handleStart(data);

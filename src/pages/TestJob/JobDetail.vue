@@ -8,7 +8,7 @@
     <div class="job-detail__progress-container">
       <a-progress
         :percent="percent"
-        :status="status"
+        :status="statusText"
         :showInfo="true"
         class="job-detail__progress"
       />
@@ -32,7 +32,7 @@
           </div>
             <div class="job-detail__item-container">
                 <p class="job-detail__item-title">Test Job Status:</p>
-                <p class="job-detail__item-text">{{status}}</p>
+                <p class="job-detail__item-text">{{statusText}}</p>
             </div>
             <testCasePie />
         </a-card>
@@ -87,7 +87,7 @@ export default {
   computed: {
     ...mapState({
       percent: state => state.testJob.percent,
-      status: state => state.testJob.status,
+        statusText: state => state.testJob.statusText,
       detailTestCase: state => state.testJob.detailTestCase,
         executionStartTime: state => state.testJob.executionStartTime,
     }),
@@ -126,6 +126,7 @@ export default {
     ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime"]),
     initJobDetail() {
       // this.initWebSocket();
+        console.log(this.currentJob,"currentJob")
       if (this.currentJob.jobStatus !== "CREATED") {
         this.getProgress({jobId: this.currentJob.jobId});
           this.progressTimer = setInterval(() => {

@@ -26,7 +26,7 @@ const router = {
     actions: {
         getCurrentLanguage({ commit }, obj) {
             axiosget(API.getCurrentLanguage, obj).then(res => {
-                if (res.statusCode === "100") {
+                if (res.code === 200) {
                     if (Object.keys(obj).length === 0) commit('updateLanguage', res.body);
                     else commit('updateLanguage', obj.language)
                 }

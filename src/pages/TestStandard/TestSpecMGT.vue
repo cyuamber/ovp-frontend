@@ -48,15 +48,15 @@
           <span slot="status" slot-scope="status">
             <span
               class="test-case__showState"
-              :style="{backgroundColor: status==='disable'? '#7ED321': '#d0021b'}"
-              :title="status=== 'disable'? 'Available': 'unavailable'"
+              :style="{backgroundColor: status==='enable'? '#7ED321': '#d0021b'}"
+              :title="status=== 'enable'? 'enable': 'disable'"
             ></span>
           </span>
           <span slot="action" slot-scope="action,record">
             <a-switch
-                    checkedChildren="Available"
-                    unCheckedChildren="unavailable"
-                    :defaultChecked="record.status=== 'disable'"
+                    checkedChildren="enable"
+                    unCheckedChildren="disable"
+                    :defaultChecked="record.status=== 'enable'"
                     @change="(() => activationModal(record))"
             />
         </span>
@@ -140,7 +140,7 @@ export default {
       this.getTableData(obj);
     },
     caseMgtTableShow(expanded, record) {
-        this.getTestCaseTableData(record);
+        this.getTestCaseTableData({record,expanded});
     },
     // Filter by creating time
     onChange(date, d) {
@@ -161,7 +161,7 @@ export default {
       if (item === "Edit") {
           this.updateVisible(true);
         this.isEdit = true;
-        this.getTestCaseTableData(testSpecSingleData);
+        this.getTestCaseTableData({record:testSpecSingleData,expanded:false});
         this.getTestSpec(testSpecSingleData);
       } else {
         this.$confirm({

@@ -107,6 +107,7 @@ export default {
             subSutType: "",
             PublishORG: ""
           });
+          console.log(this.initcheckboxGroup,"initcheckboxGroup")
         }
       }
     }
@@ -180,6 +181,11 @@ export default {
             this.spin = false;
         }
     },
+      initcheckboxGroup(val){
+          this.form.setFieldsValue({
+              checkboxGroup:val
+          });
+      }
   },
   methods: {
     ...mapActions("testSpecMGT", [
@@ -230,16 +236,16 @@ export default {
     handleSubmit() {
       this.form.validateFields((err, values) => {
         if (!err) {
-            console.log(values.SUTType,this.initSUTTypeValue,"handleSubmit.data---")
           let data = {
             name: values.Name,
             version: values.Version,
-            sutType: (values.SUTType === this.initSUTTypeValue) && this.isEdit?this.codeConversion(values.SUTType,this.SUTOptions):values.SUTType,
-            subSutType: (values.subSutType === this.initVNFtypeValue) && this.isEdit?this.codeConversion(values.SUTType,this.VNFOptions):values.subSutType,
+            sutType: values.SUTType === this.initSUTTypeValue && this.isEdit?this.codeConversion(values.SUTType,this.SUTOptions):values.SUTType,
+            subSutType: values.subSutType === this.initVNFtypeValue && this.isEdit?this.codeConversion(values.subSutType,this.VNFOptions):values.subSutType,
             caseId:values.checkboxGroup ||[],
             publishOrg: values.PublishORG
           };
           let { isEdit } = this;
+          if(isEdit)data.id = this.testSpecSingleData.id;
           this.createOrEditTestSpec({ isEdit, data }).then(
             () => {
               this.form.resetFields();

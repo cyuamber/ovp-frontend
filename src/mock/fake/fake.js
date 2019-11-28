@@ -730,7 +730,7 @@ module.exports = {
     },
     getCurrentLanguage: {
         body: "en_US",
-        statusCode: "100",
+        code: 200,
         message: "OK"
     }
 }
