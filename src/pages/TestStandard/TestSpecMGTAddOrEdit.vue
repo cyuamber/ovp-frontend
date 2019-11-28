@@ -201,8 +201,14 @@ export default {
       this.getVNFOptions({ SUTType: val })
     },
       handleSelectSubSUTTypeChange(val){
+          let sutCode = null;
+          if(this.isEdit){
+              sutCode = this.form.getFieldValue("SUTType") === this.initSUTTypeValue?this.codeConversion(this.form.getFieldValue("SUTType"),this.SUTOptions):this.form.getFieldValue("SUTType")
+          }else {
+              sutCode = this.form.getFieldValue("SUTType")
+          }
           this.getTestCaseList({
-              sutCode:this.form.getFieldValue("SUTType") === this.initSUTTypeValue?this.codeConversion(this.form.getFieldValue("SUTType"),this.SUTOptions):this.form.getFieldValue("SUTType"),
+              sutCode:sutCode,
               subSutCode:val,
               message: this.$message
           });

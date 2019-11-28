@@ -7,7 +7,7 @@
       </a-breadcrumb>
     </div>
     <div>
-      <a-button :style="headerbuttonStyle" @click="handleCreateTestJob">{{$t('T.CreateTestJob')}}</a-button>
+      <!--<a-button :style="headerbuttonStyle" @click="handleCreateTestJob">{{$t('T.CreateTestJob')}}</a-button>-->
       <a-dropdown>
         <a-menu slot="overlay" @click="handleMenuClick">
           <!-- <a-menu-item key="1">
@@ -90,14 +90,23 @@ export default {
         path: "/login"
       });
     },
-    handleCreateTestJob() {
-      if (this.$route.path !== "/testjobmgt") {
-        this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
-        this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
-        this.$router.push({ path: "testjobmgt" });
-      }
-      this.$store.commit("testJob/setIsShow", true);
-    },
+    // handleCreateTestJob() {
+    //   if (this.$route.path !== "/testjobmgt") {
+    //     this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
+    //     this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+    //     this.$router.push({ path: "testjobmgt" });
+    //   }
+    //   this.$store.commit("testJob/setIsShow", true);
+    //   this.$store.dispatch("testJob/getSUTType",{
+    //       message: this.$message
+    //   });
+    //   this.$store.dispatch("testJob/getVNFMOption", {
+    //       message: this.$message
+    //   });
+    //   this.$store.dispatch("testJob/getVIMOption", {
+    //       message: this.$message
+    //   });
+    // },
     handleLangChange(val) {
       let obj = { language: val === "en_US" ? "zh_CN" : "en_US" };
       this.$store.dispatch("getCurrentLanguage", obj);
