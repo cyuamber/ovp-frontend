@@ -76,15 +76,19 @@ export default {
       pagination: state => state.testJob.pagination,
       tableLoading: state => state.testJob.tableLoading,
         testJobSingleData: state => state.testJob.testJobSingleData,
-        dashboardJumpStatus: state => state.testJob.dashboardJumpStatus,
         lang: state => state.router.lang
-    })
+    }),
+      dashboardJumpStatus: {
+          get() {
+              return this.$store.state.testJob.dashboardJumpStatus;
+          }
+      }
   },
   components: { Drawer, Loading },
     created(){
         if(window.location.href.includes("?")){
-            this.dashboardJumpStatus = window.location.href.split("?")[1].split("=")[1];
-            this.updateDashboardJumpStatus(this.dashboardJumpStatus)
+            let JumpStatus = window.location.href.split("?")[1].split("=")[1];
+            this.updateDashboardJumpStatus(JumpStatus)
         }
     },
   mounted() {
