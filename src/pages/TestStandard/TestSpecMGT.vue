@@ -54,18 +54,16 @@
           </span>
           <span slot="action" slot-scope="action,record">
             <a-switch
-                    checkedChildren="enable"
-                    unCheckedChildren="disable"
-                    :checked="record.status=== 'enable'"
-                    @click="(() => activationModal(record))"
+              checkedChildren="enable"
+              unCheckedChildren="disable"
+              :checked="record.status=== 'enable'"
+              @click="(() => activationModal(record))"
             />
-        </span>
+          </span>
         </a-table>
       </a-table>
     </div>
-    <TestSpecMGTAddOrEdit
-      :isEdit="isEdit"
-    />
+    <TestSpecMGTAddOrEdit :isEdit="isEdit" />
   </div>
 </template>
 <script>
@@ -99,7 +97,7 @@ export default {
       loadingMessage: state => state.testSpecMGT.loadingMessage,
       tableLoading: state => state.testSpecMGT.tableLoading,
       testCasetableLoading: state => state.testSpecMGT.testCasetableLoading,
-        visible: state => state.testSpecMGT.visible
+      visible: state => state.testSpecMGT.visible
     })
   },
   mounted() {
@@ -114,16 +112,16 @@ export default {
       "getPagination",
       "clearPagination",
       "getSUTOptions",
-        "getVNFOptions",
-        "activateTestCase"
+      "getVNFOptions",
+      "activateTestCase"
     ]),
-    ...mapMutations("testSpecMGT", ["updatecaseMgtTableData","updateVisible"]),
+    ...mapMutations("testSpecMGT", ["updatecaseMgtTableData", "updateVisible"]),
     initTestStandardTable() {
       this.getSUTOptions();
       this.getTableData({});
     },
     handleCreateClick() {
-        this.updateVisible(true);
+      this.updateVisible(true);
       this.isEdit = false;
       this.getTestSpec("");
     },
@@ -140,7 +138,7 @@ export default {
       this.getTableData(obj);
     },
     caseMgtTableShow(expanded, record) {
-        this.getTestCaseTableData({record,expanded});
+      this.getTestCaseTableData({ record, expanded });
     },
     // Filter by creating time
     onChange(date, d) {
@@ -159,9 +157,12 @@ export default {
     },
     showEditOrDeleteModal(item, testSpecSingleData) {
       if (item === "Edit") {
-          this.updateVisible(true);
+        this.updateVisible(true);
         this.isEdit = true;
-        this.getTestCaseTableData({record:testSpecSingleData,expanded:false});
+        this.getTestCaseTableData({
+          record: testSpecSingleData,
+          expanded: false
+        });
         this.getTestSpec(testSpecSingleData);
       } else {
         this.$confirm({
@@ -176,18 +177,18 @@ export default {
         });
       }
     },
-      activationModal(testCaseSingleData){
-          this.$confirm({
-              title: "Are you sure activate this Case?",
-              content: "Id: " + testCaseSingleData.id,
-              okText: "Yes",
-              okType: "danger",
-              cancelText: "No",
-              onOk: () => {
-                  this.activateTestCase(testCaseSingleData);
-              }
-          });
-      }
+    activationModal(testCaseSingleData) {
+      this.$confirm({
+        title: "Are you sure activate this Case?",
+        content: "Id: " + testCaseSingleData.id,
+        okText: "Yes",
+        okType: "danger",
+        cancelText: "No",
+        onOk: () => {
+          this.activateTestCase(testCaseSingleData);
+        }
+      });
+    }
   }
 };
 </script>

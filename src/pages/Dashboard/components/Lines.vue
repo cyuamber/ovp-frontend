@@ -4,8 +4,6 @@
   </div>
 </template>
 <script>
-// import moment from "moment";
-// import util from "../../../utils/utils";
 import { Chart } from "highcharts-vue";
 import { mapState } from "vuex";
 export default {
@@ -14,85 +12,56 @@ export default {
     linechart: Chart
   },
   data() {
-      return {
-          chartOptions: {}
-      };
+    return {
+      chartOptions: {}
+    };
   },
   computed: {
-      ...mapState({
-          linesData: state => state.dashBoard.linesData,
-      })
+    ...mapState({
+      linesData: state => state.dashBoard.linesData
+    })
   },
-  watch:{
-      linesData(val){
-          if(val){
-              this.initlines();
-          }
+  watch: {
+    linesData(val) {
+      if (val) {
+        this.initlines();
       }
+    }
   },
   methods: {
-      initlines(){
-          this.chartOptions = {
-              title: {
-                  text: "Passed Test Case Amount in "+this.linesData.xAxis.length+" Days"
-              },
-              credits: {
-                  enabled: false
-              },
-              xAxis: [
-                  {
-                      categories: this.linesData.xAxis,
-                      crosshair: true
-                  }
-              ],
-                  yAxis: [
-                  {
-                      // Primary yAxis
-                      labels: {
-                          format: "{value}",
-                          style: {
-                              // color: Highcharts.getOptions().colors[1]
-                          }
-                      },
-                      title: {
-                          text: "",
-                          style: {
-                              // color: Highcharts.getOptions().colors[1]
-                          }
-                      }
-                  }
-                  // {
-                  //   // Secondary yAxis
-                  //   title: {
-                  //     text: "Pass rate",
-                  //     style: {
-                  //       // color: Highcharts.getOptions().colors[0]
-                  //     }
-                  //   },
-                  //   labels: {
-                  //     format: "{value} %",
-                  //     style: {
-                  //       // color: Highcharts.getOptions().colors[0]
-                  //     }
-                  //   },
-                  //   opposite: true
-                  // }
-              ],
-                  tooltip: {
-                  shared: true
-              },
-              legend: {
-                  // layout: "vertical",
-                  // align: "left",
-                  // x: 120,
-                  // verticalAlign: "top",
-                  // y: 100,
-                  // floating: true,
-                  // backgroundColor: "rgba(255,255,255,0.25)"
-              },
-              series: this.linesData.series
+    initlines() {
+      this.chartOptions = {
+        title: {
+          text: "Passed Test Case Amount in " + 7 + " Days"
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: [
+          {
+            categories: this.linesData.xAxis,
+            crosshair: true
           }
-      }
+        ],
+        yAxis: [
+          {
+            // Primary yAxis
+            labels: {
+              format: "{value}",
+              style: {}
+            },
+            title: {
+              text: ""
+            }
+          }
+        ],
+        tooltip: {
+          shared: true
+        },
+        legend: {},
+        series: this.linesData.series
+      };
+    }
   }
 };
 </script>

@@ -22,74 +22,74 @@ export default {
   components: {
     circleschart: Chart
   },
-    computed: {
-        ...mapState({
-            testJobCirclesData: state => state.dashBoard.testJobCirclesData,
-        })
-    },
-    watch:{
-        testJobCirclesData(val){
-            if(val){
-                this.initcircles();
-            }
-        }
-    },
-    data() {
+  computed: {
+    ...mapState({
+      testJobCirclesData: state => state.dashBoard.testJobCirclesData
+    })
+  },
+  watch: {
+    testJobCirclesData(val) {
+      if (val) {
+        this.initcircles();
+      }
+    }
+  },
+  data() {
     return {
       chartOPtions: {}
     };
   },
-    methods: {
-        initcircles(){
-            this.chartOPtions = {
-                chart: {
-                    plotBackgroundColor: null,
-                        plotBorderWidth: 0,
-                        plotShadow: false
-                },
-                title: {
-                    text: "Test job",
-                        align: "center",
-                        verticalAlign: "middle",
-                        y: 60
-                },
-                credits: {
-                    enabled: false
-                },
-                tooltip: {
-                    pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                            cursor: "pointer",
-                            dataLabels: {
-                            enabled: true,
-                                format: "<b>{point.name}</b>: {point.y:1f} ",
-                                distance: 50,
-                                style: {
-                                color: "white",
-                                    fontSize: 14
-                            }
-                        },
-                        startAngle: -90,
-                            endAngle: 90,
-                            center: ["50%", "75%"],
-                            size: "110%"
-                    }
-                },
-                series: [
-                    {
-                        type: "pie",
-                        name: "Browser share",
-                        colorByPoint: true,
-                        innerSize: "50%",
-                        data: this.testJobCirclesData
-                    }
-                ]
-            }
-        }
+  methods: {
+    initcircles() {
+      this.chartOPtions = {
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: 0,
+          plotShadow: false
+        },
+        title: {
+          text: "Test job",
+          align: "center",
+          verticalAlign: "middle",
+          y: 60
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: "pointer",
+            dataLabels: {
+              enabled: true,
+              format: "<b>{point.name}</b>: {point.y:1f} ",
+              distance: 50,
+              style: {
+                color: "white",
+                fontSize: 14
+              }
+            },
+            startAngle: -90,
+            endAngle: 90,
+            center: ["50%", "75%"],
+            size: "110%"
+          }
+        },
+        series: [
+          {
+            type: "pie",
+            name: "Browser share",
+            colorByPoint: true,
+            innerSize: "50%",
+            data: this.testJobCirclesData
+          }
+        ]
+      };
     }
+  }
 };
 </script>
 
@@ -102,7 +102,6 @@ export default {
   background: #fff;
   margin-bottom: 20px;
   padding: 30px;
-  // box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
   .progress {
     display: flex;
     margin-top: 20px;
