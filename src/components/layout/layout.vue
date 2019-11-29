@@ -31,6 +31,7 @@ const siderStyle = {
   maxWidth: "250px",
   position: "fixed",
   left: 0,
+  zIndex: 100,
   borderRight: "1px solid rgb(232, 232, 232)"
 };
 const layoutStyle = {
