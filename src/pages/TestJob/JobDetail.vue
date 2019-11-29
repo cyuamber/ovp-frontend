@@ -8,8 +8,8 @@
     <div class="job-detail__progress-container">
       <a-progress
         :percent="percent"
-        :status="statusText"
         :showInfo="true"
+        :status="progressStatus"
         class="job-detail__progress"
       />
       <a-button
@@ -20,49 +20,51 @@
         <a-icon type="sync" />Refresh
       </a-button>
     </div>
-    <div class="job-detail__content">
-      <div class="job-detail__info">
-        <a-card>
-          <h2 class="job-detail__info-title">Test Job Info</h2>
-          <div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
-            <p class="job-detail__item-title">{{item.title}}:</p>
-            <p
-              class="job-detail__item-text"
-            >{{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}</p>
+      <a-spin tip="Loading..." :spinning="detailLoading" size="large">
+        <div class="job-detail__content">
+          <div class="job-detail__info">
+            <a-card>
+              <h2 class="job-detail__info-title">Test Job Info</h2>
+              <div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
+                <p class="job-detail__item-title">{{item.title}}:</p>
+                <p
+                  class="job-detail__item-text"
+                >{{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}</p>
+              </div>
+                <div class="job-detail__item-container">
+                    <p class="job-detail__item-title">Test Job Status:</p>
+                    <p class="job-detail__item-text">{{this.statusText}}</p>
+                </div>
+                <testCasePie />
+            </a-card>
           </div>
-            <div class="job-detail__item-container">
-                <p class="job-detail__item-title">Test Job Status:</p>
-                <p class="job-detail__item-text">{{statusText}}</p>
-            </div>
-            <testCasePie />
-        </a-card>
-      </div>
-      <div class="job-detail__detail">
-        <a-card :hoverable="false">
-          <a-card-grid style="width: 100%" :hoverable="false">
-            <h2>Test Job Detail</h2>
-            <div class="job-detail__test-env">
-              <p>{{currentJob.remark}}</p>
-            </div>
-          </a-card-grid>
-          <div v-if="detailTestCase.length >0">
-            <a-card-grid
-              style="width: 100%"
-              v-for="(item,index) in detailTestCase"
-              :key="index"
-              :hoverable="false"
-            >
-              Case Name：{{item.caseEntity.name}}
-              <span
-                class="job-detail__testCase-status"
-                v-if="item.caseStatus!==null && item.caseStatus!==undefined"
-                :style="getCaseStatusStyle(item.caseStatus)"
-              ></span>
-            </a-card-grid>
+          <div class="job-detail__detail">
+            <a-card :hoverable="false">
+              <a-card-grid style="width: 100%" :hoverable="false">
+                <h2>Test Job Detail</h2>
+                <div class="job-detail__test-env">
+                  <p>{{currentJob.remark}}</p>
+                </div>
+              </a-card-grid>
+              <div v-if="detailTestCase.length >0">
+                <a-card-grid
+                  style="width: 100%"
+                  v-for="(item,index) in detailTestCase"
+                  :key="index"
+                  :hoverable="false"
+                >
+                  Case Name：{{item.caseEntity.name}}
+                  <span
+                    class="job-detail__testCase-status"
+                    v-if="item.caseStatus!==null && item.caseStatus!==undefined"
+                    :style="getCaseStatusStyle(item.caseStatus)"
+                  ></span>
+                </a-card-grid>
+              </div>
+            </a-card>
           </div>
-        </a-card>
-      </div>
-    </div>
+        </div>
+    </a-spin>
   </div>
 </template>
 
@@ -70,8 +72,8 @@
 import testCasePie from "./testCasePie";
 import { testJobColumns } from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
+// import SockJS from "sockjs-client";
+// import Stomp from "stompjs";
 export default {
   name: "JobDetail",
     components: { testCasePie },
@@ -80,12 +82,14 @@ export default {
       statusColor: "",
       stompClient: "",
       timer: "",
-      caseStatusTimer: "",
-    progressTimer:""
+      // caseStatusTimer: "",
+    progressTimer:"",
+    progressStatus:'normal'
     };
   },
   computed: {
     ...mapState({
+        detailLoading: state => state.testJob.detailLoading,
       percent: state => state.testJob.percent,
         statusText: state => state.testJob.statusText,
       detailTestCase: state => state.testJob.detailTestCase,
@@ -104,6 +108,14 @@ export default {
       return this.$route.params;
     }
   },
+    watch:{
+        percent(val){
+            if(val === 100){
+                clearInterval(this.progressTimer);
+            }
+            this.progressStatus = val ===undefined ||val ===null || val !==100?"normal":"success"
+        }
+    },
   created() {
     this.changeComponent(true);
     if (!this.$store.state.router.breadcrumbArr.length) {
@@ -114,21 +126,9 @@ export default {
   mounted() {
     this.initJobDetail();
   },
-  destroyed() {
-    this.changeComponent(false);
-    this.updateDetailTestCase([]);
-    this.updateTestCasePieData([
-        { name: "DONE", y: 0, color: "#cae76e" },
-        { name: "FAILED", y: 0, color: "#e94e75" }
-    ]);
-    this.updateProgress({
-      percent: 0,
-      status: "normal"
-    });
-  },
   methods: {
     ...mapActions("testJob", ["getProgress", "detailTestCaseJop"]),
-    ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime","updateDetailTestCase","updateTestCasePieData"]),
+    ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime","updateDetailTestCase","updateTestCasePieData","updateDetailLoading"]),
     initJobDetail() {
       // this.initWebSocket();
         console.log(this.currentJob,"currentJob")
@@ -137,22 +137,23 @@ export default {
           this.progressTimer = setInterval(() => {
               this.getProgress({jobId: this.currentJob.jobId});
           }, 5000);
-        this.detailTestCaseJop({jobId: this.currentJob.jobId});
-
-        this.caseStatusTimer = setInterval(() => {
-          this.detailTestCaseJop({
-            jobId: this.currentJob.jobId,
-            executionStartTime: this.currentJob.executionStartTime
-          });
-        }, 5000);
       }
     },
     handleBack() {
-      // this.$router.back()
-      this.$emit("close");
-      clearInterval(this.progressTimer);
-      clearInterval(this.caseStatusTimer);
+      // this.$emit("close");
+        clearInterval(this.progressTimer);
         this.updateExecutionStartTime('');
+        this.updateDetailLoading(true);
+        this.changeComponent(false);
+        this.updateDetailTestCase([]);
+        this.updateTestCasePieData([
+            { name: "DONE", y: 0, color: "#cae76e" },
+            { name: "FAILED", y: 0, color: "#e94e75" }
+        ]);
+        this.updateProgress({
+            percent: 0,
+            status: ""
+        });
       this.$router.push("/testjobmgt");
     },
     getCaseStatusStyle(status) {
@@ -170,58 +171,68 @@ export default {
       // this.initWebSocket();
         this.getProgress({jobId: this.currentJob.jobId});
     },
-    initWebSocket() {
-      //initialization weosocket
-      this.connection();
-      let that = this;
-      this.timer = setInterval(() => {
-        try {
-          that.stompClient.send("Test if the connection is normal");
-        } catch (err) {
-          console.log("Disconnected: " + err);
-          that.connection();
-        }
-      }, 5000);
-    },
-    connection() {
-      let socket = new SockJS("/webSocketEndPoint");
-      // let socket = new SockJS('http://localhost:8080');
-      this.stompClient = Stomp.over(socket);
-      let headers = {
-        Authorization: ""
-      };
-      this.stompClient.connect(
-        headers,
-        () => {
-          this.stompClient.subscribe(
-            "/topic/status",
-            msg => {
-              console.log(msg, "socket-msg");
-              this.updateProgress({
-                percent: msg.progress,
-                status: msg.state
-              });
-            },
-            headers
-          );
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    },
-    disconnect() {
-      if (this.stompClient) {
-        this.stompClient.disconnect();
-      }
-    }
+    // initWebSocket() {
+    //   //initialization weosocket
+    //   this.connection();
+    //   let that = this;
+    //   this.timer = setInterval(() => {
+    //     try {
+    //       that.stompClient.send("Test if the connection is normal");
+    //     } catch (err) {
+    //       console.log("Disconnected: " + err);
+    //       that.connection();
+    //     }
+    //   }, 5000);
+    // },
+    // connection() {
+    //   let socket = new SockJS("/webSocketEndPoint");
+    //   // let socket = new SockJS('http://localhost:8080');
+    //   this.stompClient = Stomp.over(socket);
+    //   let headers = {
+    //     Authorization: ""
+    //   };
+    //   this.stompClient.connect(
+    //     headers,
+    //     () => {
+    //       this.stompClient.subscribe(
+    //         "/topic/status",
+    //         msg => {
+    //           console.log(msg, "socket-msg");
+    //           this.updateProgress({
+    //             percent: msg.progress,
+    //             status: msg.state
+    //           });
+    //         },
+    //         headers
+    //       );
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   );
+    // },
+    // disconnect() {
+    //   if (this.stompClient) {
+    //     this.stompClient.disconnect();
+    //   }
+    // }
   },
   beforeDestroy: function() {
     // this.disconnect();
     // clearInterval(this.timer);
     clearInterval(this.progressTimer);
-    clearInterval(this.caseStatusTimer);
+    // clearInterval(this.caseStatusTimer);
     this.updateExecutionStartTime('');
+      this.changeComponent(false);
+      this.updateDetailTestCase([]);
+      this.updateTestCasePieData([
+          { name: "DONE", y: 0, color: "#cae76e" },
+          { name: "FAILED", y: 0, color: "#e94e75" }
+      ]);
+      this.updateProgress({
+          percent: 0,
+          status: ""
+      });
   }
 };
 </script>

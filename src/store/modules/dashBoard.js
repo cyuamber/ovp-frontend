@@ -12,14 +12,15 @@ const state = {
         legend: [],
         series: []
     },
-    testJobCirclesData: [],
-    SUTAmountData: [],
-    SUTAmountColors: ["#46b8e0", "#ffca52", "#34314b"],
-    jobAmountData: [],
-    jobAmountColors: ["#cae76e", "#e94e75"],
-    jobAmountClickText: ["DONE", "FAILED"],
-    testEnvAmountData: [],
-    testEnvAmountColors: ["#ea9e9f", "#f9ebc9", "#a89c8e"],
+    linesxAxisLength:0,
+    testJobCirclesData:[],
+    SUTAmountData:[],
+    SUTAmountColors:["#46b8e0","#ffca52","#34314b"],
+    jobAmountData:[],
+    jobAmountColors:["#cae76e","#e94e75"],
+    jobAmountClickText:["DONE","FAILED"],
+    testEnvAmountData:[],
+    testEnvAmountColors:["#ea9e9f","#f9ebc9","#a89c8e"],
 };
 const mutations = {
     updateLiveData(state, data) {
@@ -56,6 +57,9 @@ const mutations = {
             };
         }
         // console.log(state.linesData, "----> state.linesData")
+    },
+    updateLinesxAxisLength(state, data){
+        state.linesxAxisLength = data;
     },
     updateTestJobCirclesData(state, data) {
         if (Object.keys(data).length > 0) {
@@ -129,6 +133,7 @@ const actions = {
         axiosget(API.dashboard.PassCaseAmount7Days).then(res => {
             if (res.code === 200) {
                 commit('updateLinesData', res.body);
+                commit('updateLinesxAxisLength', res.body.length);
             } else message.error('Network exception, please try again')
         },
             () => {

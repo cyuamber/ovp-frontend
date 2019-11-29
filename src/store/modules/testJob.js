@@ -13,6 +13,7 @@ const state = {
 	isShow: false,
 	loadingMessage: null,
 	tableLoading: false,
+    detailLoading:true,
 	SUTTypeList: [],
 	SUTNameList: [],
 	getSUTName: false,
@@ -40,7 +41,7 @@ const state = {
         { name: "FAILED", y: 0, color: "#e94e75" }
     ],
 	testJobSingleData:{},
-	dashboardJumpStatus:null,
+	dashboardJumpStatus:'All',
     initcheckboxGroup:[]
 }
 
@@ -60,6 +61,9 @@ const mutations = {
 			toast
 		}
 	},
+    updateDetailLoading(state,detailLoading){
+        state.detailLoading = detailLoading;
+    },
 	updataSUTType(state, { list }) {
 		if (list) {
 			state.SUTTypeList = list
@@ -116,8 +120,8 @@ const mutations = {
 		state.tableData = tableData
 	},
 	updateProgress(state, { percent, status }) {
-		if (state.percent !== percent) state.percent = percent
-		if (state.statusText !== status) state.statusText = status
+        state.percent = percent;
+        state.statusText = status
 	},
 	changeComponent(state, bool) {
 		state.isJobDetail = bool
@@ -387,7 +391,7 @@ const actions = {
 				}
 			})
 	},
-    getProgress({ commit },data) {
+    getProgress({ dispatch,commit },data) {
         axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
             .then(res => {
                 if (res.code === 200) {
@@ -396,7 +400,12 @@ const actions = {
                         percent: res.body.jobProgress,
                         status: res.body.jobStatus
                     });
-                    commit('updateExecutionStartTime', res.body.executionStartTime)
+                    console.log(res.body,"getProgress---res.body");
+                    if(res.body.jobProgress!==null && res.body.jobProgress!==undefined && res.body.jobProgress!==0){
+                        commit('updateDetailLoading', false);
+                        commit('updateExecutionStartTime', res.body.executionStartTime);
+                        dispatch("detailTestCaseJop",{jobId: res.body.jobId,executionStartTime:res.body.executionStartTime})
+                    }
                 }
             });
     },
@@ -404,7 +413,7 @@ const actions = {
         if(state.executionStartTime ==="")return false
         else {
             // Simulation request
-            axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", state.executionStartTime))
+            axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", data.executionStartTime))
                 .then(res => {
                     if (res.code === 200) {
                         commit('updateSuccessMessage', 'Successfully detail testing');

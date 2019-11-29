@@ -46,7 +46,7 @@
         </span>
       </a-table>
     </div>
-    <Drawer :isShow="isShow" :isEdit="isEdit"/>
+    <Drawer :isShow="isShow" :isEdit="isEdit" />
   </div>
 </template>
 
@@ -65,8 +65,7 @@ export default {
         statusOptions: statusOptions,
       loading: false,
       tableQueryTimer: "",
-        isEdit: false,
-        dashboardJumpStatus:statusOptions[0]
+        isEdit: false
     };
   },
   computed: {
@@ -77,6 +76,7 @@ export default {
       pagination: state => state.testJob.pagination,
       tableLoading: state => state.testJob.tableLoading,
         testJobSingleData: state => state.testJob.testJobSingleData,
+        dashboardJumpStatus: state => state.testJob.dashboardJumpStatus,
         lang: state => state.router.lang
     })
   },
