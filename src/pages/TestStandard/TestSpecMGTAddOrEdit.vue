@@ -233,7 +233,8 @@ export default {
     handleCancel() {
       this.updateVisible(false);
     },
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
           let data = {

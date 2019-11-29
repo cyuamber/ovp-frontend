@@ -1,5 +1,5 @@
 export const T = {
-    "language":"EN",
+    "lang":"EN",
     "LOGIN":"登录",
     "Log in":"登录",
     "Change E-mail":"修改邮箱",

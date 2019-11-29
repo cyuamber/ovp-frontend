@@ -5,7 +5,7 @@ const router = {
         breadcrumbArr: [],
         currentMenu: [],
         langList: [],
-        language: 'en_US'
+        lang: 'en_US'
     },
     mutations: {
         setBreadcrumb(state, data) {
@@ -15,7 +15,7 @@ const router = {
             state.currentMenu = data
         },
         updateLanguage(state, data) {
-            state.language = data;
+            state.lang = data;
         },
     },
     getters: {
@@ -28,7 +28,7 @@ const router = {
             axiosget(API.getCurrentLanguage, obj).then(res => {
                 if (res.code === 200) {
                     if (Object.keys(obj).length === 0) commit('updateLanguage', res.body);
-                    else commit('updateLanguage', obj.language)
+                    else commit('updateLanguage', obj.lang)
                 }
             },
                 () => {

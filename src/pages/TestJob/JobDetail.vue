@@ -114,8 +114,13 @@ export default {
   mounted() {
     this.initJobDetail();
   },
-  destroyed() {
+  beforeDestroy() {
     this.changeComponent(false);
+    this.updateDetailTestCase([]);
+    this.updateTestCasePieData([
+        { name: "DONE", y: 0, color: "#cae76e" },
+        { name: "FAILED", y: 0, color: "#e94e75" }
+    ]);
     this.updateProgress({
       percent: 0,
       status: "normal"
@@ -123,7 +128,7 @@ export default {
   },
   methods: {
     ...mapActions("testJob", ["getProgress", "detailTestCaseJop"]),
-    ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime"]),
+    ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime","updateDetailTestCase","updateTestCasePieData"]),
     initJobDetail() {
       // this.initWebSocket();
         console.log(this.currentJob,"currentJob")

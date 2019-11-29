@@ -76,7 +76,8 @@ export default {
       tableData: state => state.testJob.tableData,
       pagination: state => state.testJob.pagination,
       tableLoading: state => state.testJob.tableLoading,
-        testJobSingleData: state => state.testJob.testJobSingleData
+        testJobSingleData: state => state.testJob.testJobSingleData,
+        lang: state => state.router.lang
     })
   },
   components: { Drawer, Loading },
@@ -198,7 +199,7 @@ export default {
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          this.download({jobId:data.jobId});
+          this.download({jobId:data.jobId,lang:this.lang});
         },
         onCancel() {
           console.log("Cancel");

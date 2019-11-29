@@ -366,7 +366,7 @@ const actions = {
 		})
 	},
 	download({ commit }, data) {
-        let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId);
+        let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId)+"?lang="+data.lang;
         console.log(window.location.protocol+"//"+window.location.host+url,"window.location.protocol--testJobDownLoad");
         window.open(window.location.protocol+"//"+window.location.host+url);
         commit('updateSuccessMessage', 'DownLoad File successfully');
@@ -375,6 +375,7 @@ const actions = {
 		axiosput(API.testJobMgt.testJobStart.replace(":jobId", data.jobId))
 			.then(res => {
 				if (res.code === 200) {
+                    console.log(res,"-------runTestJobMGT");
 					commit('updateSuccessMessage', 'Successfully started testing');
 					data.status = "RUNNING";
 					data.jobStatus = "STARTED";
@@ -382,9 +383,7 @@ const actions = {
 					data.jobId = res.body.jobId;
 					data.executionStartTime = res.body.executionStartTime;
 					commit('updateTableItemData', data);
-					setTimeout(() => {
-						router.push({ name: "JobDetail", params: data })
-					}, 5000)
+                    router.push({ name: "JobDetail", params: data })
 				}
 			})
 	},

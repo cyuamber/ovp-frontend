@@ -37,8 +37,8 @@
       </a-dropdown>
       <a-button
         :style="headerbuttonStyle"
-        @click="(() => handleLangChange(language))"
-      >{{$t('T.language')}}</a-button>
+        @click="(() => handleLangChange(lang))"
+      >{{$t('T.lang')}}</a-button>
     </div>
   </div>
 </template>
@@ -65,17 +65,17 @@ export default {
   },
   mounted() {
       this.$store.dispatch('getCurrentLanguage',{}).then(()=>{
-          this.$i18n.locale = this.language;
+          this.$i18n.locale = this.lang;
       });
   },
   computed: {
     ...mapGetters(["updateBread"]),
     ...mapState({
-      language: state => state.router.language
+        lang: state => state.router.lang
     })
   },
   watch: {
-    language(val) {
+      lang(val) {
       this.$i18n.locale = val;
     }
   },
@@ -108,7 +108,7 @@ export default {
     //   });
     // },
     handleLangChange(val) {
-      let obj = { language: val === "en_US" ? "zh_CN" : "en_US" };
+      let obj = { lang: val === "en_US" ? "zh_CN" : "en_US" };
       this.$store.dispatch("getCurrentLanguage", obj);
     }
   }

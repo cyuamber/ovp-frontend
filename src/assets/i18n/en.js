@@ -1,6 +1,6 @@
 export const T = {
     //header
-    "language":"中文",
+    "lang":"中文",
     "LOGIN":"LOGIN",
     "Log in":"Login",
     "Change E-mail":"Change E-mail",
