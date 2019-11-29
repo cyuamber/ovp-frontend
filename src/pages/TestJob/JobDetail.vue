@@ -114,7 +114,7 @@ export default {
   mounted() {
     this.initJobDetail();
   },
-  beforeDestroy() {
+  destroyed() {
     this.changeComponent(false);
     this.updateDetailTestCase([]);
     this.updateTestCasePieData([
