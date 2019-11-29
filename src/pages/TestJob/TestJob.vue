@@ -131,8 +131,10 @@ export default {
       this.getTableData({bool:true});
     },
       handleSelectStatusChange(val){
-        // console.log(val,"val---")
-          this.updateDashboardJumpStatus("All")
+          if(window.location.href.includes("?")){
+              window.location.href = window.location.href.split("?")[0];
+          }
+          this.updateDashboardJumpStatus("All");
           if(val === 'All')this.clearSearchKeyword(val);
           this.setFilter({
               key: val
