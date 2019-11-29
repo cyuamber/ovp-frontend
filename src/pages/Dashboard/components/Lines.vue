@@ -21,6 +21,7 @@ export default {
   computed: {
       ...mapState({
           linesData: state => state.dashBoard.linesData,
+          linesxAxisLength: state => state.dashBoard.linesxAxisLength
       })
   },
   watch:{
@@ -28,13 +29,16 @@ export default {
           if(val){
               this.initlines();
           }
+      },
+      linesxAxisLength(val){
+          this.chartOptions.title.text = "Passed Test Case Amount in "+val+" Days"
       }
   },
   methods: {
       initlines(){
           this.chartOptions = {
               title: {
-                  text: "Passed Test Case Amount in "+this.linesData.xAxis.length+" Days"
+                  text: "Passed Test Case Amount in "+this.linesxAxisLength+" Days"
               },
               credits: {
                   enabled: false

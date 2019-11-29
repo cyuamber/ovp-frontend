@@ -12,6 +12,7 @@ const state = {
         legend:[],
         series:[]
     },
+    linesxAxisLength:0,
     testJobCirclesData:[],
     SUTAmountData:[],
     SUTAmountColors:["#46b8e0","#ffca52","#34314b"],
@@ -31,7 +32,9 @@ const mutations = {
         if(data.length > 0){
             data.forEach((item)=>{
                 Object.keys(data[0]).forEach((items)=>{
-                    if(items === 'range')state.linesData.xAxis.push(item[items])
+                    if(items === 'range'){
+                        state.linesData.xAxis.push(item[items])
+                    }
                     else if(state.linesData.legend.includes(items) ===false){
                         state.linesData.legend.push(items);
                         let singleData = [];
@@ -56,6 +59,9 @@ const mutations = {
             };
         }
         console.log(state.linesData,"----> state.linesData")
+    },
+    updateLinesxAxisLength(state, data){
+        state.linesxAxisLength = data;
     },
     updateTestJobCirclesData(state, data) {
         if(Object.keys(data).length > 0){
@@ -129,6 +135,7 @@ const actions = {
         axiosget(API.dashboard.PassCaseAmount7Days).then(res => {
             if (res.code === 200) {
                 commit('updateLinesData', res.body);
+                commit('updateLinesxAxisLength', res.body.length);
             } else message.error('Network exception, please try again')
         },
             () => {
