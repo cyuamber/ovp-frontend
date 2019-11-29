@@ -371,7 +371,6 @@ const actions = {
 	},
 	download({ commit }, data) {
         let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId)+"?lang="+data.lang;
-        console.log(window.location.protocol+"//"+window.location.host+url,"window.location.protocol--testJobDownLoad");
         window.open(window.location.protocol+"//"+window.location.host+url);
         commit('updateSuccessMessage', 'DownLoad File successfully');
 	},
@@ -474,7 +473,7 @@ const actions = {
         axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
             .then(res => {
                 if (res.code === 200) {
-                    console.log(res.body,"res.body")
+                    console.log(res.body,"res.body----getEditTestJob");
                     commit('updateTestJobSingleData', res.body);
                     dispatch("getTestCase",{TestSpecification: res.body.spec.id, message: this.$message})
                 }

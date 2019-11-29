@@ -83,7 +83,6 @@ export default {
   components: { Drawer, Loading },
     created(){
         if(window.location.href.includes("?")){
-            console.log(window.location.href.split("?")[1].split("=")[1])
             this.dashboardJumpStatus = window.location.href.split("?")[1].split("=")[1];
             this.updateDashboardJumpStatus(this.dashboardJumpStatus)
         }
@@ -128,7 +127,7 @@ export default {
       this.getTableData({bool:true});
     },
       handleSelectStatusChange(val){
-        console.log(val,"val---")
+        // console.log(val,"val---")
           this.updateDashboardJumpStatus("All")
           if(val === 'All')this.clearSearchKeyword(val);
           this.setFilter({
@@ -162,7 +161,7 @@ export default {
       });
     },
       handleEdit(data){
-        console.log(data);
+        // console.log(data);
           this.isEdit = true;
           this.setIsShow(true);
           this.getEditTestJob(data);
@@ -191,7 +190,6 @@ export default {
       });
     },
     handleDownload(data) {
-      console.log("Download");
       this.$confirm({
         title: "Are you sure download this task?",
         content: "jobId: " + data.jobId,

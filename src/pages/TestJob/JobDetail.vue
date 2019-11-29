@@ -72,8 +72,6 @@
 import testCasePie from "./testCasePie";
 import { testJobColumns } from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
-// import SockJS from "sockjs-client";
-// import Stomp from "stompjs";
 export default {
   name: "JobDetail",
     components: { testCasePie },
@@ -82,7 +80,6 @@ export default {
       statusColor: "",
       stompClient: "",
       timer: "",
-      // caseStatusTimer: "",
     progressTimer:"",
     progressStatus:'normal'
     };
@@ -130,8 +127,7 @@ export default {
     ...mapActions("testJob", ["getProgress", "detailTestCaseJop"]),
     ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime","updateDetailTestCase","updateTestCasePieData","updateDetailLoading"]),
     initJobDetail() {
-      // this.initWebSocket();
-        console.log(this.currentJob,"currentJob")
+        console.log(this.currentJob,"currentJob");
       if (this.currentJob.jobStatus !== "CREATED") {
         this.getProgress({jobId: this.currentJob.jobId});
           this.progressTimer = setInterval(() => {
@@ -140,7 +136,6 @@ export default {
       }
     },
     handleBack() {
-      // this.$emit("close");
         clearInterval(this.progressTimer);
         this.updateExecutionStartTime('');
         this.updateDetailLoading(true);
@@ -168,60 +163,11 @@ export default {
       return { backgroundColor: color };
     },
     handleRefresh() {
-      // this.initWebSocket();
         this.getProgress({jobId: this.currentJob.jobId});
     },
-    // initWebSocket() {
-    //   //initialization weosocket
-    //   this.connection();
-    //   let that = this;
-    //   this.timer = setInterval(() => {
-    //     try {
-    //       that.stompClient.send("Test if the connection is normal");
-    //     } catch (err) {
-    //       console.log("Disconnected: " + err);
-    //       that.connection();
-    //     }
-    //   }, 5000);
-    // },
-    // connection() {
-    //   let socket = new SockJS("/webSocketEndPoint");
-    //   // let socket = new SockJS('http://localhost:8080');
-    //   this.stompClient = Stomp.over(socket);
-    //   let headers = {
-    //     Authorization: ""
-    //   };
-    //   this.stompClient.connect(
-    //     headers,
-    //     () => {
-    //       this.stompClient.subscribe(
-    //         "/topic/status",
-    //         msg => {
-    //           console.log(msg, "socket-msg");
-    //           this.updateProgress({
-    //             percent: msg.progress,
-    //             status: msg.state
-    //           });
-    //         },
-    //         headers
-    //       );
-    //     },
-    //     err => {
-    //       console.log(err);
-    //     }
-    //   );
-    // },
-    // disconnect() {
-    //   if (this.stompClient) {
-    //     this.stompClient.disconnect();
-    //   }
-    // }
   },
   beforeDestroy: function() {
-    // this.disconnect();
-    // clearInterval(this.timer);
     clearInterval(this.progressTimer);
-    // clearInterval(this.caseStatusTimer);
     this.updateExecutionStartTime('');
       this.changeComponent(false);
       this.updateDetailTestCase([]);
