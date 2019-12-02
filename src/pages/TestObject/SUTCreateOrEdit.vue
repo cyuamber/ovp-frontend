@@ -64,7 +64,7 @@
             @change="handleChange"
             class="form__upload-float"
             name="file"
-            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: editUploadtextShow ? true :false,}]}]"
+            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: isEdit && editUploadtextShow ? false:true,}]}]"
           >
             <p class="ant-upload-text form__upload-text--font-size">
               <a-icon type="upload" />&nbsp;&nbsp;&nbsp;
@@ -147,12 +147,12 @@ export default {
             type: this.VNFTest.typeCH.code
           });
         } else if (!this.isEdit && this.count > 1) {
-          this.form.setFieldsValue({ type: this.VNFOptions[0].code });
+          this.form.setFieldsValue({ type: this.VNFOptions.length>0?this.VNFOptions[0].code:'' });
         }
       }
     },
     VNFOptions(val) {
-      if (val.length) {
+      if (val.length>0) {
         this.initNVFTypeValue = val[0].code;
         this.spin = false;
       }

@@ -133,6 +133,8 @@ export default {
           this.progressTimer = setInterval(() => {
               this.getProgress({jobId: this.currentJob.jobId});
           }, 5000);
+      }else {
+          this.updateDetailLoading(false);
       }
     },
     handleBack() {

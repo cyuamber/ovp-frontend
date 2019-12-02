@@ -50,7 +50,7 @@ const mutations = {
 		state.VNFTest = VNFTest
 	},
 	updateVNFOptions(state, options) {
-		state.VNFOptions = options;
+		if(options)state.VNFOptions = options
 	},
 	updateFailedMessage(state, toast) {
 		state.loadingMessage = {
