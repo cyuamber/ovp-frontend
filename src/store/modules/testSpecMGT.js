@@ -20,6 +20,7 @@ const state = {
     dropdownSpec:[],
     dropdownSpecIndex:0,
   pagination: { current: 1, total: 0, pageSize: 10 },
+// specpagination:{ current: 1, total: 0, pageSize: 5 },
   loadingMessage: { type: '', toast: '' }
 }
 const mutations = {
@@ -29,6 +30,7 @@ const mutations = {
       item.publishTime = item.publishTime !== null ? moment(item.publishTime).format('YYYY-MM-DD'):item.publishTime;
       item.index = index;
       item.caseMgt = [];
+      item.specpagination = { current: 1, total: 0, pageSize: 5 };
       item.action = ['Edit', 'Delete'];
       return item
     })
@@ -36,6 +38,7 @@ const mutations = {
   updatecaseMgtTableData(state, {testCaseData,record}) {
     let index = record.index;
     if(testCaseData.length > 0){
+        state.tableData[index].specpagination.total = testCaseData.length;
         state.tableData[index].caseMgt = testCaseData.map((item) => {
             item.action = 'activate';
             return item
@@ -68,6 +71,10 @@ const mutations = {
   updatePagination(state, Options) {
     state.pagination = Options;
   },
+    updateSpecPagination(state, {pagination,index}) {
+        console.log(pagination,index,"updateSpecPagination")
+        state.tableData[index].specpagination = pagination;
+    },
   updateFailedMessage(state, toast) {
     state.loadingMessage = {
       type: 'failed',
@@ -116,7 +123,6 @@ const actions = {
   },
   getTestCaseTableData({ commit,state }, {record,expanded}){
       commit('updateTestCaseTableLoading', true);
-      console.log(record,expanded,"expanded")
       state.dropdownSpec[record.index] = Object.assign({},record);
       state.dropdownSpecIndex = record.index;
       axiosget(API.TestSpecMgt.testCaseTable.replace(":specId",record.id)).then(res => {
@@ -175,6 +181,10 @@ const actions = {
   clearPagination({ commit }) {
     commit('updatePagination', { current: 1, total: 0 })
   },
+    getSpecPagination({ commit }, { pagination,index }) {
+      console.log(pagination,index,"getSpecPagination")
+        commit('updateSpecPagination', {pagination,index})
+    },
   clearOptions({ commit }) {
     commit('updateVNFOptions', []);
     commit('updateTestCaseList', []);

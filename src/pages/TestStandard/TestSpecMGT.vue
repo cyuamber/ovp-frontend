@@ -43,7 +43,8 @@
           :dataSource="record.caseMgt"
           rowKey="id"
           size="default"
-          :pagination="false"
+          :pagination="record.specpagination"
+          @change="(() => handleSpecTableChange(record.index))"
         >
           <span slot="status" slot-scope="status">
             <span
@@ -113,7 +114,8 @@ export default {
       "clearPagination",
       "getSUTOptions",
       "getVNFOptions",
-      "activateTestCase"
+      "activateTestCase",
+        "getSpecPagination"
     ]),
     ...mapMutations("testSpecMGT", ["updatecaseMgtTableData", "updateVisible"]),
     initTestStandardTable() {
@@ -139,7 +141,15 @@ export default {
     },
     caseMgtTableShow(expanded, record) {
       this.getTestCaseTableData({ record, expanded });
+      if(!expanded){
+          let pagination = { current: 1, total: 0, pageSize: 5 };
+          this.getSpecPagination({ pagination,index:record.index });
+      }
     },
+      handleSpecTableChange(pagination,index){
+          this.getSpecPagination({ pagination,index });
+        console.log(pagination,index,"pagination")
+      },
     // Filter by creating time
     onChange(date, d) {
       this.publishTime = d;
