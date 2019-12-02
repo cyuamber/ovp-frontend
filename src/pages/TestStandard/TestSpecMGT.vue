@@ -44,7 +44,7 @@
           rowKey="id"
           size="default"
           :pagination="record.specpagination"
-          @change="(() => handleSpecTableChange(record.index))"
+          @change="((pagination) => handleSpecTableChange(pagination,record.index))"
         >
           <span slot="status" slot-scope="status">
             <span
