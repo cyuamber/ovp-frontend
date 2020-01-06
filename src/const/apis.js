@@ -13,13 +13,13 @@ export default {
     getCurrentLanguage: "/lang/local",
     uploadFile: baseUrl + "/files/upload",
     downloadFile: baseUrl + "/files/:filename",
-    dashboard:{
-        liveCaseAmount:baseUrl + "/dashboard/statisticLiveCaseAmount",
-        PassCaseAmount7Days:baseUrl + "/dashboard/statisticPassCaseAmount7Days",
-        jobsFlowAmount:baseUrl + "/dashboard/statisticJobsFlowAmount",
-        sutAmount:baseUrl + "/dashboard/sutAmount",
-        jobsAmount:baseUrl + "/dashboard/statisticJobsAmount",
-        testEnvAmount:baseUrl + "/dashboard/testEnvAmount",
+    dashboard: {
+        liveCaseAmount: baseUrl + "/dashboard/statisticLiveCaseAmount",
+        PassCaseAmount7Days: baseUrl + "/dashboard/statisticPassCaseAmount7Days",
+        jobsFlowAmount: baseUrl + "/dashboard/statisticJobsFlowAmount",
+        sutAmount: baseUrl + "/dashboard/sutAmount",
+        jobsAmount: baseUrl + "/dashboard/statisticJobsAmount",
+        testEnvAmount: baseUrl + "/dashboard/testEnvAmount",
     },
     vimVnfmMgt: {
         vimEnvMgtTable: baseUrl + "/vimEnvMgt",
@@ -66,7 +66,8 @@ export default {
         testJobSUTName: baseUrl + "/sutName/:code",
         testJobSpec: baseUrl + "/testSpec/:type",
         testJobTestCase: baseUrl + "/testCase/jobCase/:id",
-        testJobDownLoad:baseUrl+"/jobs/cases/download/:jobId"
+        testJobDownLoad: baseUrl + "/jobs/cases/download/:jobId",
+        testFailedDetail: baseUrl + "/jobs/case/retrieve/:requestId"
     },
     TestSpecMgt: {
         specMgtTable: baseUrl + "/specMgt",
@@ -77,6 +78,6 @@ export default {
         TestSpecSUTType: baseUrl + "/types/100",
         TestSpecVNFType: baseUrl + "/types/:flag",
         testCaseList: baseUrl + "/testCase/box/:flag/:subSutType",
-        specMgtCaseActivate:baseUrl + "/testCase/updateStatus/:id/:status",
+        specMgtCaseActivate: baseUrl + "/testCase/updateStatus/:id/:status",
     }
 }

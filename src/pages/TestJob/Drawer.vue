@@ -71,11 +71,7 @@
           v-decorator="[keyList[i],{initialValue:initTestVNFMENV.name}]"
           class="form__select--width"
         >
-          <a-select-option
-            v-for="type in VNFMOption"
-            :key="type.id"
-            :value="type.id"
-          >{{type.name}}</a-select-option>
+          <a-select-option v-for="type in VNFMOption" :key="type.id" :value="type.id">{{type.name}}</a-select-option>
         </a-select>
         <a-select
           v-else-if="item === 'Test VIM ENV'"
@@ -107,12 +103,14 @@
               @change="onChange"
             >
               <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
-                <a-checkbox :value="item.id"
-                            :checked="initcheckboxGroup.includes(item.id)"
-                            class="form__checkbox--size"/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
+                <a-checkbox
+                  :value="item.id"
+                  :checked="initcheckboxGroup.includes(item.id)"
+                  class="form__checkbox--size"
+                />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
                 <a-tooltip placement="topLeft" :title="item.description">
-                  <a-icon  type="info-circle" class="form__info-cursor" />
+                  <a-icon type="info-circle" class="form__info-cursor" />
                 </a-tooltip>
               </a-card-grid>
             </a-checkbox-group>
@@ -132,38 +130,38 @@ import { mapState, mapActions, mapMutations } from "vuex";
 import { formList } from "./constants";
 
 export default {
-  props: ["isShow","isEdit"],
+  props: ["isShow", "isEdit"],
   data() {
     return {
       visible: this.isShow,
-        title: "Create Test Job",
+      title: "Create Test Job",
       formList,
       keyList: [],
       form: this.$form.createForm(this),
       selectedSUTType: "",
       selectedSUTName: "",
       selectedSpecification: "",
-        initSUTType:{
-          name:null,
-            code:null
-        },
-        initSUTName:{
-            name:null,
-            code:null
-        },
-        initSpecification:{
-            name:null,
-            code:null
-        },
-      initTestVIMENV:{
-          name:null,
-          code:null
+      initSUTType: {
+        name: null,
+        code: null
       },
-      initTestVNFMENV:{
-          name:null,
-          code:null
+      initSUTName: {
+        name: null,
+        code: null
       },
-        count: 0
+      initSpecification: {
+        name: null,
+        code: null
+      },
+      initTestVIMENV: {
+        name: null,
+        code: null
+      },
+      initTestVNFMENV: {
+        name: null,
+        code: null
+      },
+      count: 0
     };
   },
   computed: {
@@ -179,8 +177,8 @@ export default {
       specificationList: store => store.testJob.specificationList,
       testCaseSpin: store => store.testJob.testCaseSpin,
       testCaseList: store => store.testJob.testCaseList,
-        testJobSingleData: state => state.testJob.testJobSingleData,
-        initcheckboxGroup: state => state.testJob.initcheckboxGroup
+      testJobSingleData: state => state.testJob.testJobSingleData,
+      initcheckboxGroup: state => state.testJob.initcheckboxGroup
     })
   },
   watch: {
@@ -198,84 +196,100 @@ export default {
         this.keyList.forEach(item => {
           this.form.setFieldsValue({ [item]: "" });
         });
-        console.log(this.testJobSingleData,"visible----this.testJobSingleData")
-      }else {
-          console.log(this.count,"this.count++")
-          this.count++;
+        console.log(
+          this.testJobSingleData,
+          "visible----this.testJobSingleData"
+        );
+      } else {
+        console.log(this.count, "this.count++");
+        this.count++;
       }
-      if(this.isEdit){
-          this.title = "Edit Test Job"
-      }else {
-          this.title = "Create Test Job"
+      if (this.isEdit) {
+        this.title = "Edit Test Job";
+      } else {
+        this.title = "Create Test Job";
       }
     },
-      testJobSingleData(val) {
-          console.log(this.count,"this.count---testJobSingleData")
-          if(Object.keys(val).length > 0){
-              console.log(this.testJobSingleData,"val---testJobSingleData")
-              this.initSUTType = {
-                  name:this.testJobSingleData.sut.flagName,
-                  code:this.testJobSingleData.sut.flag
-              };
-              this.initSUTName = {
-                  name:this.testJobSingleData.sut.name,
-                  code:this.testJobSingleData.sut.id,
-              };
-              this.initSpecification = {
-                  name:this.testJobSingleData.spec.name,
-                  code:this.testJobSingleData.spec.id
-              };
-              this.initTestVIMENV = {
-                  name: this.testJobSingleData.vim?this.testJobSingleData.vim.cloudOwner:'',
-                  code: this.testJobSingleData.vim?this.testJobSingleData.vim.id: ''
-              };
-              this.initTestVNFMENV = {
-                  name:this.testJobSingleData.vnfm?this.testJobSingleData.vnfm.name: '',
-                  code:this.testJobSingleData.vnfm?this.testJobSingleData.vnfm.id: ''
-              };
-              // setTimeout()
-              if (this.isEdit && this.count > 1) {
-                  console.log(this.testJobSingleData,"vibiliti---this.testJobSingleData")
-                  this.form.setFieldsValue({
-                      JobName: this.testJobSingleData.jobName,
-                      JobDescription: this.testJobSingleData.remark,
-                      SUTType: this.testJobSingleData.sut.flagName,
-                      SUTName: this.testJobSingleData.sut.name,
-                      TestSpecification:this.testJobSingleData.spec.name,
-                      TestVIMENV: this.testJobSingleData.vim?this.testJobSingleData.vim.cloudOwner:'',
-                      TestVNFMENV: this.testJobSingleData.vnfm?this.testJobSingleData.vnfm.name: ''
-                  });
-              }
-          }
-      },
-      // initcheckboxGroup(val){
-      //     if(val.length>0 && this.isEdit && this.count > 1){
-      //         console.log(val,"val--initcheckboxGroup")
-      //         this.form.setFieldsValue({
-      //             checkboxGroup:val
-      //         });
-      //     }
-      // }
+    testJobSingleData(val) {
+      console.log(this.count, "this.count---testJobSingleData");
+      if (Object.keys(val).length > 0) {
+        console.log(this.testJobSingleData, "val---testJobSingleData");
+        this.initSUTType = {
+          name: this.testJobSingleData.sut.flagName,
+          code: this.testJobSingleData.sut.flag
+        };
+        this.initSUTName = {
+          name: this.testJobSingleData.sut.name,
+          code: this.testJobSingleData.sut.id
+        };
+        this.initSpecification = {
+          name: this.testJobSingleData.spec.name,
+          code: this.testJobSingleData.spec.id
+        };
+        this.initTestVIMENV = {
+          name: this.testJobSingleData.vim
+            ? this.testJobSingleData.vim.cloudOwner
+            : "",
+          code: this.testJobSingleData.vim ? this.testJobSingleData.vim.id : ""
+        };
+        this.initTestVNFMENV = {
+          name: this.testJobSingleData.vnfm
+            ? this.testJobSingleData.vnfm.name
+            : "",
+          code: this.testJobSingleData.vnfm
+            ? this.testJobSingleData.vnfm.id
+            : ""
+        };
+        // setTimeout()
+        if (this.isEdit && this.count > 1) {
+          console.log(
+            this.testJobSingleData,
+            "vibiliti---this.testJobSingleData"
+          );
+          this.form.setFieldsValue({
+            JobName: this.testJobSingleData.jobName,
+            JobDescription: this.testJobSingleData.remark,
+            SUTType: this.testJobSingleData.sut.flagName,
+            SUTName: this.testJobSingleData.sut.name,
+            TestSpecification: this.testJobSingleData.spec.name,
+            TestVIMENV: this.testJobSingleData.vim
+              ? this.testJobSingleData.vim.cloudOwner
+              : "",
+            TestVNFMENV: this.testJobSingleData.vnfm
+              ? this.testJobSingleData.vnfm.name
+              : ""
+          });
+        }
+      }
+    }
+    // initcheckboxGroup(val){
+    //     if(val.length>0 && this.isEdit && this.count > 1){
+    //         console.log(val,"val--initcheckboxGroup")
+    //         this.form.setFieldsValue({
+    //             checkboxGroup:val
+    //         });
+    //     }
+    // }
   },
   created() {
     this.keyList = this.formList.map(item => {
       item = item.replace(" ", "").replace(" ", "");
       return item;
     });
-    console.log(this.isShow,"this.isShow----created")
+    console.log(this.isShow, "this.isShow----created");
   },
-    mounted(){
-        console.log(this.isShow,"this.isShow----mounted")
-    },
+  mounted() {
+    console.log(this.isShow, "this.isShow----mounted");
+  },
   methods: {
     ...mapActions("testJob", [
       "createrTestJobMGT",
       "getSUTName",
       "getSpecification",
       "getTestCase",
-        "getEditTestJob"
+      "getEditTestJob"
     ]),
-    ...mapMutations("testJob", ["clean","setIsShow"]),
+    ...mapMutations("testJob", ["clean", "setIsShow"]),
     onClose() {
       this.visible = false;
       this.setIsShow(false);
@@ -283,14 +297,26 @@ export default {
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
-        let { isEdit } = this;
-        if(isEdit){
-            values.SUTName = (values.SUTName === this.initSUTName.name)?this.initSUTName.name+'+'+this.initSUTName.code:values.SUTName;
-            values.TestSpecification = (values.TestSpecification === this.initSpecification.name)?this.initSpecification.code:values.TestSpecification;
-            values.TestVIMENV = (values.TestVIMENV === this.initTestVIMENV.name)?this.initTestVIMENV.code:values.TestVIMENV;
-            values.TestVNFMENV = (values.TestVNFMENV === this.initTestVNFMENV.name)?this.initTestVNFMENV.code:values.TestVNFMENV;
-	}
-          this.createrTestJobMGT({isEdit,values});
+          let { isEdit } = this;
+          if (isEdit) {
+            values.SUTName =
+              values.SUTName === this.initSUTName.name
+                ? this.initSUTName.name + "+" + this.initSUTName.code
+                : values.SUTName;
+            values.TestSpecification =
+              values.TestSpecification === this.initSpecification.name
+                ? this.initSpecification.code
+                : values.TestSpecification;
+            values.TestVIMENV =
+              values.TestVIMENV === this.initTestVIMENV.name
+                ? this.initTestVIMENV.code
+                : values.TestVIMENV;
+            values.TestVNFMENV =
+              values.TestVNFMENV === this.initTestVNFMENV.name
+                ? this.initTestVNFMENV.code
+                : values.TestVNFMENV;
+          }
+          this.createrTestJobMGT({ isEdit, values });
           this.visible = false;
         }
       });
@@ -354,9 +380,9 @@ export default {
     width: 100%;
     padding: 14px;
     text-indent: 0.5em;
-      .form__info-cursor{
-          cursor:pointer;
-      }
+    .form__info-cursor {
+      cursor: pointer;
+    }
   }
   .form__checkboxgroup--margin {
     width: 100%;

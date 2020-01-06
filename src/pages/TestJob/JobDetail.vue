@@ -20,50 +20,66 @@
         <a-icon type="sync" />Refresh
       </a-button>
     </div>
-      <a-spin tip="Loading..." :spinning="detailLoading" size="large">
-        <div class="job-detail__content">
-          <div class="job-detail__info">
-            <a-card>
-              <h2 class="job-detail__info-title">Test Job Info</h2>
-              <div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
-                <p class="job-detail__item-title">{{item.title}}:</p>
-                <p
-                  class="job-detail__item-text"
-                >{{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}</p>
-              </div>
-                <div class="job-detail__item-container">
-                    <p class="job-detail__item-title">Test Job Status:</p>
-                    <p class="job-detail__item-text">{{this.statusText}}</p>
-                </div>
-                <testCasePie />
-            </a-card>
-          </div>
-          <div class="job-detail__detail">
-            <a-card :hoverable="false">
-              <a-card-grid style="width: 100%" :hoverable="false">
-                <h2>Test Job Detail</h2>
-                <div class="job-detail__test-env">
-                  <p>{{currentJob.remark}}</p>
-                </div>
-              </a-card-grid>
-              <div v-if="detailTestCase.length >0">
-                <a-card-grid
-                  style="width: 100%"
-                  v-for="(item,index) in detailTestCase"
-                  :key="index"
-                  :hoverable="false"
+    <a-spin tip="Loading..." :spinning="detailLoading" size="large">
+      <div class="job-detail__content">
+        <div class="job-detail__info">
+          <a-card>
+            <h2 class="job-detail__info-title">Test Job Info</h2>
+            <div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
+              <p class="job-detail__item-title">{{item.title}}:</p>
+              <p class="job-detail__item-text">
+                {{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}
+                <span
+                  v-if="item.title === 'SUT Name' && currentJob.jobStatus === 'FAILED'"
                 >
-                  Case Name：{{item.caseEntity.name}}
+                  <a-divider type="vertical" />
+                  <a-button type="link" size="small" @click="jumpToUpload">Upload SUT</a-button>
+                </span>
+              </p>
+            </div>
+            <div class="job-detail__item-container">
+              <p class="job-detail__item-title">Test Job Status:</p>
+              <p class="job-detail__item-text">{{this.statusText}}</p>
+            </div>
+            <testCasePie v-if="this.statusText" />
+          </a-card>
+        </div>
+        <div class="job-detail__detail">
+          <a-card :hoverable="false">
+            <a-card-grid style="width: 100%" :hoverable="false">
+              <h2>Test Job Detail</h2>
+              <div class="job-detail__test-env">
+                <p>{{currentJob.remark}}</p>
+              </div>
+            </a-card-grid>
+            <div v-if="detailTestCase.length >0">
+              <a-card-grid
+                style="width: 100%"
+                v-for="(item,index) in detailTestCase"
+                :key="index"
+                :hoverable="false"
+              >
+                Case Name：{{item.caseEntity.name}}
+                <a-tooltip
+                  placement="left"
+                  trigger="hover"
+                  autoAdjustOverflow
+                  :mouseEnterDelay="0.5"
+                  :mouseLeaveDelay="0.1"
+                  :title="testFailDetail"
+                >
                   <span
+                    @mouseover="getTestFail(item)"
                     class="job-detail__testCase-status"
                     v-if="item.caseStatus!==null && item.caseStatus!==undefined"
                     :style="getCaseStatusStyle(item.caseStatus)"
                   ></span>
-                </a-card-grid>
-              </div>
-            </a-card>
-          </div>
+                </a-tooltip>
+              </a-card-grid>
+            </div>
+          </a-card>
         </div>
+      </div>
     </a-spin>
   </div>
 </template>
@@ -74,23 +90,26 @@ import { testJobColumns } from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "JobDetail",
-    components: { testCasePie },
+  components: { testCasePie },
   data() {
     return {
       statusColor: "",
       stompClient: "",
       timer: "",
-    progressTimer:"",
-    progressStatus:'normal'
+      progressTimer: "",
+      progressStatus: "normal",
+      sutvalidLind: "http://192.168.235.16:8080/onapui/vnfmarket"
     };
   },
   computed: {
     ...mapState({
-        detailLoading: state => state.testJob.detailLoading,
+      detailLoading: state => state.testJob.detailLoading,
       percent: state => state.testJob.percent,
-        statusText: state => state.testJob.statusText,
+      statusText: state => state.testJob.statusText,
       detailTestCase: state => state.testJob.detailTestCase,
-        executionStartTime: state => state.testJob.executionStartTime,
+      testFailDetail: state => state.testJob.testFailDetail,
+      failLoading: state => state.testJob.failLoading,
+      executionStartTime: state => state.testJob.executionStartTime
     }),
     infoList() {
       let list = [];
@@ -105,14 +124,15 @@ export default {
       return this.$route.params;
     }
   },
-    watch:{
-        percent(val){
-            if(val === 100){
-                clearInterval(this.progressTimer);
-            }
-            this.progressStatus = val ===undefined ||val ===null || val !==100?"normal":"success"
-        }
-    },
+  watch: {
+    percent(val) {
+      if (val === 100) {
+        clearInterval(this.progressTimer);
+      }
+      this.progressStatus =
+        val === undefined || val === null || val !== 100 ? "normal" : "success";
+    }
+  },
   created() {
     this.changeComponent(true);
     if (!this.$store.state.router.breadcrumbArr.length) {
@@ -124,33 +144,44 @@ export default {
     this.initJobDetail();
   },
   methods: {
-    ...mapActions("testJob", ["getProgress", "detailTestCaseJop"]),
-    ...mapMutations("testJob", ["changeComponent", "updateProgress","updateExecutionStartTime","updateDetailTestCase","updateTestCasePieData","updateDetailLoading"]),
+    ...mapActions("testJob", [
+      "getProgress",
+      "detailTestCaseJop",
+      "getTestFail"
+    ]),
+    ...mapMutations("testJob", [
+      "changeComponent",
+      "updateProgress",
+      "updateExecutionStartTime",
+      "updateDetailTestCase",
+      "updateTestCasePieData",
+      "updateDetailLoading",
+      "updateFailDetail"
+    ]),
     initJobDetail() {
-        console.log(this.currentJob,"currentJob");
       if (this.currentJob.jobStatus !== "CREATED") {
-        this.getProgress({jobId: this.currentJob.jobId});
-          this.progressTimer = setInterval(() => {
-              this.getProgress({jobId: this.currentJob.jobId});
-          }, 5000);
-      }else {
-          this.updateDetailLoading(false);
+        this.getProgress({ jobId: this.currentJob.jobId });
+        this.progressTimer = setInterval(() => {
+          this.getProgress({ jobId: this.currentJob.jobId });
+        }, 5000);
+      } else {
+        this.updateDetailLoading(false);
       }
     },
     handleBack() {
-        clearInterval(this.progressTimer);
-        this.updateExecutionStartTime('');
-        this.updateDetailLoading(true);
-        this.changeComponent(false);
-        this.updateDetailTestCase([]);
-        this.updateTestCasePieData([
-            { name: "DONE", y: 0, color: "#cae76e" },
-            { name: "FAILED", y: 0, color: "#e94e75" }
-        ]);
-        this.updateProgress({
-            percent: 0,
-            status: ""
-        });
+      clearInterval(this.progressTimer);
+      this.updateExecutionStartTime("");
+      this.updateDetailLoading(true);
+      this.changeComponent(false);
+      this.updateDetailTestCase([]);
+      this.updateTestCasePieData([
+        { name: "DONE", y: 0, color: "#cae76e" },
+        { name: "FAILED", y: 0, color: "#e94e75" }
+      ]);
+      this.updateProgress({
+        percent: 0,
+        status: ""
+      });
       this.$router.push("/testjobmgt");
     },
     getCaseStatusStyle(status) {
@@ -162,25 +193,31 @@ export default {
           : status === "DONE"
           ? "#7ED321"
           : "#D0021B";
-      return { backgroundColor: color };
+      return {
+        backgroundColor: color,
+        cursor: status === "FAILED" ? "pointer" : "default"
+      };
     },
     handleRefresh() {
-        this.getProgress({jobId: this.currentJob.jobId});
+      this.getProgress({ jobId: this.currentJob.jobId });
     },
+    jumpToUpload() {
+      window.open(this.sutvalidLind, "_blank");
+    }
   },
   beforeDestroy: function() {
     clearInterval(this.progressTimer);
-    this.updateExecutionStartTime('');
-      this.changeComponent(false);
-      this.updateDetailTestCase([]);
-      this.updateTestCasePieData([
-          { name: "DONE", y: 0, color: "#cae76e" },
-          { name: "FAILED", y: 0, color: "#e94e75" }
-      ]);
-      this.updateProgress({
-          percent: 0,
-          status: ""
-      });
+    this.updateExecutionStartTime("");
+    this.changeComponent(false);
+    this.updateDetailTestCase([]);
+    this.updateTestCasePieData([
+      { name: "DONE", y: 0, color: "#cae76e" },
+      { name: "FAILED", y: 0, color: "#e94e75" }
+    ]);
+    this.updateProgress({
+      percent: 0,
+      status: ""
+    });
   }
 };
 </script>
@@ -240,10 +277,9 @@ export default {
       }
       .job-detail__testCase-status {
         float: right;
-        width: 12px;
-        height: 12px;
+        width: 15px;
+        height: 15px;
         margin-top: 5px;
-        // background-color: red;
         border-radius: 50%;
       }
     }
