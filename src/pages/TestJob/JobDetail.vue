@@ -186,14 +186,12 @@ export default {
           : "#D0021B";
       return {
         backgroundColor: color,
-        cursor: this.currentJob.jobStatus === "FAILED" ? "pointer" : "default"
+        cursor: "pointer"
       };
     },
     pasteReason(item) {
-      if (this.statusText === "FAILED") {
-        this.getTestFail(item);
-        this.$message.success(this.$t("T.Failed Reason"));
-      }
+      this.getTestFail(item);
+      this.$message.success(this.$t("T.Failed Reason"));
     },
     handleRefresh() {
       this.getProgress({ jobId: this.currentJob.jobId });

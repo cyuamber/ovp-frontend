@@ -360,23 +360,19 @@ const actions = {
 		})
 	},
 	getTestFail({ commit }, data) {
-		if (state.statusText === "FAILED") {
-			axiosget(API.testJobMgt.testFailedDetail.replace(":requestId", data.requestId)).then(res => {
-				if (+res.code === 200) {
-					let reason = JSON.stringify(res.body)
-					util.pasteContent(reason);
-					// commit('updateFailDetail', reason);
-				} else {
-					util.pasteContent("");
-					commit('updateFailedMessage', 'Get detail reason failed')
-				}
-			}).catch((err) => {
-				console.warn(err)
-			})
-		} else {
-			util.pasteContent("");
-			// commit('updateFailDetail', "")
-		}
+		axiosget(API.testJobMgt.testFailedDetail.replace(":requestId", data.requestId)).then(res => {
+			if (+res.code === 200) {
+				let reason = JSON.stringify(res.body)
+				util.pasteContent(reason);
+				// commit('updateFailDetail', reason);
+			} else {
+				util.pasteContent("");
+				commit('updateFailedMessage', 'Get detail reason failed')
+			}
+		}).catch((err) => {
+			console.warn(err)
+		})
+
 	},
 	delete({ dispatch, commit }, data) {
 		axiosdelete(API.testJobMgt.testJobDelete.replace(":jobId", data.jobId)).then(res => {
