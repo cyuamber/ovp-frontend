@@ -1,5 +1,6 @@
 import moment from 'moment'
 import API from '../../const/apis';
+import util from '../../utils/utils';
 import router from "../../router/router"
 import {
 	axiospost,
@@ -341,7 +342,7 @@ const actions = {
 		})
 	},
 	getTestCase({ commit }, { TestSpecification, message }) {
-		console.log("======getTestCase")
+		// console.log("======getTestCase")
 		commit('updateTestCaseList', { spin: true });
 		commit('updateFailDetail', "");
 		axiosget(API.testJobMgt.testJobTestCase.replace(":id", TestSpecification)).then(res => {
@@ -359,18 +360,22 @@ const actions = {
 		})
 	},
 	getTestFail({ commit }, data) {
-		if (data.caseStatus === "FAILED") {
+		if (state.statusText === "FAILED") {
 			axiosget(API.testJobMgt.testFailedDetail.replace(":requestId", data.requestId)).then(res => {
 				if (+res.code === 200) {
-					commit('updateFailDetail', res.body.error || res.body);
+					let reason = JSON.stringify(res.body)
+					util.pasteContent(reason);
+					// commit('updateFailDetail', reason);
 				} else {
+					util.pasteContent("");
 					commit('updateFailedMessage', 'Get detail reason failed')
 				}
 			}).catch((err) => {
 				console.warn(err)
 			})
 		} else {
-			commit('updateFailDetail', "")
+			util.pasteContent("");
+			// commit('updateFailDetail', "")
 		}
 	},
 	delete({ dispatch, commit }, data) {

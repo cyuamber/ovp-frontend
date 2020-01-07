@@ -60,21 +60,12 @@
                 :hoverable="false"
               >
                 Case Name：{{item.caseEntity.name}}
-                <a-tooltip
-                  placement="left"
-                  trigger="hover"
-                  autoAdjustOverflow
-                  :mouseEnterDelay="0.5"
-                  :mouseLeaveDelay="0.1"
-                  :title="testFailDetail"
-                >
-                  <span
-                    @mouseover="getTestFail(item)"
-                    class="job-detail__testCase-status"
-                    v-if="item.caseStatus!==null && item.caseStatus!==undefined"
-                    :style="getCaseStatusStyle(item.caseStatus)"
-                  ></span>
-                </a-tooltip>
+                <span
+                  @click="pasteReason(item)"
+                  class="job-detail__testCase-status"
+                  v-if="item.caseStatus!==null && item.caseStatus!==undefined"
+                  :style="getCaseStatusStyle(item.caseStatus)"
+                ></span>
               </a-card-grid>
             </div>
           </a-card>
@@ -107,7 +98,7 @@ export default {
       percent: state => state.testJob.percent,
       statusText: state => state.testJob.statusText,
       detailTestCase: state => state.testJob.detailTestCase,
-      testFailDetail: state => state.testJob.testFailDetail,
+      // testFailDetail: state => state.testJob.testFailDetail,
       failLoading: state => state.testJob.failLoading,
       executionStartTime: state => state.testJob.executionStartTime
     }),
@@ -195,8 +186,14 @@ export default {
           : "#D0021B";
       return {
         backgroundColor: color,
-        cursor: status === "FAILED" ? "pointer" : "default"
+        cursor: this.currentJob.jobStatus === "FAILED" ? "pointer" : "default"
       };
+    },
+    pasteReason(item) {
+      if (this.statusText === "FAILED") {
+        this.getTestFail(item);
+        this.$message.success(this.$t("T.Failed Reason"));
+      }
     },
     handleRefresh() {
       this.getProgress({ jobId: this.currentJob.jobId });

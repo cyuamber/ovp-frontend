@@ -276,10 +276,10 @@ export default {
       item = item.replace(" ", "").replace(" ", "");
       return item;
     });
-    console.log(this.isShow, "this.isShow----created");
+    // console.log(this.isShow, "this.isShow----created");
   },
   mounted() {
-    console.log(this.isShow, "this.isShow----mounted");
+    // console.log(this.isShow, "this.isShow----mounted");
   },
   methods: {
     ...mapActions("testJob", [
