@@ -23,6 +23,7 @@ export default {
     },
     vimVnfmMgt: {
         vimEnvMgtTable: baseUrl + "/vimEnvMgt",
+        manoEnvMgtTable: baseUrl + "/manos",
         cloudRegionID: baseUrl + "/cloudRegionID",
         cloudType: baseUrl + "/types/1000",
         vimEnvMgtInsert: baseUrl + "/vimEnvMgt/insert",

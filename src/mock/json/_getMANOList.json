@@ -1,0 +1,29 @@
+{
+    "code": 200,
+    "message": "OK",
+    "body": [{
+            "id": "435137142476455936",
+            "name": "MANO 001",
+            "version": "1.6",
+            "vendor": "string",
+            "monoType": "Onap",
+            "profiles": [{
+                "key": "string",
+                "value": "string"
+            }]
+        },
+        {
+            "id": "435137142476489898",
+            "name": "MANO 002",
+            "version": "1.0",
+            "vendor": "string",
+            "monoType": "Onap",
+            "profiles": [{
+                "key": "string",
+                "value": "string"
+            }]
+        }
+    ],
+    "total": 2,
+    "pageTotal": 1
+}

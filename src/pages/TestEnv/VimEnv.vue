@@ -14,6 +14,7 @@
             <a-icon slot="prefix" type="search" />
           </a-input>
           <a-date-picker
+            v-if="tab!=='MANO ENV'"
             class="tab-content__calendar"
             @change="selectedTime"
             placeholder="Select date"
@@ -21,6 +22,7 @@
         </div>
         <div class="table">
           <a-table
+            v-if="tab !== 'MANO ENV'"
             :columns="tab === 'VIM ENV'? VIMColumns : VNFMColumns"
             :dataSource="tab === 'VIM ENV' ? VIMTableData : VNFMTableData"
             bordered
@@ -48,6 +50,27 @@
               >{{item}}</a-tag>
             </span>
           </a-table>
+          <a-table
+            v-if="tab === 'MANO ENV'"
+            :columns="MANOColumns"
+            :dataSource="MANOTableData"
+            bordered
+            :loading="tableLoading"
+            rowKey="index"
+            size="default"
+            :pagination="pagination"
+            @change="pageChange"
+          >
+            <span slot="action" slot-scope="action,record">
+              <a-tag
+                v-for="(item,index) in action"
+                :key="index"
+                :color="item === 'Edit'? 'blue' : 'red'"
+                class="tag"
+                @click="(() => showEditOrDeleteModal(item,record))"
+              >{{item}}</a-tag>
+            </span>
+          </a-table>
         </div>
       </a-tab-pane>
     </a-tabs>
@@ -58,17 +81,22 @@
 <script>
 import CreateOrEditModal from "./CreateOrEditModal";
 import Loading from "../../components/Loading/Loading";
-import { testEnvVIMColumns, testEvnVNFMColumns } from "../../const/constant";
+import {
+  testEnvVIMColumns,
+  testEvnVNFMColumns,
+  testMANOColumns
+} from "../../const/constant";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "VimEnv",
   data() {
     return {
-      tabs: ["VIM ENV", "VNFM ENV"],
+      tabs: ["VIM ENV", "VNFM ENV", "MANO ENV"],
       keyword: "",
       VIMColumns: testEnvVIMColumns,
       VNFMColumns: testEvnVNFMColumns,
+      MANOColumns: testMANOColumns,
       isEdit: false
     };
   },
@@ -78,6 +106,7 @@ export default {
       loadingMessage: state => state.testENV.loadingMessage,
       VIMTableData: state => state.testENV.VIMTableData,
       VNFMTableData: state => state.testENV.VNFMTableData,
+      MANOTableData: state => state.testENV.MANOTableData,
       pagination: state => state.testENV.pagination,
       searchKeyword: state => state.testENV.searchKeyword,
       currentTab: state => state.testENV.currentTab,

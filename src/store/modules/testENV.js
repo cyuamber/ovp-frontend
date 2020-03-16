@@ -1,5 +1,5 @@
-import {axiosget, axiospost, axiosput, axiosdelete} from '../../utils/http'
-import {  axiosgetType } from "../../const/constant";
+import { axiosget, axiospost, axiosput, axiosdelete } from '../../utils/http'
+import { axiosgetType } from "../../const/constant";
 import API from '../../const/apis';
 import moment from 'moment'
 
@@ -7,7 +7,8 @@ const state = {
     loadingMessage: null,
     VIMTableData: [],
     VNFMTableData: [],
-    pagination: {current:1,total:0},
+    MANOTableData: [],
+    pagination: { current: 1, total: 0 },
     searchKeyword: '',
     createTime: '',
     pageNum: 1,
@@ -21,180 +22,191 @@ const state = {
 }
 
 const mutations = {
-    updateTableData(state, res){
+    updateTableData(state, res) {
         state.pagination = {
             current: state.pageNum,
             total: res.total
         }
-        let data = res.body.map( (item, index) => {
+        let data = res.body.map((item, index) => {
             item.action = ['Edit', 'Delete'];
-            item.index = res.body.length * (state.pagination.current -1) + index+1;
-            item.createTime = item.createTime!==null?moment(item.createTime).format('YYYY-MM-DD'):item.createTime;
+            item.index = res.body.length * (state.pagination.current - 1) + index + 1;
+            item.createTime = item.createTime !== null ? moment(item.createTime).format('YYYY-MM-DD') : item.createTime;
             return item
         })
-        if(state.currentTab === 'VIM ENV') {
+        if (state.currentTab === 'VIM ENV') {
             state.VIMTableData = data
+        } else if (state.currentTab === 'VNFM ENV') {
+            state.VNFMTableData = data
+        } else if (state.currentTab === 'MANO ENV') {
+            state.MANOTableData = data
         }
-        else state.VNFMTableData = data
     },
-    changeTab(state, tab){
+    changeTab(state, tab) {
         state.currentTab = tab
     },
     updateTableLoading(state, tableLoading) {
         state.tableLoading = tableLoading
     },
-    setFilterItem(state,{time, key, pageObj, isSearch, message}){
-        if(isSearch){
-            if(key === '' && state.createTime === '' && state.searchKeyword === '') {
+    setFilterItem(state, { time, key, pageObj, isSearch, message }) {
+        if (isSearch) {
+            if (key === '' && state.createTime === '' && state.searchKeyword === '') {
                 message.warning('Please enter valid search information')
                 return
-            }    
+            }
         }
-        if(time !== undefined) {
+        if (time !== undefined) {
             state.createTime = time
             // Jump to the first page after adding search criteria
-            if(state.pageNum !== 1){
+            if (state.pageNum !== 1) {
                 state.pageNum = 1
             }
-        }else if(key !== undefined) {
+        } else if (key !== undefined) {
             state.searchKeyword = key
             // Jump to the first page after adding search criteria
-            if(state.pageNum !== 1){
+            if (state.pageNum !== 1) {
                 state.pageNum = 1
             }
         }
-        else if(pageObj !== undefined) {
+        else if (pageObj !== undefined) {
             state.pageNum = pageObj.current
             state.pageSize = pageObj.pageSize
         }
     },
-    updateFailedMessage(state,toast){
+    updateFailedMessage(state, toast) {
         state.loadingMessage = {
             type: 'failed',
             toast
         }
     },
-    updateSuccessMessage(state,toast){
+    updateSuccessMessage(state, toast) {
         state.loadingMessage = {
             type: 'success',
             toast
         }
     },
-    updateVisible(state, bool){
+    updateVisible(state, bool) {
         state.visible = bool
     },
-    updateRegionIdOptions(state,{ regionIdList }){
+    updateRegionIdOptions(state, { regionIdList }) {
         state.regionIdOptions = regionIdList
     },
-    updateCloudTypeOptions(state,{ CloudTypeList }){
+    updateCloudTypeOptions(state, { CloudTypeList }) {
         state.cloudTypeOptions = CloudTypeList
     },
-    setInitValues(state, values){
-        console.log(values,"values")
-        if(values.item !== "Edit"){
+    setInitValues(state, values) {
+        if (values.item !== "Edit") {
             state.initValues = values;
-        }else {
+        } else {
             state.initValues = values.record
-            // if(state.currentTab === "VIM ENV")VIMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
-            // else {
-            //     VNFMForm.forEach(item => {state.initValues[item.key] = values.record[item.key]})
-            //     console.log(state.initValues,"state.initValues")
-            // }
-            // state.initValues.id = values.record.id;
         }
     }
 }
 
 const actions = {
-    setParams({state, dispatch}){
+    setParams({ state, dispatch }) {
         let paramsObj = {}
-        if(state.createTime !== '') paramsObj.createTime = state.createTime
-        if(state.searchKeyword !== '') {
-            if(state.currentTab === 'VIM ENV'){
+        if (state.createTime !== '') paramsObj.createTime = state.createTime
+        if (state.searchKeyword !== '') {
+            if (state.currentTab === 'VIM ENV') {
                 paramsObj.dictLabel = state.searchKeyword
-            }else paramsObj.name = state.searchKeyword
+            } else paramsObj.name = state.searchKeyword
         }
-        if(state.pageNum !== '') {
+        if (state.pageNum !== '') {
             paramsObj.pageNum = state.pageNum;
             paramsObj.pageSize = state.pageSize
         }
-        dispatch('getTableData',{paramsObj,isFilter: true})
+        dispatch('getTableData', { paramsObj, isFilter: true })
     },
-    getTableData({commit, state}, {paramsObj, isFilter}){
-        let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtTable: API.vimVnfmMgt.vnfmEnvMgtTable;
+    getTableData({ commit, state }, { paramsObj, isFilter }) {
+        let url = ""
+
+        switch (state.currentTab) {
+            case 'VIM ENV':
+                url = API.vimVnfmMgt.vimEnvMgtTable
+                break;
+            case 'VNFM ENV':
+                url = API.vimVnfmMgt.vnfmEnvMgtTable
+                break;
+            case 'MANO ENV':
+                url = API.vimVnfmMgt.manoEnvMgtTable
+                break;
+            default:
+                break;
+        }
+
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
-        let axiosrequest = axiosgetType?axiospost:axiosget;
+        let axiosrequest = axiosgetType ? axiospost : axiosget;
         commit('updateTableLoading', true);
         axiosrequest(url, paramsObj).then(res => {
-            if(res.code === 200){
-                commit('updateTableData',res);
+            if (res.code === 200) {
+                commit('updateTableData', res);
                 commit('updateTableLoading', false);
-                if(isFilter) commit('updateSuccessMessage','Successfully get table data')
-            }else {
-                if(isFilter) commit('updateFailedMessage','Failed to get form data')
+                if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
+            } else {
+                if (isFilter) commit('updateFailedMessage', 'Failed to get form data')
             }
-        },() => {if(isFilter) commit('updateFailedMessage','Network exception, please try again')}
+        }, () => { if (isFilter) commit('updateFailedMessage', 'Network exception, please try again') }
         )
     },
-    deleteData({dispatch,commit,state},data){
-        let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtDelete: API.vimVnfmMgt.vnfmEnvMgtDelete;
-        axiosdelete(url.replace(":id",data.id)).then( res => {
-            if(res.code === 200){
-                commit('updateSuccessMessage','Deleted successfully')
-                let paramsObj = {pageNumstate: state.pageNum, pageSize: state.pageSize}
-                dispatch('getTableData',{paramsObj})
-            }else  commit('updateFailedMessage','Failed to delete')
+    deleteData({ dispatch, commit, state }, data) {
+        let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtDelete : API.vimVnfmMgt.vnfmEnvMgtDelete;
+        axiosdelete(url.replace(":id", data.id)).then(res => {
+            if (res.code === 200) {
+                commit('updateSuccessMessage', 'Deleted successfully')
+                let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize }
+                dispatch('getTableData', { paramsObj })
+            } else commit('updateFailedMessage', 'Failed to delete')
         }).catch(() => {
-            commit('updateFailedMessage','Network exception, please try again')
+            commit('updateFailedMessage', 'Network exception, please try again')
         })
     },
-    getRegionIdOptions({commit, dispatch}){
+    getRegionIdOptions({ commit, dispatch }) {
         axiosget(API.vimVnfmMgt.cloudRegionID).then(res => {
-            if(res.code === 200){
+            if (res.code === 200) {
                 let idList = [];
-                    res.body.map((item)=>{
-                        idList.push(item.dictValue)
-                    });
-                commit('updateRegionIdOptions',{regionIdList:idList})
-                dispatch('getCloudTypeOptions', {selectRegionId:idList[0]})
-            }else {
+                res.body.map((item) => {
+                    idList.push(item.dictValue)
+                });
+                commit('updateRegionIdOptions', { regionIdList: idList })
+                dispatch('getCloudTypeOptions', { selectRegionId: idList[0] })
+            } else {
                 this.$message.error('Network exception, please try again');
             }
         })
         // Simulation request
     },
-    getCloudTypeOptions({commit}){
+    getCloudTypeOptions({ commit }) {
         let url = API.vimVnfmMgt.cloudType;
         axiosget(url).then(res => {
-            if(res.code === 200){
-                commit('updateCloudTypeOptions',{CloudTypeList:res.body});
-            }else {
+            if (res.code === 200) {
+                commit('updateCloudTypeOptions', { CloudTypeList: res.body });
+            } else {
                 this.$message.error('Network exception, please try again');
             }
         })
         // Simulation request
     },
-    loginVIN({state,commit, dispatch},{isEdit, data}){
-        if(isEdit) data.id = state.initValues.id;
-        let url = isEdit ? (state.currentTab === 'VIM ENV'? API.vimVnfmMgt.vimEnvMgtUpdate:API.vimVnfmMgt.vnfmEnvMgtUpdate) : (state.currentTab === 'VIM ENV'? API.vimVnfmMgt.vimEnvMgtInsert:API.vimVnfmMgt.vnfmEnvMgtInsert);
+    loginVIN({ state, commit, dispatch }, { isEdit, data }) {
+        if (isEdit) data.id = state.initValues.id;
+        let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : API.vimVnfmMgt.vnfmEnvMgtUpdate) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : API.vimVnfmMgt.vnfmEnvMgtInsert);
         let axiosType = isEdit ? axiosput : axiospost;
         axiosType(url, data)
             .then((res) => {
-                if(res.code === 200){
-                    commit('updateSuccessMessage',this.isEdit ? 'Successfully updated' : 'Has been added successfully');
+                if (res.code === 200) {
+                    commit('updateSuccessMessage', this.isEdit ? 'Successfully updated' : 'Has been added successfully');
                     let paramsObj = {
-                        pageNum :state.pageNum,
-                        pageSize :state.pageSize
+                        pageNum: state.pageNum,
+                        pageSize: state.pageSize
                     }
-                    dispatch('getTableData', {paramsObj})
-                }else {
-                    commit('updateFailedMessage',this.isEdit ? 'Update failed' : 'add failed')
+                    dispatch('getTableData', { paramsObj })
+                } else {
+                    commit('updateFailedMessage', this.isEdit ? 'Update failed' : 'add failed')
                 }
             },
-            () => {
-                commit('updateFailedMessage','Network exception, please try again')
-            })
+                () => {
+                    commit('updateFailedMessage', 'Network exception, please try again')
+                })
     }
 
 }
@@ -203,4 +215,4 @@ const getters = {
 
 }
 
-export default { state, mutations, actions, getters, namespaced: true}
+export default { state, mutations, actions, getters, namespaced: true }

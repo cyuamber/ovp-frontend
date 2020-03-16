@@ -176,6 +176,46 @@ const testEvnVNFMColumns = [
         fixed: 'right'
     }
 ];
+const testMANOColumns = [
+    {
+        title: 'ID',
+        dataIndex: 'id',
+        width: 50,
+    },
+    {
+        title: 'Name',
+        dataIndex: 'name',
+    },
+    {
+        title: 'Type',
+        dataIndex: 'monoType',
+        scopedSlots: {
+            customRender: 'monoType'
+        },
+    },
+    {
+        title: 'vender',
+        dataIndex: 'vendor',
+        scopedSlots: {
+            customRender: 'vendor'
+        },
+    },
+    {
+        title: 'version',
+        dataIndex: 'version',
+        scopedSlots: {
+            customRender: 'version'
+        },
+    },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        scopedSlots: {
+            customRender: 'action'
+        },
+        width: 180
+    }
+];
 const testJobColumns = [
     {
         title: 'ID',
@@ -432,6 +472,7 @@ export {
     TestSUTColumns,
     testEnvVIMColumns,
     testEvnVNFMColumns,
+    testMANOColumns,
     TestInsrigisterColumns,
     VnfpnfSuiteColumns,
     TestSpecColumns,
