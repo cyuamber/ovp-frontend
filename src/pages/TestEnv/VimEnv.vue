@@ -125,7 +125,8 @@ export default {
       "getTableData",
       "setParams",
       "deleteData",
-      "getCloudTypeOptions"
+      "getCloudTypeOptions",
+      "getMANOTypeOptions"
     ]),
     ...mapMutations("testENV", [
       "changeTab",
@@ -143,6 +144,9 @@ export default {
       this.keyword = "";
       let paramsObj = {};
       this.getTableData({ paramsObj, isFilter: false });
+      if(key === 'MANO ENV'){
+          this.getMANOTypeOptions()
+      }
     },
     handleRigister() {
       this.updateVisible(true);

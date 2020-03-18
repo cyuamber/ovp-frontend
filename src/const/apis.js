@@ -26,6 +26,7 @@ export default {
         manoEnvMgtTable: baseUrl + "/manos",
         cloudRegionID: baseUrl + "/cloudRegionID",
         cloudType: baseUrl + "/types/1000",
+        MANOType: baseUrl + "/types/200",
         vimEnvMgtInsert: baseUrl + "/vimEnvMgt/insert",
         vimEnvMgtUpdate: baseUrl + "/vimEnvMgt/update",
         vimEnvMgtDelete: baseUrl + "/vimEnvMgt/:id/delete",
@@ -33,6 +34,9 @@ export default {
         vnfmEnvMgtInsert: baseUrl + "/vnfmEnvMgt/insert",
         vnfmEnvMgtUpdate: baseUrl + "/vnfmEnvMgt/update",
         vnfmEnvMgtDelete: baseUrl + "/vnfmEnvMgt/:id/delete",
+        manoMgtInsert:baseUrl + "/manos/insert",
+        manoMgtUpdate:baseUrl + "/manos/:manoId/update",
+        manoMgtDelete:baseUrl + "/manos/:id/delete"
     },
     instrumentMgs: {
         instrumentMgsTable: baseUrl + "/instrumentMgs",

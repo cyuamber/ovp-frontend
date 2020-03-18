@@ -99,7 +99,10 @@ const mutations = {
         } else {
             state.initValues = values.record
         }
-    }
+    },
+    updateMANOTypeOptions(state, { CloudTypeList }) {
+        state.MANOTypeOptions = CloudTypeList
+    },
 }
 
 const actions = {
@@ -118,8 +121,7 @@ const actions = {
         dispatch('getTableData', { paramsObj, isFilter: true })
     },
     getTableData({ commit, state }, { paramsObj, isFilter }) {
-        let url = ""
-
+        let url = "";
         switch (state.currentTab) {
             case 'VIM ENV':
                 url = API.vimVnfmMgt.vimEnvMgtTable
@@ -150,11 +152,24 @@ const actions = {
         )
     },
     deleteData({ dispatch, commit, state }, data) {
-        let url = state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtDelete : API.vimVnfmMgt.vnfmEnvMgtDelete;
+        let url = '';
+        switch (state.currentTab) {
+            case 'VIM ENV':
+                url = API.vimVnfmMgt.vimEnvMgtDelete;
+                break;
+            case 'VNFM ENV':
+                url = API.vimVnfmMgt.vnfmEnvMgtDelete;
+                break;
+            case 'MANO ENV':
+                url = API.vimVnfmMgt.manoMgtDelete;
+                break;
+            default:
+                break;
+        }
         axiosdelete(url.replace(":id", data.id)).then(res => {
             if (res.code === 200) {
-                commit('updateSuccessMessage', 'Deleted successfully')
-                let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize }
+                commit('updateSuccessMessage', 'Deleted successfully');
+                let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize };
                 dispatch('getTableData', { paramsObj })
             } else commit('updateFailedMessage', 'Failed to delete')
         }).catch(() => {
@@ -189,7 +204,7 @@ const actions = {
     },
     loginVIN({ state, commit, dispatch }, { isEdit, data }) {
         if (isEdit) data.id = state.initValues.id;
-        let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : API.vimVnfmMgt.vnfmEnvMgtUpdate) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : API.vimVnfmMgt.vnfmEnvMgtInsert);
+        let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtUpdate : API.vimVnfmMgt.manoMgtUpdate.replace(":manoId",data.id)) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtInsert : API.vimVnfmMgt.manoMgtInsert);
         let axiosType = isEdit ? axiosput : axiospost;
         axiosType(url, data)
             .then((res) => {
@@ -207,7 +222,17 @@ const actions = {
                 () => {
                     commit('updateFailedMessage', 'Network exception, please try again')
                 })
-    }
+    },
+    getMANOTypeOptions({ commit }) {
+        let url = API.vimVnfmMgt.MANOType;
+        axiosget(url).then(res => {
+            if (res.code === 200) {
+                commit('updateCloudTypeOptions', { CloudTypeList: res.body });
+            } else {
+                this.$message.error('Network exception, please try again');
+            }
+        })
+    },
 
 }
 

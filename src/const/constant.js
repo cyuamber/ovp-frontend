@@ -464,6 +464,66 @@ const VNFMForm = [
         key: 'password'
     }
 ]
+const MANOForm = [
+    {
+        title: 'Name',
+        key: 'name'
+    },
+    {
+        title: 'Vendor',
+        key: 'vendor',
+    },
+    {
+        title: 'Version',
+        key: 'version',
+    },
+    {
+        title: 'MANO Type',
+        key: 'manoType',
+    }
+]
+const MANOONAPForm = [
+    {
+        key: 'aai:host-url:',
+        value: 'aaiHostUrl'
+    },
+    {
+        key: 'sdc.catalog:host-url:',
+        value: 'sdcCatalogHostUrl',
+    },
+    {
+        key: 'multicloud:host-url:',
+        value: 'multicloudHostUrl',
+    },
+    {
+        key: 'sdc.oboarding:host-url:',
+        value: 'sdcOboardingHostUrl',
+    },
+    {
+        key: 'vfc:host-url:',
+        value: 'vfcHostUrl',
+    }
+]
+const customProfiles = [
+        {
+            title: 'key',
+            dataIndex: 'key',
+            scopedSlots: { customRender: 'key' },
+            width:'37%'
+        },
+        {
+            title: 'value',
+            dataIndex: 'value',
+            scopedSlots: { customRender: 'value' },
+            width:'53%'
+        },
+        {
+            title: 'action',
+            dataIndex: 'action',
+            scopedSlots: { customRender: 'action' },
+            width:'5%'
+        }
+]
 export {
     mockcolumns,
     axiosgetType,
@@ -479,5 +539,8 @@ export {
     testJobColumns,
     TestCaseColumns,
     VIMForm,
-    VNFMForm
+    VNFMForm,
+    MANOForm,
+    MANOONAPForm,
+    customProfiles
 }

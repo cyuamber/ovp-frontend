@@ -1,0 +1,44 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "code": "200001",
+      "dictLabel": "ONAP",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "200001",
+      "dictLabel": "SO",
+      "dictValue": "2",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "200001",
+      "dictLabel": "AAI",
+      "dictValue": "3",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    {
+      "code": "200001",
+      "dictLabel": "SDC",
+      "dictValue": "4",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    }
+  ],
+  "total": 4,
+  "pageTotal": 1
+}

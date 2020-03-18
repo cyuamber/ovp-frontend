@@ -22,6 +22,10 @@ module.exports =
     "/portal/business/vnfmEnvMgt/insert": "/loginVNFM",
     "/portal/business/vnfmEnvMgt/update": "/updateVNFM",
     "/portal/business/vnfmEnvMgt/:id/delete": "/deleteVNFM",
+    "/portal/business/types/200": "/getMANOType",
+    "/portal/business/manos/insert": "/updateVNFM",
+    "/portal/business/manos/:manoId/update": "/updateVNFM",
+    "/portal/business/manos/:manoId/delete": "/updateVNFM",
     ///////<-------------Instrument MGS MGT--------->/////
     "/portal/business/instrumentMgs": "/_getMeterSys",
     "/portal/business/instrumentMgs/insert": "/loginMeterSys",
