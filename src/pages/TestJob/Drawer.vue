@@ -385,6 +385,7 @@ export default {
           console.log(caseReqs,"-----submit----caseReqs")
           this.createrTestJobMGT({ isEdit, values, caseReqs });
           this.visible = false;
+          this.setIsShow(false);
         }
       });
     },
@@ -421,6 +422,13 @@ export default {
       this.updateInitcheckboxGroup(e);
     },
     caseParamsEdit(caseData){
+        let hasvisible = caseData.parameters.map(item=>{
+            return item.visible
+        });
+        if(hasvisible.indexOf(true)< 0){
+            this.$message.info('This testCase has no editable parameters.');
+            return false
+        }
         this.updateCaseParamsData(caseData);
         this.setCaseParamsIsShow(true);
     }

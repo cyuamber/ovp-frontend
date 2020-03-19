@@ -390,13 +390,15 @@ export default {
                       edit:false
                   })
               });
-              this.onapProfileDataSource.forEach(item => {
-                  data['profiles'].push({
-                      key:item.key,
-                      value:item.value,
-                      edit:true
-                  })
-              });
+              if(this.onapProfileDataSource.length>0){
+                  this.onapProfileDataSource.forEach(item => {
+                      data['profiles'].push({
+                          key:item.key,
+                          value:item.value,
+                          edit:true
+                      })
+                  });
+              }
               console.log(data,this.onapProfileDataSource,"----data----onapProfileDataSource")
           }
           this.updateVisible(false);
@@ -464,7 +466,7 @@ export default {
   margin: 0 5%;
   text-align: center;
   display: inline-block;
-  border-top: 1px dimgray dashed;
+  border-top: 1px #ababab dashed;
 }
 .onap-profile-table{
     margin-top:-20px;
