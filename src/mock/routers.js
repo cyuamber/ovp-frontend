@@ -14,6 +14,7 @@ module.exports =
     ///////<-------------VimEnv--------->/////
     "/portal/business/vimEnvMgt": "/_getVIM",
     "/portal/business/manos": "/_getMANOList",
+    "/portal/business/manos?pageSize=:pageSize": "/_getMANOList",
     "/portal/business/cloudType/1000": "/getcloudType",
     "/portal/business/vimEnvMgt/insert": "/loginVIM",
     "/portal/business/vimEnvMgt/update": "/updateVIM",
@@ -28,6 +29,7 @@ module.exports =
     "/portal/business/manos/:manoId/delete": "/updateVNFM",
     ///////<-------------Instrument MGS MGT--------->/////
     "/portal/business/instrumentMgs": "/_getMeterSys",
+    "/portal/business/instrumentMgs?pageSize=:pageSize": "/_getMeterSys",
     "/portal/business/instrumentMgs/insert": "/loginMeterSys",
     "/portal/business/instrumentMgs/update": "/updateMeterSys",
     "/portal/business/instrumentMgs/:name/delete": "/deleteMeterSys",
@@ -57,7 +59,7 @@ module.exports =
     "/portal/business/jobs": "/_getTestJobMGT",
     "/portal/business/sutName/:code": "/getSUTName",
     "/portal/business/testSpec/:type": "/getJobSpecification",
-    "/portal/business/testCase/jobCase/:id": "/getTestCaseList",
+    "/portal/business/testCase/jobCase/:id/:sutId": "/_getTestCaseList",
     "/portal/business/jobs/insert": "/addTestSpec",
     "/portal/business/jobs/:jobId/update": "/addTestSpec",
     "/portal/business/jobs/:jobId/start": "/runTestJobMGT",
@@ -65,6 +67,7 @@ module.exports =
     "/portal/business/jobs/:jobId": "/_getJobProgress",
     "/portal/business/jobs/cases/:jobId/:ExecutionStartTime": "/_testJobDetail",
     "/portal/business/jobs/cases/download/:jobId": "/_downloadFile",
+    "/portal/business/testCase/:caseId/:sutId": "/_downloadFile",
     "/*/*": "/$1_$2",
     "/*/*/*": "/$1_$2_$3",
     "/*/*/*/*": "/$1_$2_$3_$4",

@@ -37,12 +37,53 @@
     },
     "cases": [
       {
-        "id": 1000,
-        "number": "1000",
-        "name": "vFW-Function-DNS-Proxy",
-        "description": null,
-        "version": "v1.0",
-        "status": null
+        "id": 1,
+        "number": 1,
+        "name": "vFW-Function-Policy",
+        "description": "The Firewall Policy can match the traffic's src security zone, dst security zone, src IP address, dst IP address, TCP/UDP port, and the action of policy rule can take effect right.",
+        "version": "6",
+        "status": "enable",
+        "sutType": 101,
+        "subSutType": 101003,
+        "executions":null,
+        "parameters":[
+          {
+            "name": "string1",
+            "value": "string",
+            "description": "string",
+            "type": "string",
+            "defaultValue": "789",
+            "isOptional": true,
+            "visible": true
+          },
+          {
+            "name": "string2",
+            "value": "string",
+            "description": "string",
+            "type": "string",
+            "defaultValue": "456",
+            "isOptional": false,
+            "visible": true
+          },
+          {
+            "name": "string3",
+            "value": "string",
+            "description": "string",
+            "type": "bool",
+            "defaultValue": "false",
+            "isOptional": true,
+            "visible": true
+          },
+          {
+            "name": "string4",
+            "value": "string",
+            "description": "string",
+            "type": "bool",
+            "defaultValue": "true",
+            "isOptional": true,
+            "visible": false
+          }
+        ]
       }
     ],
     "vim": {
@@ -78,6 +119,20 @@
       "password": null,
       "certificateUrl": null,
       "typeCH": null
+    },
+    "mano": {
+      "createTime": null,
+      "updateTime": null,
+      "id": null,
+      "name": null,
+      "version": null,
+      "vendor": null,
+      "monoType": null,
+      "profiles": null
+    },
+    "suite": {
+      "id":null,
+      "name":null
     }
   }
 }

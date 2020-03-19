@@ -38,6 +38,8 @@ const state = {
 	detailTestCase: [],
 	VNFMOption: [],
 	VIMOption: [],
+    MANOOption: [],
+    TestInstrumentOption: [],
 	executionStartTime: '',
 	testCasePieData: [
 		{ name: "DONE", y: 0, color: "#cae76e" },
@@ -45,13 +47,18 @@ const state = {
 	],
 	testJobSingleData: {},
 	dashboardJumpStatus: 'All',
-	initcheckboxGroup: []
+	initcheckboxGroup: [],
+    caseParamsIsShow: false,
+    caseParamsData: []
 }
 
 const mutations = {
 	setIsShow(state, bool) {
 		state.isShow = bool;
 	},
+    setCaseParamsIsShow(state, bool) {
+        state.caseParamsIsShow = bool;
+    },
 	updateFailedMessage(state, toast) {
 		state.loadingMessage = {
 			type: 'failed',
@@ -123,6 +130,8 @@ const mutations = {
 		state.initcheckboxGroup = []
 		state.VNFMOption = []
 		state.VIMOption = []
+		state.MANOOption = []
+		state.TestInstrumentOption = []
 	},
 	updateTableData(state, tableData) {
 		state.tableData = tableData
@@ -169,6 +178,12 @@ const mutations = {
 	updateVIMOption(state, options) {
 		state.VIMOption = options;
 	},
+    updateMANOOption(state, options) {
+        state.MANOOption = options;
+    },
+    updateTestInstrumentOption(state, options) {
+        state.TestInstrumentOption = options;
+    },
 	updateExecutionStartTime(state, options) {
 		state.executionStartTime = options;
 	},
@@ -192,6 +207,10 @@ const mutations = {
 	},
 	updateInitcheckboxGroup(state, data) {
 		state.initcheckboxGroup = data;
+	},
+    updateCaseParamsData(state, data){
+        state.caseParamsData = data;
+		console.log(data,state.caseParamsData,"---state.caseParamsData")
 	}
 }
 
@@ -223,7 +242,7 @@ const actions = {
 			if (bool) commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
-	createrTestJobMGT({ dispatch, commit, state }, { isEdit, values }) {
+	createrTestJobMGT({ dispatch, commit, state }, { isEdit, values, caseReqs }) {
 		let body = {
 			cronExpression: "",
 			endpoint: "/portal/business/jobs/case/start",
@@ -236,10 +255,12 @@ const actions = {
 			sutId: values.SUTName.split("+")[1],
 			specId: values.TestSpecification,
 			createrTime: moment(new Date()).format('YYYY-MM-DD'),
-			caseIds: values.checkboxGroup ? values.checkboxGroup : []
+            caseReqs: caseReqs
 		};
 		if (values.TestVIMENV) body.vimId = values.TestVIMENV;
 		if (values.TestVNFMENV) body.vnfmId = values.TestVNFMENV;
+		if (values.TestMANOENV) body.manoId = values.TestMANOENV;
+		if (values.TestInstrument) body.suiteId = values.TestInstrument;
 		let jobId = isEdit ? state.testJobSingleData.jobId : "";
 		if (isEdit) body.jobId = jobId;
 		let url = isEdit ? API.testJobMgt.testJobUpdate.replace(":jobId", jobId) : API.testJobMgt.testJobInsert;
@@ -345,7 +366,7 @@ const actions = {
 		// console.log("======getTestCase")
 		commit('updateTestCaseList', { spin: true });
 		commit('updateFailDetail', "");
-		axiosget(API.testJobMgt.testJobTestCase.replace(":id", TestSpecification)).then(res => {
+		axiosget(API.testJobMgt.testJobTestCase.replace(":id", TestSpecification).replace(":sutId", TestSpecification)).then(res => {
 			if (res.code === 200) {
 				commit('updateTestCaseList', { spin: false, list: res.body })
 			} else {
@@ -482,18 +503,47 @@ const actions = {
 			message.error('Network exception, please try again')
 		})
 	},
+    getMANOOption({ commit }, { message, pageSize }) {
+        let obj = {
+            pageSize:pageSize
+        }
+        axiosget(API.vimVnfmMgt.manoEnvMgtTable,obj).then(res => {
+            if (res.code === 200) {
+                // Simulation request
+                commit('updateMANOOption', res.body)
+            } else {
+                message.error('Failed to get SUT Name list')
+            }
+        }, () => {
+            message.error('Network exception, please try again')
+        })
+    },
+    getTestInstrumentOption({ commit }, { message, pageSize }) {
+		let obj = {
+            pageSize:pageSize
+		}
+        axiosget(API.instrumentMgs.instrumentMgsTable,obj).then(res => {
+            if (res.code === 200) {
+                // Simulation request
+                commit('updateTestInstrumentOption', res.body)
+            } else {
+                message.error('Failed to get SUT Name list')
+            }
+        }, () => {
+            message.error('Network exception, please try again')
+        })
+    },
 	getEditTestJob({ dispatch, commit }, data) {
 		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
 			.then(res => {
 				if (res.code === 200) {
-					console.log(res.body, "res.body----getEditTestJob");
 					commit('updateTestJobSingleData', res.body);
 					dispatch("getTestCase", { TestSpecification: res.body.spec.id, message: this.$message })
 				}
 			}, () => {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			});
-	}
+	},
 
 }
 
