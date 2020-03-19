@@ -75,8 +75,8 @@ export default {
       tableData: state => state.testJob.tableData,
       pagination: state => state.testJob.pagination,
       tableLoading: state => state.testJob.tableLoading,
-        testJobSingleData: state => state.testJob.testJobSingleData,
-        lang: state => state.router.lang
+      testJobSingleData: state => state.testJob.testJobSingleData,
+      lang: state => state.router.lang
     }),
       dashboardJumpStatus: {
           get() {
@@ -104,14 +104,16 @@ export default {
       "getSUTType",
       "getVNFMOption",
       "getVIMOption",
-        "getEditTestJob"
+      "getMANOOption",
+      "getTestInstrumentOption",
+      "getEditTestJob"
     ]),
     ...mapMutations("testJob", ["setIsShow", "setFilter","updateDashboardJumpStatus","clearSearchKeyword"]),
     initTestJobTable() {
       this.getTableData({bool:false});
-      this.tableQueryTimer = setInterval(() => {
-        this.getTableData({bool:false,loading:false});
-      }, 5000);
+      // this.tableQueryTimer = setInterval(() => {
+      //   this.getTableData({bool:false,loading:false});
+      // }, 5000);
     },
     handleCreate() {
         this.isEdit = false;
@@ -124,6 +126,12 @@ export default {
       });
       this.getVIMOption({
         message: this.$message
+      });
+      this.getMANOOption({
+          message: this.$message
+      });
+      this.getTestInstrumentOption({
+          message: this.$message
       });
     },
     handleSelectCreateTime(date, d) {
@@ -167,7 +175,6 @@ export default {
       });
     },
       handleEdit(data){
-        // console.log(data);
           this.isEdit = true;
           this.setIsShow(true);
           this.getEditTestJob(data);
@@ -179,6 +186,14 @@ export default {
           });
           this.getVIMOption({
               message: this.$message
+          });
+          this.getMANOOption({
+              message: this.$message,
+              pageSize: 100
+          });
+          this.getTestInstrumentOption({
+              message: this.$message,
+              pageSize: 100
           });
       },
     handleDelete(data) {

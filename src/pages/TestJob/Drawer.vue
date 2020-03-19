@@ -84,6 +84,28 @@
             :value="type.id"
           >{{type.cloudOwner}}</a-select-option>
         </a-select>
+        <a-select
+                v-else-if="item === 'Test MANO ENV'"
+                v-decorator="[keyList[i],{initialValue:initMANOENV.name}]"
+                class="form__select--width"
+        >
+          <a-select-option
+                  v-for="type in MANOOption"
+                  :key="type.id"
+                  :value="type.id"
+          >{{type.name}}</a-select-option>
+        </a-select>
+        <a-select
+                v-else-if="item === 'Test Instrument'"
+                v-decorator="[keyList[i],{initialValue:initTestInstrument.name}]"
+                class="form__select--width"
+        >
+          <a-select-option
+                  v-for="type in TestInstrumentOption"
+                  :key="type.id"
+                  :value="type.id"
+          >{{type.name}}</a-select-option>
+        </a-select>
         <!-- loading -->
         <a-spin :spinning="nameSpin" v-if="item === 'SUT Name'">
           <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
@@ -112,8 +134,14 @@
                 <a-tooltip placement="topLeft" :title="item.description">
                   <a-icon type="info-circle" class="form__info-cursor" />
                 </a-tooltip>
+                <a-icon
+                        v-if="initcheckboxGroup.includes(item.id)"
+                        type="unordered-list"
+                        class="form__info-cursor"
+                        @click="(() => caseParamsEdit(item))"/>
               </a-card-grid>
             </a-checkbox-group>
+            <CaseParams :isEdit="isEdit" />
           </a-form-item>
         </div>
       </a-spin>
@@ -128,9 +156,10 @@
 <script type="text/ecmascript-6">
 import { mapState, mapActions, mapMutations } from "vuex";
 import { formList } from "./constants";
-
+import CaseParams from "./CaseParams";
 export default {
   props: ["isShow", "isEdit"],
+  components: { CaseParams },
   data() {
     return {
       visible: this.isShow,
@@ -161,6 +190,14 @@ export default {
         name: null,
         code: null
       },
+      initMANOENV: {
+          name: null,
+          code: null
+      },
+      initTestInstrument: {
+          name: null,
+          code: null
+      },
       count: 0
     };
   },
@@ -170,6 +207,8 @@ export default {
       SUTNameList: store => store.testJob.SUTNameList,
       VNFMOption: store => store.testJob.VNFMOption,
       VIMOption: store => store.testJob.VIMOption,
+      MANOOption: store => store.testJob.MANOOption,
+      TestInstrumentOption: store => store.testJob.TestInstrumentOption,
       nameSpin: store => store.testJob.nameSpin,
       getSUTNames: store => store.testJob.getSUTName,
       specificationSpin: store => store.testJob.specificationSpin,
@@ -178,7 +217,7 @@ export default {
       testCaseSpin: store => store.testJob.testCaseSpin,
       testCaseList: store => store.testJob.testCaseList,
       testJobSingleData: state => state.testJob.testJobSingleData,
-      initcheckboxGroup: state => state.testJob.initcheckboxGroup
+      initcheckboxGroup: state => state.testJob.initcheckboxGroup,
     })
   },
   watch: {
@@ -196,12 +235,8 @@ export default {
         this.keyList.forEach(item => {
           this.form.setFieldsValue({ [item]: "" });
         });
-        console.log(
-          this.testJobSingleData,
-          "visible----this.testJobSingleData"
-        );
       } else {
-        console.log(this.count, "this.count++");
+          console.log(val,this.count,"this.count----")
         this.count++;
       }
       if (this.isEdit) {
@@ -211,9 +246,7 @@ export default {
       }
     },
     testJobSingleData(val) {
-      console.log(this.count, "this.count---testJobSingleData");
       if (Object.keys(val).length > 0) {
-        console.log(this.testJobSingleData, "val---testJobSingleData");
         this.initSUTType = {
           name: this.testJobSingleData.sut.flagName,
           code: this.testJobSingleData.sut.flag
@@ -240,12 +273,24 @@ export default {
             ? this.testJobSingleData.vnfm.id
             : ""
         };
+        this.initMANOENV = {
+            name: this.testJobSingleData.mano
+                ? this.testJobSingleData.mano.name
+                : "",
+            code: this.testJobSingleData.mano
+                ? this.testJobSingleData.mano.id
+                : ""
+        };
+        this.initTestInstrument = {
+            name: this.testJobSingleData.suite
+                ? this.testJobSingleData.suite.name
+                : "",
+            code: this.testJobSingleData.suite
+                ? this.testJobSingleData.suite.id
+                : ""
+        };
         // setTimeout()
         if (this.isEdit && this.count > 1) {
-          console.log(
-            this.testJobSingleData,
-            "vibiliti---this.testJobSingleData"
-          );
           this.form.setFieldsValue({
             JobName: this.testJobSingleData.jobName,
             JobDescription: this.testJobSingleData.remark,
@@ -257,29 +302,25 @@ export default {
               : "",
             TestVNFMENV: this.testJobSingleData.vnfm
               ? this.testJobSingleData.vnfm.name
-              : ""
+              : "",
+            TestMANOENV: this.testJobSingleData.mano
+              ? this.testJobSingleData.mano.name
+              : "",
+            TestInstrument: this.testJobSingleData.suite
+                ? this.testJobSingleData.suite.name
+                : ""
           });
         }
       }
     }
-    // initcheckboxGroup(val){
-    //     if(val.length>0 && this.isEdit && this.count > 1){
-    //         console.log(val,"val--initcheckboxGroup")
-    //         this.form.setFieldsValue({
-    //             checkboxGroup:val
-    //         });
-    //     }
-    // }
   },
   created() {
     this.keyList = this.formList.map(item => {
       item = item.replace(" ", "").replace(" ", "");
       return item;
     });
-    // console.log(this.isShow, "this.isShow----created");
   },
   mounted() {
-    // console.log(this.isShow, "this.isShow----mounted");
   },
   methods: {
     ...mapActions("testJob", [
@@ -289,7 +330,13 @@ export default {
       "getTestCase",
       "getEditTestJob"
     ]),
-    ...mapMutations("testJob", ["clean", "setIsShow"]),
+    ...mapMutations("testJob", [
+        "clean",
+        "setIsShow",
+        "updateInitcheckboxGroup",
+        "setCaseParamsIsShow",
+        "updateCaseParamsData"
+    ]),
     onClose() {
       this.visible = false;
       this.setIsShow(false);
@@ -315,8 +362,28 @@ export default {
               values.TestVNFMENV === this.initTestVNFMENV.name
                 ? this.initTestVNFMENV.code
                 : values.TestVNFMENV;
+              values.TestMANOENV =
+                  values.TestMANOENV === this.initMANOENV.name
+                      ? this.initMANOENV.code
+                      : values.TestMANOENV;
+              values.TestInstrument =
+                  values.TestInstrument === this.initTestInstrument.name
+                      ? this.initTestInstrument.code
+                      : values.TestInstrument;
           }
-          this.createrTestJobMGT({ isEdit, values });
+          let caseReqs = [];
+          if(this.initcheckboxGroup.length>0){
+              this.testCaseList.forEach(item=>{
+                  if(this.initcheckboxGroup.includes(item.id)){
+                      caseReqs.push({
+                          caseId:item.id,
+                          parameters:item.parameters
+                      })
+                  }
+              })
+          }
+          console.log(caseReqs,"-----submit----caseReqs")
+          this.createrTestJobMGT({ isEdit, values, caseReqs });
           this.visible = false;
         }
       });
@@ -336,7 +403,7 @@ export default {
       this.selectedSUTName = key.split("+")[1];
       this.selectedSpecification = "";
       this.getSpecification({
-        SUTName: key.split("+")[0],
+        SUTName: key.split("+")[1],
         message: this.$message
       });
       this.form.setFieldsValue({ TestSpecification: "" });
@@ -346,11 +413,16 @@ export default {
       this.selectedSpecification = key;
       this.getTestCase({
         TestSpecification: key,
+        sutId:this.selectedSUTName,
         message: this.$message
       });
     },
     onChange(e) {
-      console.log(e.target, e);
+      this.updateInitcheckboxGroup(e);
+    },
+    caseParamsEdit(caseData){
+        this.updateCaseParamsData(caseData);
+        this.setCaseParamsIsShow(true);
     }
   }
 };
@@ -382,6 +454,7 @@ export default {
     text-indent: 0.5em;
     .form__info-cursor {
       cursor: pointer;
+      margin-right: 10px;
     }
   }
   .form__checkboxgroup--margin {
