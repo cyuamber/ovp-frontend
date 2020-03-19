@@ -104,6 +104,7 @@ export default {
       spin: true,
       initNVFTypeValue: null,
       uploading: false,
+      uploadAliasFilename: "",
       editUploadtextShow: true
     };
   },
@@ -126,6 +127,7 @@ export default {
             vendor: "",
             type: ""
           });
+          this.uploadAliasFilename = "";
         }
       }
     }
@@ -147,12 +149,14 @@ export default {
             type: this.VNFTest.typeCH.code
           });
         } else if (!this.isEdit && this.count > 1) {
-          this.form.setFieldsValue({ type: this.VNFOptions.length>0?this.VNFOptions[0].code:'' });
+          this.form.setFieldsValue({
+            type: this.VNFOptions.length > 0 ? this.VNFOptions[0].code : ""
+          });
         }
       }
     },
     VNFOptions(val) {
-      if (val.length>0) {
+      if (val.length > 0) {
         this.initNVFTypeValue = val[0].code;
         this.spin = false;
       }
@@ -160,6 +164,7 @@ export default {
     VNFTest(val) {
       if (val.code !== undefined) {
         this.initNVFTypeValue = val.code;
+        this.uploadAliasFilename = val.fileAliasName;
         this.spin = false;
       }
     }
@@ -173,10 +178,12 @@ export default {
       }
       this.updateVisible(false);
     },
-      handleChange(info) {
-          console.log(info,"fileInfo");
-          this.editUploadtextShow = false;
-      },
+    handleChange(info) {
+      this.editUploadtextShow = false;
+      this.uploadAliasFilename = info.file.response
+        ? info.file.response.body.filename
+        : "";
+    },
     normFile(e) {
       if (Array.isArray(e)) {
         return e;
@@ -212,14 +219,17 @@ export default {
             createTime: this.isEdit
               ? this.VNFTest.createTime
               : moment(new Date()).format("YYYY-MM-DD"),
-            // fileName:"test.casr"
+            fileAliasName: this.uploadAliasFilename,
             fileName: !this.editUploadtextShow
               ? values.upload[0].name
               : this.VNFTest.fileName
           };
-          this.submitFormData(data);
-          // if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
-          // else this.handleUpload(data, formData);
+          console.log(data, "===>params");
+          if (!data.fileName || !data.fileAliasName) {
+            this.$message.error("Upload file error. Please upload again!");
+          } else {
+            this.submitFormData(data);
+          }
         }
       });
     },

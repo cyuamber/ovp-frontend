@@ -87,7 +87,7 @@ export default {
       "getPagination",
       "clearPagination",
       "deleteTestMeter",
-        "downloadFile"
+      "downloadFile"
     ]),
     ...mapMutations("VnfpnfSuite", [
       "changeTab",
@@ -141,7 +141,7 @@ export default {
         this.updateVisible(true);
         this.isEdit = true;
         this.updateVNFTest(SuiteSingleData);
-      } else if(item === "Delete") {
+      } else if (item === "Delete") {
         this.$confirm({
           title: "Are you sure delete this xNF TT?",
           content: "Name: " + SuiteSingleData.name,
@@ -152,17 +152,20 @@ export default {
             this.deleteTestMeter({ id: SuiteSingleData.id });
           }
         });
-      }else {
-          this.$confirm({
-              title: "Are you sure download this xNF TT?",
-              content: "fileName: " + SuiteSingleData.fileName,
-              okText: "Yes",
-              okType: "danger",
-              cancelText: "No",
-              onOk: () => {
-                  this.downloadFile({ fileName: SuiteSingleData.fileName });
-              }
-          });
+      } else {
+        this.$confirm({
+          title: "Are you sure download this xNF TT?",
+          content: "File Name: " + SuiteSingleData.fileName,
+          okText: "Yes",
+          okType: "danger",
+          cancelText: "No",
+          onOk: () => {
+            this.downloadFile({
+              fileName:
+                SuiteSingleData.fileAliasName || SuiteSingleData.fileName
+            });
+          }
+        });
       }
     }
   },

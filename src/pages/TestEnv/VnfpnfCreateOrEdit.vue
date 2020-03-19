@@ -75,6 +75,24 @@
             class="form__uploadtext-height"
           >{{SuiteSingleData.fileName}}</span>
         </a-form-item>
+        <a-form-item
+          label="Manage System"
+          v-if="currentTab === 101"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 8 }"
+        >
+          <a-select
+            :disabled="spin"
+            class="select"
+            v-decorator="['manage',{ rules: [{ required: true, message: 'Manage System is required' }],initialValue: initManageSystemValue}]"
+          >
+            <a-select-option
+              v-for="system in SystemOptions"
+              :key="system.id"
+              :value="system.id"
+            >{{system.name}}</a-select-option>
+          </a-select>
+        </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
           <a-button type="primary" html-type="submit" :disabled="disabled">Submit</a-button>
         </a-form-item>
@@ -94,13 +112,19 @@ export default {
       spin: false,
       count: 0,
       disabled: false,
+      uploadAliasFilename: "",
       initNVFTypeValue: null,
+      initManageSystemValue: null,
       editUploadtextShow: true
     };
+  },
+  mounted() {
+    this.getSystemOptions();
   },
   computed: {
     ...mapState({
       VNFOptions: state => state.VnfpnfSuite.VNFOptions,
+      SystemOptions: state => state.VnfpnfSuite.SystemOptions,
       SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
       currentTab: state => state.VnfpnfSuite.currentTab
     }),
@@ -135,7 +159,8 @@ export default {
             XNFName: this.SuiteSingleData.name,
             XNFType: this.SuiteSingleData.typeCH.code,
             XNFVendor: this.SuiteSingleData.vendor,
-            Version: this.SuiteSingleData.version
+            Version: this.SuiteSingleData.version,
+            manage: this.SuiteSingleData.instrumentMgs.id
           });
         } else if (!this.isEdit && this.count > 1) {
           this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
@@ -148,28 +173,37 @@ export default {
       }
       if (val.length && !this.isEdit) {
         this.initNVFTypeValue = val[0].code;
-        console.log(this.initNVFTypeValue, "this.initNVFTypeValue");
+      }
+    },
+    SystemOptions(val) {
+      if (val.length && !this.isEdit) {
+        this.initManageSystemValue = val[0].id;
       }
     },
     SuiteSingleData(val) {
       if (Object.keys(val).length > 0) {
         this.initNVFTypeValue = val.type;
+        this.uploadAliasFilename = val.fileAliasName;
+        this.initManageSystemValue = val.instrumentMgs.id;
         this.spin = false;
       }
     }
   },
   methods: {
     ...mapActions("VnfpnfSuite", [
-      "getVNFOptions",
+      "getSystemOptions",
       "clearOptions",
       "uploadVNFFile",
       "createOrEditTestMeter"
     ]),
     ...mapMutations("VnfpnfSuite", ["updateVNFTest", "updateVisible"]),
-      handleChange(info) {
-        console.log(info,"fileInfo");
-          this.editUploadtextShow = false;
-      },
+    handleChange(info) {
+      this.editUploadtextShow = false;
+      this.uploadAliasFilename = info.file.response
+        ? info.file.response.body.filename
+        : "";
+    },
+
     normFile(e) {
       if (Array.isArray(e)) {
         return e;
@@ -191,12 +225,8 @@ export default {
         });
       }
     },
-    beforeUpload() {
-      return false;
-    },
     handleUpload(data, formData) {
       this.disabled = true;
-      console.log(formData.get("file"), "file------");
       this.uploadVNFFile({ formData, message: this.$message }).then(
         () => {
           this.submitFormData(data);
@@ -226,15 +256,21 @@ export default {
             type: values.XNFType,
             vendor: values.XNFVendor,
             version: values.Version,
-            // fileName:"test.casr"
+            fileAliasName: this.uploadAliasFilename,
             fileName: !this.editUploadtextShow
               ? values.upload[0].name
               : this.SuiteSingleData.fileName
           };
-          if(this.isEdit)data.id = this.SuiteSingleData.id;
-          this.submitFormData(data);
-          // if (this.isEdit && this.editUploadtextShow) this.submitFormData(data);
-          // else this.handleUpload(data, formData);
+          if (this.currentTab === 101) {
+            Object.assign(data, { instrumentMgsId: values.manage });
+          }
+          // console.log(data, "===>params");
+          if (this.isEdit) data.id = this.SuiteSingleData.id;
+          if (!data.fileName || !data.fileAliasName) {
+            this.$message.error("Upload file error. Please upload again!");
+          } else {
+            this.submitFormData(data);
+          }
         }
       });
     },

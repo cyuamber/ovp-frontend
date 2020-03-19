@@ -6,6 +6,7 @@ import { axiosgetType } from "../../const/constant";
 const state = {
     tableData: [],
     VNFOptions: [],
+    SystemOptions: [],
     SuiteSingleData: {},
     tableLoading: false,
     source: null,
@@ -18,9 +19,9 @@ const mutations = {
     updateTableData(state, tableData) {
         state.pagination.total = tableData.total;
         state.tableData = tableData.body.map((item, index) => {
-            item.createTime = item.createTime!==null?moment(item.createTime).format('YYYY-MM-DD'):item.createTime;
+            item.createTime = item.createTime !== null ? moment(item.createTime).format('YYYY-MM-DD') : item.createTime;
             item.index = tableData.body.length * (state.pagination.current - 1) + index + 1;
-            item.action = ['Edit', 'Delete','Download'];
+            item.action = ['Edit', 'Delete', 'Download'];
             return item
         })
     },
@@ -29,6 +30,9 @@ const mutations = {
     },
     updateVNFOptions(state, Options) {
         state.VNFOptions = Options;
+    },
+    updateSystemOptions(state, Options) {
+        state.SystemOptions = Options;
     },
     updatePagination(state, Options) {
         state.pagination = Options;
@@ -94,6 +98,16 @@ const actions = {
             }
         })
     },
+    getSystemOptions({ commit }) {
+        let url = API.instrumentMgs.instrumentMgsTable;
+        axiosget(url).then(res => {
+            if (res.code === 200) {
+                commit('updateSystemOptions', res.body)
+            } else {
+                this.$message.error('Network exception, please try again');
+            }
+        })
+    },
     clearOptions({ commit }) {
         commit('updateVNFOptions', [])
     },
@@ -139,10 +153,10 @@ const actions = {
             } else commit('updateFailedMessage', 'Network exception, please try again')
         })
     },
-    downloadFile({ commit }, data){
+    downloadFile({ commit }, data) {
         let url = API.downloadFile.replace(":filename", data.fileName);
-        console.log(window.location.protocol+"//"+window.location.host+url,"window.location.protocol");
-        window.open(window.location.protocol+"//"+window.location.host+url);
+        console.log(window.location.protocol + "//" + window.location.host + url, "window.location.protocol");
+        window.open(window.location.protocol + "//" + window.location.host + url);
         commit('updateSuccessMessage', 'DownLoad File successfully');
     }
 

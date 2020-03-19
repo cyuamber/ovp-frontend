@@ -1,47 +1,67 @@
 {
   "code": 200,
   "message": "OK",
-  "body": [
-    {
+  "body": [{
+    "id": 1,
+    "name": "STVc-FW",
+    "vendor": "Spirent",
+    "version": "V1.0",
+    "type": 1,
+    "createTime": 1573516800000,
+    "updateTime": null,
+    "fileName": "test.casr",
+    "fileAliasName": "fakefilename01.casr",
+    "flag": 0,
+    "typeCH": {
+      "code": "2",
+      "dictLabel": "FW",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "instrumentMgs": {
+      "createTime": null,
+      "updateTime": null,
       "id": 1,
-      "name": "STVc-FW",
-      "vendor": "Spirent",
-      "version": "V1.0",
-      "type": 1,
-      "createTime": 1573516800000,
-      "updateTime": null,
-      "fileName": "test.casr",
-      "flag": 0,
-      "typeCH": {
-        "code": "2",
-        "dictLabel": "FW",
-        "dictValue": "1",
-        "dictParentCode": null,
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      }
-    },{
-      "id": 2,
-      "name": "STVc-DNS",
-      "vendor": "Spirent",
-      "version": "V1.0",
-      "type": 2,
-      "createTime": 1570492800000,
-      "updateTime": null,
-      "fileName": null,
-      "flag": 0,
-      "typeCH": {
-        "code": "2",
-        "dictLabel": "DNS",
-        "dictValue": "1",
-        "dictParentCode": null,
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      }
+      "name": null,
+      "vendor": null,
+      "mntAddress": null,
+      "username": null,
+      "password": null
     }
-  ],
-  "total": 1,
+  }, {
+    "id": 2,
+    "name": "STVc-DNS",
+    "vendor": "Spirent",
+    "version": "V1.0",
+    "type": 2,
+    "createTime": 1570492800000,
+    "updateTime": null,
+    "fileName": "file name.yaml",
+    "fileAliasName": "fakefilename02.yaml",
+    "flag": 0,
+    "typeCH": {
+      "code": "2",
+      "dictLabel": "DNS",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "instrumentMgs": {
+      "createTime": null,
+      "updateTime": null,
+      "id": 3,
+      "name": null,
+      "vendor": null,
+      "mntAddress": null,
+      "username": null,
+      "password": null
+    }
+  }],
+  "total": 2,
   "pageTotal": 1
 }
