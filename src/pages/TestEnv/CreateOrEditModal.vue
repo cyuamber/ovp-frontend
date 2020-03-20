@@ -481,4 +481,9 @@ export default {
         width: 90%;
     }
 }
+.ant-checkbox-group{
+    .ant-card-grid:hover{
+        z-index: 0!important;
+    }
+}
 </style>

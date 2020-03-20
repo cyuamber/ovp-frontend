@@ -14,7 +14,7 @@
                     />
                     <a-switch
                             v-if="item.visible===true &&item.type==='bool'"
-                            v-decorator="[item.name,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:isEdit === true ?strBool(item.value):strBool(item.defaultValue) }]"/>
+                            v-decorator="[item.name,{ valuePropName: 'checked',rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:isEdit === true ?strBool(item.value):strBool(item.defaultValue) }]"/>
                 </a-form-item>
             </a-form>
         </template>
@@ -66,8 +66,7 @@ import { mapState, mapMutations } from "vuex";
                             this.form.setFieldsValue({
                                 [item.name]: this.isEdit === false ?item.defaultValue:(this.isEdit === true && item.type === 'bool'?this.strBool(item.value):item.value)
                             });
-                        })
-                        console.log(val,this.caseParams,"-----count>1-----caseParamsIsShow")
+                        });
                     }
                 }
             },
@@ -75,7 +74,6 @@ import { mapState, mapMutations } from "vuex";
                 this.caseParams = val.parameters.filter(item =>{
                     return item.visible !== false
                 });
-                console.log(val,this.caseParams,"-----caseParamsData")
             },
         },
         methods: {
@@ -108,19 +106,11 @@ import { mapState, mapMutations } from "vuex";
                 })
             },
             strBool(val){
-                let result = null;
-                if(typeof val === 'string'){
-                    if(val ==='true'){
-                        result = true
-                    }else if(val ==='false'){
-                        result = false
-                    }else {
-                        result = val
-                    }
+                if(val === 'true'){
+                    return Boolean('true')
                 }else {
-                    result = val
+                    return Boolean()
                 }
-                return result
             }
         }
     }
