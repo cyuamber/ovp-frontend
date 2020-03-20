@@ -139,6 +139,7 @@ export default {
           this.editUploadtextShow = false;
         } else {
           this.editUploadtextShow = true;
+          this.uploadAliasFilename = this.VNFTest.fileAliasName;
         }
         this.count++;
         if (this.isEdit && this.count > 1) {
@@ -224,7 +225,7 @@ export default {
               ? values.upload[0].name
               : this.VNFTest.fileName
           };
-          console.log(data, "===>params");
+          // console.log(data, "===>params");
           if (!data.fileName || !data.fileAliasName) {
             this.$message.error("Upload file error. Please upload again!");
           } else {
