@@ -33,5 +33,8 @@ export default {
         //     document.getSelection().removeAllRanges();
         //     document.getSelection().addRange(selected);
         // }
+    },
+    strBool(val) {
+        return val === "true" ? true : false;
     }
 }
