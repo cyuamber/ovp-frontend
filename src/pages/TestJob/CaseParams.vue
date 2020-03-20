@@ -10,11 +10,11 @@
                         :wrapper-col="{ span: 14 }">
                     <a-input
                             v-if="item.visible===true &&item.type==='string'"
-                            v-decorator="[item.name,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:item.defaultValue!==null?item.defaultValue:item.value }]"
+                            v-decorator="[item.name,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:!isEdit?item.defaultValue:item.value }]"
                     />
                     <a-switch
                             v-if="item.visible===true &&item.type==='bool'"
-                            v-decorator="[item.name,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:item.defaultValue!==null?item.defaultValue:item.value }]"/>
+                            v-decorator="[item.name,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:isEdit === true ?strBool(item.value):strBool(item.defaultValue) }]"/>
                 </a-form-item>
             </a-form>
         </template>
@@ -47,9 +47,9 @@ import { mapState, mapMutations } from "vuex";
                     if (!val) {
                         this.caseParams.forEach(item=>{
                             this.form.setFieldsValue({
-                                [item.name]: item.defaultValue!==null?item.defaultValue:item.value
+                                [item.name]: this.isEdit === false ?item.defaultValue:(this.isEdit === true && item.type === 'bool'?this.strBool(item.value):item.value)
                             });
-                        })
+                        });
                     }
                 }
             }
@@ -64,9 +64,10 @@ import { mapState, mapMutations } from "vuex";
                         });
                         this.caseParams.forEach(item=>{
                             this.form.setFieldsValue({
-                                [item.name]: item.defaultValue!==null?item.defaultValue:item.value
+                                [item.name]: this.isEdit === false ?item.defaultValue:(this.isEdit === true && item.type === 'bool'?this.strBool(item.value):item.value)
                             });
                         })
+                        console.log(val,this.caseParams,"-----count>1-----caseParamsIsShow")
                     }
                 }
             },
@@ -74,6 +75,7 @@ import { mapState, mapMutations } from "vuex";
                 this.caseParams = val.parameters.filter(item =>{
                     return item.visible !== false
                 });
+                console.log(val,this.caseParams,"-----caseParamsData")
             },
         },
         methods: {
@@ -104,6 +106,21 @@ import { mapState, mapMutations } from "vuex";
                         console.log(values,caseParameters,"caseParams------");
                     }
                 })
+            },
+            strBool(val){
+                let result = null;
+                if(typeof val === 'string'){
+                    if(val ==='true'){
+                        result = true
+                    }else if(val ==='false'){
+                        result = false
+                    }else {
+                        result = val
+                    }
+                }else {
+                    result = val
+                }
+                return result
             }
         }
     }

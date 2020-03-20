@@ -376,7 +376,7 @@ export default {
               this.testCaseList.forEach(item=>{
                   if(this.initcheckboxGroup.includes(item.id)){
                       caseReqs.push({
-                          caseId:item.id,
+                          caseId:item.id.toString(),
                           parameters:item.parameters
                       })
                   }
@@ -425,6 +425,14 @@ export default {
       this.updateInitcheckboxGroup(e);
     },
     caseParamsEdit(caseData){
+        if(this.isEdit){
+            this.testJobSingleData.cases.map(item=>{
+                if(item.id === caseData.id){
+                    caseData.parameters = [].concat(item.parameters)
+                }
+            });
+        }
+        console.log(caseData,"-----cases----caseParamsEdit")
         let hasvisible = caseData.parameters.map(item=>{
             return item.visible
         });

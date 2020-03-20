@@ -259,8 +259,8 @@ const actions = {
 		};
 		if (values.TestVIMENV) body.vimId = values.TestVIMENV;
 		if (values.TestVNFMENV) body.vnfmId = values.TestVNFMENV;
-		if (values.TestMANOENV) body.manoId = Number(values.TestMANOENV);
-		if (values.TestInstrument) body.suiteId = Number(values.TestInstrument);
+		if (values.TestMANOENV) body.manoId = values.TestMANOENV;
+		if (values.TestInstrument) body.suiteId = values.TestInstrument;
 		let jobId = isEdit ? state.testJobSingleData.jobId : "";
 		// if (isEdit) body.jobId = jobId;
 		let url = isEdit ? API.testJobMgt.testJobUpdate.replace(":jobId", jobId) : API.testJobMgt.testJobInsert;
@@ -524,9 +524,10 @@ const actions = {
     },
     getTestInstrumentOption({ commit }, { message, pageSize }) {
 		let obj = {
-            pageSize:pageSize
+            pageSize:pageSize,
+			flag:101
 		}
-        axiosget(API.instrumentMgs.instrumentMgsTable,obj).then(res => {
+        axiosget(API.suiteMgt.suiteMgtTable,obj).then(res => {
             if (res.code === 200) {
                 // Simulation request
                 commit('updateTestInstrumentOption', res.body)
