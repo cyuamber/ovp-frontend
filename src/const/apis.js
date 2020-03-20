@@ -70,7 +70,7 @@ export default {
         testJobSUTType: baseUrl + "/types/100",
         testJobSUTName: baseUrl + "/sutName/:code",
         testJobSpec: baseUrl + "/testSpec/:type",
-        testJobTestCase: baseUrl + "/testCase/jobCase/:id/:sutId",
+        testJobTestCase: baseUrl + "/testCase/jobCase",
         testJobDownLoad: baseUrl + "/jobs/cases/download/:jobId",
         testFailedDetail: baseUrl + "/jobs/case/retrieve/:requestId"
     },

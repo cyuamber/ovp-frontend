@@ -404,7 +404,7 @@ export default {
       this.selectedSUTName = key.split("+")[1];
       this.selectedSpecification = "";
       this.getSpecification({
-        SUTName: key.split("+")[1],
+        SUTName: key.split("+")[0],
         message: this.$message
       });
       this.form.setFieldsValue({ TestSpecification: "" });
@@ -412,9 +412,12 @@ export default {
     selectSpecification(key) {
       if (key === this.selectedSpecification) return;
       this.selectedSpecification = key;
+      let obj = {
+          specId: key,
+          sutId: this.selectedSUTName
+      };
       this.getTestCase({
-        TestSpecification: key,
-        sutId:this.selectedSUTName,
+        obj,
         message: this.$message
       });
     },

@@ -59,7 +59,7 @@ module.exports =
     "/portal/business/jobs": "/_getTestJobMGT",
     "/portal/business/sutName/:code": "/getSUTName",
     "/portal/business/testSpec/:type": "/getJobSpecification",
-    "/portal/business/testCase/jobCase/:id/:sutId": "/_getTestCaseList",
+    "/portal/business/testCase/jobCase?specId=:specId&sutId=:sutId": "/_getTestCaseList",
     "/portal/business/jobs/insert": "/addTestSpec",
     "/portal/business/jobs/:jobId/update": "/addTestSpec",
     "/portal/business/jobs/:jobId/start": "/runTestJobMGT",

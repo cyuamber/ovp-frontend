@@ -254,15 +254,15 @@ const actions = {
 			// SUTType: values.SUTType,
 			sutId: values.SUTName.split("+")[1],
 			specId: values.TestSpecification,
-			createrTime: moment(new Date()).format('YYYY-MM-DD'),
+			// createrTime: moment(new Date()).format('YYYY-MM-DD'),
             caseReqs: caseReqs
 		};
 		if (values.TestVIMENV) body.vimId = values.TestVIMENV;
 		if (values.TestVNFMENV) body.vnfmId = values.TestVNFMENV;
-		if (values.TestMANOENV) body.manoId = values.TestMANOENV;
-		if (values.TestInstrument) body.suiteId = values.TestInstrument;
+		if (values.TestMANOENV) body.manoId = Number(values.TestMANOENV);
+		if (values.TestInstrument) body.suiteId = Number(values.TestInstrument);
 		let jobId = isEdit ? state.testJobSingleData.jobId : "";
-		if (isEdit) body.jobId = jobId;
+		// if (isEdit) body.jobId = jobId;
 		let url = isEdit ? API.testJobMgt.testJobUpdate.replace(":jobId", jobId) : API.testJobMgt.testJobInsert;
 		let axiosType = isEdit ? axiosput : axiospost;
 		axiosType(url, body)
@@ -364,11 +364,11 @@ const actions = {
 			})
 		})
 	},
-	getTestCase({ commit }, { TestSpecification, message }) {
-		// console.log("======getTestCase")
+	getTestCase({ commit }, { obj, message }) {
+		console.log(obj,"======getTestCase")
 		commit('updateTestCaseList', { spin: true });
 		commit('updateFailDetail', "");
-		axiosget(API.testJobMgt.testJobTestCase.replace(":id", TestSpecification).replace(":sutId", TestSpecification)).then(res => {
+		axiosget(API.testJobMgt.testJobTestCase,obj).then(res => {
 			if (res.code === 200) {
 				commit('updateTestCaseList', { spin: false, list: res.body })
 			} else {
@@ -542,7 +542,11 @@ const actions = {
 			.then(res => {
 				if (res.code === 200) {
 					commit('updateTestJobSingleData', res.body);
-					dispatch("getTestCase", { TestSpecification: res.body.spec.id, message: this.$message })
+					let obj = {
+                        specId: res.body.spec.id,
+						sutId:res.body.sut.id,
+					}
+					dispatch("getTestCase", { obj, message: this.$message })
 				}
 			}, () => {
 				commit('updateFailedMessage', 'Network exception, please try again')
