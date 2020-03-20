@@ -242,7 +242,7 @@ const actions = {
 			if (bool) commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
-	createrTestJobMGT({ dispatch, commit, state }, { isEdit, values, caseReqs }) {
+	createrTestJobMGT({ dispatch, commit, state }, { isEdit, values, caseReqs, message }) {
 		let body = {
 			cronExpression: "",
 			endpoint: "/portal/business/jobs/case/start",
@@ -272,7 +272,9 @@ const actions = {
 				} else commit('updateFailedMessage', 'add failed');
 				commit('setIsShow', false);
 				dispatch('getTableData', false)
-			})
+			},() => {
+                message.error('Network exception, please try again')
+            })
 			.catch(() => {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			})
@@ -399,9 +401,11 @@ const actions = {
 		axiosdelete(API.testJobMgt.testJobDelete.replace(":jobId", data.jobId)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
-				dispatch('getTableData');
+                dispatch('getTableData', false)
 			}
-		})
+		},() => {
+            commit('updateFailedMessage', 'Network exception, please try again')
+        })
 	},
 	download({ commit }, data) {
 		let url = API.testJobMgt.testJobDownLoad.replace(":jobId", data.jobId) + "?lang=" + data.lang;

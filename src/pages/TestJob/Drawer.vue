@@ -383,7 +383,7 @@ export default {
               })
           }
           console.log(caseReqs,"-----submit----caseReqs")
-          this.createrTestJobMGT({ isEdit, values, caseReqs });
+          this.createrTestJobMGT({ isEdit, values, caseReqs, message: this.$message });
           this.visible = false;
           this.setIsShow(false);
         }
