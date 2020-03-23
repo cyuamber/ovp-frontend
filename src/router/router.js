@@ -73,7 +73,7 @@ export default new Router({
         },
       ]
     }, {
-      path: '/vimvnfmenvmgt',
+      path: '/vimvnfmmanoenvmgt',
       component: Layout,
       children: [
         {
