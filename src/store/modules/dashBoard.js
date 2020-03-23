@@ -12,15 +12,15 @@ const state = {
         legend: [],
         series: []
     },
-    linesxAxisLength:0,
-    testJobCirclesData:[],
-    SUTAmountData:[],
-    SUTAmountColors:["#46b8e0","#ffca52","#34314b"],
-    jobAmountData:[],
-    jobAmountColors:["#cae76e","#e94e75"],
-    jobAmountClickText:["DONE","FAILED"],
-    testEnvAmountData:[],
-    testEnvAmountColors:["#ea9e9f","#f9ebc9","#a89c8e"],
+    linesxAxisLength: 0,
+    testJobCirclesData: [],
+    SUTAmountData: [],
+    SUTAmountColors: ["#46b8e0", "#ffca52", "#34314b"],
+    jobAmountData: [],
+    jobAmountColors: ["#cae76e", "#e94e75"],
+    jobAmountClickText: ["DONE", "FAILED"],
+    testEnvAmountData: [],
+    testEnvAmountColors: ["#ea9e9f", "#f9ebc9", "#a89c8e"],
 };
 const mutations = {
     updateLiveData(state, data) {
@@ -58,7 +58,7 @@ const mutations = {
         }
         // console.log(state.linesData, "----> state.linesData")
     },
-    updateLinesxAxisLength(state, data){
+    updateLinesxAxisLength(state, data) {
         state.linesxAxisLength = data;
     },
     updateTestJobCirclesData(state, data) {
@@ -75,7 +75,7 @@ const mutations = {
         if (Object.keys(data).length > 0) {
             Object.keys(data).forEach((item, index) => {
                 state.SUTAmountData.push({
-                    name: item === 'pnfcount' ? 'PNF Count' : (item === 'nvficount' ? 'NFVI Count' : 'VNF Count'),
+                    name: item === 'pnfcount' ? 'PNF Count' : (item === 'nfvicount' ? 'NFVI Count' : 'VNF Count'),
                     y: data[item],
                     color: state.SUTAmountColors[index]
                 });
@@ -106,7 +106,7 @@ const mutations = {
         if (Object.keys(data).length > 0) {
             Object.keys(data).forEach((item, index) => {
                 state.testEnvAmountData.push({
-                    name: item === 'instcount' ? 'INST Count' : (item === 'vimcount' ? 'VIM Count' : 'VNFM Count'),
+                    name: item === 'manocount' ? 'Mano Count' : (item === 'vimcount' ? 'VIM Count' : 'VNFM Count'),
                     y: data[item],
                     color: state.testEnvAmountColors[index]
                 });
