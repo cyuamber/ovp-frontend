@@ -12,7 +12,7 @@ export const T = {
     "Test Objects MGT": "Test Object MGT",
     "Test SUT MGT": "Test SUT MGT",
     "Test ENV MGT": "Test ENV MGT",
-    "VIM/VNFM ENV MGT": "VIM/VNFM ENV MGT",
+    "VIM/VNFM/MANO ENV MGT": "VIM/VNFM/MANO ENV MGT",
     "Test Instrument MGT": "Test Instrument MGT",
     "Instrument MGS MGT": "Instrument MGS MGT",
     "Instrument Package MGT": "Instrument Package MGT",

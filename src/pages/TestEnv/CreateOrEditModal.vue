@@ -378,8 +378,8 @@ export default {
                   if (item.title === "MANO Type") {
                       data[item.key] =
                           values[item.key] === this.initCloudType.name
-                              ? this.initCloudType.code
-                              : values[item.key];
+                              ? Number(this.initCloudType.code)
+                              : Number(values[item.key]);
                   } else data[item.key] = values[item.key];
               });
               data['profiles'] = [];

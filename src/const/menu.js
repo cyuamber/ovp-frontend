@@ -15,7 +15,7 @@ export default {
                 isChildren: true,
                 children: [{
                     auth: ['admin', 'customer'],
-                    name: 'VIM/VNFM ENV MGT',
+                    name: 'VIM/VNFM/MANO ENV MGT',
                     iconType: '',
                 },{
                     auth: ['admin','customer'],
