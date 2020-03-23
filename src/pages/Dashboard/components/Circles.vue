@@ -68,8 +68,9 @@ export default {
               format: "<b>{point.name}</b>: {point.y:1f} ",
               distance: 50,
               style: {
-                color: "white",
-                fontSize: 14
+                color: "#333333",
+                fontSize: 14,
+                fontFamily:'微软雅黑'
               }
             },
             startAngle: -90,
