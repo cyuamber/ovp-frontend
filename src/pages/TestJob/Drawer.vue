@@ -373,14 +373,35 @@ export default {
           }
           let caseReqs = [];
           if(this.initcheckboxGroup.length>0){
-              this.testCaseList.forEach(item=>{
-                  if(this.initcheckboxGroup.includes(item.id)){
-                      caseReqs.push({
-                          caseId:item.id.toString(),
-                          parameters:item.parameters
-                      })
-                  }
-              })
+              if(!isEdit){
+                  this.testCaseList.forEach(item=>{
+                      if(this.initcheckboxGroup.includes(item.id)){
+                          caseReqs.push({
+                              caseId:item.id.toString(),
+                              parameters:item.parameters
+                          })
+                      }
+                  })
+              }else {
+                  this.testJobSingleData.cases.map(item=>{
+                      if(this.initcheckboxGroup.includes(item.id)){
+                          let index = this.initcheckboxGroup.indexOf(item.id);
+                          caseReqs.push({
+                              caseId:item.id.toString(),
+                              parameters:item.parameters
+                          });
+                          this.initcheckboxGroup.splice(index,1)
+                      }
+                  });
+                  this.testCaseList.forEach(item=>{
+                      if(this.initcheckboxGroup.includes(item.id)){
+                          caseReqs.push({
+                              caseId:item.id.toString(),
+                              parameters:item.parameters
+                          })
+                      }
+                  })
+              }
           }
           console.log(caseReqs,"-----submit----caseReqs")
           this.createrTestJobMGT({ isEdit, values, caseReqs, message: this.$message });
@@ -432,7 +453,6 @@ export default {
                 }
             });
         }
-        console.log(caseData,"-----cases----caseParamsEdit")
         let hasvisible = caseData.parameters.map(item=>{
             return item.visible
         });
