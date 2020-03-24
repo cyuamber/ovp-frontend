@@ -259,8 +259,8 @@ export default {
                 this.onapProfileDataSource = [];
             } else if (this.isEdit && this.MANOCount > 1) {
                 this.initCloudType = {
-                    name: this.initValues.monoType,
-                    code: this.keyValueConversion(this.initValues.monoType,this.cloudTypeOptions)
+                    name: this.initValues.manoType,
+                    code: this.keyValueConversion(this.initValues.manoType,this.cloudTypeOptions)
                 };
                 this.onapProfileDataSource = [];
                 this.customParamsNumber = 0;
@@ -314,8 +314,8 @@ export default {
       }else if (this.currentTab === "MANO ENV") {
           if (Object.keys(val).length > 0) {
               this.initCloudType = {
-                  name: val.monoType,
-                  code: this.keyValueConversion(val.monoType,this.cloudTypeOptions)
+                  name: val.manoType,
+                  code: this.keyValueConversion(val.manoType,this.cloudTypeOptions)
               };
               if(this.initCloudType.name.toUpperCase() === 'ONAP'){
                   this.onapProfilesShow = true;

@@ -188,9 +188,9 @@ const testMANOColumns = [
     },
     {
         title: 'Type',
-        dataIndex: 'monoType',
+        dataIndex: 'manoType',
         scopedSlots: {
-            customRender: 'monoType'
+            customRender: 'manoType'
         },
     },
     {

@@ -6,7 +6,7 @@
             "name": "MANO 001",
             "version": "1.6",
             "vendor": "string",
-            "monoType": "ONAP",
+            "manoType": "ONAP",
             "profiles": [
               {
                 "key": "aaiHostUrl",
@@ -40,7 +40,7 @@
             "name": "MANO 002",
             "version": "1.0",
             "vendor": "string",
-            "monoType": "ONAP",
+            "manoType": "ONAP",
             "profiles": [{
                 "key": "ksys",
                 "value": "test",
@@ -85,7 +85,7 @@
         "name": "MANO 003",
         "version": "3.0",
         "vendor": "string",
-        "monoType": "SDC",
+        "manoType": "SDC",
         "profiles": []
       }
     ],
