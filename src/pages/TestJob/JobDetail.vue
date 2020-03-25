@@ -30,7 +30,7 @@
               <p class="job-detail__item-text">
                 {{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}
                 <span
-                  v-if="item.title === 'SUT Name' && currentJob.jobStatus === 'FAILED'"
+                  v-if="item.title === 'SUT Name' && currentJob.jobStatus === 'DONE'"
                 >
                   <a-divider type="vertical" />
                   <a-button type="link" size="small" @click="jumpToUpload">Upload SUT</a-button>
@@ -60,12 +60,17 @@
                 :hoverable="false"
               >
                 Case Name：{{item.caseEntity.name}}
-                <span
-                  @click="pasteReason(item)"
-                  class="job-detail__testCase-status"
-                  v-if="item.caseStatus!==null && item.caseStatus!==undefined"
-                  :style="getCaseStatusStyle(item.caseStatus)"
-                ></span>
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>{{item.caseStatus}}</span>
+                  </template>
+                  <span
+                    @click="pasteReason(item)"
+                    class="job-detail__testCase-status"
+                    v-if="item.caseStatus!==null && item.caseStatus!==undefined"
+                    :style="getCaseStatusStyle(item.caseStatus)"
+                  ></span>
+                </a-tooltip>
               </a-card-grid>
             </div>
           </a-card>
@@ -181,6 +186,8 @@ export default {
           ? "#979797"
           : status === "RUNNING"
           ? "#F5A623"
+          : status === "CREATED"
+          ? "#78E5D7"
           : status === "DONE"
           ? "#7ED321"
           : "#D0021B";
@@ -239,7 +246,7 @@ export default {
     justify-content: space-between;
     margin-top: 30px;
     .job-detail__info {
-      width: 40%;
+      width: 45%;
       .ant-card {
         height: 100%;
       }
@@ -260,7 +267,7 @@ export default {
       }
     }
     .job-detail__detail {
-      width: 59.5%;
+      width: 54%;
       .job-detail__test-env {
         margin-top: 16px;
         overflow: hidden;

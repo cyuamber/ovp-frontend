@@ -3,17 +3,13 @@
     <Loading :loadingMessage="loadingMessage" />
     <div class="test-job__top">
       <a-button type="primary" @click="handleCreate">Create Test Job</a-button>
-        <a-select
-                class="select"
-                :defaultValue="dashboardJumpStatus"
-                @change="handleSelectStatusChange"
-        >
-            <a-select-option
-                    v-for="status of statusOptions"
-                    :key="status"
-                    :value="status"
-            >{{status}}</a-select-option>
-        </a-select>
+      <a-select
+        class="select"
+        :defaultValue="dashboardJumpStatus"
+        @change="handleSelectStatusChange"
+      >
+        <a-select-option v-for="status of statusOptions" :key="status" :value="status">{{status}}</a-select-option>
+      </a-select>
       <a-date-picker class="calendar" @change="handleSelectCreateTime" placeholder="Select date" />
     </div>
     <div class="test-job__table">
@@ -29,11 +25,12 @@
         @change="handlePageChange"
       >
         <span slot="status" slot-scope="status">
-          <span
-            class="test-job__showState"
-            :style="getStatusStyle(status)"
-            :title="getStatusTitle(status)"
-          ></span>
+          <a-tooltip placement="top">
+            <template slot="title">
+              <span>{{status}}</span>
+            </template>
+            <span class="test-job__showState" :style="getStatusStyle(status)"></span>
+          </a-tooltip>
         </span>
         <span slot="action" slot-scope="action,record">
           <a-tag
@@ -62,10 +59,10 @@ export default {
   data() {
     return {
       columns: testJobColumns,
-        statusOptions: statusOptions,
+      statusOptions: statusOptions,
       loading: false,
       tableQueryTimer: "",
-        isEdit: false
+      isEdit: false
     };
   },
   computed: {
@@ -78,19 +75,19 @@ export default {
       testJobSingleData: state => state.testJob.testJobSingleData,
       lang: state => state.router.lang
     }),
-      dashboardJumpStatus: {
-          get() {
-              return this.$store.state.testJob.dashboardJumpStatus;
-          }
+    dashboardJumpStatus: {
+      get() {
+        return this.$store.state.testJob.dashboardJumpStatus;
       }
+    }
   },
   components: { Drawer, Loading },
-    created(){
-        if(window.location.href.includes("?")){
-            let JumpStatus = window.location.href.split("?")[1].split("=")[1];
-            this.updateDashboardJumpStatus(JumpStatus)
-        }
-    },
+  created() {
+    if (window.location.href.includes("?")) {
+      let JumpStatus = window.location.href.split("?")[1].split("=")[1];
+      this.updateDashboardJumpStatus(JumpStatus);
+    }
+  },
   mounted() {
     this.initTestJobTable();
   },
@@ -108,15 +105,20 @@ export default {
       "getTestInstrumentOption",
       "getEditTestJob"
     ]),
-    ...mapMutations("testJob", ["setIsShow", "setFilter","updateDashboardJumpStatus","clearSearchKeyword"]),
+    ...mapMutations("testJob", [
+      "setIsShow",
+      "setFilter",
+      "updateDashboardJumpStatus",
+      "clearSearchKeyword"
+    ]),
     initTestJobTable() {
-      this.getTableData({bool:false});
+      this.getTableData({ bool: false });
       // this.tableQueryTimer = setInterval(() => {
       //   this.getTableData({bool:false,loading:false});
       // }, 5000);
     },
     handleCreate() {
-        this.isEdit = false;
+      this.isEdit = false;
       this.setIsShow(true);
       this.getSUTType({
         message: this.$message
@@ -128,27 +130,27 @@ export default {
         message: this.$message
       });
       this.getMANOOption({
-          message: this.$message
+        message: this.$message
       });
       this.getTestInstrumentOption({
-          message: this.$message
+        message: this.$message
       });
     },
     handleSelectCreateTime(date, d) {
       this.setFilter({ time: d });
-      this.getTableData({bool:true});
+      this.getTableData({ bool: true });
     },
-      handleSelectStatusChange(val){
-          if(window.location.href.includes("?")){
-              window.location.href = window.location.href.split("?")[0];
-          }
-          this.updateDashboardJumpStatus("All");
-          if(val === 'All')this.clearSearchKeyword(val);
-          this.setFilter({
-              key: val
-          });
-          this.getTableData({bool:true});
-      },
+    handleSelectStatusChange(val) {
+      if (window.location.href.includes("?")) {
+        window.location.href = window.location.href.split("?")[0];
+      }
+      this.updateDashboardJumpStatus("All");
+      if (val === "All") this.clearSearchKeyword(val);
+      this.setFilter({
+        key: val
+      });
+      this.getTableData({ bool: true });
+    },
     handleActions(action, data) {
       if (action === "Start") this.handleStart(data);
       else if (action === "Edit") this.handleEdit(data);
@@ -174,28 +176,28 @@ export default {
         }
       });
     },
-      handleEdit(data){
-          this.isEdit = true;
-          this.setIsShow(true);
-          this.getEditTestJob(data);
-          this.getSUTType({
-              message: this.$message
-          });
-          this.getVNFMOption({
-              message: this.$message
-          });
-          this.getVIMOption({
-              message: this.$message
-          });
-          this.getMANOOption({
-              message: this.$message,
-              pageSize: 100
-          });
-          this.getTestInstrumentOption({
-              message: this.$message,
-              pageSize: 100
-          });
-      },
+    handleEdit(data) {
+      this.isEdit = true;
+      this.setIsShow(true);
+      this.getEditTestJob(data);
+      this.getSUTType({
+        message: this.$message
+      });
+      this.getVNFMOption({
+        message: this.$message
+      });
+      this.getVIMOption({
+        message: this.$message
+      });
+      this.getMANOOption({
+        message: this.$message,
+        pageSize: 100
+      });
+      this.getTestInstrumentOption({
+        message: this.$message,
+        pageSize: 100
+      });
+    },
     handleDelete(data) {
       this.$confirm({
         title: "Are you sure delete this task?",
@@ -218,7 +220,7 @@ export default {
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          this.download({jobId:data.jobId,lang:this.lang});
+          this.download({ jobId: data.jobId, lang: this.lang });
         },
         onCancel() {
           console.log("Cancel");
@@ -231,7 +233,7 @@ export default {
     },
     handlePageChange(pageObj) {
       this.setFilter({ pageObj });
-      this.getTableData({bool:true});
+      this.getTableData({ bool: true });
     },
     handleStop(data) {
       // The analog call interface changes a single piece of data in a single table
@@ -277,6 +279,12 @@ export default {
         case "RUNNING":
           color = "#F5A623";
           break;
+        case "CREATED":
+          color = "#78E5D7";
+          break;
+        case "UPDATED":
+          color = "#2db7f5";
+          break;
         case "DONE":
           color = "#7ED321";
           break;
@@ -297,7 +305,7 @@ export default {
         ? "red"
         : item === actions[3]
         ? "#D3B230"
-        :"purple";
+        : "purple";
     }
   },
   beforeDestroy: function() {
@@ -309,9 +317,9 @@ export default {
 .test-job__container {
   .test-job__top {
     margin-bottom: 30px;
-    .select{
-        width: 150px;
-        margin-left: 30px;
+    .select {
+      width: 150px;
+      margin-left: 30px;
     }
     .calendar {
       float: right;
@@ -333,13 +341,13 @@ export default {
       font-size: 14px;
     }
   }
-    .tab-content__button {
-        display: inline-block;
-        width: 240px;
-        margin-left: 40px;
-        /deep/ .ant-input {
-            border-radius: 20px;
-        }
+  .tab-content__button {
+    display: inline-block;
+    width: 240px;
+    margin-left: 40px;
+    /deep/ .ant-input {
+      border-radius: 20px;
     }
+  }
 }
 </style>

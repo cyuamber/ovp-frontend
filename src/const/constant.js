@@ -505,24 +505,24 @@ const MANOONAPForm = [
     }
 ]
 const customProfiles = [
-        {
-            title: 'key',
-            dataIndex: 'key',
-            scopedSlots: { customRender: 'key' },
-            width:'37%'
-        },
-        {
-            title: 'value',
-            dataIndex: 'value',
-            scopedSlots: { customRender: 'value' },
-            width:'53%'
-        },
-        {
-            title: 'action',
-            dataIndex: 'action',
-            scopedSlots: { customRender: 'action' },
-            width:'5%'
-        }
+    {
+        title: 'key',
+        dataIndex: 'key',
+        scopedSlots: { customRender: 'key' },
+        width: '37%'
+    },
+    {
+        title: 'value',
+        dataIndex: 'value',
+        scopedSlots: { customRender: 'value' },
+        width: '53%'
+    },
+    {
+        title: 'action',
+        dataIndex: 'action',
+        scopedSlots: { customRender: 'action' },
+        width: '5%'
+    }
 ]
 export {
     mockcolumns,
