@@ -438,7 +438,7 @@ const actions = {
 						status: res.body.jobStatus
 					});
 					// console.log(res.body, "getProgress---res.body");
-					if (res.body.jobProgress !== null && res.body.jobProgress !== undefined && res.body.jobProgress !== 0) {
+					if (res.body.jobProgress !== null && res.body.jobProgress !== undefined) {
 						commit('updateDetailLoading', false);
 						commit('updateExecutionStartTime', res.body.executionStartTime);
 						dispatch("detailTestCaseJop", { jobId: res.body.jobId, executionStartTime: res.body.executionStartTime })

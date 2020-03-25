@@ -47,7 +47,7 @@ export default {
         },
         yAxis: {
           title: {
-            text: ""
+            text: null
           },
           plotLines: [
             {
@@ -61,8 +61,8 @@ export default {
           enabled: false
         },
         tooltip: {
-          headerFormat: "<b>{series.name}</b><br/>",
-          pointFormat: "{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}"
+          headerFormat: "<b>{series.name}: {point.y:f}</b><br/>",
+          pointFormat: "{point.x:%Y-%m-%d %H:%M:%S}<br/>"
         },
         legend: {
           enabled: false

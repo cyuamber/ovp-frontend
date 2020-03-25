@@ -30,7 +30,7 @@
               <p class="job-detail__item-text">
                 {{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}
                 <span
-                  v-if="item.title === 'SUT Name' && currentJob.jobStatus === 'DONE'"
+                  v-if="item.title === 'SUT Name' && statusText === 'DONE'"
                 >
                   <a-divider type="vertical" />
                   <a-button type="link" size="small" @click="jumpToUpload">Upload SUT</a-button>
