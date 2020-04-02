@@ -86,6 +86,20 @@
         ]
       }
     ],
+    "scheduleCases": [
+      {
+        "id": "441957056277856256",
+        "jobId": "441956958802231296",
+        "caseId": "1029",
+        "caseStatus": "DONE",
+        "executionStartTime": "2020-03-30 11:00:40",
+        "consumes": 72,
+        "jobExecutionStartTime": "2020-03-30 11:00:39",
+        "requestId": "2321a626-2699-46f1-aaa3-8c3d8d12bea1",
+        "executions": null,
+        "groupType": null
+      }
+    ],
     "vim": {
       "id": 1,
       "status": "0",

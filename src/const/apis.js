@@ -12,7 +12,7 @@ export default {
     },
     getCurrentLanguage: "/lang/local",
     uploadFile: baseUrl + "/files/upload",
-    downloadFile: baseUrl + "/files/:filename",
+    downloadFile: baseUrl + "/files/:filealias/:filename",
     dashboard: {
         liveCaseAmount: baseUrl + "/dashboard/statisticLiveCaseAmount",
         PassCaseAmount7Days: baseUrl + "/dashboard/statisticPassCaseAmount7Days",
@@ -72,7 +72,7 @@ export default {
         testJobSpec: baseUrl + "/testSpec/:type",
         testJobTestCase: baseUrl + "/testCase/jobCase",
         testJobDownLoad: baseUrl + "/jobs/cases/download/:jobId",
-        testFailedDetail: baseUrl + "/jobs/case/retrieve/:requestId"
+        testFailedDetail: baseUrl + "/jobs/case/executions/retrieve/:requestId"
     },
     TestSpecMgt: {
         specMgtTable: baseUrl + "/specMgt",

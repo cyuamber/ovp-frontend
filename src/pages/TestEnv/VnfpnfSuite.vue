@@ -161,8 +161,8 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.downloadFile({
-              fileName:
-                SuiteSingleData.fileAliasName || SuiteSingleData.fileName
+              fileName: SuiteSingleData.fileName,
+              fileAliasName:SuiteSingleData.fileAliasName
             });
           }
         });

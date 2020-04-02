@@ -38,7 +38,7 @@ module.exports =
     "/portal/business/suiteMgt/insert": "/loginMeterSys",
     "/portal/business/suiteMgt/update": "/updateMeterSys",
     "/portal/business/suiteMgt/:id/delete": "/deleteMeterSys",
-    "/portal/business/files/:filename": "/_downloadFile",
+    "/portal/business/files/:filealias/:filename": "/_downloadFile",
     ///////<-------------TestSUT--------->/////
     "/portal/business/sutMgt": "/_getVNFTest",
     "/portal/business/sutMgt/insert": "/createVNFTest",
@@ -56,7 +56,7 @@ module.exports =
     "/portal/business/types/100": "/_getTestSpecSUTType",
     "/portal/business/testCase/box/:flag/:subSutType": "/_getTestCaseList",
     ///////<-------------Test Job--------->/////
-    "/portal/business/jobs": "/_getTestJobMGT",
+    "/portal/business/jobs?pageNum=:pageNum&pageSize=:pageSize": "/_getTestJobMGT",
     "/portal/business/sutName/:code": "/getSUTName",
     "/portal/business/testSpec/:type": "/getJobSpecification",
     "/portal/business/testCase/jobCase?specId=:specId&sutId=:sutId": "/_getTestCaseList",

@@ -397,11 +397,13 @@ const actions = {
 		})
 
 	},
-	delete({ dispatch, commit }, data) {
+	delete({ dispatch, commit }, {data, message}) {
 		axiosdelete(API.testJobMgt.testJobDelete.replace(":jobId", data.jobId)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
 				dispatch('getTableData', false)
+			}else if(res.code === 503){
+                message.error(res.message)
 			}
 		}, () => {
 			commit('updateFailedMessage', 'Network exception, please try again')
@@ -412,7 +414,7 @@ const actions = {
 		window.open(window.location.protocol + "//" + window.location.host + url);
 		commit('updateSuccessMessage', 'DownLoad File successfully');
 	},
-	runTestJobMGT({ commit }, data) {
+	runTestJobMGT({ commit }, {data, message}) {
 		axiosput(API.testJobMgt.testJobStart.replace(":jobId", data.jobId))
 			.then(res => {
 				if (res.code === 200) {
@@ -425,11 +427,15 @@ const actions = {
 					data.executionStartTime = res.body.executionStartTime;
 					commit('updateTableItemData', data);
 					router.push({ name: "JobDetail", params: data })
+				}else if(res.code === 503){
+                    message.error(res.message)
 				}
-			})
+			}, () => {
+                message.error('Network exception, please try again')
+            })
 	},
-	getProgress({ dispatch, commit }, data) {
-		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
+	getProgress({ commit }, {jobId, message}) {
+		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", jobId))
 			.then(res => {
 				if (res.code === 200) {
 					commit('updateSuccessMessage', 'Successfully detail testing');
@@ -437,39 +443,57 @@ const actions = {
 						percent: res.body.jobProgress,
 						status: res.body.jobStatus
 					});
-					// console.log(res.body, "getProgress---res.body");
+                    commit('updateDetailTestCase', res.body.scheduleCases);
+                    let doneCaseNum = 0, failedCaseNum = 0;
+                    if(res.body.scheduleCases && res.body.scheduleCases.length!==0){
+                        res.body.scheduleCases.forEach((item) => {
+                            if (item.caseStatus === 'DONE') {
+                                doneCaseNum++
+                            } else if (item.caseStatus === 'FAILED') {
+                                failedCaseNum++
+                            }
+                        });
+                    }
+                    commit('updateTestCasePieData', { doneCaseNum, failedCaseNum });
+					console.log(res.body, "getProgress---jobdetail---res.body");
 					if (res.body.jobProgress !== null && res.body.jobProgress !== undefined) {
 						commit('updateDetailLoading', false);
 						commit('updateExecutionStartTime', res.body.executionStartTime);
-						dispatch("detailTestCaseJop", { jobId: res.body.jobId, executionStartTime: res.body.executionStartTime })
+						// dispatch("detailTestCaseJop", { jobId: res.body.jobId, executionStartTime: res.body.executionStartTime })
 					}
-				}
-			});
+				}else if(res.code === 503){
+                    message.error(res.message)
+                }
+			}, () => {
+                message.error('Network exception, please try again')
+            });
 	},
-	detailTestCaseJop({ commit, state }, data) {
-		if (state.executionStartTime === "") return false
-		else {
-			// Simulation request
-			axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", data.executionStartTime))
-				.then(res => {
-					if (res.code === 200) {
-						commit('updateSuccessMessage', 'Successfully detail testing');
-						commit('updateDetailTestCase', res.body);
-						let doneCaseNum = 0, failedCaseNum = 0;
-						res.body.forEach((item) => {
-							if (item.caseStatus === 'DONE') {
-								doneCaseNum++
-							} else if (item.caseStatus === 'FAILED') {
-								failedCaseNum++
-							}
-						});
-						commit('updateTestCasePieData', { doneCaseNum, failedCaseNum });
-					}
-				});
-		}
 
-	},
-	stopJop({ dispatch, commit }, data) {
+	// detailTestCaseJop({ commit, state }, data) {
+	// 	if (state.executionStartTime === "") return false
+	// 	else {
+	// 		// Simulation request
+	// 		axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", data.executionStartTime))
+	// 			.then(res => {
+	// 				if (res.code === 200) {
+     //                    commit('updateDetailTestCase', res.body);
+	// 					commit('updateSuccessMessage', 'Successfully detail testing');
+	// 					let doneCaseNum = 0, failedCaseNum = 0;
+	// 					res.body.forEach((item) => {
+	// 						if (item.caseStatus === 'DONE') {
+	// 							doneCaseNum++
+	// 						} else if (item.caseStatus === 'FAILED') {
+	// 							failedCaseNum++
+	// 						}
+	// 					});
+	// 					commit('updateTestCasePieData', { doneCaseNum, failedCaseNum });
+	// 				}
+	// 			});
+	// 	}
+    //
+	// },
+
+	stopJop({ dispatch, commit }, {data, message}) {
 		// Simulation request
 		axiosput(API.testJobMgt.testJobStop.replace(":jobId", data.jobId))
 			.then(res => {
@@ -479,8 +503,12 @@ const actions = {
 					data.actions[0] = 'Start';
 					commit('updateTableItemData', data);
 					dispatch('getTableData', true)
+				}else if(res.code === 503){
+                    message.error(res.message)
 				}
-			});
+			}, () => {
+                message.error('Network exception, please try again')
+            });
 		dispatch('getTableData', true)
 	},
 	getVNFMOption({ commit }, { message }) {
@@ -538,7 +566,7 @@ const actions = {
 			message.error('Network exception, please try again')
 		})
 	},
-	getEditTestJob({ dispatch, commit }, data) {
+	getEditTestJob({ dispatch, commit }, {data, message}) {
 		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
 			.then(res => {
 				if (res.code === 200) {
@@ -548,7 +576,9 @@ const actions = {
 						sutId: res.body.sut.id,
 					}
 					dispatch("getTestCase", { obj, message: this.$message })
-				}
+				}else if(res.code === 503){
+                    message.error(res.message)
+                }
 			}, () => {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			});

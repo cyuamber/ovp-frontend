@@ -169,7 +169,10 @@ export default {
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          this.runTestJobMGT(data);
+          this.runTestJobMGT({
+              data,
+              message: this.$message
+          });
         },
         onCancel() {
           console.log("Cancel");
@@ -179,7 +182,10 @@ export default {
     handleEdit(data) {
       this.isEdit = true;
       this.setIsShow(true);
-      this.getEditTestJob(data);
+      this.getEditTestJob({
+          data,
+          message: this.$message
+      });
       this.getSUTType({
         message: this.$message
       });
@@ -205,7 +211,10 @@ export default {
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          this.delete(data);
+          this.delete({
+              data,
+              message: this.$message
+          });
         },
         onCancel() {
           console.log("Cancel");
@@ -243,7 +252,10 @@ export default {
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          this.stopJop(data);
+          this.stopJop({
+              data,
+              message: this.$message
+          });
         },
         onCancel() {
           console.log("Cancel");

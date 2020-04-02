@@ -59,7 +59,7 @@
                 :key="index"
                 :hoverable="false"
               >
-                Case Name：{{item.caseEntity.name}}
+                Case Name：{{item.caseId}}
                 <a-tooltip placement="top">
                   <template slot="title">
                     <span>{{item.caseStatus}}</span>
@@ -142,7 +142,6 @@ export default {
   methods: {
     ...mapActions("testJob", [
       "getProgress",
-      "detailTestCaseJop",
       "getTestFail"
     ]),
     ...mapMutations("testJob", [
@@ -156,9 +155,15 @@ export default {
     ]),
     initJobDetail() {
       if (this.currentJob.jobStatus !== "CREATED") {
-        this.getProgress({ jobId: this.currentJob.jobId });
+        this.getProgress({
+            jobId: this.currentJob.jobId,
+            message: this.$message
+        });
         this.progressTimer = setInterval(() => {
-          this.getProgress({ jobId: this.currentJob.jobId });
+          this.getProgress({
+              jobId: this.currentJob.jobId,
+              message: this.$message
+          });
         }, 5000);
       } else {
         this.updateDetailLoading(false);
@@ -227,7 +232,7 @@ export default {
 <style lang="less" scoped>
 .job-detail {
   .job-detail__back-btn {
-    display: inline-biock;
+    display: inline-block;
     cursor: pointer;
     font-size: 18px;
   }
