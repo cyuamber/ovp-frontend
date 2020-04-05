@@ -34,14 +34,14 @@
                         type: "pie"
                     },
                     title: {
-                        text: "Test Case"
+                        text: "Test Case",
                     },
                     credits: {
                         enabled: false
                     },
                     tooltip: {
                         pointFormat:
-                            "Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}"
+                            "Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}</b>"
                     },
                     legend: {
                         align: "center",

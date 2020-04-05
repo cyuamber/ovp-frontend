@@ -24,24 +24,30 @@
       <div class="job-detail__content">
         <div class="job-detail__info">
           <a-card>
-            <h2 class="job-detail__info-title">Test Job Info</h2>
-            <div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
-              <p class="job-detail__item-title">{{item.title}}:</p>
-              <p class="job-detail__item-text">
-                {{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}
-                <span
-                  v-if="item.title === 'SUT Name' && statusText === 'DONE'"
-                >
+            <a-row>
+              <a-col :span="10">
+                <h2 class="job-detail__info-title">Test Job Info</h2>
+                <div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
+                  <p class="job-detail__item-title">{{item.title}}:</p>
+                  <p class="job-detail__item-text">
+                    {{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}
+                    <span
+                            v-if="item.title === 'SUT Name' && statusText === 'DONE'"
+                    >
                   <a-divider type="vertical" />
                   <a-button type="link" size="small" @click="jumpToUpload">Upload SUT</a-button>
                 </span>
-              </p>
-            </div>
-            <div class="job-detail__item-container">
-              <p class="job-detail__item-title">Test Job Status:</p>
-              <p class="job-detail__item-text">{{this.statusText}}</p>
-            </div>
-            <testCasePie v-if="this.statusText" />
+                  </p>
+                </div>
+                <div class="job-detail__item-container">
+                  <p class="job-detail__item-title">Test Job Status:</p>
+                  <p class="job-detail__item-text">{{this.statusText}}</p>
+                </div>
+              </a-col>
+              <a-col :span="14">
+                <testCasePie v-if="this.statusText" />
+              </a-col>
+            </a-row>
           </a-card>
         </div>
         <div class="job-detail__detail">
@@ -53,25 +59,29 @@
               </div>
             </a-card-grid>
             <div v-if="detailTestCase.length >0">
-              <a-card-grid
-                style="width: 100%"
-                v-for="(item,index) in detailTestCase"
-                :key="index"
-                :hoverable="false"
+              <a-table
+                      class="detailtestcase-table"
+                      :columns="columns"
+                      :dataSource="detailTestCase"
+                      rowKey="id"
+                      bordered
+                      size="default"
+                      :pagination="false"
+                      @expand="caseSecondaryTableShow"
               >
-                Case Name：{{item.caseId}}
-                <a-tooltip placement="top">
-                  <template slot="title">
-                    <span>{{item.caseStatus}}</span>
-                  </template>
-                  <span
-                    @click="pasteReason(item)"
-                    class="job-detail__testCase-status"
-                    v-if="item.caseStatus!==null && item.caseStatus!==undefined"
-                    :style="getCaseStatusStyle(item.caseStatus)"
-                  ></span>
-                </a-tooltip>
-              </a-card-grid>
+                <span slot="caseStatus" slot-scope="caseStatus,record">
+                  <a-tooltip placement="top">
+                    <template slot="title">
+                      <span>{{caseStatus}}</span>
+                    </template>
+                    <span
+                            @click="pasteReason(record)"
+                            class="job-detail__testCase-status"
+                            :style="getCaseStatusStyle(caseStatus)"
+                    ></span>
+                  </a-tooltip>
+                </span>
+              </a-table>
             </div>
           </a-card>
         </div>
@@ -82,13 +92,14 @@
 
 <script type="text/ecmascript-6">
 import testCasePie from "./testCasePie";
-import { testJobColumns } from "../../const/constant";
+import { testJobColumns, testJobDetailCaseListColumns } from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "JobDetail",
   components: { testCasePie },
   data() {
     return {
+      columns: testJobDetailCaseListColumns,
       statusColor: "",
       stompClient: "",
       timer: "",
@@ -210,7 +221,10 @@ export default {
     },
     jumpToUpload() {
       window.open(this.sutvalidLind, "_blank");
-    }
+    },
+      caseSecondaryTableShow(expanded, record){
+        console.log(expanded, record,"----expanded, record")
+      }
   },
   beforeDestroy: function() {
     clearInterval(this.progressTimer);
@@ -247,11 +261,11 @@ export default {
     }
   }
   .job-detail__content {
-    display: flex;
+    /*display: flex;*/
     justify-content: space-between;
     margin-top: 30px;
     .job-detail__info {
-      width: 45%;
+      width: 100%;
       .ant-card {
         height: 100%;
       }
@@ -272,7 +286,8 @@ export default {
       }
     }
     .job-detail__detail {
-      width: 54%;
+      width: 100%;
+      margin: 20px 0;
       .job-detail__test-env {
         margin-top: 16px;
         overflow: hidden;
@@ -283,7 +298,7 @@ export default {
         }
       }
       .job-detail__testCase-status {
-        float: right;
+        display: block;
         width: 15px;
         height: 15px;
         margin-top: 5px;

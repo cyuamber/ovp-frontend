@@ -261,6 +261,32 @@ const testJobColumns = [
         },
     }
 ]
+const testJobDetailCaseListColumns = [
+    {
+        title: 'Id',
+        dataIndex: 'id'
+    },
+    {
+        title: 'Case Id',
+        dataIndex: 'caseId',
+    },
+    {
+        title: 'Execution Start Time',
+        dataIndex: 'executionStartTime'
+    },
+    {
+        title: 'Job Execution Start Time',
+        dataIndex: 'jobExecutionStartTime'
+    },
+    {
+        title: 'Case Status',
+        dataIndex: 'caseStatus',
+        scopedSlots: {
+            customRender: 'caseStatus'
+        },
+        width:120
+    }
+]
 const TestInsrigisterColumns = [
     {
         title: 'ID',
@@ -542,5 +568,6 @@ export {
     VNFMForm,
     MANOForm,
     MANOONAPForm,
-    customProfiles
+    customProfiles,
+    testJobDetailCaseListColumns
 }
