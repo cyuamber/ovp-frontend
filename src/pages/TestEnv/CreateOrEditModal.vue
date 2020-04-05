@@ -404,7 +404,8 @@ export default {
           this.updateVisible(false);
           this.loginVIN({
             isEdit: this.isEdit,
-            data
+            data,
+            message: this.$message
           });
         }
       });

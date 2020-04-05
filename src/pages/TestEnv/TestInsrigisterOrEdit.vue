@@ -65,7 +65,11 @@
                         };
                         let {isEdit} = this;
                         if(this.isEdit)data.id = this.singleData.id;
-                        this.createOrEditTestIns({isEdit,data}).
+                        this.createOrEditTestIns({
+                            isEdit,
+                            data,
+                            message: this.$message
+                        }).
                             then(
                                 ()=>{this.$emit('close');},
                                 ()=>{this.$emit('close');}

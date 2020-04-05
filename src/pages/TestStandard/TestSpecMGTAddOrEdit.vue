@@ -247,7 +247,11 @@ export default {
           };
           let { isEdit } = this;
           if(isEdit)data.id = this.testSpecSingleData.id;
-          this.createOrEditTestSpec({ isEdit, data }).then(
+          this.createOrEditTestSpec({
+              isEdit,
+              data,
+              message: this.$message
+          }).then(
             () => {
               this.form.resetFields();
               this.getTestSpec({});

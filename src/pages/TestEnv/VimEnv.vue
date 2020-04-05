@@ -177,7 +177,10 @@ export default {
           okType: "danger",
           cancelText: "No",
           onOk: () => {
-            this.deleteData(record);
+            this.deleteData({
+                data:record,
+                message: this.$message
+            });
           }
         });
       }

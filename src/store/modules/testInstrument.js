@@ -78,7 +78,7 @@ const actions = {
   clearPagination({ commit }) {
     commit('updatePagination', { current: 1, total: 0 })
   },
-  createOrEditTestIns({ commit, dispatch }, { isEdit, data }) {
+  createOrEditTestIns({ commit, dispatch }, { isEdit, data, message }) {
     let url = isEdit ? API.instrumentMgs.instrumentMgsUpdate : API.instrumentMgs.instrumentMgsInsert;
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data)
@@ -86,18 +86,24 @@ const actions = {
         if (res.code === 200) {
           commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully');
           dispatch('getTableData', {})
+        }else if(res.code === 503){
+            message.error(res.message)
         } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
       },
         () => {
           commit('updateFailedMessage', 'Network exception, please try again')
         })
   },
-  deleteMeterSys({ commit, dispatch }, data) {
-    axiosdelete(API.instrumentMgs.instrumentMgsDelete.replace(":id", data.id)).then(res => {
+  deleteMeterSys({ commit, dispatch }, {id, message}) {
+    axiosdelete(API.instrumentMgs.instrumentMgsDelete.replace(":id", id)).then(res => {
       if (res.code === 200) {
         commit('updateSuccessMessage', 'Deleted successfully')
         dispatch('getTableData', {})
+      }else if(res.code === 503){
+          message.error(res.message)
       } else commit('updateFailedMessage', 'Network exception, please try again')
+    }, () => {
+        message.error('Network exception, please try again')
     })
   }
 

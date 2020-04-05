@@ -140,7 +140,7 @@ const actions = {
 			}
 		})
 	},
-	createOrEditVNFTest({ commit, state, dispatch }, { data, isEdit }) {
+	createOrEditVNFTest({ commit, state, dispatch }, { data, isEdit, message }) {
 		if (isEdit) data.id = state.VNFTest.id;
 		let url = isEdit ? API.sutMgt.sutMgtUpdate : API.sutMgt.sutMgtInsert;
 		let apiType = isEdit ? axiosput : axiospost;
@@ -150,19 +150,23 @@ const actions = {
 					commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
 					let paramsObj = { flag: state.currentTab };
 					dispatch('getTableData', { paramsObj, isFilter: false })
-				} else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
+				}else if(res.code === 503){
+                    message.error(res.message)
+                } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
 			},
 				() => {
 					commit('updateFailedMessage', 'Network exception, please try again')
 				})
 	},
-	deleteVNFTest({ commit, dispatch }, data) {
+	deleteVNFTest({ commit, dispatch }, {data, message}) {
 		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", data.id)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
 				let paramsObj = { flag: state.currentTab };
 				dispatch('getTableData', { paramsObj, isFilter: false })
-			} else commit('updateFailedMessage', 'Network exception, please try again')
+			}else if(res.code === 503){
+                message.error(res.message)
+            }  else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
 	upload({ commit }, { formData, message }) {

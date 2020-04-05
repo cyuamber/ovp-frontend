@@ -248,7 +248,11 @@ export default {
     },
     submitFormData(data) {
       let { isEdit } = this;
-      this.createOrEditVNFTest({ isEdit, data }).then(
+      this.createOrEditVNFTest({
+          isEdit,
+          data,
+          message: this.$message
+      }).then(
         () => {
           this.updateVisible(false);
           this.form.resetFields();

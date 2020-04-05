@@ -151,7 +151,7 @@ const actions = {
         }, () => { if (isFilter) commit('updateFailedMessage', 'Network exception, please try again') }
         )
     },
-    deleteData({ dispatch, commit, state }, data) {
+    deleteData({ dispatch, commit, state }, {data, message}) {
         let url = '';
         switch (state.currentTab) {
             case 'VIM ENV':
@@ -171,7 +171,9 @@ const actions = {
                 commit('updateSuccessMessage', 'Deleted successfully');
                 let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize };
                 dispatch('getTableData', { paramsObj })
-            } else commit('updateFailedMessage', 'Failed to delete')
+            }else if(res.code === 503){
+                message.error(res.message)
+            }else commit('updateFailedMessage', 'Failed to delete')
         }).catch(() => {
             commit('updateFailedMessage', 'Network exception, please try again')
         })
@@ -202,7 +204,7 @@ const actions = {
         })
         // Simulation request
     },
-    loginVIN({ state, commit, dispatch }, { isEdit, data }) {
+    loginVIN({ state, commit, dispatch }, { isEdit, data, message }) {
         if (isEdit) data.id = state.initValues.id;
         let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtUpdate : API.vimVnfmMgt.manoMgtUpdate.replace(":manoId",data.id)) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtInsert : API.vimVnfmMgt.manoMgtInsert);
         let axiosType = isEdit ? axiosput : axiospost;
@@ -215,7 +217,9 @@ const actions = {
                         pageSize: state.pageSize
                     }
                     dispatch('getTableData', { paramsObj })
-                } else {
+                } else if(res.code === 503){
+                    message.error(res.message)
+                }else {
                     commit('updateFailedMessage', this.isEdit ? 'Update failed' : 'add failed')
                 }
             },

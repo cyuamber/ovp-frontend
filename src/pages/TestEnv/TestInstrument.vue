@@ -131,7 +131,10 @@ export default {
           okType: "danger",
           cancelText: "No",
           onOk: () => {
-            this.deleteMeterSys({ id: singleData.id });
+            this.deleteMeterSys({
+                id: singleData.id,
+                message: this.$message
+            });
           }
         });
       }

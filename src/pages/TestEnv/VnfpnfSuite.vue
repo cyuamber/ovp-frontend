@@ -149,7 +149,10 @@ export default {
           okType: "danger",
           cancelText: "No",
           onOk: () => {
-            this.deleteTestMeter({ id: SuiteSingleData.id });
+            this.deleteTestMeter({
+                id: SuiteSingleData.id,
+                message: this.$message
+            });
           }
         });
       } else {

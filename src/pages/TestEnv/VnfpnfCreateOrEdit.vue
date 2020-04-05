@@ -275,7 +275,11 @@ export default {
       });
     },
     submitFormData(data) {
-      this.createOrEditTestMeter({ isEdit: this.isEdit, data }).then(
+      this.createOrEditTestMeter({
+          isEdit: this.isEdit,
+          data,
+          message: this.$message
+      }).then(
         () => {
           this.updateVisible(false);
           this.form.resetFields();

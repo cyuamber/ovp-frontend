@@ -190,7 +190,7 @@ const actions = {
     commit('updateTestCaseList', []);
     commit('updateCheckboxGroup', []);
   },
-  createOrEditTestSpec({ commit, dispatch, state }, { isEdit, data }) {
+  createOrEditTestSpec({ commit, dispatch, state }, { isEdit, data, message }) {
     let url = isEdit ? API.TestSpecMgt.specMgtUpdate : API.TestSpecMgt.specMgtInsert;
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data)
@@ -199,26 +199,32 @@ const actions = {
           commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully');
           let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
           dispatch('getTableData', obj)
+        }else if(res.code === 503){
+            message.error(res.message)
         } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
       },
         () => {
           commit('updateFailedMessage', 'Network exception, please try again')
         })
   },
-  deleteTestSpec({ commit, dispatch, state }, id) {
+  deleteTestSpec({ commit, dispatch, state }, {id, message}) {
     axiosdelete(API.TestSpecMgt.specMgtDelete.replace(":id", id)).then(res => {
       if (res.code === 200) {
         commit('updateSuccessMessage', 'Deleted successfully');
         let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
         dispatch('getTableData', obj)
-      } else commit('updateFailedMessage', 'Network exception, please try again')
+      }else if(res.code === 503){
+          message.error(res.message)
+      }else commit('updateFailedMessage', 'Network exception, please try again')
     })
   },
-    activateTestCase({ commit, dispatch, state }, obj){
+    activateTestCase({ commit, dispatch, state }, {obj, message}){
         axiosput(API.TestSpecMgt.specMgtCaseActivate.replace(":id", obj.id).replace(":status", obj.status)).then(res => {
             if (res.code === 200) {
                 commit('updateSuccessMessage', 'Update activation status successfully');
                 dispatch('getTestCaseTableData', {record:state.dropdownSpec[state.dropdownSpecIndex],expanded:true})
+            }else if(res.code === 503){
+                message.error(res.message)
             } else commit('updateFailedMessage', 'Network exception, please try again')
         })
     }

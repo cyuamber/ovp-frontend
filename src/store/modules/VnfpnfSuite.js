@@ -128,7 +128,7 @@ const actions = {
             commit('updateToken', null)
         })
     },
-    createOrEditTestMeter({ commit, dispatch, state }, { data, isEdit }) {
+    createOrEditTestMeter({ commit, dispatch, state }, { data, isEdit, message }) {
         let url = isEdit ? API.suiteMgt.suiteMgtUpdate : API.suiteMgt.suiteMgtInsert;
         let axiosType = isEdit ? axiosput : axiospost;
         axiosType(url, data)
@@ -137,20 +137,24 @@ const actions = {
                     commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully');
                     let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
                     dispatch('getTableData', obj)
-                } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
+                }else if(res.code === 503){
+                    message.error(res.message)
+                }  else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
             },
                 () => {
                     commit('updateFailedMessage', 'Network exception, please try again')
                 })
     },
-    deleteTestMeter({ commit, dispatch, state }, data) {
-        let url = API.suiteMgt.suiteMgtDelete.replace(":id", data.id);
+    deleteTestMeter({ commit, dispatch, state }, {id, message}) {
+        let url = API.suiteMgt.suiteMgtDelete.replace(":id", id);
         axiosdelete(url).then(res => {
             if (res.code === 200) {
                 commit('updateSuccessMessage', 'Deleted successfully');
                 let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
                 dispatch('getTableData', obj)
-            } else commit('updateFailedMessage', 'Network exception, please try again')
+            }else if(res.code === 503){
+                message.error(res.message)
+            }  else commit('updateFailedMessage', 'Network exception, please try again')
         })
     },
     downloadFile({ commit }, {fileName,fileAliasName}) {

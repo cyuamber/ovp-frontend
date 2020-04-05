@@ -182,7 +182,10 @@ export default {
           okType: "danger",
           cancelText: "No",
           onOk: () => {
-            this.deleteTestSpec(testSpecSingleData.id);
+            this.deleteTestSpec({
+                id:testSpecSingleData.id,
+                message: this.$message
+            });
           }
         });
       }
@@ -195,7 +198,10 @@ export default {
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          this.activateTestCase(testCaseSingleData);
+          this.activateTestCase({
+              obj:testCaseSingleData,
+              message: this.$message
+          });
         }
       });
     }
