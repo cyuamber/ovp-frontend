@@ -81,6 +81,29 @@
                     ></span>
                   </a-tooltip>
                 </span>
+                <a-table
+                        class="test-case__table"
+                        slot="expandedRowRender"
+                        slot-scope="record"
+                        :loading="testCaseChildtableLoading"
+                        :columns="innerColumns"
+                        :dataSource="record.caseMgt"
+                        rowKey="executionId"
+                        size="default"
+                        :pagination="false"
+                >
+                  <span slot="status" slot-scope="status">
+                  <a-tooltip placement="top">
+                    <template slot="title">
+                      <span>{{status}}</span>
+                    </template>
+                    <span
+                            class="job-detail__testCase-status"
+                            :style="getCaseStatusStyle(status)"
+                    ></span>
+                  </a-tooltip>
+                </span>
+                </a-table>
               </a-table>
             </div>
           </a-card>
@@ -92,7 +115,7 @@
 
 <script type="text/ecmascript-6">
 import testCasePie from "./testCasePie";
-import { testJobColumns, testJobDetailCaseListColumns } from "../../const/constant";
+import { testJobColumns, testJobDetailCaseListColumns, testJobDetailCaseChildColumns } from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "JobDetail",
@@ -100,6 +123,7 @@ export default {
   data() {
     return {
       columns: testJobDetailCaseListColumns,
+      innerColumns: testJobDetailCaseChildColumns,
       statusColor: "",
       stompClient: "",
       timer: "",
@@ -116,7 +140,8 @@ export default {
       detailTestCase: state => state.testJob.detailTestCase,
       // testFailDetail: state => state.testJob.testFailDetail,
       failLoading: state => state.testJob.failLoading,
-      executionStartTime: state => state.testJob.executionStartTime
+      executionStartTime: state => state.testJob.executionStartTime,
+      testCaseChildtableLoading: state => state.testJob.testCaseChildtableLoading
     }),
     infoList() {
       let list = [];
@@ -153,7 +178,8 @@ export default {
   methods: {
     ...mapActions("testJob", [
       "getProgress",
-      "getTestFail"
+      "getTestFail",
+      "getTestJobCaseExecutions"
     ]),
     ...mapMutations("testJob", [
       "changeComponent",
@@ -223,7 +249,10 @@ export default {
       window.open(this.sutvalidLind, "_blank");
     },
       caseSecondaryTableShow(expanded, record){
-        console.log(expanded, record,"----expanded, record")
+        console.log(expanded, record,"----expanded, record");
+        if(expanded){
+            this.getTestJobCaseExecutions({ record });
+        }
       }
   },
   beforeDestroy: function() {

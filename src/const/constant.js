@@ -287,6 +287,32 @@ const testJobDetailCaseListColumns = [
         width:120
     }
 ]
+const testJobDetailCaseChildColumns = [
+    {
+        title: 'TestCase Name',
+        dataIndex: 'testSuiteName',
+    },
+    {
+        title: 'Request Id',
+        dataIndex: 'requestId'
+    },
+    {
+        title: 'Start Time',
+        dataIndex: 'startTime'
+    },
+    {
+        title: 'End Time',
+        dataIndex: 'endTime'
+    },
+    {
+        title: 'status',
+        dataIndex: 'status',
+        scopedSlots: {
+            customRender: 'status'
+        },
+        width:120
+    }
+]
 const TestInsrigisterColumns = [
     {
         title: 'ID',
@@ -569,5 +595,6 @@ export {
     MANOForm,
     MANOONAPForm,
     customProfiles,
-    testJobDetailCaseListColumns
+    testJobDetailCaseListColumns,
+    testJobDetailCaseChildColumns
 }

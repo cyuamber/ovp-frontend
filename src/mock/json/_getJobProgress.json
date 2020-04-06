@@ -92,10 +92,46 @@
         "jobId": "441956958802231296",
         "caseId": "1029",
         "caseStatus": "DONE",
+        "executionStartTime": "2020-03-28 11:00:40",
+        "consumes": 72,
+        "jobExecutionStartTime": "2020-03-28 11:00:39",
+        "requestId": "2321a626-2699-46f1-aaa3-8c3d8d12bea1",
+        "executions": null,
+        "groupType": null
+      },
+      {
+        "id": "441957056277856257",
+        "jobId": "441956958802231297",
+        "caseId": "1030",
+        "caseStatus": "FAILED",
+        "executionStartTime": "2020-03-29 11:00:40",
+        "consumes": 72,
+        "jobExecutionStartTime": "2020-03-29 11:00:39",
+        "requestId": "2321a626-2699-46f1-aaa3-8c3d8d12bea2",
+        "executions": null,
+        "groupType": null
+      },
+      {
+        "id": "441957056277856258",
+        "jobId": "441956958802231298",
+        "caseId": "1031",
+        "caseStatus": "STARTED",
         "executionStartTime": "2020-03-30 11:00:40",
         "consumes": 72,
         "jobExecutionStartTime": "2020-03-30 11:00:39",
-        "requestId": "2321a626-2699-46f1-aaa3-8c3d8d12bea1",
+        "requestId": "2321a626-2699-46f1-aaa3-8c3d8d12bea3",
+        "executions": null,
+        "groupType": null
+      },
+      {
+        "id": "441957056277856259",
+        "jobId": "441956958802231299",
+        "caseId": "1032",
+        "caseStatus": "RUNNING",
+        "executionStartTime": "2020-03-30 11:00:40",
+        "consumes": 72,
+        "jobExecutionStartTime": "2020-03-30 11:00:39",
+        "requestId": "2321a626-2699-46f1-aaa3-8c3d8d12bea4",
         "executions": null,
         "groupType": null
       }

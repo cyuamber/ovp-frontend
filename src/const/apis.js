@@ -72,7 +72,8 @@ export default {
         testJobSpec: baseUrl + "/testSpec/:type",
         testJobTestCase: baseUrl + "/testCase/jobCase",
         testJobDownLoad: baseUrl + "/jobs/cases/download/:jobId",
-        testFailedDetail: baseUrl + "/jobs/case/executions/retrieve/:requestId"
+        testFailedDetail: baseUrl + "/jobs/case/executions/retrieve/:requestId",
+        testJobCaseExecutions: baseUrl + "/jobs/case/executions/list/:requestId",
     },
     TestSpecMgt: {
         specMgtTable: baseUrl + "/specMgt",

@@ -1,0 +1,28 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "scenario": "onap-dublin01",
+      "testCaseName": "complex-delete",
+      "testSuiteName": "aai",
+      "executionId": "eff19a6e-a386-4521-911b-6a9e8095be4c-1585139625971",
+      "requestId": "eff19a6e-a386-4521-911b-6a9e8095be4c",
+      "profile": "onap-dublin",
+      "status": "failed",
+      "startTime": "2020-03-25T12:33:45.000",
+      "endTime": "2020-03-25T12:33:46.000"
+    },
+    {
+      "scenario": "onap-dublin02",
+      "testCaseName": "complex-delete",
+      "testSuiteName": "so",
+      "executionId": "eff19a6e-a386-4521-911b-6a9e8095be4c-11111111222",
+      "requestId": "eff19a6e-a386-4521-911b-6a9e8095be4c",
+      "profile": "onap-dublin",
+      "status": "done",
+      "startTime": "2020-03-25T12:33:45.000",
+      "endTime": "2020-03-25T12:33:46.000"
+    }
+  ]
+}

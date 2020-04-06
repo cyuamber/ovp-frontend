@@ -49,7 +49,8 @@ const state = {
 	dashboardJumpStatus: 'All',
 	initcheckboxGroup: [],
 	caseParamsIsShow: false,
-	caseParamsData: []
+	caseParamsData: [],
+    testCaseChildtableLoading: false
 }
 
 const mutations = {
@@ -59,6 +60,9 @@ const mutations = {
 	setCaseParamsIsShow(state, bool) {
 		state.caseParamsIsShow = bool;
 	},
+    setTestCaseChildtableLoading(state, bool) {
+        state.testCaseChildtableLoading = bool;
+    },
 	updateFailedMessage(state, toast) {
 		state.loadingMessage = {
 			type: 'failed',
@@ -170,7 +174,10 @@ const mutations = {
 		state.tableLoading = tableLoading
 	},
 	updateDetailTestCase(state, detailTestCase) {
-		state.detailTestCase = detailTestCase
+		state.detailTestCase = detailTestCase.map((item,index)=>{
+			item.index = index;
+			return item
+		})
 	},
 	updateVNFMOption(state, options) {
 		state.VNFMOption = options;
@@ -211,6 +218,10 @@ const mutations = {
 	updateCaseParamsData(state, data) {
 		state.caseParamsData = data;
 		console.log(data, state.caseParamsData, "---state.caseParamsData")
+	},
+    updatecaseChildTableData(state, {testCaseChildData,record}) {
+        let index = record.index;
+		state.detailTestCase[index].caseMgt = testCaseChildData
 	}
 }
 
@@ -469,29 +480,19 @@ const actions = {
             });
 	},
 
-	// detailTestCaseJop({ commit, state }, data) {
-	// 	if (state.executionStartTime === "") return false
-	// 	else {
-	// 		// Simulation request
-	// 		axiosget(API.testJobMgt.testJobDetail.replace(":jobId", data.jobId).replace(":ExecutionStartTime", data.executionStartTime))
-	// 			.then(res => {
-	// 				if (res.code === 200) {
-     //                    commit('updateDetailTestCase', res.body);
-	// 					commit('updateSuccessMessage', 'Successfully detail testing');
-	// 					let doneCaseNum = 0, failedCaseNum = 0;
-	// 					res.body.forEach((item) => {
-	// 						if (item.caseStatus === 'DONE') {
-	// 							doneCaseNum++
-	// 						} else if (item.caseStatus === 'FAILED') {
-	// 							failedCaseNum++
-	// 						}
-	// 					});
-	// 					commit('updateTestCasePieData', { doneCaseNum, failedCaseNum });
-	// 				}
-	// 			});
-	// 	}
-    //
-	// },
+    getTestJobCaseExecutions({ commit }, { record }) {
+		commit('setTestCaseChildtableLoading',true);
+		axiosget(API.testJobMgt.testJobCaseExecutions.replace(":requestId", record.requestId)).then(res => {
+                commit('setTestCaseChildtableLoading',false);
+				if (Number(res.code) === 200) {
+                    commit('updatecaseChildTableData', {testCaseChildData:res.body,record});
+				}
+			},
+			() => {
+                commit('setTestCaseChildtableLoading',false);
+				commit('updateFailedMessage', 'Network exception, please try again')
+			})
+    },
 
 	stopJop({ dispatch, commit }, {data, message}) {
 		// Simulation request

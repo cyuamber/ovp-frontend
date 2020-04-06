@@ -47,7 +47,7 @@ module.exports =
     "/portal/business/types/:flag": "/getVNFType",
     "/portal/business/files/upload": "/updateVNFTest",
     ///////<-------------Test Spec MGT--------->/////
-    "/portal/business/specMgt": "/_getTestSpec",
+    "/portal/business/specMgt?pageNum=:pageNum&pageSize=:pageSize": "/_getTestSpec",
     "/portal/business/testCase/:specId": "/_getTestCaseTable",
     "/portal/business/specMgt/insert": "/addTestSpec",
     "/portal/business/specMgt/update": "/updateTestSpec",
@@ -66,6 +66,7 @@ module.exports =
     "/portal/business/jobs/:jobId/stop": "/stopTestJobMGT",
     "/portal/business/jobs/:jobId": "/_getJobProgress",
     "/portal/business/jobs/cases/:jobId/:ExecutionStartTime": "/_testJobDetail",
+    "/portal/business/jobs/case/executions/list/:requestId": "/_getcaseExecutionsList",
     "/portal/business/jobs/cases/download/:jobId": "/_downloadFile",
     "/portal/business/testCase/:caseId/:sutId": "/_downloadFile",
     "/*/*": "/$1_$2",
