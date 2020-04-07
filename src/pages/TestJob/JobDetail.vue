@@ -23,20 +23,24 @@
     <a-spin tip="Loading..." :spinning="detailLoading" size="large">
       <div class="job-detail__content">
         <div class="job-detail__info">
-          <a-card>
+          <a-card title="Test Job Info">
             <a-row>
               <a-col :span="10">
-                <h2 class="job-detail__info-title">Test Job Info</h2>
-                <div v-for="(item,index) in infoList" :key="index" class="job-detail__item-container">
+                <!-- <h2 class="job-detail__info-title">Test Job Info</h2> -->
+                <div
+                  v-for="(item,index) in infoList"
+                  :key="index"
+                  class="job-detail__item-container"
+                >
                   <p class="job-detail__item-title">{{item.title}}:</p>
                   <p class="job-detail__item-text">
                     {{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}
                     <span
-                            v-if="item.title === 'SUT Name' && statusText === 'DONE'"
+                      v-if="item.title === 'SUT Name' && statusText === 'DONE'"
                     >
-                  <a-divider type="vertical" />
-                  <a-button type="link" size="small" @click="jumpToUpload">Upload SUT</a-button>
-                </span>
+                      <a-divider type="vertical" />
+                      <a-button type="link" size="small" @click="jumpToUpload">Upload SUT</a-button>
+                    </span>
                   </p>
                 </div>
                 <div class="job-detail__item-container">
@@ -60,14 +64,14 @@
             </a-card-grid>
             <div v-if="detailTestCase.length >0">
               <a-table
-                      class="detailtestcase-table"
-                      :columns="columns"
-                      :dataSource="detailTestCase"
-                      rowKey="id"
-                      bordered
-                      size="default"
-                      :pagination="false"
-                      @expand="caseSecondaryTableShow"
+                class="detailtestcase-table"
+                :columns="columns"
+                :dataSource="detailTestCase"
+                rowKey="id"
+                bordered
+                size="default"
+                :pagination="false"
+                @expand="caseSecondaryTableShow"
               >
                 <span slot="caseStatus" slot-scope="caseStatus,record">
                   <a-tooltip placement="top">
@@ -75,34 +79,31 @@
                       <span>{{caseStatus}}</span>
                     </template>
                     <span
-                            @click="pasteReason(record)"
-                            class="job-detail__testCase-status"
-                            :style="getCaseStatusStyle(caseStatus)"
+                      @click="pasteReason(record)"
+                      class="job-detail__testCase-status"
+                      :style="getCaseStatusStyle(caseStatus)"
                     ></span>
                   </a-tooltip>
                 </span>
                 <a-table
-                        class="test-case__table"
-                        slot="expandedRowRender"
-                        slot-scope="record"
-                        :loading="testCaseChildtableLoading"
-                        :columns="innerColumns"
-                        :dataSource="record.caseMgt"
-                        rowKey="executionId"
-                        size="default"
-                        :pagination="false"
+                  class="test-case__table"
+                  slot="expandedRowRender"
+                  slot-scope="record"
+                  :loading="testCaseChildtableLoading"
+                  :columns="innerColumns"
+                  :dataSource="record.caseMgt"
+                  rowKey="executionId"
+                  size="default"
+                  :pagination="false"
                 >
                   <span slot="status" slot-scope="status">
-                  <a-tooltip placement="top">
-                    <template slot="title">
-                      <span>{{status}}</span>
-                    </template>
-                    <span
-                            class="job-detail__testCase-status"
-                            :style="getCaseStatusStyle(status)"
-                    ></span>
-                  </a-tooltip>
-                </span>
+                    <a-tooltip placement="top">
+                      <template slot="title">
+                        <span>{{status}}</span>
+                      </template>
+                      <span class="job-detail__testCase-status" :style="getCaseStatusStyle(status)"></span>
+                    </a-tooltip>
+                  </span>
                 </a-table>
               </a-table>
             </div>
@@ -115,7 +116,11 @@
 
 <script type="text/ecmascript-6">
 import testCasePie from "./testCasePie";
-import { testJobColumns, testJobDetailCaseListColumns, testJobDetailCaseChildColumns } from "../../const/constant";
+import {
+  testJobColumns,
+  testJobDetailCaseListColumns,
+  testJobDetailCaseChildColumns
+} from "../../const/constant";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "JobDetail",
@@ -141,7 +146,8 @@ export default {
       // testFailDetail: state => state.testJob.testFailDetail,
       failLoading: state => state.testJob.failLoading,
       executionStartTime: state => state.testJob.executionStartTime,
-      testCaseChildtableLoading: state => state.testJob.testCaseChildtableLoading
+      testCaseChildtableLoading: state =>
+        state.testJob.testCaseChildtableLoading
     }),
     infoList() {
       let list = [];
@@ -193,13 +199,13 @@ export default {
     initJobDetail() {
       if (this.currentJob.jobStatus !== "CREATED") {
         this.getProgress({
-            jobId: this.currentJob.jobId,
-            message: this.$message
+          jobId: this.currentJob.jobId,
+          message: this.$message
         });
         this.progressTimer = setInterval(() => {
           this.getProgress({
-              jobId: this.currentJob.jobId,
-              message: this.$message
+            jobId: this.currentJob.jobId,
+            message: this.$message
           });
         }, 5000);
       } else {
@@ -248,12 +254,12 @@ export default {
     jumpToUpload() {
       window.open(this.sutvalidLind, "_blank");
     },
-      caseSecondaryTableShow(expanded, record){
-        console.log(expanded, record,"----expanded, record");
-        if(expanded){
-            this.getTestJobCaseExecutions({ record });
-        }
+    caseSecondaryTableShow(expanded, record) {
+      console.log(expanded, record, "----expanded, record");
+      if (expanded) {
+        this.getTestJobCaseExecutions({ record });
       }
+    }
   },
   beforeDestroy: function() {
     clearInterval(this.progressTimer);
@@ -303,6 +309,7 @@ export default {
       }
       .job-detail__item-container {
         overflow: hidden;
+        margin-top: 15px;
         .job-detail__item-title {
           float: left;
           width: 140px;
