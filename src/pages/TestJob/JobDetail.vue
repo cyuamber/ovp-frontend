@@ -1,5 +1,6 @@
 <template>
   <div class="job-detail">
+    <Loading :loadingMessage="loadingMessage" />
     <div>
       <p class="job-detail__back-btn" @click="handleBack">
         <a-icon type="left" />&nbsp;Back
@@ -116,6 +117,7 @@
 
 <script type="text/ecmascript-6">
 import testCasePie from "./testCasePie";
+import Loading from "../../components/Loading/Loading";
 import {
   testJobColumns,
   testJobDetailCaseListColumns,
@@ -124,7 +126,7 @@ import {
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "JobDetail",
-  components: { testCasePie },
+  components: { testCasePie, Loading },
   data() {
     return {
       columns: testJobDetailCaseListColumns,
@@ -140,6 +142,7 @@ export default {
   computed: {
     ...mapState({
       detailLoading: state => state.testJob.detailLoading,
+      loadingMessage: state => state.testJob.loadingMessage,
       percent: state => state.testJob.percent,
       statusText: state => state.testJob.statusText,
       detailTestCase: state => state.testJob.detailTestCase,
@@ -185,7 +188,8 @@ export default {
     ...mapActions("testJob", [
       "getProgress",
       "getTestFail",
-      "getTestJobCaseExecutions"
+      "getTestJobCaseExecutions",
+      "jobVNFCsarsUplaod"
     ]),
     ...mapMutations("testJob", [
       "changeComponent",
@@ -252,7 +256,10 @@ export default {
       this.getProgress({ jobId: this.currentJob.jobId });
     },
     jumpToUpload() {
-      window.open(this.sutvalidLind, "_blank");
+        this.jobVNFCsarsUplaod({
+            jobId:this.$route.params.jobId
+        });
+      // window.open(this.sutvalidLind, "_blank");
     },
     caseSecondaryTableShow(expanded, record) {
       console.log(expanded, record, "----expanded, record");

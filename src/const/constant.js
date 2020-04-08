@@ -271,6 +271,10 @@ const testJobDetailCaseListColumns = [
         dataIndex: 'caseId',
     },
     {
+        title: 'Consumes（ms）',
+        dataIndex: 'consumes',
+    },
+    {
         title: 'Execution Start Time',
         dataIndex: 'executionStartTime'
     },

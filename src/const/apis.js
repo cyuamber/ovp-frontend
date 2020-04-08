@@ -74,6 +74,8 @@ export default {
         testJobDownLoad: baseUrl + "/jobs/cases/download/:jobId",
         testFailedDetail: baseUrl + "/jobs/case/executions/retrieve/:requestId",
         testJobCaseExecutions: baseUrl + "/jobs/case/executions/list/:requestId",
+        testJobCaseVNFUplaod: baseUrl + "/jobs/:jobId/csars/upload",
+        testJobCaseVNFReupload: baseUrl + "/jobs/:jobId/csars/reupload",
     },
     TestSpecMgt: {
         specMgtTable: baseUrl + "/specMgt",

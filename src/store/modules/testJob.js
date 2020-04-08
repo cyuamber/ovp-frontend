@@ -63,16 +63,18 @@ const mutations = {
     setTestCaseChildtableLoading(state, bool) {
         state.testCaseChildtableLoading = bool;
     },
-	updateFailedMessage(state, toast) {
+	updateFailedMessage(state, toast, show) {
 		state.loadingMessage = {
 			type: 'failed',
-			toast
+			toast,
+            show
 		}
 	},
-	updateSuccessMessage(state, toast) {
+	updateSuccessMessage(state, toast, show) {
 		state.loadingMessage = {
 			type: 'success',
-			toast
+			toast,
+			show
 		}
 	},
 	updateDetailLoading(state, detailLoading) {
@@ -584,6 +586,48 @@ const actions = {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			});
 	},
+	jobVNFCsarsUplaod({ commit, dispatch }, {jobId, message}){
+        commit('updateSuccessMessage', 'File uploading',true);
+		axiospost(API.testJobMgt.testJobCaseVNFUplaod.replace(":jobId",jobId))
+			.then(res => {
+			commit('updateSuccessMessage', '');
+            if (res.code === 200) {
+                window.open(this.sutvalidLind, "_blank");
+            }else if(res.code === 417){
+                message.error(res.body);
+                this.$confirm({
+                    title: "Do you need to upload this file again?",
+                    content: "jobId: " + jobId,
+                    okText: "Yes",
+                    okType: "danger",
+                    cancelText: "No",
+                    onOk: () => {
+                        dispatch("jobCaseVNFReupload", { jobId, message })
+                    }
+                });
+			}else if(res.code === 503){
+                message.error(res.message)
+            }
+        }, () => {
+            commit('updateFailedMessage', 'Network exception, please try again')
+        });
+	},
+    jobCaseVNFReupload({ commit }, {jobId, message}){
+        commit('updateSuccessMessage', 'File uploading',true);
+        axiospost(API.testJobMgt.testJobCaseVNFReupload.replace(":jobId",jobId))
+            .then(res => {
+                commit('updateSuccessMessage', '');
+                if (res.code === 200) {
+                    window.open(this.sutvalidLind, "_blank");
+                }else if(res.code === 503){
+                    message.error(res.message)
+                }
+            }, () => {
+                commit('updateFailedMessage', 'Network exception, please try again')
+            });
+    }
+
+
 
 }
 
