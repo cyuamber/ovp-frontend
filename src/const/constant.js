@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV;
-const axiosgetType = env !== "development" ? true : false;
+const axiosgetType = env !== "development" ? false : true;
 
 const mockcolumns = [{
     title: "Avatar",
@@ -288,7 +288,7 @@ const testJobDetailCaseListColumns = [
         scopedSlots: {
             customRender: 'caseStatus'
         },
-        width:120
+        width: 120
     }
 ]
 const testJobDetailCaseChildColumns = [
@@ -314,7 +314,7 @@ const testJobDetailCaseChildColumns = [
         scopedSlots: {
             customRender: 'status'
         },
-        width:120
+        width: 120
     }
 ]
 const TestInsrigisterColumns = [
