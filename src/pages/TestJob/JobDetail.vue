@@ -266,6 +266,7 @@ export default {
     jumpToUpload() {
         this.jobVNFCsarsUplaod({
             jobId:this.$route.params.jobId,
+            sutvalidLind: this.sutvalidLind,
             message: this.$message,
             confirm: this.$confirm
         });

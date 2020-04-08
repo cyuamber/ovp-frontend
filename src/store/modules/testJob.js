@@ -602,13 +602,13 @@ const actions = {
 				commit('updateFailedMessage', 'Network exception, please try again')
 			});
 	},
-	jobVNFCsarsUplaod({ commit, dispatch }, {jobId, message, confirm}){
+	jobVNFCsarsUplaod({ commit, dispatch }, {jobId, sutvalidLind, message, confirm}){
         commit('updateSuccessMessage', 'File uploading',true);
 		axiospost(API.testJobMgt.testJobCaseVNFUplaod.replace(":jobId",jobId))
 			.then(res => {
             if (res.code === 200) {
                 commit('updateSuccessMessage', 'File uploaded successfully');
-                window.open(this.sutvalidLind, "_blank");
+                window.open(sutvalidLind, "_blank");
             }else if(res.code === 417){
                 message.error(res.body);
                 confirm({
@@ -618,7 +618,7 @@ const actions = {
                     okType: "danger",
                     cancelText: "No",
                     onOk: () => {
-                        dispatch("jobCaseVNFReupload", { jobId, message })
+                        dispatch("jobCaseVNFReupload", { jobId, sutvalidLind, message })
                     }
                 });
 			}else if(res.code === 503){
@@ -628,13 +628,13 @@ const actions = {
             commit('updateFailedMessage', 'Network exception, please try again')
         });
 	},
-    jobCaseVNFReupload({ commit }, {jobId, message}){
+    jobCaseVNFReupload({ commit }, {jobId, sutvalidLind, message}){
         commit('updateSuccessMessage', 'File uploading',true);
         axiospost(API.testJobMgt.testJobCaseVNFReupload.replace(":jobId",jobId))
             .then(res => {
                 if (res.code === 200) {
                     commit('updateSuccessMessage', 'File reUploaded successfully');
-                    window.open(this.sutvalidLind, "_blank");
+                    window.open(sutvalidLind, "_blank");
                 }else if(res.code === 503){
                     message.error(res.message)
                 }
