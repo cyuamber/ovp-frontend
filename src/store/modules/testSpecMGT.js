@@ -199,8 +199,8 @@ const actions = {
           commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully');
           let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
           dispatch('getTableData', obj)
-        }else if(res.code === 503){
-            message.error(res.message)
+        }else if(res.code === 417){
+            message.error(res.body)
         } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
       },
         () => {
@@ -213,8 +213,8 @@ const actions = {
         commit('updateSuccessMessage', 'Deleted successfully');
         let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
         dispatch('getTableData', obj)
-      }else if(res.code === 503){
-          message.error(res.message)
+      }else if(res.code === 417){
+          message.error(res.body)
       }else commit('updateFailedMessage', 'Network exception, please try again')
     })
   },
@@ -223,8 +223,8 @@ const actions = {
             if (res.code === 200) {
                 commit('updateSuccessMessage', 'Update activation status successfully');
                 dispatch('getTestCaseTableData', {record:state.dropdownSpec[state.dropdownSpecIndex],expanded:true})
-            }else if(res.code === 503){
-                message.error(res.message)
+            }else if(res.code === 417){
+                message.error(res.body)
             } else commit('updateFailedMessage', 'Network exception, please try again')
         })
     }

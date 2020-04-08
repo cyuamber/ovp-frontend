@@ -275,21 +275,24 @@ export default {
     caseSecondaryTableShow(expanded, record) {
       console.log(expanded, record, "----expanded, record");
       if (expanded) {
+          this.getTestJobCaseExecutions({
+              record,
+              expanded,
+              message: this.$message
+          });
           if(record.caseStatus !=='DONE'&& record.caseStatus !=='FAILED' && record.caseStatus !=='STARTED'){
-              this.updateExpandedRowKeys({
-                  key:record.index,
-                  expanded
-              });
-              this.getTestJobCaseExecutions({ record });
               this.caseChildlistTimer[record.index] = setInterval(() => {
-                  this.getTestJobCaseExecutions({ record });
+                  this.getTestJobCaseExecutions({
+                      record,
+                      expanded,
+                      message: this.$message
+                  });
               }, 5000);
-          }else {
-              this.$message.info('No child data under this test case.')
           }
-
       }else {
-          clearInterval(this.caseChildlistTimer[record.index]);
+          if(record.caseStatus !=='DONE'&& record.caseStatus !=='FAILED' && record.caseStatus !=='STARTED') {
+              clearInterval(this.caseChildlistTimer[record.index]);
+          }
       }
     }
   },

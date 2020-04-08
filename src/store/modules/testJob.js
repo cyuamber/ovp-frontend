@@ -90,6 +90,13 @@ const mutations = {
 			show
 		}
 	},
+    updateVFNUploadLoading(state, toast, show) {
+        state.loadingMessage = {
+            type: '',
+            toast,
+            show
+        }
+    },
 	updateDetailLoading(state, detailLoading) {
 		state.detailLoading = detailLoading;
 	},
@@ -431,7 +438,7 @@ const actions = {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
 				dispatch('getTableData', false)
-			}else if(res.code === 503){
+			}else if(res.code === 417){
                 message.error(res.message)
 			}
 		}, () => {
@@ -456,7 +463,7 @@ const actions = {
 					data.executionStartTime = res.body.executionStartTime;
 					commit('updateTableItemData', data);
 					router.push({ name: "JobDetail", params: data })
-				}else if(res.code === 503){
+				}else if(res.code === 417){
                     message.error(res.message)
 				}
 			}, () => {
@@ -467,7 +474,6 @@ const actions = {
 		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", jobId))
 			.then(res => {
 				if (res.code === 200) {
-					commit('updateSuccessMessage', 'Successfully detail testing');
 					commit('updateProgress', {
 						percent: res.body.jobProgress,
 						status: res.body.jobStatus
@@ -490,7 +496,7 @@ const actions = {
 						commit('updateExecutionStartTime', res.body.executionStartTime);
 						// dispatch("detailTestCaseJop", { jobId: res.body.jobId, executionStartTime: res.body.executionStartTime })
 					}
-				}else if(res.code === 503){
+				}else if(res.code === 417){
                     message.error(res.message)
                 }
 			}, () => {
@@ -498,12 +504,17 @@ const actions = {
             });
 	},
 
-    getTestJobCaseExecutions({ commit }, { record }) {
+    getTestJobCaseExecutions({ commit }, { record, expanded, message }) {
 		commit('setTestCaseChildtableLoading',true);
 		axiosget(API.testJobMgt.testJobCaseExecutions.replace(":requestId", record.requestId)).then(res => {
                 commit('setTestCaseChildtableLoading',false);
 				if (Number(res.code) === 200) {
-                    commit('updatecaseChildTableData', {testCaseChildData:res.body,record});
+					if(res.body.length !== 0){
+                        commit('updatecaseChildTableData', { key:record.index,expanded});
+                        commit('updatecaseChildTableData', {testCaseChildData:res.body,record});
+					}else {
+                        message.info('No child data under this test case.')
+					}
 				}
 			},
 			() => {
@@ -522,7 +533,7 @@ const actions = {
 					data.actions[0] = 'Start';
 					commit('updateTableItemData', data);
 					dispatch('getTableData', true)
-				}else if(res.code === 503){
+				}else if(res.code === 417){
                     message.error(res.message)
 				}
 			}, () => {
@@ -593,9 +604,9 @@ const actions = {
 					let obj = {
 						specId: res.body.spec.id,
 						sutId: res.body.sut.id,
-					}
+					};
 					dispatch("getTestCase", { obj, message: this.$message })
-				}else if(res.code === 503){
+				}else if(res.code === 417){
                     message.error(res.message)
                 }
 			}, () => {
@@ -603,39 +614,35 @@ const actions = {
 			});
 	},
 	jobVNFCsarsUplaod({ commit, dispatch }, {jobId, sutvalidLind, message, confirm}){
-        commit('updateSuccessMessage', 'File uploading',true);
-		axiospost(API.testJobMgt.testJobCaseVNFUplaod.replace(":jobId",jobId))
+        commit('updateVFNUploadLoading', null ,true);
+        let updata = () => {
+            confirm({
+                title: "Do you need to upload this file again?",
+                content: "jobId: " + jobId,
+                okText: "Yes",
+                cancelText: "No",
+                onOk: () => {
+                    dispatch("jobCaseVNFReupload", { jobId, sutvalidLind, message })
+                }
+            });
+        };
+		axiospost(API.testJobMgt.testJobCaseVNFUplaod.replace(":jobId",jobId),null,null,updata)
 			.then(res => {
             if (res.code === 200) {
-                commit('updateSuccessMessage', 'File uploaded successfully');
+                commit('updateVFNUploadLoading', null ,false);
                 window.open(sutvalidLind, "_blank");
-            }else if(res.code === 417){
-                message.error(res.body);
-                confirm({
-                    title: "Do you need to upload this file again?",
-                    content: "jobId: " + jobId,
-                    okText: "Yes",
-                    okType: "danger",
-                    cancelText: "No",
-                    onOk: () => {
-                        dispatch("jobCaseVNFReupload", { jobId, sutvalidLind, message })
-                    }
-                });
-			}else if(res.code === 503){
-                message.error(res.message)
             }
         }, () => {
             commit('updateFailedMessage', 'Network exception, please try again')
         });
 	},
     jobCaseVNFReupload({ commit }, {jobId, sutvalidLind, message}){
-        commit('updateSuccessMessage', 'File uploading',true);
+        commit('updateVFNUploadLoading', null ,true);
         axiospost(API.testJobMgt.testJobCaseVNFReupload.replace(":jobId",jobId))
             .then(res => {
                 if (res.code === 200) {
-                    commit('updateSuccessMessage', 'File reUploaded successfully');
                     window.open(sutvalidLind, "_blank");
-                }else if(res.code === 503){
+                }else if(res.code === 417){
                     message.error(res.message)
                 }
             }, () => {

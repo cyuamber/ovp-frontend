@@ -1,4 +1,4 @@
-
+import { message } from 'ant-design-vue';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true; // set cross-origin
@@ -11,51 +11,71 @@ const getHeaders = () => ({
 const uploadGetHeaders = () => ({
     "Content-Type": "multipart/form-data",
 });
-export function axiospost (url, data,uploadHeader) {
+export function axiospost (url, data,uploadHeader,callback) {
     // axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
     return new Promise((resolve, reject) => {
         axios.post(url, data, {
             headers:uploadHeader ? uploadGetHeaders() : getHeaders(),
         }).then((res) => {
-            resolve(res.data);
+            if (res.data.code === 200) {
+                resolve(res.data);
+            } else if(res.data.code === 417){
+                message.error(res.body);
+                callback()
+            }
         }).catch((err) => {
             reject(err);
         });
     });
 }
-export function axiosget (url, data) {
+export function axiosget (url, data,callback) {
     return new Promise((resolve, reject) => {
         axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
         axios.get(url, {
             params: data,
             headers: getHeaders(),
         }).then((res) => {
-            resolve(res.data);
+            if (res.data.code === 200) {
+                resolve(res.data);
+            } else if(res.data.code === 417){
+                message.error(res.body);
+                callback()
+            }
         }).catch((err) => {
             reject(err);
         });
     })
 }
-export function axiosput (url, data) {
+export function axiosput (url, data, callback) {
     axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
     return new Promise((resolve, reject) => {
         axios.put(url, data, {
             headers: getHeaders(),
         }).then((res) => {
-            resolve(res.data);
+            if (res.data.code === 200) {
+                resolve(res.data);
+            } else if(res.data.code === 417){
+                message.error(res.body);
+                callback()
+            }
         }).catch((err) => {
             reject(err);
         });
     });
 }
-export function axiosdelete (url, data) {
+export function axiosdelete (url, data, callback) {
     return new Promise((resolve, reject) => {
         axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
         axios.delete(url, {
             params: data,
             headers: getHeaders(),
         }).then((res) => {
-            resolve(res.data);
+            if (res.data.code === 200) {
+                resolve(res.data);
+            } else if(res.data.code === 417){
+                message.error(res.body);
+                callback()
+            }
         }).catch((err) => {
             reject(err);
         });

@@ -86,8 +86,8 @@ const actions = {
         if (res.code === 200) {
           commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully');
           dispatch('getTableData', {})
-        }else if(res.code === 503){
-            message.error(res.message)
+        }else if(res.code === 417){
+            message.error(res.body)
         } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
       },
         () => {
@@ -99,8 +99,8 @@ const actions = {
       if (res.code === 200) {
         commit('updateSuccessMessage', 'Deleted successfully')
         dispatch('getTableData', {})
-      }else if(res.code === 503){
-          message.error(res.message)
+      }else if(res.code === 417){
+          message.error(res.body)
       } else commit('updateFailedMessage', 'Network exception, please try again')
     }, () => {
         message.error('Network exception, please try again')

@@ -171,8 +171,8 @@ const actions = {
                 commit('updateSuccessMessage', 'Deleted successfully');
                 let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize };
                 dispatch('getTableData', { paramsObj })
-            }else if(res.code === 503){
-                message.error(res.message)
+            }else if(res.code === 417){
+                message.error(res.body)
             }else commit('updateFailedMessage', 'Failed to delete')
         }).catch(() => {
             commit('updateFailedMessage', 'Network exception, please try again')
@@ -217,8 +217,8 @@ const actions = {
                         pageSize: state.pageSize
                     }
                     dispatch('getTableData', { paramsObj })
-                } else if(res.code === 503){
-                    message.error(res.message)
+                } else if(res.code === 417){
+                    message.error(res.body)
                 }else {
                     commit('updateFailedMessage', this.isEdit ? 'Update failed' : 'add failed')
                 }

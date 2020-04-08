@@ -150,8 +150,8 @@ const actions = {
 					commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
 					let paramsObj = { flag: state.currentTab };
 					dispatch('getTableData', { paramsObj, isFilter: false })
-				}else if(res.code === 503){
-                    message.error(res.message)
+				}else if(res.code === 417){
+                    message.error(res.body)
                 } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
 			},
 				() => {
@@ -164,8 +164,8 @@ const actions = {
 				commit('updateSuccessMessage', 'Deleted successfully')
 				let paramsObj = { flag: state.currentTab };
 				dispatch('getTableData', { paramsObj, isFilter: false })
-			}else if(res.code === 503){
-                message.error(res.message)
+			}else if(res.code === 417){
+                message.error(res.body)
             }  else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
