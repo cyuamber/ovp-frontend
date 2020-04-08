@@ -1,4 +1,5 @@
 module.exports = {
     NODE_ENV: "production",
-    hosturl: ''
+    hosturl: '',
+    port: '8080'
 }

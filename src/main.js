@@ -8,9 +8,17 @@ import Axios from 'axios';
 import VueI18n from 'vue-i18n'
 
 Vue.prototype.$axios = Axios;
+
+let proEnv = require('../config/pro.env');
+
 if (process.env.NODE_ENV === "development") {
   Axios.defaults.baseURL = '/api';
 }
+
+if (process.env.NODE_ENV === "production") {
+  Axios.defaults.baseURL = `http://${window.location.hostname}:${proEnv.port}/`;
+}
+
 Axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 Vue.use(VueI18n);
