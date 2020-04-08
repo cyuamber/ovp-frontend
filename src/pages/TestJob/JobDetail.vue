@@ -265,7 +265,9 @@ export default {
     },
     jumpToUpload() {
         this.jobVNFCsarsUplaod({
-            jobId:this.$route.params.jobId
+            jobId:this.$route.params.jobId,
+            message: this.$message,
+            confirm: this.$confirm
         });
       // window.open(this.sutvalidLind, "_blank");
     },
