@@ -24,6 +24,9 @@ const router = {
         }
     },
     actions: {
+        getCurrentMenu({ commit }, data) {
+            commit('setCurrentMenu', data)
+        },
         getCurrentLanguage({ commit }, obj) {
             axiosget(API.getCurrentLanguage, obj).then(res => {
                 if (res.code === 200) {
