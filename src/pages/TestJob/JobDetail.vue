@@ -135,6 +135,7 @@ export default {
       stompClient: "",
       timer: "",
       progressTimer: "",
+      caseChildlistTimer: "",
       progressStatus: "normal",
       sutvalidLind: "http://192.168.235.16:8080/onapui/vnfmarket"
     };
@@ -218,6 +219,7 @@ export default {
     },
     handleBack() {
       clearInterval(this.progressTimer);
+      clearInterval(this.caseChildlistTimer);
       this.updateExecutionStartTime("");
       this.updateDetailLoading(true);
       this.changeComponent(false);
@@ -264,12 +266,18 @@ export default {
     caseSecondaryTableShow(expanded, record) {
       console.log(expanded, record, "----expanded, record");
       if (expanded) {
-        this.getTestJobCaseExecutions({ record });
+          this.getTestJobCaseExecutions({ record });
+          this.caseChildlistTimer = setInterval(() => {
+              this.getTestJobCaseExecutions({ record });
+          }, 5000);
+      }else {
+          clearInterval(this.caseChildlistTimer);
       }
     }
   },
   beforeDestroy: function() {
     clearInterval(this.progressTimer);
+    clearInterval(this.caseChildlistTimer);
     this.updateExecutionStartTime("");
     this.changeComponent(false);
     this.updateDetailTestCase([]);
