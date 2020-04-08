@@ -63,7 +63,7 @@ export default {
     this.menus = MENUITEM.menuItems;
     this.setDefaultmenu();
     window.addEventListener("popstate", () => {
-      this.currentMenu = [];
+      // this.currentMenu = [];
       this.setDefaultmenu();
     });
   },
