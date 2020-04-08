@@ -72,6 +72,7 @@
                 bordered
                 size="default"
                 :pagination="false"
+                :expandedRowKeys="expandedRowKeyss"
                 @expand="caseSecondaryTableShow"
               >
                 <span slot="caseStatus" slot-scope="caseStatus,record">
@@ -88,8 +89,8 @@
                 </span>
                 <a-table
                   class="test-case__table"
-                  slot="expandedRowRender"
                   slot-scope="record"
+                  slot="expandedRowRender"
                   :loading="testCaseChildtableLoading"
                   :columns="innerColumns"
                   :dataSource="record.caseMgt"
@@ -150,8 +151,8 @@ export default {
       // testFailDetail: state => state.testJob.testFailDetail,
       failLoading: state => state.testJob.failLoading,
       executionStartTime: state => state.testJob.executionStartTime,
-      testCaseChildtableLoading: state =>
-        state.testJob.testCaseChildtableLoading
+      testCaseChildtableLoading: state => state.testJob.testCaseChildtableLoading,
+      expandedRowKeyss: state => state.testJob.expandedRowKeys,
     }),
     infoList() {
       let list = [];
@@ -199,7 +200,9 @@ export default {
       "updateDetailTestCase",
       "updateTestCasePieData",
       "updateDetailLoading",
-      "updateFailDetail"
+      "updateFailDetail",
+      "updateExpandedRowKeys",
+      "clearexpandedRowKeys"
     ]),
     initJobDetail() {
       if (this.currentJob.jobStatus !== "CREATED") {
@@ -222,6 +225,7 @@ export default {
       this.caseChildlistTimer.map(item=>{
           clearInterval(item);
       })
+      this.clearexpandedRowKeys();
       this.updateExecutionStartTime("");
       this.updateDetailLoading(true);
       this.changeComponent(false);
@@ -268,10 +272,19 @@ export default {
     caseSecondaryTableShow(expanded, record) {
       console.log(expanded, record, "----expanded, record");
       if (expanded) {
-          this.getTestJobCaseExecutions({ record });
-          this.caseChildlistTimer[record.index] = setInterval(() => {
+          if(record.caseStatus !=='DONE'&& record.caseStatus !=='FAILED' && record.caseStatus !=='STARTED'){
+              this.updateExpandedRowKeys({
+                  key:record.index,
+                  expanded
+              });
               this.getTestJobCaseExecutions({ record });
-          }, 5000);
+              this.caseChildlistTimer[record.index] = setInterval(() => {
+                  this.getTestJobCaseExecutions({ record });
+              }, 5000);
+          }else {
+              this.$message.info('No child data under this test case.')
+          }
+
       }else {
           clearInterval(this.caseChildlistTimer[record.index]);
       }
@@ -282,6 +295,7 @@ export default {
     this.caseChildlistTimer.map(item=>{
         clearInterval(item);
     });
+    this.clearexpandedRowKeys();
     this.updateExecutionStartTime("");
     this.changeComponent(false);
     this.updateDetailTestCase([]);

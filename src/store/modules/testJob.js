@@ -50,7 +50,8 @@ const state = {
 	initcheckboxGroup: [],
 	caseParamsIsShow: false,
 	caseParamsData: [],
-    testCaseChildtableLoading: false
+    testCaseChildtableLoading: false,
+    expandedRowKeys:[]
 }
 
 const mutations = {
@@ -63,6 +64,18 @@ const mutations = {
     setTestCaseChildtableLoading(state, bool) {
         state.testCaseChildtableLoading = bool;
     },
+	updateExpandedRowKeys(state, { key ,expanded}){
+		if(expanded){
+            if(state.expandedRowKeys.indexOf(key)>-1){
+                let index = state.expandedRowKeys.indexOf(key)
+                state.expandedRowKeys.splice(index,1)
+            }
+            state.expandedRowKeys.push(key)
+		}else {
+            state.expandedRowKeys.splice(key,1)
+		}
+
+	},
 	updateFailedMessage(state, toast, show) {
 		state.loadingMessage = {
 			type: 'failed',
@@ -138,6 +151,9 @@ const mutations = {
 		state.VIMOption = []
 		state.MANOOption = []
 		state.TestInstrumentOption = []
+	},
+	clearexpandedRowKeys(state){
+		state.expandedRowKeys = []
 	},
 	updateTableData(state, tableData) {
 		state.tableData = tableData
