@@ -26,7 +26,7 @@
         <div class="job-detail__info">
           <a-card title="Test Job Info">
             <a-row>
-              <a-col :span="10">
+              <a-col :span="9">
                 <!-- <h2 class="job-detail__info-title">Test Job Info</h2> -->
                 <div
                   v-for="(item,index) in infoList"
@@ -49,7 +49,7 @@
                   <p class="job-detail__item-text">{{this.statusText}}</p>
                 </div>
               </a-col>
-              <a-col :span="14">
+              <a-col :span="10" :offset="2">
                 <testCasePie v-if="this.statusText" />
               </a-col>
             </a-row>
