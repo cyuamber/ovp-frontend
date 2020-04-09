@@ -265,7 +265,7 @@ export default {
     },
     jumpToUpload() {
       this.jobVNFCsarsUplaod({
-        jobId: this.$route.params.jobId,
+        jobId: this.currentJob.jobId,
         sutvalidLind: this.sutvalidLind,
         message: this.$message,
         confirm: this.$confirm
@@ -273,7 +273,7 @@ export default {
       // window.open(this.sutvalidLind, "_blank");
     },
     caseSecondaryTableShow(expanded, record) {
-      console.log(expanded, record, "----expanded, record");
+      // console.log(expanded, record, "----expanded, record");
       if (expanded) {
         this.getTestJobCaseExecutions({
           record,
