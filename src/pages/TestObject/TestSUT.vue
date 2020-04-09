@@ -157,8 +157,8 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.downloadFile({
-                fileName: VNFTest.fileName,
-                fileAliasName:VNFTest.fileAliasName
+              fileName: VNFTest.fileName,
+              fileAliasName: VNFTest.fileAliasName
             });
           }
         });
@@ -167,7 +167,7 @@ export default {
     showConfirm(item, title, VNFTest) {
       this.$confirm({
         title,
-        content: "Some descriptions",
+        content: "Are you sure to delete this package?",
         okText: "Yes",
         okType: "danger",
         cancelText: "No",

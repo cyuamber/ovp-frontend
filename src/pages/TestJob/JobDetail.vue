@@ -99,10 +99,10 @@
                   <span slot="status" slot-scope="status">
                     {{status}}
                     <!--<a-tooltip placement="top">-->
-                      <!--<template slot="title">-->
-                        <!--<span>{{status}}</span>-->
-                      <!--</template>-->
-                      <!--<span class="job-detail__testCase-status" :style="getCaseStatusStyle(status)"></span>-->
+                    <!--<template slot="title">-->
+                    <!--<span>{{status}}</span>-->
+                    <!--</template>-->
+                    <!--<span class="job-detail__testCase-status" :style="getCaseStatusStyle(status)"></span>-->
                     <!--</a-tooltip>-->
                   </span>
                 </a-table>
@@ -150,8 +150,9 @@ export default {
       // testFailDetail: state => state.testJob.testFailDetail,
       failLoading: state => state.testJob.failLoading,
       executionStartTime: state => state.testJob.executionStartTime,
-      testCaseChildtableLoading: state => state.testJob.testCaseChildtableLoading,
-      expandedRowKeys: state => state.testJob.expandedRowKeys,
+      testCaseChildtableLoading: state =>
+        state.testJob.testCaseChildtableLoading,
+      expandedRowKeys: state => state.testJob.expandedRowKeys
     }),
     infoList() {
       let list = [];
@@ -221,9 +222,9 @@ export default {
     },
     handleBack() {
       clearInterval(this.progressTimer);
-      this.caseChildlistTimer.map(item=>{
-          clearInterval(item);
-      })
+      this.caseChildlistTimer.map(item => {
+        clearInterval(item);
+      });
       this.clearexpandedRowKeys();
       this.updateExecutionStartTime("");
       this.updateDetailLoading(true);
@@ -263,46 +264,54 @@ export default {
       this.getProgress({ jobId: this.currentJob.jobId });
     },
     jumpToUpload() {
-        this.jobVNFCsarsUplaod({
-            jobId:this.$route.params.jobId,
-            sutvalidLind: this.sutvalidLind,
-            message: this.$message,
-            confirm: this.$confirm
-        });
+      this.jobVNFCsarsUplaod({
+        jobId: this.$route.params.jobId,
+        sutvalidLind: this.sutvalidLind,
+        message: this.$message,
+        confirm: this.$confirm
+      });
       // window.open(this.sutvalidLind, "_blank");
     },
     caseSecondaryTableShow(expanded, record) {
       console.log(expanded, record, "----expanded, record");
       if (expanded) {
-          this.getTestJobCaseExecutions({
+        this.getTestJobCaseExecutions({
+          record,
+          expanded,
+          message: this.$message
+        });
+        if (
+          record.caseStatus !== "DONE" &&
+          record.caseStatus !== "FAILED" &&
+          record.caseStatus !== "STARTED"
+        ) {
+          this.caseChildlistTimer[record.index] = setInterval(() => {
+            this.getTestJobCaseExecutions({
               record,
               expanded,
               message: this.$message
-          });
-          if(record.caseStatus !=='DONE'&& record.caseStatus !=='FAILED' && record.caseStatus !=='STARTED'){
-              this.caseChildlistTimer[record.index] = setInterval(() => {
-                  this.getTestJobCaseExecutions({
-                      record,
-                      expanded,
-                      message: this.$message
-                  });
-              }, 5000);
-          }
-      }else {
-          if(record.caseStatus !=='DONE'&& record.caseStatus !=='FAILED' && record.caseStatus !=='STARTED') {
-              clearInterval(this.caseChildlistTimer[record.index]);
-          }
-          this.updateExpandedRowKeys({
-              key:record.index,
-              expanded
-          })
+            });
+          }, 5000);
+        }
+      } else {
+        if (
+          record.caseStatus !== "DONE" &&
+          record.caseStatus !== "FAILED" &&
+          record.caseStatus !== "STARTED"
+        ) {
+          clearInterval(this.caseChildlistTimer[record.index]);
+        }
+        this.updateExpandedRowKeys({
+          key: record.index,
+          expanded
+        });
       }
     }
   },
   beforeDestroy: function() {
     clearInterval(this.progressTimer);
-    this.caseChildlistTimer.map(item=>{
-        clearInterval(item);
+    this.caseChildlistTimer.map(item => {
+      clearInterval(item);
     });
     this.clearexpandedRowKeys();
     this.updateExecutionStartTime("");
@@ -349,9 +358,12 @@ export default {
       .job-detail__info-title {
         margin-bottom: 24px;
       }
+      .job-detail__item-container:first-child {
+        margin-top: 15px;
+      }
       .job-detail__item-container {
         overflow: hidden;
-        margin-top: 15px;
+        // margin-top: 15px;
         .job-detail__item-title {
           float: left;
           width: 140px;

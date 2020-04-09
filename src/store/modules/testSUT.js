@@ -34,7 +34,7 @@ const mutations = {
 			total: tableData.total
 		}
 		state.tableData = tableData.body.map((item, index) => {
-			item.createTime = item.createTime !==null?moment(item.createTime).format('YYYY-MM-DD'):item.createTime;
+			item.createTime = item.createTime !== null ? moment(item.createTime).format('YYYY-MM-DD') : item.createTime;
 			item.index = tableData.body.length * (state.pagination.current - 1) + index + 1;
 			item.action = ['Edit', 'Delete', 'Download']
 			return item
@@ -50,7 +50,7 @@ const mutations = {
 		state.VNFTest = VNFTest
 	},
 	updateVNFOptions(state, options) {
-		if(options)state.VNFOptions = options
+		if (options) state.VNFOptions = options
 	},
 	updateFailedMessage(state, toast) {
 		state.loadingMessage = {
@@ -150,27 +150,26 @@ const actions = {
 					commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
 					let paramsObj = { flag: state.currentTab };
 					dispatch('getTableData', { paramsObj, isFilter: false })
-				}else if(res.code === 417){
-                    message.error(res.body)
-                } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
+				} else if (res.code === 417) {
+					message.error(res.body)
+				} else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
 			},
 				() => {
 					commit('updateFailedMessage', 'Network exception, please try again')
 				})
 	},
-	deleteVNFTest({ commit, dispatch }, {data, message}) {
-		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", data.id)).then(res => {
+	deleteVNFTest({ commit, dispatch }, { id, message }) {
+		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", id)).then(res => {
 			if (res.code === 200) {
 				commit('updateSuccessMessage', 'Deleted successfully')
 				let paramsObj = { flag: state.currentTab };
 				dispatch('getTableData', { paramsObj, isFilter: false })
-			}else if(res.code === 417){
-                message.error(res.body)
-            }  else commit('updateFailedMessage', 'Network exception, please try again')
+			} else if (res.code === 417) {
+				message.error(res.body)
+			} else commit('updateFailedMessage', 'Network exception, please try again')
 		})
 	},
 	upload({ commit }, { formData, message }) {
-		console.log(formData, "SUT---upload");
 		reqwest({
 			url: API.uploadFile,
 			method: 'post',
@@ -186,12 +185,12 @@ const actions = {
 			},
 		})
 	},
-    downloadFile({ commit }, {fileName, fileAliasName}){
-        let url = API.downloadFile.replace(":filealias",fileAliasName).replace(":filename", fileName);
-        console.log(window.location.protocol+"//"+window.location.host+url,"window.location.protocol");
-        window.open(window.location.protocol+"//"+window.location.host+url);
-        commit('updateSuccessMessage', 'DownLoad File successfully');
-    }
+	downloadFile({ commit }, { fileName, fileAliasName }) {
+		let url = API.downloadFile.replace(":filealias", fileAliasName).replace(":filename", fileName);
+		// console.log(window.location.protocol + "//" + window.location.host + url, "window.location.protocol");
+		window.open(window.location.protocol + "//" + window.location.host + url);
+		commit('updateSuccessMessage', 'DownLoad File successfully');
+	}
 
 }
 const getters = {
