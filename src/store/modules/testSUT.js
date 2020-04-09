@@ -186,8 +186,8 @@ const actions = {
 			},
 		})
 	},
-    downloadFile({ commit }, data){
-        let url = API.downloadFile.replace(":filename", data.fileName);
+    downloadFile({ commit }, {fileName, fileAliasName}){
+        let url = API.downloadFile.replace(":filealias",fileAliasName).replace(":filename", fileName);
         console.log(window.location.protocol+"//"+window.location.host+url,"window.location.protocol");
         window.open(window.location.protocol+"//"+window.location.host+url);
         commit('updateSuccessMessage', 'DownLoad File successfully');

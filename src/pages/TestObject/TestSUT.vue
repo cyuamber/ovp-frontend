@@ -156,7 +156,10 @@ export default {
           okType: "danger",
           cancelText: "No",
           onOk: () => {
-            this.downloadFile({ fileName: VNFTest.fileName });
+            this.downloadFile({
+                fileName: VNFTest.fileName,
+                fileAliasName:VNFTest.fileAliasName
+            });
           }
         });
       }

@@ -97,12 +97,13 @@
                   size="default"
                 >
                   <span slot="status" slot-scope="status">
-                    <a-tooltip placement="top">
-                      <template slot="title">
-                        <span>{{status}}</span>
-                      </template>
-                      <span class="job-detail__testCase-status" :style="getCaseStatusStyle(status)"></span>
-                    </a-tooltip>
+                    {{status}}
+                    <!--<a-tooltip placement="top">-->
+                      <!--<template slot="title">-->
+                        <!--<span>{{status}}</span>-->
+                      <!--</template>-->
+                      <!--<span class="job-detail__testCase-status" :style="getCaseStatusStyle(status)"></span>-->
+                    <!--</a-tooltip>-->
                   </span>
                 </a-table>
               </a-table>
@@ -242,7 +243,7 @@ export default {
       let color =
         status === "STARTED"
           ? "#979797"
-          : status === "RUNNING"
+          : status === "RUNNING" || status === "in-progress"
           ? "#F5A623"
           : status === "CREATED"
           ? "#78E5D7"
