@@ -20,6 +20,7 @@ export function axiospost (url, data,uploadHeader,callback) {
             if (res.data.code === 200) {
                 resolve(res.data);
             } else if(res.data.code === 417){
+                console.log("-----123456789")
                 message.error(res.data.body);
                 callback()
             }

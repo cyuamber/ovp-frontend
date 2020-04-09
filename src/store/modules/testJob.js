@@ -51,7 +51,7 @@ const state = {
 	caseParamsIsShow: false,
 	caseParamsData: [],
     testCaseChildtableLoading: false,
-    expandedRowKeys:[]
+    expandedRowKeys: []
 }
 
 const mutations = {
@@ -64,17 +64,13 @@ const mutations = {
     setTestCaseChildtableLoading(state, bool) {
         state.testCaseChildtableLoading = bool;
     },
-	updateExpandedRowKeys(state, { key ,expanded}){
+	updateExpandedRowKeys(state, {key ,expanded}){
+		console.log(key ,expanded,"------key ,expanded")
 		if(expanded){
-            if(state.expandedRowKeys.indexOf(key)>-1){
-                let index = state.expandedRowKeys.indexOf(key)
-                state.expandedRowKeys.splice(index,1)
-            }
-            state.expandedRowKeys.push(key)
+            state.expandedRowKeys = [key]
 		}else {
-            state.expandedRowKeys.splice(key,1)
+            state.expandedRowKeys = []
 		}
-
 	},
 	updateFailedMessage(state, toast, show) {
 		state.loadingMessage = {
@@ -510,7 +506,7 @@ const actions = {
                 commit('setTestCaseChildtableLoading',false);
 				if (Number(res.code) === 200) {
 					if(res.body.length !== 0){
-                        commit('updatecaseChildTableData', { key:record.index,expanded});
+                        commit('updateExpandedRowKeys', {key:record.index,expanded});
                         commit('updatecaseChildTableData', {testCaseChildData:res.body,record});
 					}else {
                         message.info('No child data under this test case.')

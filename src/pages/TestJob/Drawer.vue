@@ -343,6 +343,7 @@ export default {
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
+          console.log(error,"----123value")
         if (!error) {
           let { isEdit } = this;
           if (isEdit) {
