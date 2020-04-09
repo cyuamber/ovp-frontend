@@ -246,7 +246,7 @@ export default {
           ? "#F5A623"
           : status === "CREATED"
           ? "#78E5D7"
-          : status === "DONE"
+          : status === "DONE" || status === "completed"
           ? "#7ED321"
           : "#D0021B";
       return {

@@ -294,11 +294,11 @@ const testJobDetailCaseListColumns = [
 const testJobDetailCaseChildColumns = [
     {
         title: 'TestCase Name',
-        dataIndex: 'testSuiteName',
+        dataIndex: 'testCaseName',
     },
     {
-        title: 'Request Id',
-        dataIndex: 'requestId'
+        title: 'Execution Id',
+        dataIndex: 'executionId'
     },
     {
         title: 'Start Time',
