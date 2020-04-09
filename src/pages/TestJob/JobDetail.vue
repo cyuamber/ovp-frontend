@@ -68,11 +68,10 @@
                 class="detailtestcase-table"
                 :columns="columns"
                 :dataSource="detailTestCase"
-                rowKey="id"
+                rowKey="index"
                 bordered
                 size="default"
-                :pagination="false"
-                :expandedRowKeys="expandedRowKeyss"
+                :expandedRowKeys="expandedRowKeys"
                 @expand="caseSecondaryTableShow"
               >
                 <span slot="caseStatus" slot-scope="caseStatus,record">
@@ -96,7 +95,6 @@
                   :dataSource="record.caseMgt"
                   rowKey="executionId"
                   size="default"
-                  :pagination="false"
                 >
                   <span slot="status" slot-scope="status">
                     <a-tooltip placement="top">
@@ -152,7 +150,7 @@ export default {
       failLoading: state => state.testJob.failLoading,
       executionStartTime: state => state.testJob.executionStartTime,
       testCaseChildtableLoading: state => state.testJob.testCaseChildtableLoading,
-      expandedRowKeyss: state => state.testJob.expandedRowKeys,
+      expandedRowKeys: state => state.testJob.expandedRowKeys,
     }),
     infoList() {
       let list = [];
@@ -293,6 +291,10 @@ export default {
           if(record.caseStatus !=='DONE'&& record.caseStatus !=='FAILED' && record.caseStatus !=='STARTED') {
               clearInterval(this.caseChildlistTimer[record.index]);
           }
+          this.updateExpandedRowKeys({
+              key:record.index,
+              expanded
+          })
       }
     }
   },

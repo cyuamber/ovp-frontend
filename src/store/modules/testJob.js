@@ -65,11 +65,14 @@ const mutations = {
         state.testCaseChildtableLoading = bool;
     },
 	updateExpandedRowKeys(state, {key ,expanded}){
-		console.log(key ,expanded,"------key ,expanded")
 		if(expanded){
-            state.expandedRowKeys = [key]
+            if(state.expandedRowKeys.indexOf(key)>-1){
+                let index = state.expandedRowKeys.indexOf(key)
+                state.expandedRowKeys.splice(index,1)
+            }
+            state.expandedRowKeys.push(key)
 		}else {
-            state.expandedRowKeys = []
+            state.expandedRowKeys.splice(key,1)
 		}
 	},
 	updateFailedMessage(state, toast, show) {
