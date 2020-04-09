@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV;
-const axiosgetType = env === "development" ? false : true;
+const axiosgetType = env !== "development" ? false : true;
 
 const mockcolumns = [{
     title: "Avatar",

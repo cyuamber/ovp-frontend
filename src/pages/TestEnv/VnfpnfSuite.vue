@@ -156,6 +156,7 @@ export default {
           }
         });
       } else {
+          console.log(SuiteSingleData,"-----123")
         this.$confirm({
           title: "Are you sure download this xNF TT?",
           content: "File Name: " + SuiteSingleData.fileName,
