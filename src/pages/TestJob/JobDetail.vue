@@ -164,7 +164,7 @@ export default {
       return list;
     },
     currentJob() {
-      return this.$route.params;
+      return JSON.parse(this.$route.query.detail);
     }
   },
   watch: {

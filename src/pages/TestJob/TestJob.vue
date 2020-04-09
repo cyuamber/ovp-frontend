@@ -170,8 +170,8 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.runTestJobMGT({
-              data,
-              message: this.$message
+            data,
+            message: this.$message
           });
         },
         onCancel() {
@@ -183,8 +183,8 @@ export default {
       this.isEdit = true;
       this.setIsShow(true);
       this.getEditTestJob({
-          data,
-          message: this.$message
+        data,
+        message: this.$message
       });
       this.getSUTType({
         message: this.$message
@@ -212,8 +212,8 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.delete({
-              data,
-              message: this.$message
+            data,
+            message: this.$message
           });
         },
         onCancel() {
@@ -238,7 +238,13 @@ export default {
     },
     handleOpenDetail(data) {
       data.currentAction = "More";
-      this.$router.push({ name: "JobDetail", params: data });
+      this.$router.push({
+        path: "/JobDetail",
+        query: {
+          detail: JSON.stringify(data)
+        }
+      });
+      // this.$router.push({ name: "JobDetail", params: data });
     },
     handlePageChange(pageObj) {
       this.setFilter({ pageObj });
@@ -253,8 +259,8 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.stopJop({
-              data,
-              message: this.$message
+            data,
+            message: this.$message
           });
         },
         onCancel() {
