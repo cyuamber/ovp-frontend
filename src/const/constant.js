@@ -297,8 +297,8 @@ const testJobDetailCaseChildColumns = [
         dataIndex: 'testCaseName',
     },
     {
-        title: 'Execution Id',
-        dataIndex: 'executionId'
+        title: 'TestSuite Name',
+        dataIndex: 'testSuiteName'
     },
     {
         title: 'Start Time',
@@ -309,7 +309,7 @@ const testJobDetailCaseChildColumns = [
         dataIndex: 'endTime'
     },
     {
-        title: 'status',
+        title: 'Status',
         dataIndex: 'status',
         scopedSlots: {
             customRender: 'status'
