@@ -461,7 +461,9 @@ const actions = {
 					data.jobId = res.body.jobId;
 					data.executionStartTime = res.body.executionStartTime;
 					commit('updateTableItemData', data);
-					router.push({ name: "JobDetail", params: data })
+					router.push({ name: "JobDetail", query: {
+                            detail: JSON.stringify(data)
+                        } })
 				}else if(res.code === 417){
                     message.error(res.message)
 				}

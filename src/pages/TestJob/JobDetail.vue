@@ -16,7 +16,7 @@
       <a-button
         class="job-detail__refresh-btn"
         @click="handleRefresh"
-        :disabled="$route.params.jobStatus === 'DONE'"
+        :disabled="$route.query.detail.jobStatus === 'DONE'"
       >
         <a-icon type="sync" />Refresh
       </a-button>
@@ -329,7 +329,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .job-detail {
   .job-detail__back-btn {
     display: inline-block;
@@ -393,6 +393,13 @@ export default {
         height: 15px;
         margin-top: 5px;
         border-radius: 50%;
+      }
+      .detailtestcase-table{
+        .ant-spin-nested-loading{
+          .ant-pagination{
+            padding: 0 16px!important;
+          }
+        }
       }
     }
   }
