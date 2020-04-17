@@ -66,7 +66,7 @@ export default {
       tableData: state => state.testSUT.tableData,
       pagination: state => state.testSUT.pagination,
       VNFTest: state => state.testSUT.VNFTest,
-      loadingMessage: state => state.testSUT.loadingMessage,
+      loadingMessage: state => state.loading.loadingMessage,
       visible: state => state.testSUT.visible,
       createTime: state => state.testSUT.createTime,
       currentTab: state => state.testSUT.currentTab,

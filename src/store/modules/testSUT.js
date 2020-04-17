@@ -110,7 +110,7 @@ const actions = {
 			isFilter
 		})
 	},
-	getTableData({ commit, state }, { paramsObj, isFilter }) {
+	getTableData({ dispatch, commit, state }, { paramsObj, isFilter }) {
 		commit('updateTableLoading', true);
 		paramsObj.flag = state.currentTab;
 		paramsObj.pageNum = state.pageNum;
@@ -120,7 +120,10 @@ const actions = {
 			if (res.code === 200) {
 				commit('updateTableData', res);
 				commit('updateTableLoading', false);
-				if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
+				if (isFilter) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data', toastOpen: true }, { root: true })
+
+				// commit('updateSuccessMessage', 'Successfully get table data')
+
 			} else {
 				if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')
 			}
@@ -147,7 +150,7 @@ const actions = {
 		apiType(url, data)
 			.then((res) => {
 				if (res.code === 200) {
-					commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully')
+					commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Successfully added')
 					let paramsObj = { flag: state.currentTab };
 					dispatch('getTableData', { paramsObj, isFilter: false })
 				} else if (res.code === 417) {
@@ -161,7 +164,8 @@ const actions = {
 	deleteVNFTest({ commit, dispatch }, { id, message }) {
 		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", id)).then(res => {
 			if (res.code === 200) {
-				commit('updateSuccessMessage', 'Deleted successfully')
+				dispatch('loading/showLoading', { type: 'success', toast: ' get table data' }, { root: true })
+				// commit('updateSuccessMessage', 'Deleted successfully')
 				let paramsObj = { flag: state.currentTab };
 				dispatch('getTableData', { paramsObj, isFilter: false })
 			} else if (res.code === 417) {

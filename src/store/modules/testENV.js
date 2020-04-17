@@ -151,7 +151,7 @@ const actions = {
         }, () => { if (isFilter) commit('updateFailedMessage', 'Network exception, please try again') }
         )
     },
-    deleteData({ dispatch, commit, state }, {data, message}) {
+    deleteData({ dispatch, commit, state }, { data, message }) {
         let url = '';
         switch (state.currentTab) {
             case 'VIM ENV':
@@ -171,9 +171,9 @@ const actions = {
                 commit('updateSuccessMessage', 'Deleted successfully');
                 let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize };
                 dispatch('getTableData', { paramsObj })
-            }else if(res.code === 417){
+            } else if (res.code === 417) {
                 message.error(res.body)
-            }else commit('updateFailedMessage', 'Failed to delete')
+            } else commit('updateFailedMessage', 'Failed to delete')
         }).catch(() => {
             commit('updateFailedMessage', 'Network exception, please try again')
         })
@@ -206,7 +206,7 @@ const actions = {
     },
     loginVIN({ state, commit, dispatch }, { isEdit, data, message }) {
         if (isEdit) data.id = state.initValues.id;
-        let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtUpdate : API.vimVnfmMgt.manoMgtUpdate.replace(":manoId",data.id)) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtInsert : API.vimVnfmMgt.manoMgtInsert);
+        let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtUpdate : API.vimVnfmMgt.manoMgtUpdate.replace(":manoId", data.id)) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtInsert : API.vimVnfmMgt.manoMgtInsert);
         let axiosType = isEdit ? axiosput : axiospost;
         axiosType(url, data)
             .then((res) => {
@@ -217,9 +217,9 @@ const actions = {
                         pageSize: state.pageSize
                     }
                     dispatch('getTableData', { paramsObj })
-                } else if(res.code === 417){
+                } else if (res.code === 417) {
                     message.error(res.body)
-                }else {
+                } else {
                     commit('updateFailedMessage', this.isEdit ? 'Update failed' : 'add failed')
                 }
             },
@@ -237,7 +237,6 @@ const actions = {
             }
         })
     },
-
 }
 
 const getters = {

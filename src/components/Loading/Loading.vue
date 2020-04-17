@@ -108,7 +108,9 @@ export default {
   props: ["loadingMessage"],
   watch: {
     loadingMessage(currentState) {
-      this.showLoading = true;
+      console.log(currentState);
+      this.showLoading = +currentState.showAll;
+      this.toastOpen = currentState.toastOpen;
       this.messageType = currentState.type;
       this.toastMessage = currentState.toast;
       if (!currentState.show) {
@@ -119,28 +121,39 @@ export default {
   data() {
     return {
       showLoading: false,
+      toastOpen: false,
       messageType: "", //success, error, warn
       toastMessage: "" //shown message when toast disappear
     };
   },
   methods: {
     hideLoading() {
-      setTimeout(() => {
-        this.showLoading = false;
-        if (this.messageType && this.messageType.length !== 0) {
-          this.showMessage(this.messageType);
-        }
-      }, 1000);
+      setTimeout(
+        () => {
+          this.showLoading = false;
+          if (
+            this.messageType &&
+            this.messageType.length !== 0 &&
+            this.toastOpen
+          ) {
+            this.showMessage(this.messageType);
+          }
+        },
+        this.showLoading ? 1000 : 300
+      );
     },
     showMessage(type) {
+      let toastMsg = this.toastMessage.toast
+        ? this.toastMessage.toast
+        : this.toastMessage;
       if (type === "success") {
-        this.$message.success(this.toastMessage);
+        this.$message.success(toastMsg);
       }
-      if (type === "error") {
-        this.$message.error(this.toastMessage);
+      if (type === "error" || type === "failed") {
+        this.$message.error(toastMsg);
       }
       if (type === "warn") {
-        this.$message.warning(this.toastMessage);
+        this.$message.warning(toastMsg);
       }
     }
   }

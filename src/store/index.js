@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import login from './modules/login';
 import router from './modules/router';
+import loading from './modules/loading';
 import testInstrument from './modules/testInstrument';
 import testSpecMGT from './modules/testSpecMGT';
 import VnfpnfSuite from './modules/VnfpnfSuite';
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
   modules: {
     login,
     router,
+    loading,
     testInstrument,
     testSpecMGT,
     VnfpnfSuite,
