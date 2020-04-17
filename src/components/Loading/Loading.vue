@@ -121,7 +121,7 @@ export default {
   data() {
     return {
       showLoading: false,
-      toastOpen: false,
+      toastOpen: true,
       messageType: "", //success, error, warn
       toastMessage: "" //shown message when toast disappear
     };

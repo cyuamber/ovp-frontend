@@ -1,7 +1,8 @@
 const state = {
-    loadingMessage: { type: '', toast: '', showAll: false, toastOpen: false },
+    loadingMessage: { type: '', toast: '', showAll: false, toastOpen: true },
     tableLoading: false,
-    searchLoading: false
+    searchLoading: false,
+    detailLoading: false
 }
 const mutations = {
     uploadingMessage(state, loadingMsg) {
@@ -11,6 +12,12 @@ const mutations = {
             type: loadingMsg.type,
             toast: loadingMsg.toast
         }
+    },
+    loadingMessage(state, params) {
+        state[params] = params
+    },
+    updateDetailLoading(state, detailLoading) {
+        state.detailLoading = detailLoading;
     },
     updateTableLoading(state, tableLoading) {
         state.tableLoading = tableLoading

@@ -120,10 +120,8 @@ const actions = {
 			if (res.code === 200) {
 				commit('updateTableData', res);
 				commit('updateTableLoading', false);
-				if (isFilter) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data', toastOpen: true }, { root: true })
-
+				if (isFilter) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
 				// commit('updateSuccessMessage', 'Successfully get table data')
-
 			} else {
 				if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')
 			}
@@ -164,7 +162,7 @@ const actions = {
 	deleteVNFTest({ commit, dispatch }, { id, message }) {
 		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", id)).then(res => {
 			if (res.code === 200) {
-				dispatch('loading/showLoading', { type: 'success', toast: ' get table data' }, { root: true })
+				dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true })
 				// commit('updateSuccessMessage', 'Deleted successfully')
 				let paramsObj = { flag: state.currentTab };
 				dispatch('getTableData', { paramsObj, isFilter: false })
