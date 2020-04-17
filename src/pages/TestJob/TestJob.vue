@@ -174,9 +174,7 @@ export default {
             message: this.$message
           });
         },
-        onCancel() {
-          console.log("Cancel");
-        }
+        onCancel() {}
       });
     },
     handleEdit(data) {
@@ -216,9 +214,7 @@ export default {
             message: this.$message
           });
         },
-        onCancel() {
-          console.log("Cancel");
-        }
+        onCancel() {}
       });
     },
     handleDownload(data) {
@@ -231,9 +227,7 @@ export default {
         onOk: () => {
           this.download({ jobId: data.jobId, lang: this.lang });
         },
-        onCancel() {
-          console.log("Cancel");
-        }
+        onCancel() {}
       });
     },
     handleOpenDetail(data) {
@@ -263,9 +257,7 @@ export default {
             message: this.$message
           });
         },
-        onCancel() {
-          console.log("Cancel");
-        }
+        onCancel() {}
       });
     },
     getStatusTitle(status) {

@@ -49,6 +49,7 @@ export default {
       "clearData"
     ]),
     initDashBoard() {
+      console.log("===>dashboard");
       this.clearData();
       this.getLiveData({
         message: this.$message

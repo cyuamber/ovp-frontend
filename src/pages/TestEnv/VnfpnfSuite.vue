@@ -104,7 +104,6 @@ export default {
       this.updateVNFTest({});
     },
     handleTabsChanges(key) {
-      console.log(key, "key");
       this.changeTab(key);
       this.getTableData({});
     },
@@ -136,7 +135,6 @@ export default {
       this.getTableData(obj);
     },
     showEditOrDeleteModal(item, SuiteSingleData) {
-      console.log(SuiteSingleData, "---singleData");
       if (item === "Edit") {
         this.updateVisible(true);
         this.isEdit = true;
@@ -150,13 +148,12 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.deleteTestMeter({
-                id: SuiteSingleData.id,
-                message: this.$message
+              id: SuiteSingleData.id,
+              message: this.$message
             });
           }
         });
       } else {
-          console.log(SuiteSingleData,"-----123")
         this.$confirm({
           title: "Are you sure download this xNF TT?",
           content: "File Name: " + SuiteSingleData.fileName,
@@ -166,7 +163,7 @@ export default {
           onOk: () => {
             this.downloadFile({
               fileName: SuiteSingleData.fileName,
-              fileAliasName:SuiteSingleData.fileAliasName
+              fileAliasName: SuiteSingleData.fileAliasName
             });
           }
         });

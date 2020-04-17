@@ -115,7 +115,7 @@ export default {
       "getSUTOptions",
       "getVNFOptions",
       "activateTestCase",
-        "getSpecPagination"
+      "getSpecPagination"
     ]),
     ...mapMutations("testSpecMGT", ["updatecaseMgtTableData", "updateVisible"]),
     initTestStandardTable() {
@@ -141,15 +141,14 @@ export default {
     },
     caseMgtTableShow(expanded, record) {
       this.getTestCaseTableData({ record, expanded });
-      if(!expanded){
-          let pagination = { current: 1, total: 0, pageSize: 5 };
-          this.getSpecPagination({ pagination,index:record.index });
+      if (!expanded) {
+        let pagination = { current: 1, total: 0, pageSize: 5 };
+        this.getSpecPagination({ pagination, index: record.index });
       }
     },
-      handleSpecTableChange(pagination,index){
-          this.getSpecPagination({ pagination,index });
-        console.log(pagination,index,"pagination")
-      },
+    handleSpecTableChange(pagination, index) {
+      this.getSpecPagination({ pagination, index });
+    },
     // Filter by creating time
     onChange(date, d) {
       this.publishTime = d;
@@ -183,8 +182,8 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.deleteTestSpec({
-                id:testSpecSingleData.id,
-                message: this.$message
+              id: testSpecSingleData.id,
+              message: this.$message
             });
           }
         });
@@ -199,8 +198,8 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.activateTestCase({
-              obj:testCaseSingleData,
-              message: this.$message
+            obj: testCaseSingleData,
+            message: this.$message
           });
         }
       });

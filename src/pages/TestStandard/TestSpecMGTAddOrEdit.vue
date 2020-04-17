@@ -25,37 +25,41 @@
             >{{type.dictLabel}}</a-select-option>
           </a-select>
         </a-form-item>
-          <a-form-item label="Sub SUT type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
-              <a-select
-                      class="select"
-                      v-decorator="['subSutType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
-
-                      @change="handleSelectSubSUTTypeChange"
-                      @dropdownVisibleChange="dropdownVisibleChange"
-              >
-                  <a-select-option
-                          v-for="type in VNFOptions"
-                          :key="type.code"
-                          :value="type.code"
-                  >{{type.dictLabel}}</a-select-option>
-              </a-select>
-            <a-spin :spinning="spin">
-              <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
-            </a-spin>
-          </a-form-item>
-          <a-form-item v-if="testCaseList.length>0">
-            <h3 class="form__checkboxtitle--size"><span>*</span>Test Case List:</h3>
-            <a-checkbox-group
-                    class="form__checkboxgroup--margin"
-                    v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
-                    @change="onChange"
-            >
-              <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
-                <a-checkbox :value="item.id" :checked="initcheckboxGroup.includes(item.id)" class="form__checkbox--size"/>
-                <span :title="item.description" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>
-              </a-card-grid>
-            </a-checkbox-group>
-          </a-form-item>
+        <a-form-item label="Sub SUT type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+          <a-select
+            class="select"
+            v-decorator="['subSutType',{ rules: [{ required: true, }],initialValue:initVNFtypeValue}]"
+            @change="handleSelectSubSUTTypeChange"
+            @dropdownVisibleChange="dropdownVisibleChange"
+          >
+            <a-select-option
+              v-for="type in VNFOptions"
+              :key="type.code"
+              :value="type.code"
+            >{{type.dictLabel}}</a-select-option>
+          </a-select>
+          <a-spin :spinning="spin">
+            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+          </a-spin>
+        </a-form-item>
+        <a-form-item v-if="testCaseList.length>0">
+          <h3 class="form__checkboxtitle--size">
+            <span>*</span>Test Case List:
+          </h3>
+          <a-checkbox-group
+            class="form__checkboxgroup--margin"
+            v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
+          >
+            <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
+              <a-checkbox
+                :value="item.id"
+                :checked="initcheckboxGroup.includes(item.id)"
+                class="form__checkbox--size"
+              />
+              <span :title="item.description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>
+            </a-card-grid>
+          </a-checkbox-group>
+        </a-form-item>
         <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
             v-decorator="['PublishORG',{ rules: [{ required: true,message:' PublishORG is required'}],initialValue:testSpecSingleData.publishOrg }]"
@@ -90,7 +94,7 @@ export default {
       VNFOptions: state => state.testSpecMGT.VNFOptions,
       testCaseList: store => store.testSpecMGT.testCaseList,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
-        initcheckboxGroup: state => state.testSpecMGT.initcheckboxGroup
+      initcheckboxGroup: state => state.testSpecMGT.initcheckboxGroup
     }),
     visible: {
       get() {
@@ -107,7 +111,6 @@ export default {
             subSutType: "",
             PublishORG: ""
           });
-          console.log(this.initcheckboxGroup,"initcheckboxGroup")
         }
       }
     }
@@ -117,102 +120,103 @@ export default {
       if (val) {
         this.count++;
         if (this.isEdit && this.count > 1) {
-            this.form.setFieldsValue({
+          this.form.setFieldsValue({
             Name: this.testSpecSingleData.name,
             Version: this.testSpecSingleData.version,
             SUTType: this.testSpecSingleData.sutTypeCH.dictLabel,
             subSutType: this.testSpecSingleData.subSutTypeCH.dictLabel,
-            checkboxGroup:this.initcheckboxGroup,
+            checkboxGroup: this.initcheckboxGroup,
             PublishORG: this.testSpecSingleData.publishOrg
           });
-            this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
-            this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
+          this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
+          this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
         } else if (!this.isEdit && this.count > 1) {
           this.spin = true;
           this.initSUTTypeValue = this.SUTOptions[0].code;
-            this.form.setFieldsValue({SUTType: this.SUTOptions[0].code})
-            this.getVNFOptions({
-                SUTType: this.initSUTTypeValue
-            });
-          console.log(
-            this.initSUTTypeValue,
-            this.initVNFtypeValue,
-            " this.initVNFtypeValue---"
-          );
+          this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
+          this.getVNFOptions({
+            SUTType: this.initSUTTypeValue
+          });
         }
       }
     },
     SUTOptions(val) {
       if (val.length && !this.isEdit) {
-          this.initSUTTypeValue = this.SUTOptions[0].code;
-          if(this.count > 1){
-              this.form.setFieldsValue({SUTType: this.SUTOptions[0].code})
-          }
+        this.initSUTTypeValue = this.SUTOptions[0].code;
+        if (this.count > 1) {
+          this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
+        }
       }
     },
     VNFOptions(val) {
-        this.spin = false;
+      this.spin = false;
       if (val.length && !this.isEdit) {
         this.initVNFtypeValue = this.VNFOptions[0].code;
-          this.getTestCaseList({
-              sutCode:this.initSUTTypeValue,
-              subSutCode:this.VNFOptions[0].code,
-              message: this.$message
-          });
-          if(this.count > 1){
-              this.form.setFieldsValue({subSutType: this.VNFOptions[0].code})
-          }
+        this.getTestCaseList({
+          sutCode: this.initSUTTypeValue,
+          subSutCode: this.VNFOptions[0].code,
+          message: this.$message
+        });
+        if (this.count > 1) {
+          this.form.setFieldsValue({ subSutType: this.VNFOptions[0].code });
+        }
       }
     },
     testSpecSingleData(val) {
-        if(Object.keys(val).length > 0){
-            this.initSUTTypeValue = val.sutTypeCH.dictLabel;
-            this.initVNFtypeValue = val.subSutTypeCH.dictLabel;
-            this.getTestCaseList({
-                sutCode:val.sutTypeCH.code,
-                subSutCode:val.subSutTypeCH.code,
-                message: this.$message
-            });
-            this.spin = false;
-        }
-    },
-      initcheckboxGroup(val){
-          this.form.setFieldsValue({
-              checkboxGroup:val
-          });
+      if (Object.keys(val).length > 0) {
+        this.initSUTTypeValue = val.sutTypeCH.dictLabel;
+        this.initVNFtypeValue = val.subSutTypeCH.dictLabel;
+        this.getTestCaseList({
+          sutCode: val.sutTypeCH.code,
+          subSutCode: val.subSutTypeCH.code,
+          message: this.$message
+        });
+        this.spin = false;
       }
+    },
+    initcheckboxGroup(val) {
+      this.form.setFieldsValue({
+        checkboxGroup: val
+      });
+    }
   },
   methods: {
     ...mapActions("testSpecMGT", [
       "clearOptions",
       "getTestSpec",
-        "getSUTOptions",
-        "getVNFOptions",
-        "activateTestCase",
+      "getSUTOptions",
+      "getVNFOptions",
+      "activateTestCase",
       "createOrEditTestSpec",
-        "getTestCaseList",
+      "getTestCaseList"
     ]),
-    ...mapMutations("testSpecMGT", ["updateVisible","updateTestCaseList"]),
+    ...mapMutations("testSpecMGT", ["updateVisible", "updateTestCaseList"]),
     handleSelectSUTChange(val) {
       this.spin = true;
       this.clearOptions();
-      this.initVNFtypeValue = '';
-      this.form.setFieldsValue({subSutType:''})
-      this.getVNFOptions({ SUTType: val })
+      this.initVNFtypeValue = "";
+      this.form.setFieldsValue({ subSutType: "" });
+      this.getVNFOptions({ SUTType: val });
     },
-      handleSelectSubSUTTypeChange(val){
-          let sutCode = null;
-          if(this.isEdit){
-              sutCode = this.form.getFieldValue("SUTType") === this.initSUTTypeValue?this.codeConversion(this.form.getFieldValue("SUTType"),this.SUTOptions):this.form.getFieldValue("SUTType")
-          }else {
-              sutCode = this.form.getFieldValue("SUTType")
-          }
-          this.getTestCaseList({
-              sutCode:sutCode,
-              subSutCode:val,
-              message: this.$message
-          });
-      },
+    handleSelectSubSUTTypeChange(val) {
+      let sutCode = null;
+      if (this.isEdit) {
+        sutCode =
+          this.form.getFieldValue("SUTType") === this.initSUTTypeValue
+            ? this.codeConversion(
+                this.form.getFieldValue("SUTType"),
+                this.SUTOptions
+              )
+            : this.form.getFieldValue("SUTType");
+      } else {
+        sutCode = this.form.getFieldValue("SUTType");
+      }
+      this.getTestCaseList({
+        sutCode: sutCode,
+        subSutCode: val,
+        message: this.$message
+      });
+    },
     dropdownVisibleChange() {
       if (!this.VNFOptions.length) {
         this.getVNFOptions({
@@ -220,37 +224,40 @@ export default {
         });
       }
     },
-      onChange(e) {
-          console.log(e);
-      },
-    codeConversion(value,selectOptions){
-        let code = null;
-        selectOptions.map((item)=>{
-            if(item.dictLabel === value)code = item.code
-        })
-        return code
+    codeConversion(value, selectOptions) {
+      let code = null;
+      selectOptions.map(item => {
+        if (item.dictLabel === value) code = item.code;
+      });
+      return code;
     },
     handleCancel() {
       this.updateVisible(false);
     },
     handleSubmit(e) {
-        e.preventDefault();
+      e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
           let data = {
             name: values.Name,
             version: values.Version,
-            sutType: values.SUTType === this.initSUTTypeValue && this.isEdit?this.codeConversion(values.SUTType,this.SUTOptions):values.SUTType,
-            subSutType: values.subSutType === this.initVNFtypeValue && this.isEdit?this.codeConversion(values.subSutType,this.VNFOptions):values.subSutType,
-            caseId:values.checkboxGroup ||[],
+            sutType:
+              values.SUTType === this.initSUTTypeValue && this.isEdit
+                ? this.codeConversion(values.SUTType, this.SUTOptions)
+                : values.SUTType,
+            subSutType:
+              values.subSutType === this.initVNFtypeValue && this.isEdit
+                ? this.codeConversion(values.subSutType, this.VNFOptions)
+                : values.subSutType,
+            caseId: values.checkboxGroup || [],
             publishOrg: values.PublishORG
           };
           let { isEdit } = this;
-          if(isEdit)data.id = this.testSpecSingleData.id;
+          if (isEdit) data.id = this.testSpecSingleData.id;
           this.createOrEditTestSpec({
-              isEdit,
-              data,
-              message: this.$message
+            isEdit,
+            data,
+            message: this.$message
           }).then(
             () => {
               this.form.resetFields();
@@ -273,17 +280,17 @@ export default {
   width: 40%;
   margin-right: 5%;
 }
-.form__checkboxtitle--size{
+.form__checkboxtitle--size {
   text-indent: 1.2em;
   display: inline-block;
   vertical-align: top;
   font-weight: normal;
-    span{
-        color:#f5222d;
-        margin-right: 4px;
-        line-height: 1;
-        font-size: 14px;
-    }
+  span {
+    color: #f5222d;
+    margin-right: 4px;
+    line-height: 1;
+    font-size: 14px;
+  }
 }
 .form__checkboxgroup--margin {
   width: 100%;
@@ -294,7 +301,7 @@ export default {
   width: 80%;
   padding: 14px;
   text-indent: 0.5em;
-    margin: 0 10%;
+  margin: 0 10%;
 }
 .form__checkbox--size {
   font-size: 20px;

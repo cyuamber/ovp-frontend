@@ -85,25 +85,21 @@
           >{{type.cloudOwner}}</a-select-option>
         </a-select>
         <a-select
-                v-else-if="item === 'Test MANO ENV'"
-                v-decorator="[keyList[i],{initialValue:initMANOENV.name}]"
-                class="form__select--width"
+          v-else-if="item === 'Test MANO ENV'"
+          v-decorator="[keyList[i],{initialValue:initMANOENV.name}]"
+          class="form__select--width"
         >
-          <a-select-option
-                  v-for="type in MANOOption"
-                  :key="type.id"
-                  :value="type.id"
-          >{{type.name}}</a-select-option>
+          <a-select-option v-for="type in MANOOption" :key="type.id" :value="type.id">{{type.name}}</a-select-option>
         </a-select>
         <a-select
-                v-else-if="item === 'Test Instrument'"
-                v-decorator="[keyList[i],{initialValue:initTestInstrument.name}]"
-                class="form__select--width"
+          v-else-if="item === 'Test Instrument'"
+          v-decorator="[keyList[i],{initialValue:initTestInstrument.name}]"
+          class="form__select--width"
         >
           <a-select-option
-                  v-for="type in TestInstrumentOption"
-                  :key="type.id"
-                  :value="type.id"
+            v-for="type in TestInstrumentOption"
+            :key="type.id"
+            :value="type.id"
           >{{type.name}}</a-select-option>
         </a-select>
         <!-- loading -->
@@ -135,10 +131,11 @@
                   <a-icon type="info-circle" class="form__info-cursor" />
                 </a-tooltip>
                 <a-icon
-                        v-if="initcheckboxGroup.includes(item.id)"
-                        type="unordered-list"
-                        class="form__info-cursor"
-                        @click="(() => caseParamsEdit(item))"/>
+                  v-if="initcheckboxGroup.includes(item.id)"
+                  type="unordered-list"
+                  class="form__info-cursor"
+                  @click="(() => caseParamsEdit(item))"
+                />
               </a-card-grid>
             </a-checkbox-group>
             <CaseParams :isEdit="isEdit" />
@@ -191,12 +188,12 @@ export default {
         code: null
       },
       initMANOENV: {
-          name: null,
-          code: null
+        name: null,
+        code: null
       },
       initTestInstrument: {
-          name: null,
-          code: null
+        name: null,
+        code: null
       },
       count: 0
     };
@@ -217,7 +214,7 @@ export default {
       testCaseSpin: store => store.testJob.testCaseSpin,
       testCaseList: store => store.testJob.testCaseList,
       testJobSingleData: state => state.testJob.testJobSingleData,
-      initcheckboxGroup: state => state.testJob.initcheckboxGroup,
+      initcheckboxGroup: state => state.testJob.initcheckboxGroup
     })
   },
   watch: {
@@ -236,7 +233,6 @@ export default {
           this.form.setFieldsValue({ [item]: "" });
         });
       } else {
-          console.log(val,this.count,"this.count----")
         this.count++;
       }
       if (this.isEdit) {
@@ -274,20 +270,20 @@ export default {
             : ""
         };
         this.initMANOENV = {
-            name: this.testJobSingleData.mano
-                ? this.testJobSingleData.mano.name
-                : "",
-            code: this.testJobSingleData.mano
-                ? this.testJobSingleData.mano.id
-                : ""
+          name: this.testJobSingleData.mano
+            ? this.testJobSingleData.mano.name
+            : "",
+          code: this.testJobSingleData.mano
+            ? this.testJobSingleData.mano.id
+            : ""
         };
         this.initTestInstrument = {
-            name: this.testJobSingleData.suite
-                ? this.testJobSingleData.suite.name
-                : "",
-            code: this.testJobSingleData.suite
-                ? this.testJobSingleData.suite.id
-                : ""
+          name: this.testJobSingleData.suite
+            ? this.testJobSingleData.suite.name
+            : "",
+          code: this.testJobSingleData.suite
+            ? this.testJobSingleData.suite.id
+            : ""
         };
         // setTimeout()
         if (this.isEdit && this.count > 1) {
@@ -307,8 +303,8 @@ export default {
               ? this.testJobSingleData.mano.name
               : "",
             TestInstrument: this.testJobSingleData.suite
-                ? this.testJobSingleData.suite.name
-                : ""
+              ? this.testJobSingleData.suite.name
+              : ""
           });
         }
       }
@@ -320,8 +316,7 @@ export default {
       return item;
     });
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     ...mapActions("testJob", [
       "createrTestJobMGT",
@@ -331,11 +326,11 @@ export default {
       "getEditTestJob"
     ]),
     ...mapMutations("testJob", [
-        "clean",
-        "setIsShow",
-        "updateInitcheckboxGroup",
-        "setCaseParamsIsShow",
-        "updateCaseParamsData"
+      "clean",
+      "setIsShow",
+      "updateInitcheckboxGroup",
+      "setCaseParamsIsShow",
+      "updateCaseParamsData"
     ]),
     onClose() {
       this.visible = false;
@@ -343,7 +338,6 @@ export default {
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
-          console.log(error,"----123value")
         if (!error) {
           let { isEdit } = this;
           if (isEdit) {
@@ -363,49 +357,53 @@ export default {
               values.TestVNFMENV === this.initTestVNFMENV.name
                 ? this.initTestVNFMENV.code
                 : values.TestVNFMENV;
-              values.TestMANOENV =
-                  values.TestMANOENV === this.initMANOENV.name
-                      ? this.initMANOENV.code
-                      : values.TestMANOENV;
-              values.TestInstrument =
-                  values.TestInstrument === this.initTestInstrument.name
-                      ? this.initTestInstrument.code
-                      : values.TestInstrument;
+            values.TestMANOENV =
+              values.TestMANOENV === this.initMANOENV.name
+                ? this.initMANOENV.code
+                : values.TestMANOENV;
+            values.TestInstrument =
+              values.TestInstrument === this.initTestInstrument.name
+                ? this.initTestInstrument.code
+                : values.TestInstrument;
           }
           let caseReqs = [];
-          if(this.initcheckboxGroup.length>0){
-              if(!isEdit){
-                  this.testCaseList.forEach(item=>{
-                      if(this.initcheckboxGroup.includes(item.id)){
-                          caseReqs.push({
-                              caseId:item.id.toString(),
-                              parameters:item.parameters
-                          })
-                      }
-                  })
-              }else {
-                  this.testJobSingleData.cases.map(item=>{
-                      if(this.initcheckboxGroup.includes(item.id)){
-                          let index = this.initcheckboxGroup.indexOf(item.id);
-                          caseReqs.push({
-                              caseId:item.id.toString(),
-                              parameters:item.parameters
-                          });
-                          this.initcheckboxGroup.splice(index,1)
-                      }
+          if (this.initcheckboxGroup.length > 0) {
+            if (!isEdit) {
+              this.testCaseList.forEach(item => {
+                if (this.initcheckboxGroup.includes(item.id)) {
+                  caseReqs.push({
+                    caseId: item.id.toString(),
+                    parameters: item.parameters
                   });
-                  this.testCaseList.forEach(item=>{
-                      if(this.initcheckboxGroup.includes(item.id)){
-                          caseReqs.push({
-                              caseId:item.id.toString(),
-                              parameters:item.parameters
-                          })
-                      }
-                  })
-              }
+                }
+              });
+            } else {
+              this.testJobSingleData.cases.map(item => {
+                if (this.initcheckboxGroup.includes(item.id)) {
+                  let index = this.initcheckboxGroup.indexOf(item.id);
+                  caseReqs.push({
+                    caseId: item.id.toString(),
+                    parameters: item.parameters
+                  });
+                  this.initcheckboxGroup.splice(index, 1);
+                }
+              });
+              this.testCaseList.forEach(item => {
+                if (this.initcheckboxGroup.includes(item.id)) {
+                  caseReqs.push({
+                    caseId: item.id.toString(),
+                    parameters: item.parameters
+                  });
+                }
+              });
+            }
           }
-          console.log(caseReqs,"-----submit----caseReqs")
-          this.createrTestJobMGT({ isEdit, values, caseReqs, message: this.$message });
+          this.createrTestJobMGT({
+            isEdit,
+            values,
+            caseReqs,
+            message: this.$message
+          });
           this.visible = false;
           this.setIsShow(false);
         }
@@ -435,8 +433,8 @@ export default {
       if (key === this.selectedSpecification) return;
       this.selectedSpecification = key;
       let obj = {
-          specId: key,
-          sutId: this.selectedSUTName
+        specId: key,
+        sutId: this.selectedSUTName
       };
       this.getTestCase({
         obj,
@@ -446,23 +444,23 @@ export default {
     onChange(e) {
       this.updateInitcheckboxGroup(e);
     },
-    caseParamsEdit(caseData){
-        if(this.isEdit){
-            this.testJobSingleData.cases.map(item=>{
-                if(item.id === caseData.id){
-                    caseData.parameters = [].concat(item.parameters)
-                }
-            });
-        }
-        let hasvisible = caseData.parameters.map(item=>{
-            return item.visible
+    caseParamsEdit(caseData) {
+      if (this.isEdit) {
+        this.testJobSingleData.cases.map(item => {
+          if (item.id === caseData.id) {
+            caseData.parameters = [].concat(item.parameters);
+          }
         });
-        if(hasvisible.indexOf(true)< 0){
-            this.$message.info('This testCase has no editable parameters.');
-            return false
-        }
-        this.updateCaseParamsData(caseData);
-        this.setCaseParamsIsShow(true);
+      }
+      let hasvisible = caseData.parameters.map(item => {
+        return item.visible;
+      });
+      if (hasvisible.indexOf(true) < 0) {
+        this.$message.info("This testCase has no editable parameters.");
+        return false;
+      }
+      this.updateCaseParamsData(caseData);
+      this.setCaseParamsIsShow(true);
     }
   }
 };

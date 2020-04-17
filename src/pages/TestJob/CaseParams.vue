@@ -115,7 +115,6 @@ export default {
           });
           this.updateTestCaseList({ spin: false, list: testCaseLists });
           this.setCaseParamsIsShow(false);
-          console.log(values, caseParameters, "caseParams------");
         }
       });
     },
