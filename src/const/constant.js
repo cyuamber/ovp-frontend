@@ -246,7 +246,7 @@ const testJobColumns = [
     {
         title: 'Status',
         dataIndex: 'jobStatus',
-        width: 70,
+        width: 80,
         scopedSlots: {
             customRender: 'status'
         },

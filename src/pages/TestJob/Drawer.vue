@@ -343,7 +343,7 @@ export default {
     },
     onCheckAllChange(e) {
         this.changeCaseCheckAll(e.target.checked);
-        let caseCheckedList = e.target.checked === false ?[]:this.testCaseList.map(item=>{
+        let caseCheckedList = !e.target.checked?[]:this.testCaseList.map(item=>{
             return item.id
         });
         this.updateInitcheckboxGroup(caseCheckedList);

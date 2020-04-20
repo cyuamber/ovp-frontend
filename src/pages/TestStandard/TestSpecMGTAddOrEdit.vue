@@ -54,14 +54,30 @@
             v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
             @change="checkboxGrouponChange"
           >
-            <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
-              <a-checkbox
-                :value="item.id"
-                :checked="initcheckboxGroup.includes(item.id)"
-                class="form__checkbox--size"
-              />
-              <span :title="item.description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>
-            </a-card-grid>
+            <a-list itemLayout="vertical"
+                    :pagination="caseListPagination"
+                    :dataSource="testCaseList"
+                    bordered>
+              <a-list-item slot="renderItem"
+                           slot-scope="item, index"
+                           :key="item.id"
+                           class="form__card--padding">
+                <a-checkbox
+                        :value="item.id"
+                        :checked="initcheckboxGroup.includes(item.id)"
+                        class="form__checkbox--size"
+                />
+                <span :title="item.description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>
+              </a-list-item>
+            </a-list>
+            <!--<a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card&#45;&#45;padding">-->
+              <!--<a-checkbox-->
+                <!--:value="item.id"-->
+                <!--:checked="initcheckboxGroup.includes(item.id)"-->
+                <!--class="form__checkbox&#45;&#45;size"-->
+              <!--/>-->
+              <!--<span :title="item.description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>-->
+            <!--</a-card-grid>-->
           </a-checkbox-group>
         </a-form-item>
         <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -89,7 +105,13 @@ export default {
       spin: false,
       initSUTTypeValue: null,
       initVNFtypeValue: null,
-      count: 0
+      count: 0,
+      caseListPagination:{
+          onChange: page => {
+              console.log(page);
+          },
+          pageSize: 5,
+      },
     };
   },
   computed: {
@@ -311,10 +333,10 @@ export default {
   /*margin-bottom: 30px;*/
 }
 .form__card--padding {
-  width: 80%;
+  /*width: 80%;*/
   padding: 14px;
-  text-indent: 0.5em;
-  margin: 0 10%;
+  text-indent: 1.5em;
+  /*margin: 0 10%;*/
 }
 .form__checkbox--size {
   font-size: 20px;

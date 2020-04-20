@@ -140,7 +140,9 @@ const mutations = {
 		list
 	}) {
 		state.testCaseSpin = spin
-		if (list) state.testCaseList = list
+		if (list){state.testCaseList = list}
+		console.log(state.initcheckboxGroup,state.testCaseList,"----state.testCaseList")
+        state.testCaseCheckAll = state.initcheckboxGroup.length === state.testCaseList.length
 	},
 	clean(state) {
 		state.getSUTName = false
@@ -226,12 +228,11 @@ const mutations = {
 	},
 	updateTestJobSingleData(state, data) {
 		state.testJobSingleData = data;
-		if (Object.keys(data).length > 0) {
-			state.initcheckboxGroup = data.cases.map((item) => {
-				return item.id
-			});
-			state.testCaseCheckAll = data.cases.length === state.testCaseList.length
-		}
+		// if (Object.keys(data).length > 0) {
+		// 	state.initcheckboxGroup = data.cases.map((item) => {
+		// 		return item.id
+		// 	});
+		// }
 	},
 	updateDashboardJumpStatus(state, data) {
 		state.dashboardJumpStatus = data;
@@ -241,10 +242,10 @@ const mutations = {
 	},
 	updateInitcheckboxGroup(state, data) {
 		state.initcheckboxGroup = data;
+		console.log(state.initcheckboxGroup,"-----data")
 	},
 	updateCaseParamsData(state, data) {
 		state.caseParamsData = data;
-		console.log(data, state.caseParamsData, "---state.caseParamsData")
 	},
 	updatecaseChildTableData(state, { testCaseChildData, record }) {
 		let index = record.index;
@@ -605,11 +606,18 @@ const actions = {
 			.then(res => {
 				if (res.code === 200) {
 					commit('updateTestJobSingleData', res.body);
+                    if (Object.keys(res.body).length > 0) {
+                        let checkedboxGroup = res.body.cases.map((item) => {
+                            return item.id
+                        });
+                        commit('updateInitcheckboxGroup',checkedboxGroup)
+                    }
 					let obj = {
 						specId: res.body.spec.id,
 						sutId: res.body.sut.id,
 					};
-					dispatch("getTestCase", { obj, message: this.$message })
+					dispatch("getTestCase", { obj, message: this.$message });
+
 				} else if (res.code === 417) {
 					message.error(res.message)
 				}
