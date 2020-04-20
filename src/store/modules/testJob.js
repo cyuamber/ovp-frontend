@@ -141,7 +141,6 @@ const mutations = {
 	}) {
 		state.testCaseSpin = spin
 		if (list){state.testCaseList = list}
-		console.log(state.initcheckboxGroup,state.testCaseList,"----state.testCaseList")
         state.testCaseCheckAll = state.initcheckboxGroup.length === state.testCaseList.length
 	},
 	clean(state) {
@@ -228,11 +227,6 @@ const mutations = {
 	},
 	updateTestJobSingleData(state, data) {
 		state.testJobSingleData = data;
-		// if (Object.keys(data).length > 0) {
-		// 	state.initcheckboxGroup = data.cases.map((item) => {
-		// 		return item.id
-		// 	});
-		// }
 	},
 	updateDashboardJumpStatus(state, data) {
 		state.dashboardJumpStatus = data;
@@ -242,7 +236,8 @@ const mutations = {
 	},
 	updateInitcheckboxGroup(state, data) {
 		state.initcheckboxGroup = data;
-		console.log(state.initcheckboxGroup,"-----data")
+		console.log(state.initcheckboxGroup,"---state.initcheckboxGroup")
+        state.testCaseCheckAll = state.initcheckboxGroup.length === state.testCaseList.length
 	},
 	updateCaseParamsData(state, data) {
 		state.caseParamsData = data;
@@ -617,7 +612,6 @@ const actions = {
 						sutId: res.body.sut.id,
 					};
 					dispatch("getTestCase", { obj, message: this.$message });
-
 				} else if (res.code === 417) {
 					message.error(res.message)
 				}
