@@ -16,6 +16,7 @@ const state = {
   VNFOptions: [],
     testCaseList:[],
   testSpecSingleData: {},
+    testCaseCheckAll: false,
     initcheckboxGroup:[],
     dropdownSpec:[],
     dropdownSpecIndex:0,
@@ -58,6 +59,9 @@ const mutations = {
         state.testCaseList = [];
         if (list) state.testCaseList = list
     },
+    changeCaseCheckAll(state, bool) {
+        state.testCaseCheckAll = bool
+    },
     updateCheckboxGroup(state, {testCaseData}){
         if(testCaseData){
             state.initcheckboxGroup = testCaseData.map((item) => {
@@ -66,6 +70,7 @@ const mutations = {
         }else {
             state.initcheckboxGroup = [];
         }
+        state.testCaseCheckAll = state.initcheckboxGroup.length === state.testCaseList.length
     }
     ,
   updatePagination(state, Options) {
@@ -164,10 +169,14 @@ const actions = {
       }
     })
   },
-    getTestCaseList({ commit },{sutCode,subSutCode,message}){
+    getTestCaseList({ dispatch, commit },{sutCode, subSutCode, testSpecSingleData, message}){
+      console.log(sutCode, subSutCode,"---sutCode, subSutCode")
         axiosget(API.TestSpecMgt.testCaseList.replace(":flag", sutCode).replace(":subSutType", subSutCode)).then(res => {
             if (res.code === 200) {
-                commit('updateTestCaseList', {list: res.body})
+                commit('updateTestCaseList', {list: res.body});
+                if(Object.keys(testSpecSingleData).length > 0){
+                    dispatch('getTestCaseTableData', {record:testSpecSingleData,expanded: false})
+                }
             } else {
                 message.error('Failed to get Test Case list')
             }
@@ -188,7 +197,8 @@ const actions = {
   clearOptions({ commit }) {
     commit('updateVNFOptions', []);
     commit('updateTestCaseList', []);
-    commit('updateCheckboxGroup', []);
+    commit('updateCheckboxGroup', {testCaseData:[]});
+    commit('changeCaseCheckAll', false);
   },
   createOrEditTestSpec({ commit, dispatch, state }, { isEdit, data, message }) {
     let url = isEdit ? API.TestSpecMgt.specMgtUpdate : API.TestSpecMgt.specMgtInsert;

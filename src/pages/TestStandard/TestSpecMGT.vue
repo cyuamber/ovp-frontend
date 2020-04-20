@@ -108,6 +108,7 @@ export default {
     ...mapActions("testSpecMGT", [
       "getTableData",
       "getTestCaseTableData",
+      "getTestCaseList",
       "getTestSpec",
       "deleteTestSpec",
       "getPagination",
@@ -166,13 +167,15 @@ export default {
     },
     showEditOrDeleteModal(item, testSpecSingleData) {
       if (item === "Edit") {
+        this.getTestSpec(testSpecSingleData);
+        this.getTestCaseList({
+            sutCode: testSpecSingleData.sutTypeCH.code,
+            subSutCode: testSpecSingleData.subSutTypeCH.code,
+            testSpecSingleData: testSpecSingleData,
+            message: this.$message
+        });
         this.updateVisible(true);
         this.isEdit = true;
-        this.getTestCaseTableData({
-          record: testSpecSingleData,
-          expanded: false
-        });
-        this.getTestSpec(testSpecSingleData);
       } else {
         this.$confirm({
           title: "Are you sure delete this Spec?",

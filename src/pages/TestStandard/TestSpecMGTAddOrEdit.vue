@@ -45,10 +45,14 @@
         <a-form-item v-if="testCaseList.length>0">
           <h3 class="form__checkboxtitle--size">
             <span>*</span>Test Case List:
+            <a-checkbox  @change="onCheckAllChange" :checked="testCaseCheckAll">
+              Check all
+            </a-checkbox>
           </h3>
           <a-checkbox-group
             class="form__checkboxgroup--margin"
             v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
+            @change="checkboxGrouponChange"
           >
             <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
               <a-checkbox
@@ -94,6 +98,7 @@ export default {
       VNFOptions: state => state.testSpecMGT.VNFOptions,
       testCaseList: store => store.testSpecMGT.testCaseList,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
+      testCaseCheckAll: state => state.testSpecMGT.testCaseCheckAll,
       initcheckboxGroup: state => state.testSpecMGT.initcheckboxGroup
     }),
     visible: {
@@ -155,6 +160,7 @@ export default {
         this.getTestCaseList({
           sutCode: this.initSUTTypeValue,
           subSutCode: this.VNFOptions[0].code,
+          testSpecSingleData: this.testSpecSingleData,
           message: this.$message
         });
         if (this.count > 1) {
@@ -166,11 +172,6 @@ export default {
       if (Object.keys(val).length > 0) {
         this.initSUTTypeValue = val.sutTypeCH.dictLabel;
         this.initVNFtypeValue = val.subSutTypeCH.dictLabel;
-        this.getTestCaseList({
-          sutCode: val.sutTypeCH.code,
-          subSutCode: val.subSutTypeCH.code,
-          message: this.$message
-        });
         this.spin = false;
       }
     },
@@ -178,6 +179,9 @@ export default {
       this.form.setFieldsValue({
         checkboxGroup: val
       });
+     if(val.length === this.testCaseList.length){
+         this.changeCaseCheckAll(true)
+     }
     }
   },
   methods: {
@@ -190,7 +194,7 @@ export default {
       "createOrEditTestSpec",
       "getTestCaseList"
     ]),
-    ...mapMutations("testSpecMGT", ["updateVisible", "updateTestCaseList"]),
+    ...mapMutations("testSpecMGT", ["updateVisible", "updateTestCaseList","changeCaseCheckAll","updateCheckboxGroup"]),
     handleSelectSUTChange(val) {
       this.spin = true;
       this.clearOptions();
@@ -214,6 +218,7 @@ export default {
       this.getTestCaseList({
         sutCode: sutCode,
         subSutCode: val,
+        testSpecSingleData: this.testSpecSingleData,
         message: this.$message
       });
     },
@@ -233,6 +238,14 @@ export default {
     },
     handleCancel() {
       this.updateVisible(false);
+    },
+    checkboxGrouponChange(e) {
+        this.changeCaseCheckAll(e.length === this.testCaseList.length);
+    },
+    onCheckAllChange(e) {
+        this.changeCaseCheckAll(e.target.checked);
+        let caseCheckedList = e.target.checked === false ?[]:this.testCaseList;
+        this.updateCheckboxGroup({testCaseData:caseCheckedList});
     },
     handleSubmit(e) {
       e.preventDefault();
