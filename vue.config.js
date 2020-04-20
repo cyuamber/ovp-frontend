@@ -65,9 +65,9 @@ module.exports = {
         })
     },
     css: {
-        extract: true,
-        sourceMap: false,
-        loaderOptions: {},
-        requireModuleExtension: false
+        // extract: true,
+        // sourceMap: false,
+        // loaderOptions: {},
+        // requireModuleExtension: false
     },
 };
