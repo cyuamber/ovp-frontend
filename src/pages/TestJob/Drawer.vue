@@ -342,8 +342,8 @@ export default {
       this.setIsShow(false);
     },
     onCheckAllChange(e) {
-        // this.changeCaseCheckAll(e.target.checked);
-        let caseCheckedList = !e.target.checked?["a"]:this.testCaseList.map(item=>{
+        this.changeCaseCheckAll(e.target.checked);
+        let caseCheckedList = !e.target.checked?[]:this.testCaseList.map(item=>{
             return item.id
         });
         this.updateInitcheckboxGroup(caseCheckedList);
@@ -454,6 +454,7 @@ export default {
       });
     },
     onChange(e) {
+        console.log(e,"-----e")
       this.updateInitcheckboxGroup(e);
         this.changeCaseCheckAll(e.length === this.testCaseList.length);
     },
