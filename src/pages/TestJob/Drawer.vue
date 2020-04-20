@@ -23,7 +23,7 @@
         <a-textarea
           v-if="item === formList[1]"
           v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}],initialValue:testJobSingleData.remark}]"
-          :autosize="{minRows: 3}"
+          :autosize="{minRows: 3, maxRows: 10}"
         />
         <a-select
           v-else-if="item === 'SUT Type'"
@@ -115,6 +115,9 @@
         <div class="form__spin-content">
           <a-form-item v-if="testCaseList.length !== 0">
             <h3>Test Case List:</h3>
+            <a-checkbox  @change="onCheckAllChange" :checked="testCaseCheckAll">
+              Check all
+            </a-checkbox>
             <a-checkbox-group
               class="form__checkboxgroup--margin"
               v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
@@ -214,6 +217,7 @@ export default {
       testCaseSpin: store => store.testJob.testCaseSpin,
       testCaseList: store => store.testJob.testCaseList,
       testJobSingleData: state => state.testJob.testJobSingleData,
+      testCaseCheckAll: state => state.testJob.testCaseCheckAll,
       initcheckboxGroup: state => state.testJob.initcheckboxGroup
     })
   },
@@ -330,11 +334,19 @@ export default {
       "setIsShow",
       "updateInitcheckboxGroup",
       "setCaseParamsIsShow",
-      "updateCaseParamsData"
+      "updateCaseParamsData",
+      "changeCaseCheckAll"
     ]),
     onClose() {
       this.visible = false;
       this.setIsShow(false);
+    },
+    onCheckAllChange(e) {
+        this.changeCaseCheckAll(e.target.checked);
+        let caseCheckedList = e.target.checked === false ?[]:this.testCaseList.map(item=>{
+            return item.id
+        });
+        this.updateInitcheckboxGroup(caseCheckedList);
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
@@ -443,6 +455,7 @@ export default {
     },
     onChange(e) {
       this.updateInitcheckboxGroup(e);
+        this.changeCaseCheckAll(e.length === this.testCaseList.length);
     },
     caseParamsEdit(caseData) {
       if (this.isEdit) {

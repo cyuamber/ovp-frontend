@@ -22,6 +22,7 @@ const state = {
 	getSpecification: false,
 	specificationSpin: false,
 	specificationList: [],
+    testCaseCheckAll: false,
 	testCaseList: [],
 	testFailDetail: "",
 	failLoading: false,
@@ -169,6 +170,9 @@ const mutations = {
 	changeComponent(state, bool) {
 		state.isJobDetail = bool
 	},
+    changeCaseCheckAll(state, bool) {
+        state.testCaseCheckAll = bool
+    },
 	setFilter(state, { time, key, pageObj }) {
 		if (time !== undefined) {
 			state.createTime = time;
@@ -226,6 +230,7 @@ const mutations = {
 			state.initcheckboxGroup = data.cases.map((item) => {
 				return item.id
 			});
+			state.testCaseCheckAll = data.cases.length === state.testCaseList.length
 		}
 	},
 	updateDashboardJumpStatus(state, data) {

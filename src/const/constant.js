@@ -221,7 +221,7 @@ const testJobColumns = [
         title: 'ID',
         dataIndex: 'jobId',
         fixed: 'left',
-        width: 50
+        width: 150
     },
     {
         title: 'Job Name',
