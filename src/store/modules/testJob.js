@@ -236,8 +236,6 @@ const mutations = {
 	},
 	updateInitcheckboxGroup(state, data) {
 		state.initcheckboxGroup = data;
-		console.log(state.initcheckboxGroup,"---state.initcheckboxGroup")
-
 	},
 	updateCaseParamsData(state, data) {
 		state.caseParamsData = data;

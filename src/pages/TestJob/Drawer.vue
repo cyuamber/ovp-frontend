@@ -346,6 +346,7 @@ export default {
         let caseCheckedList = !e.target.checked?[]:this.testCaseList.map(item=>{
             return item.id
         });
+        console.log(e.target.checked,"e.target.checked-------")
         this.updateInitcheckboxGroup(caseCheckedList);
     },
     handleSubmit() {
