@@ -267,7 +267,6 @@ export default {
       this.jobVNFCsarsUplaod({
         jobId: this.currentJob.jobId,
         sutvalidLind: this.sutvalidLind,
-        message: this.$message,
         confirm: this.$confirm
       });
       // window.open(this.sutvalidLind, "_blank");

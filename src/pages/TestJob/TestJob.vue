@@ -170,8 +170,7 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.runTestJobMGT({
-            data,
-            message: this.$message
+            data
           });
         },
         onCancel() {}
@@ -181,8 +180,7 @@ export default {
       this.isEdit = true;
       this.setIsShow(true);
       this.getEditTestJob({
-        data,
-        message: this.$message
+        data
       });
       this.getSUTType({
         message: this.$message
@@ -210,8 +208,7 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.delete({
-            data,
-            message: this.$message
+            data
           });
         },
         onCancel() {}
@@ -253,8 +250,7 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.stopJop({
-            data,
-            message: this.$message
+            data
           });
         },
         onCancel() {}

@@ -185,8 +185,7 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.deleteTestSpec({
-              id: testSpecSingleData.id,
-              message: this.$message
+              id: testSpecSingleData.id
             });
           }
         });
@@ -201,8 +200,7 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.activateTestCase({
-            obj: testCaseSingleData,
-            message: this.$message
+            obj: testCaseSingleData
           });
         }
       });

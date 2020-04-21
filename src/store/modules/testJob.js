@@ -406,13 +406,11 @@ const actions = {
 		})
 
 	},
-	delete({ dispatch }, { data, message }) {
+	delete({ dispatch }, { data }) {
 		axiosdelete(API.testJobMgt.testJobDelete.replace(":jobId", data.jobId)).then(res => {
 			if (res.code === 200) {
                 dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true });
 				dispatch('getTableData', false)
-			} else if (res.code === 417) {
-				message.error(res.message)
 			}
 		}, () => {
             dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
@@ -423,7 +421,7 @@ const actions = {
 		window.open(window.location.protocol + "//" + window.location.host + url);
         dispatch('loading/showLoading', { type: 'success', toast: 'DownLoad File successfully' }, { root: true });
 	},
-	runTestJobMGT({ dispatch, commit }, { data, message }) {
+	runTestJobMGT({ dispatch, commit }, { data }) {
 		axiosput(API.testJobMgt.testJobStart.replace(":jobId", data.jobId))
 			.then(res => {
 				if (res.code === 200) {
@@ -439,11 +437,9 @@ const actions = {
 							detail: JSON.stringify(data)
 						}
 					})
-				} else if (res.code === 417) {
-					message.error(res.message)
 				}
 			}, () => {
-				message.error('Network exception, please try again')
+                dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 			})
 	},
 	getProgress({ commit }, { jobId, message }) {
@@ -454,13 +450,13 @@ const actions = {
 						percent: res.body.jobProgress,
 						status: res.body.jobStatus
 					});
-					res.body.cases.map(item => {
-                        res.body.scheduleCases.map(items=>{
-                        	if(item.id === items.caseId){
-                                items.name = item.name
-							}
-						})
-					});
+					// res.body.cases.map(item => {
+                     //    res.body.scheduleCases.map(items=>{
+                     //    	if(item.id === items.caseId){
+                     //            items.name = item.name
+					// 		}
+					// 	})
+					// });
 					commit('updateDetailTestCase', res.body.scheduleCases);
 					let doneCaseNum = 0, failedCaseNum = 0;
 					if (res.body.scheduleCases && res.body.scheduleCases.length !== 0) {
@@ -477,8 +473,6 @@ const actions = {
 						commit('updateDetailLoading', false);
 						commit('updateExecutionStartTime', res.body.executionStartTime);
 					}
-				} else if (res.code === 417) {
-					message.error(res.message)
 				}
 			}, () => {
 				message.error('Network exception, please try again')
@@ -504,7 +498,7 @@ const actions = {
 			})
 	},
 
-	stopJop({ dispatch, commit }, { data, message }) {
+	stopJop({ dispatch, commit }, { data }) {
 		// Simulation request
 		axiosput(API.testJobMgt.testJobStop.replace(":jobId", data.jobId))
 			.then(res => {
@@ -514,11 +508,9 @@ const actions = {
 					data.actions[0] = 'Start';
 					commit('updateTableItemData', data);
 					dispatch('getTableData', true)
-				} else if (res.code === 417) {
-					message.error(res.message)
 				}
 			}, () => {
-				message.error('Network exception, please try again')
+                dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 			});
 		dispatch('getTableData', true)
 	},
@@ -575,7 +567,7 @@ const actions = {
 			message.error('Network exception, please try again')
 		})
 	},
-	getEditTestJob({ dispatch, commit }, { data, message }) {
+	getEditTestJob({ dispatch, commit }, { data }) {
 		axiosget(API.testJobMgt.testJobProgress.replace(":jobId", data.jobId))
 			.then(res => {
 				if (res.code === 200) {
@@ -591,14 +583,12 @@ const actions = {
 						sutId: res.body.sut.id,
 					};
 					dispatch("getTestCase", { obj, message: this.$message });
-				} else if (res.code === 417) {
-					message.error(res.message)
 				}
 			}, () => {
                 dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 			});
 	},
-	jobVNFCsarsUplaod({ commit, dispatch }, { jobId, sutvalidLind, message, confirm }) {
+	jobVNFCsarsUplaod({ dispatch }, { jobId, sutvalidLind, confirm }) {
         dispatch('loading/showLoading', { type: 'success', toast: '', toastOpen: false }, { root: true });
 		let updata = () => {
 			confirm({
@@ -607,7 +597,7 @@ const actions = {
 				okText: "Yes",
 				cancelText: "No",
 				onOk: () => {
-					dispatch("jobCaseVNFReupload", { jobId, sutvalidLind, message })
+					dispatch("jobCaseVNFReupload", { jobId, sutvalidLind })
 				}
 			});
 		};
@@ -621,14 +611,12 @@ const actions = {
                 dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 			});
 	},
-	jobCaseVNFReupload({ dispatch, commit }, { jobId, sutvalidLind, message }) {
+	jobCaseVNFReupload({ dispatch }, { jobId, sutvalidLind }) {
         dispatch('loading/showLoading', { type: 'success', toast: '', toastOpen: false }, { root: true });
 		axiospost(API.testJobMgt.testJobCaseVNFReupload.replace(":jobId", jobId))
 			.then(res => {
 				if (res.code === 200) {
 					window.open(sutvalidLind, "_blank");
-				} else if (res.code === 417) {
-					message.error(res.message)
 				}
 			}, () => {
                 dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })

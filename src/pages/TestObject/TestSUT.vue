@@ -173,8 +173,7 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.deleteVNFTest({
-            id: VNFTest.id,
-            message: this.$message
+            id: VNFTest.id
           });
         }
       });

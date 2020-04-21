@@ -65,7 +65,7 @@ const actions = {
   clearPagination({ commit }) {
     commit('updatePagination', { current: 1, total: 0 })
   },
-  createOrEditTestIns({ dispatch }, { isEdit, data, message }) {
+  createOrEditTestIns({ dispatch }, { isEdit, data }) {
     let url = isEdit ? API.instrumentMgs.instrumentMgsUpdate : API.instrumentMgs.instrumentMgsInsert;
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data)
@@ -73,24 +73,20 @@ const actions = {
         if (res.code === 200) {
             dispatch('loading/showLoading', { type: 'success', toast: isEdit ? 'Successfully updated' : 'Has been added successfully' }, { root: true });
           dispatch('getTableData', {})
-        }else if(res.code === 417){
-            message.error(res.body)
-        } else dispatch('loading/showLoading', { type: 'failed', toast: isEdit ? 'Update failed' : 'add failed' }, { root: true })
+        }
       },
         () => {
             dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
         })
   },
-  deleteMeterSys({ dispatch }, {id, message}) {
+  deleteMeterSys({ dispatch }, {id}) {
     axiosdelete(API.instrumentMgs.instrumentMgsDelete.replace(":id", id)).then(res => {
       if (res.code === 200) {
         dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true });
         dispatch('getTableData', {})
-      }else if(res.code === 417){
-          message.error(res.body)
-      } else dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
+      }
     }, () => {
-        message.error('Network exception, please try again')
+        dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
     })
   }
 

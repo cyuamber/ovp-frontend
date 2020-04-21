@@ -185,43 +185,43 @@ const actions = {
     commit('updateCheckboxGroup', {testCaseData:[]});
     commit('changeCaseCheckAll', false);
   },
-  createOrEditTestSpec({ dispatch, state }, { isEdit, data, message }) {
+  createOrEditTestSpec({ dispatch, state }, { isEdit, data }) {
     let url = isEdit ? API.TestSpecMgt.specMgtUpdate : API.TestSpecMgt.specMgtInsert;
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data)
       .then((res) => {
         if (res.code === 200) {
-            dispatch('loading/showLoading', { type: 'success', toast: isEdit ? 'Successfully updated' : 'Has been added successfully' }, { root: true })
+            dispatch('loading/showLoading', { type: 'success', toast: isEdit ? 'Successfully updated' : 'Has been added successfully' }, { root: true });
           let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
           dispatch('getTableData', obj)
-        }else if(res.code === 417){
-            message.error(res.body)
-        } else dispatch('loading/showLoading', { type: 'failed', toast: isEdit ? 'Update failed' : 'add failed' }, { root: true })
+        }
       },
         () => {
             dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
       })
   },
-  deleteTestSpec({ dispatch, state }, {id, message}) {
+  deleteTestSpec({ dispatch, state }, { id }) {
     axiosdelete(API.TestSpecMgt.specMgtDelete.replace(":id", id)).then(res => {
       if (res.code === 200) {
           dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true });
         let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
         dispatch('getTableData', obj)
-      }else if(res.code === 417){
-          message.error(res.body)
-      }else dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
-    })
+      }
+    },
+        () => {
+            dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
+        })
   },
-    activateTestCase({ dispatch, state }, {obj, message}){
+    activateTestCase({ dispatch, state }, { obj }){
         axiosput(API.TestSpecMgt.specMgtCaseActivate.replace(":id", obj.id).replace(":status", obj.status)).then(res => {
             if (res.code === 200) {
                 dispatch('loading/showLoading', { type: 'success', toast: 'Update activation status successfully' }, { root: true });
                 dispatch('getTestCaseTableData', {record:state.dropdownSpec[state.dropdownSpecIndex],expanded:true})
-            }else if(res.code === 417){
-                message.error(res.body)
-            } else dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
-        })
+            }
+        },
+            () => {
+                dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
+            })
     }
 }
 const getters = {

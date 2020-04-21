@@ -412,8 +412,7 @@ export default {
           this.updateVisible(false);
           this.loginVIN({
             isEdit: this.isEdit,
-            data,
-            message: this.$message
+            data
           });
         }
       });

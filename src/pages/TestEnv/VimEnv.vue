@@ -178,8 +178,7 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.deleteData({
-                data:record,
-                message: this.$message
+                data:record
             });
           }
         });

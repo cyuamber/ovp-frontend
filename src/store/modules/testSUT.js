@@ -130,7 +130,7 @@ const actions = {
 			}
 		})
 	},
-	createOrEditVNFTest({ state, dispatch }, { data, isEdit, message }) {
+	createOrEditVNFTest({ state, dispatch }, { data, isEdit }) {
 		if (isEdit) data.id = state.VNFTest.id;
 		let url = isEdit ? API.sutMgt.sutMgtUpdate : API.sutMgt.sutMgtInsert;
 		let apiType = isEdit ? axiosput : axiospost;
@@ -140,28 +140,23 @@ const actions = {
                     dispatch('loading/showLoading', { type: 'success', toast: isEdit ? 'Successfully updated' : 'Successfully added' }, { root: true });
 					let paramsObj = { flag: state.currentTab };
 					dispatch('getTableData', { paramsObj, isFilter: false })
-				} else if (res.code === 417) {
-					message.error(res.body)
-				} else {
-				    dispatch('loading/showLoading', { type: 'failed', toast: isEdit ? 'Update failed' : 'add failed' }, { root: true })
 				}
 			},
 				() => {
                     dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 				})
 	},
-	deleteVNFTest({ dispatch }, { id, message }) {
+	deleteVNFTest({ dispatch }, { id }) {
 		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", id)).then(res => {
 			if (res.code === 200) {
 				dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true })
 				let paramsObj = { flag: state.currentTab };
 				dispatch('getTableData', { paramsObj, isFilter: false })
-			} else if (res.code === 417) {
-				message.error(res.body)
-			} else {
+			}
+		},
+            () => {
                 dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
-            }
-		})
+            })
 	},
 	upload({ commit }, { formData, message }) {
 		reqwest({
@@ -181,7 +176,6 @@ const actions = {
 	},
 	downloadFile({ dispatch }, { fileName, fileAliasName }) {
 		let url = API.downloadFile.replace(":filealias", fileAliasName).replace(":filename", fileName);
-		// console.log(window.location.protocol + "//" + window.location.host + url, "window.location.protocol");
 		window.open(window.location.protocol + "//" + window.location.host + url);
         dispatch('loading/showLoading', { type: 'success', toast: 'DownLoad File successfully' }, { root: true });
 	}

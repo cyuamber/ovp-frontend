@@ -127,20 +127,21 @@ const actions = {
         paramsObj.pageSize = state.pageSize;
         let axiosrequest = axiosgetType ? axiospost : axiosget;
         commit('updateTableLoading', true);
-        axiosrequest(url, paramsObj).then(res => {
+        let failedCallback = () => {
+            if (isFilter) {
+                dispatch('loading/showLoading', { type: 'failed', toast: "Failed to get form data" }, { root: true })
+            }
+        };
+        axiosrequest(url, paramsObj,failedCallback).then(res => {
             if (res.code === 200) {
                 commit('updateTableData', res);
                 commit('updateTableLoading', false);
                 if (isFilter) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
-            } else {
-                if (isFilter) {
-                    dispatch('loading/showLoading', { type: 'failed', toast: "Failed to get form data" }, { root: true })
-                }
             }
         }, () => { if (isFilter) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true }) }
         )
     },
-    deleteData({ dispatch, state }, { data, message }) {
+    deleteData({ dispatch, state }, { data }) {
         let url = '';
         switch (state.currentTab) {
             case 'VIM ENV':
@@ -160,9 +161,7 @@ const actions = {
                 dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true });
                 let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize };
                 dispatch('getTableData', { paramsObj })
-            } else if (res.code === 417) {
-                message.error(res.body)
-            } else dispatch('loading/showLoading', { type: 'failed', toast: "Failed to delete" }, { root: true })
+            }
         }).catch(() => {
             dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
         })
@@ -193,7 +192,7 @@ const actions = {
         })
         // Simulation request
     },
-    loginVIN({ state, dispatch }, { isEdit, data, message }) {
+    loginVIN({ state, dispatch }, { isEdit, data }) {
         if (isEdit) data.id = state.initValues.id;
         let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtUpdate : API.vimVnfmMgt.manoMgtUpdate.replace(":manoId", data.id)) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtInsert : API.vimVnfmMgt.manoMgtInsert);
         let axiosType = isEdit ? axiosput : axiospost;
@@ -204,12 +203,8 @@ const actions = {
                     let paramsObj = {
                         pageNum: state.pageNum,
                         pageSize: state.pageSize
-                    }
+                    };
                     dispatch('getTableData', { paramsObj })
-                } else if (res.code === 417) {
-                    message.error(res.body)
-                } else {
-                    dispatch('loading/showLoading', { type: 'failed', toast: this.isEdit ? 'Update failed' : 'add failed' }, { root: true })
                 }
             },
                 () => {

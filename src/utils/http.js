@@ -22,6 +22,8 @@ export function axiospost (url, data,uploadHeader,callback) {
             } else if(res.data.code === 417){
                 message.error(res.data.body);
                 callback()
+            }else{
+                message.error("Network exception, please try again.");
             }
         }).catch((err) => {
             reject(err);
@@ -40,6 +42,8 @@ export function axiosget (url, data,callback) {
             } else if(res.data.code === 417){
                 message.error(res.data.body);
                 callback()
+            }else{
+                message.error("Network exception, please try again.");
             }
         }).catch((err) => {
             reject(err);
@@ -57,6 +61,8 @@ export function axiosput (url, data, callback) {
             } else if(res.data.code === 417){
                 message.error(res.data.body);
                 callback()
+            }else{
+                message.error("Network exception, please try again.");
             }
         }).catch((err) => {
             reject(err);
@@ -75,6 +81,8 @@ export function axiosdelete (url, data, callback) {
             } else if(res.data.code === 417){
                 message.error(res.data.body);
                 callback()
+            }else{
+                message.error("Network exception, please try again.");
             }
         }).catch((err) => {
             reject(err);

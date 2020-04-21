@@ -250,8 +250,7 @@ export default {
       let { isEdit } = this;
       this.createOrEditVNFTest({
           isEdit,
-          data,
-          message: this.$message
+          data
       }).then(
         () => {
           this.updateVisible(false);

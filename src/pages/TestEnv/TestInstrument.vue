@@ -132,8 +132,7 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.deleteMeterSys({
-                id: singleData.id,
-                message: this.$message
+                id: singleData.id
             });
           }
         });
