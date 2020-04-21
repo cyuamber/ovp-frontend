@@ -455,7 +455,6 @@ export default {
       });
     },
     onChange(e) {
-        console.log(e,"-----e")
       this.updateInitcheckboxGroup(e);
         this.changeCaseCheckAll(e.length === this.testCaseList.length);
     },

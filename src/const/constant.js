@@ -180,7 +180,7 @@ const testMANOColumns = [
     {
         title: 'ID',
         dataIndex: 'id',
-        width: 50,
+        width: 180,
     },
     {
         title: 'Name',
@@ -221,7 +221,7 @@ const testJobColumns = [
         title: 'ID',
         dataIndex: 'jobId',
         fixed: 'left',
-        width: 150
+        width: 180
     },
     {
         title: 'Job Name',

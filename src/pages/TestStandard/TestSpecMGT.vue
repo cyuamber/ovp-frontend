@@ -95,7 +95,7 @@ export default {
       tableData: state => state.testSpecMGT.tableData,
       pagination: state => state.testSpecMGT.pagination,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
-      loadingMessage: state => state.testSpecMGT.loadingMessage,
+      loadingMessage: state => state.loading.loadingMessage,
       tableLoading: state => state.testSpecMGT.tableLoading,
       testCasetableLoading: state => state.testSpecMGT.testCasetableLoading,
       visible: state => state.testSpecMGT.visible

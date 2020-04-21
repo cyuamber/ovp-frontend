@@ -59,7 +59,7 @@
                     :dataSource="testCaseList"
                     bordered>
               <a-list-item slot="renderItem"
-                           slot-scope="item, index"
+                           slot-scope="item"
                            :key="item.id"
                            class="form__card--padding">
                 <a-checkbox

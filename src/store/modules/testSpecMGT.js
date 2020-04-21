@@ -22,7 +22,6 @@ const state = {
     dropdownSpecIndex:0,
   pagination: { current: 1, total: 0, pageSize: 10 },
 // specpagination:{ current: 1, total: 0, pageSize: 5 },
-  loadingMessage: { type: '', toast: '' }
 }
 const mutations = {
   updateTableData(state, tableData) {
@@ -80,18 +79,6 @@ const mutations = {
         console.log(pagination,index,"updateSpecPagination")
         state.tableData[index].specpagination = pagination;
     },
-  updateFailedMessage(state, toast) {
-    state.loadingMessage = {
-      type: 'failed',
-      toast
-    }
-  },
-  updateSuccessMessage(state, toast) {
-    state.loadingMessage = {
-      type: 'success',
-      toast
-    }
-  },
   updateTableLoading(state, tableLoading) {
     state.tableLoading = tableLoading
   },
@@ -103,7 +90,7 @@ const mutations = {
   },
 }
 const actions = {
-  getTableData({ commit }, obj) {
+  getTableData({ dispatch, commit }, obj) {
     let req = { pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
     Object.keys(obj).forEach(item => {
       if (obj[item] !== '' && obj[item] !== undefined) {
@@ -116,17 +103,17 @@ const actions = {
       if (res.code === 200) {
         commit('updateTableData', res);
         commit('updateTableLoading', false);
-        if (req.publishTime || req.testSpecName) commit('updateSuccessMessage', 'Successfully get table data')
+        if (req.publishTime || req.testSpecName) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
       } else {
-        if (req.publishTime || req.testSpecName) commit('updateFailedMessage', 'Network exception, please try again')
+        if (req.publishTime || req.testSpecName) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
       }
     },
       () => {
-        if (req.publishTime || req.testSpecName) commit('updateFailedMessage', 'Network exception, please try again')
+        if (req.publishTime || req.testSpecName) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
       }
     )
   },
-  getTestCaseTableData({ commit,state }, {record,expanded}){
+  getTestCaseTableData({ dispatch, commit,state }, {record,expanded}){
       commit('updateTestCaseTableLoading', true);
       state.dropdownSpec[record.index] = Object.assign({},record);
       state.dropdownSpecIndex = record.index;
@@ -138,12 +125,10 @@ const actions = {
                     }
                   commit('updateTestCaseTableLoading', false);
               } else {
-                  commit('updateFailedMessage', 'Network exception, please try again')
-              }
+                  dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })              }
           },
           () => {
-              commit('updateFailedMessage', 'Network exception, please try again')
-          }
+              dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })          }
       )
   },
   getTestSpec({ commit }, data) {
@@ -206,36 +191,36 @@ const actions = {
     axiosType(url, data)
       .then((res) => {
         if (res.code === 200) {
-          commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully');
+            dispatch('loading/showLoading', { type: 'success', toast: isEdit ? 'Successfully updated' : 'Has been added successfully' }, { root: true })
           let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
           dispatch('getTableData', obj)
         }else if(res.code === 417){
             message.error(res.body)
-        } else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
+        } else dispatch('loading/showLoading', { type: 'failed', toast: isEdit ? 'Update failed' : 'add failed' }, { root: true })
       },
         () => {
-          commit('updateFailedMessage', 'Network exception, please try again')
-        })
+            dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
+      })
   },
   deleteTestSpec({ commit, dispatch, state }, {id, message}) {
     axiosdelete(API.TestSpecMgt.specMgtDelete.replace(":id", id)).then(res => {
       if (res.code === 200) {
-        commit('updateSuccessMessage', 'Deleted successfully');
+          dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true });
         let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
         dispatch('getTableData', obj)
       }else if(res.code === 417){
           message.error(res.body)
-      }else commit('updateFailedMessage', 'Network exception, please try again')
+      }else dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
     })
   },
     activateTestCase({ commit, dispatch, state }, {obj, message}){
         axiosput(API.TestSpecMgt.specMgtCaseActivate.replace(":id", obj.id).replace(":status", obj.status)).then(res => {
             if (res.code === 200) {
-                commit('updateSuccessMessage', 'Update activation status successfully');
+                dispatch('loading/showLoading', { type: 'success', toast: 'Update activation status successfully' }, { root: true });
                 dispatch('getTestCaseTableData', {record:state.dropdownSpec[state.dropdownSpecIndex],expanded:true})
             }else if(res.code === 417){
                 message.error(res.body)
-            } else commit('updateFailedMessage', 'Network exception, please try again')
+            } else dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
         })
     }
 }

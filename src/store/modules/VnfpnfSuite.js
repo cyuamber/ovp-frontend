@@ -12,8 +12,7 @@ const state = {
     source: null,
     visible: false,
     currentTab: 101,
-    pagination: { current: 1, total: 0, pageSize: 10 },
-    loadingMessage: { type: '', toast: '' }
+    pagination: { current: 1, total: 0, pageSize: 10 }
 };
 const mutations = {
     updateTableData(state, tableData) {
@@ -40,18 +39,6 @@ const mutations = {
     changeTab(state, tab) {
         state.currentTab = tab
     },
-    updateFailedMessage(state, toast) {
-        state.loadingMessage = {
-            type: 'failed',
-            toast
-        }
-    },
-    updateSuccessMessage(state, toast) {
-        state.loadingMessage = {
-            type: 'success',
-            toast
-        }
-    },
     updateToken(state, source) {
         state.source = source
     },
@@ -63,8 +50,7 @@ const mutations = {
     },
 };
 const actions = {
-    getTableData({ commit, state }, obj) {
-        console.log(obj, "obj")
+    getTableData({ dispatch, commit, state }, obj) {
         let req = { pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
         Object.keys(obj).forEach(item => {
             if (obj[item] !== '' && obj[item] !== undefined) {
@@ -79,12 +65,12 @@ const actions = {
             if (res.code === 200) {
                 commit('updateTableData', res);
                 commit('updateTableLoading', false);
-                if (req.createTime || req.name) commit('updateSuccessMessage', 'Successfully get table data')
+                if (req.createTime || req.name) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
             } else {
-                if (req.createTime || req.name) commit('updateFailedMessage', 'Network exception, please try again')
+                if (req.createTime || req.name) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
             }
         }, () => {
-            if (req.createTime || req.name) commit('updateFailedMessage', 'Network exception, please try again')
+            if (req.createTime || req.name) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
         }
         )
     },
@@ -118,7 +104,6 @@ const actions = {
         commit('updatePagination', { current: 1, total: 0 })
     },
     uploadVNFFile({ commit }, { formData, message }) {
-        console.log(formData.get("file"), "uploadVNFFile------");
         axiospost(API.uploadFile, { file: formData }, true).then(res => {
             commit('updateToken', null);
             if (res.code === 200) message.success('Upload successfully');
@@ -128,40 +113,39 @@ const actions = {
             commit('updateToken', null)
         })
     },
-    createOrEditTestMeter({ commit, dispatch, state }, { data, isEdit, message }) {
+    createOrEditTestMeter({ dispatch, state }, { data, isEdit, message }) {
         let url = isEdit ? API.suiteMgt.suiteMgtUpdate : API.suiteMgt.suiteMgtInsert;
         let axiosType = isEdit ? axiosput : axiospost;
         axiosType(url, data)
             .then((res) => {
                 if (res.code === 200) {
-                    commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Has been added successfully');
+                    dispatch('loading/showLoading', { type: 'success', toast: isEdit ? 'Successfully updated' : 'Has been added successfully' }, { root: true });
                     let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
                     dispatch('getTableData', obj)
                 }else if(res.code === 417){
                     message.error(res.body)
-                }  else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
+                }  else dispatch('loading/showLoading', { type: 'failed', toast: isEdit ? 'Update failed' : 'add failed' }, { root: true })
             },
                 () => {
-                    commit('updateFailedMessage', 'Network exception, please try again')
+                    dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
                 })
     },
-    deleteTestMeter({ commit, dispatch, state }, {id, message}) {
+    deleteTestMeter({ dispatch, state }, {id, message}) {
         let url = API.suiteMgt.suiteMgtDelete.replace(":id", id);
         axiosdelete(url).then(res => {
             if (res.code === 200) {
-                commit('updateSuccessMessage', 'Deleted successfully');
+                dispatch('loading/showLoading', { type: 'success', toast: "Deleted successfully" }, { root: true });
                 let obj = { flag: state.currentTab, pageNum: state.pagination.current, pageSize: state.pagination.pageSize };
                 dispatch('getTableData', obj)
             }else if(res.code === 417){
                 message.error(res.body)
-            }  else commit('updateFailedMessage', 'Network exception, please try again')
+            }  else dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
         })
     },
-    downloadFile({ commit }, {fileName,fileAliasName}) {
+    downloadFile({ dispatch }, {fileName,fileAliasName}) {
         let url = API.downloadFile.replace(":filealias",fileAliasName).replace(":filename", fileName);
-        console.log(window.location.protocol + "//" + window.location.host + url, "window.location.protocol");
         window.open(window.location.protocol + "//" + window.location.host + url);
-        commit('updateSuccessMessage', 'DownLoad File successfully');
+        dispatch('loading/showLoading', { type: 'success', toast: "DownLoad File successfully" }, { root: true });
     }
 
 };

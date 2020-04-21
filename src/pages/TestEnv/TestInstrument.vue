@@ -65,7 +65,7 @@ export default {
       tableData: state => state.testInstrument.tableData,
       pagination: state => state.testInstrument.pagination,
       singleData: state => state.testInstrument.singleData,
-      loadingMessage: state => state.testInstrument.loadingMessage,
+      loadingMessage: state => state.loading.loadingMessage,
       tableLoading: state => state.testInstrument.tableLoading
     })
   },

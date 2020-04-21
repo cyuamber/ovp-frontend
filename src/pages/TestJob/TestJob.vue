@@ -68,7 +68,7 @@ export default {
   computed: {
     ...mapState({
       isShow: state => state.testJob.isShow,
-      loadingMessage: state => state.testJob.loadingMessage,
+      loadingMessage: state => state.loading.loadingMessage,
       tableData: state => state.testJob.tableData,
       pagination: state => state.testJob.pagination,
       tableLoading: state => state.testJob.tableLoading,

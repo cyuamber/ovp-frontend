@@ -143,7 +143,7 @@ export default {
   computed: {
     ...mapState({
       detailLoading: state => state.testJob.detailLoading,
-      loadingMessage: state => state.testJob.loadingMessage,
+      loadingMessage: state => state.loading.loadingMessage,
       percent: state => state.testJob.percent,
       statusText: state => state.testJob.statusText,
       detailTestCase: state => state.testJob.detailTestCase,

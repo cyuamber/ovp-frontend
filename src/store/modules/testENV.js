@@ -4,7 +4,6 @@ import API from '../../const/apis';
 import moment from 'moment'
 
 const state = {
-    loadingMessage: null,
     VIMTableData: [],
     VNFMTableData: [],
     MANOTableData: [],
@@ -72,18 +71,6 @@ const mutations = {
             state.pageSize = pageObj.pageSize
         }
     },
-    updateFailedMessage(state, toast) {
-        state.loadingMessage = {
-            type: 'failed',
-            toast
-        }
-    },
-    updateSuccessMessage(state, toast) {
-        state.loadingMessage = {
-            type: 'success',
-            toast
-        }
-    },
     updateVisible(state, bool) {
         state.visible = bool
     },
@@ -120,7 +107,7 @@ const actions = {
         }
         dispatch('getTableData', { paramsObj, isFilter: true })
     },
-    getTableData({ commit, state }, { paramsObj, isFilter }) {
+    getTableData({ dispatch, commit, state }, { paramsObj, isFilter }) {
         let url = "";
         switch (state.currentTab) {
             case 'VIM ENV':
@@ -144,14 +131,16 @@ const actions = {
             if (res.code === 200) {
                 commit('updateTableData', res);
                 commit('updateTableLoading', false);
-                if (isFilter) commit('updateSuccessMessage', 'Successfully get table data')
+                if (isFilter) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
             } else {
-                if (isFilter) commit('updateFailedMessage', 'Failed to get form data')
+                if (isFilter) {
+                    dispatch('loading/showLoading', { type: 'failed', toast: "Failed to get form data" }, { root: true })
+                }
             }
-        }, () => { if (isFilter) commit('updateFailedMessage', 'Network exception, please try again') }
+        }, () => { if (isFilter) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true }) }
         )
     },
-    deleteData({ dispatch, commit, state }, { data, message }) {
+    deleteData({ dispatch, state }, { data, message }) {
         let url = '';
         switch (state.currentTab) {
             case 'VIM ENV':
@@ -168,14 +157,14 @@ const actions = {
         }
         axiosdelete(url.replace(":id", data.id)).then(res => {
             if (res.code === 200) {
-                commit('updateSuccessMessage', 'Deleted successfully');
+                dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true });
                 let paramsObj = { pageNumstate: state.pageNum, pageSize: state.pageSize };
                 dispatch('getTableData', { paramsObj })
             } else if (res.code === 417) {
                 message.error(res.body)
-            } else commit('updateFailedMessage', 'Failed to delete')
+            } else dispatch('loading/showLoading', { type: 'failed', toast: "Failed to delete" }, { root: true })
         }).catch(() => {
-            commit('updateFailedMessage', 'Network exception, please try again')
+            dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
         })
     },
     getRegionIdOptions({ commit, dispatch }) {
@@ -204,14 +193,14 @@ const actions = {
         })
         // Simulation request
     },
-    loginVIN({ state, commit, dispatch }, { isEdit, data, message }) {
+    loginVIN({ state, dispatch }, { isEdit, data, message }) {
         if (isEdit) data.id = state.initValues.id;
         let url = isEdit ? (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtUpdate : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtUpdate : API.vimVnfmMgt.manoMgtUpdate.replace(":manoId", data.id)) : (state.currentTab === 'VIM ENV' ? API.vimVnfmMgt.vimEnvMgtInsert : state.currentTab === 'VNFM ENV' ? API.vimVnfmMgt.vnfmEnvMgtInsert : API.vimVnfmMgt.manoMgtInsert);
         let axiosType = isEdit ? axiosput : axiospost;
         axiosType(url, data)
             .then((res) => {
                 if (res.code === 200) {
-                    commit('updateSuccessMessage', this.isEdit ? 'Successfully updated' : 'Has been added successfully');
+                    dispatch('loading/showLoading', { type: 'success', toast: this.isEdit ? 'Successfully updated' : 'Has been added successfully' }, { root: true });
                     let paramsObj = {
                         pageNum: state.pageNum,
                         pageSize: state.pageSize
@@ -220,11 +209,11 @@ const actions = {
                 } else if (res.code === 417) {
                     message.error(res.body)
                 } else {
-                    commit('updateFailedMessage', this.isEdit ? 'Update failed' : 'add failed')
+                    dispatch('loading/showLoading', { type: 'failed', toast: this.isEdit ? 'Update failed' : 'add failed' }, { root: true })
                 }
             },
                 () => {
-                    commit('updateFailedMessage', 'Network exception, please try again')
+                    dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
                 })
     },
     getMANOTypeOptions({ commit }) {

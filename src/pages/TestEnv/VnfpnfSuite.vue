@@ -65,7 +65,7 @@ export default {
       tableData: state => state.VnfpnfSuite.tableData,
       pagination: state => state.VnfpnfSuite.pagination,
       SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
-      loadingMessage: state => state.VnfpnfSuite.loadingMessage,
+      loadingMessage: state => state.loading.loadingMessage,
       currentTab: state => state.VnfpnfSuite.currentTab,
       tableLoading: state => state.VnfpnfSuite.tableLoading
     })

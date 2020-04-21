@@ -13,10 +13,6 @@ const state = {
 	tableData: [],
 	VNFOptions: [],
 	VNFTest: {},
-	loadingMessage: {
-		type: '',
-		toast: ''
-	},
 	source: null,
 	visible: false,
 	tableLoading: false,
@@ -32,7 +28,7 @@ const mutations = {
 		state.pagination = {
 			current: state.pageNum,
 			total: tableData.total
-		}
+		};
 		state.tableData = tableData.body.map((item, index) => {
 			item.createTime = item.createTime !== null ? moment(item.createTime).format('YYYY-MM-DD') : item.createTime;
 			item.index = tableData.body.length * (state.pagination.current - 1) + index + 1;
@@ -51,18 +47,6 @@ const mutations = {
 	},
 	updateVNFOptions(state, options) {
 		if (options) state.VNFOptions = options
-	},
-	updateFailedMessage(state, toast) {
-		state.loadingMessage = {
-			type: 'failed',
-			toast
-		}
-	},
-	updateSuccessMessage(state, toast) {
-		state.loadingMessage = {
-			type: 'success',
-			toast
-		}
 	},
 	updateTableLoading(state, tableLoading) {
 		state.tableLoading = tableLoading
@@ -120,13 +104,18 @@ const actions = {
 			if (res.code === 200) {
 				commit('updateTableData', res);
 				commit('updateTableLoading', false);
-				if (isFilter) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
-				// commit('updateSuccessMessage', 'Successfully get table data')
+				if (isFilter) {
+                    dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
+                }
 			} else {
-				if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')
+				if (isFilter) {
+                    dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
+                }
 			}
 		}, () => {
-			if (isFilter) commit('updateFailedMessage', 'Network exception, please try again')
+			if (isFilter) {
+                dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
+            }
 		}
 
 		)
@@ -141,34 +130,37 @@ const actions = {
 			}
 		})
 	},
-	createOrEditVNFTest({ commit, state, dispatch }, { data, isEdit, message }) {
+	createOrEditVNFTest({ state, dispatch }, { data, isEdit, message }) {
 		if (isEdit) data.id = state.VNFTest.id;
 		let url = isEdit ? API.sutMgt.sutMgtUpdate : API.sutMgt.sutMgtInsert;
 		let apiType = isEdit ? axiosput : axiospost;
 		apiType(url, data)
 			.then((res) => {
 				if (res.code === 200) {
-					commit('updateSuccessMessage', isEdit ? 'Successfully updated' : 'Successfully added')
+                    dispatch('loading/showLoading', { type: 'success', toast: isEdit ? 'Successfully updated' : 'Successfully added' }, { root: true });
 					let paramsObj = { flag: state.currentTab };
 					dispatch('getTableData', { paramsObj, isFilter: false })
 				} else if (res.code === 417) {
 					message.error(res.body)
-				} else commit('updateFailedMessage', isEdit ? 'Update failed' : 'add failed')
+				} else {
+				    dispatch('loading/showLoading', { type: 'failed', toast: isEdit ? 'Update failed' : 'add failed' }, { root: true })
+				}
 			},
 				() => {
-					commit('updateFailedMessage', 'Network exception, please try again')
+                    dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 				})
 	},
-	deleteVNFTest({ commit, dispatch }, { id, message }) {
+	deleteVNFTest({ dispatch }, { id, message }) {
 		axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", id)).then(res => {
 			if (res.code === 200) {
 				dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true })
-				// commit('updateSuccessMessage', 'Deleted successfully')
 				let paramsObj = { flag: state.currentTab };
 				dispatch('getTableData', { paramsObj, isFilter: false })
 			} else if (res.code === 417) {
 				message.error(res.body)
-			} else commit('updateFailedMessage', 'Network exception, please try again')
+			} else {
+                dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
+            }
 		})
 	},
 	upload({ commit }, { formData, message }) {
@@ -187,11 +179,11 @@ const actions = {
 			},
 		})
 	},
-	downloadFile({ commit }, { fileName, fileAliasName }) {
+	downloadFile({ dispatch }, { fileName, fileAliasName }) {
 		let url = API.downloadFile.replace(":filealias", fileAliasName).replace(":filename", fileName);
 		// console.log(window.location.protocol + "//" + window.location.host + url, "window.location.protocol");
 		window.open(window.location.protocol + "//" + window.location.host + url);
-		commit('updateSuccessMessage', 'DownLoad File successfully');
+        dispatch('loading/showLoading', { type: 'success', toast: 'DownLoad File successfully' }, { root: true });
 	}
 
 }
