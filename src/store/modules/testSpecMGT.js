@@ -185,7 +185,7 @@ const actions = {
     commit('updateCheckboxGroup', {testCaseData:[]});
     commit('changeCaseCheckAll', false);
   },
-  createOrEditTestSpec({ commit, dispatch, state }, { isEdit, data, message }) {
+  createOrEditTestSpec({ dispatch, state }, { isEdit, data, message }) {
     let url = isEdit ? API.TestSpecMgt.specMgtUpdate : API.TestSpecMgt.specMgtInsert;
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data)
@@ -202,7 +202,7 @@ const actions = {
             dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
       })
   },
-  deleteTestSpec({ commit, dispatch, state }, {id, message}) {
+  deleteTestSpec({ dispatch, state }, {id, message}) {
     axiosdelete(API.TestSpecMgt.specMgtDelete.replace(":id", id)).then(res => {
       if (res.code === 200) {
           dispatch('loading/showLoading', { type: 'success', toast: 'Deleted successfully' }, { root: true });
@@ -213,7 +213,7 @@ const actions = {
       }else dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
     })
   },
-    activateTestCase({ commit, dispatch, state }, {obj, message}){
+    activateTestCase({ dispatch, state }, {obj, message}){
         axiosput(API.TestSpecMgt.specMgtCaseActivate.replace(":id", obj.id).replace(":status", obj.status)).then(res => {
             if (res.code === 200) {
                 dispatch('loading/showLoading', { type: 'success', toast: 'Update activation status successfully' }, { root: true });
