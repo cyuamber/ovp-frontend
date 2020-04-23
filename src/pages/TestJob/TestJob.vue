@@ -71,7 +71,7 @@ export default {
       loadingMessage: state => state.loading.loadingMessage,
       tableData: state => state.testJob.tableData,
       pagination: state => state.testJob.pagination,
-      tableLoading: state => state.testJob.tableLoading,
+      tableLoading: state => state.loading.tableLoading,
       testJobSingleData: state => state.testJob.testJobSingleData,
       lang: state => state.router.lang
     }),

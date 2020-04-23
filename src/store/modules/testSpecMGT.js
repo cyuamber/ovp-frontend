@@ -9,7 +9,6 @@ const state = {
           caseMgt:[]
       }
   ],
-  tableLoading: false,
     testCasetableLoading: false,
   visible: false,
   SUTOptions: [],
@@ -79,9 +78,6 @@ const mutations = {
         console.log(pagination,index,"updateSpecPagination")
         state.tableData[index].specpagination = pagination;
     },
-  updateTableLoading(state, tableLoading) {
-    state.tableLoading = tableLoading
-  },
     updateTestCaseTableLoading(state, testCasetableLoading) {
         state.testCasetableLoading = testCasetableLoading
     },
@@ -97,12 +93,12 @@ const actions = {
         req[item] = obj[item];
       }
     });
-    commit('updateTableLoading', true);
+      dispatch('loading/tableLoading', true, { root: true });
     let axiosrequest = axiosgetType ? axiospost : axiosget;
     axiosrequest(API.TestSpecMgt.specMgtTable, req).then(res => {
       if (res.code === 200) {
         commit('updateTableData', res);
-        commit('updateTableLoading', false);
+        dispatch('loading/tableLoading', false, { root: true });
         if (req.publishTime || req.testSpecName) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
       } else {
         if (req.publishTime || req.testSpecName) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })

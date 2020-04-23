@@ -8,7 +8,6 @@ const state = {
     VNFOptions: [],
     SystemOptions: [],
     SuiteSingleData: {},
-    tableLoading: false,
     source: null,
     visible: false,
     currentTab: 101,
@@ -42,9 +41,6 @@ const mutations = {
     updateToken(state, source) {
         state.source = source
     },
-    updateTableLoading(state, tableLoading) {
-        state.tableLoading = tableLoading
-    },
     updateVisible(state, bool) {
         state.visible = bool
     },
@@ -57,14 +53,14 @@ const actions = {
                 req[item] = obj[item];
             }
         });
-        commit('updateTableLoading', true);
+        dispatch('loading/tableLoading', true, { root: true });
         req.flag = state.currentTab;
         console.log(req, "req");
         let axiosrequest = axiosgetType ? axiospost : axiosget;
         axiosrequest(API.suiteMgt.suiteMgtTable, req).then(res => {
             if (res.code === 200) {
                 commit('updateTableData', res);
-                commit('updateTableLoading', false);
+                dispatch('loading/tableLoading', false, { root: true });
                 if (req.createTime || req.name) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
             } else {
                 if (req.createTime || req.name) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })

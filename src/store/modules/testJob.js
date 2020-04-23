@@ -12,7 +12,6 @@ import { axiosgetType } from "../../const/constant";
 
 const state = {
 	isShow: false,
-	tableLoading: false,
 	detailLoading: true,
 	SUTTypeList: [],
 	SUTNameList: [],
@@ -24,7 +23,6 @@ const state = {
     testCaseCheckAll: false,
 	testCaseList: [],
 	testFailDetail: "",
-	failLoading: false,
 	testCaseSpin: false,
 	tableData: [],
 	pagination: {},
@@ -50,7 +48,6 @@ const state = {
 	initcheckboxGroup: [],
 	caseParamsIsShow: false,
 	caseParamsData: [],
-	testCaseChildtableLoading: false,
 	expandedRowKeys: []
 }
 
@@ -60,9 +57,6 @@ const mutations = {
 	},
 	setCaseParamsIsShow(state, bool) {
 		state.caseParamsIsShow = bool;
-	},
-	setTestCaseChildtableLoading(state, bool) {
-		state.testCaseChildtableLoading = bool;
 	},
 	updateExpandedRowKeys(state, { key, expanded }) {
 		if (expanded) {
@@ -175,9 +169,6 @@ const mutations = {
 		let index = data.index - 1
 		state.tableData.splice(index, 1, data)
 	},
-	updateTableLoading(state, tableLoading) {
-		state.tableLoading = tableLoading
-	},
 	updateDetailTestCase(state, detailTestCase) {
 		state.detailTestCase = detailTestCase.map((item, index) => {
 			item.index = index;
@@ -231,9 +222,9 @@ const actions = {
 		if (state.searchKeyword !== 'All' && state.dashboardJumpStatus === "All") obj.jobStatus = state.searchKeyword;
 		if (state.searchKeyword === 'All' && state.dashboardJumpStatus !== "All") obj.jobStatus = state.dashboardJumpStatus;
 		let axiosrequest = axiosgetType ? axiospost : axiosget;
-		if (loading) commit('updateTableLoading', true);
+		if (loading) dispatch('loading/tableLoading', true, { root: true });
 		axiosrequest(API.testJobMgt.testJobTable, obj).then((res) => {
-			if (loading) commit('updateTableLoading', false);
+			if (loading) dispatch('loading/tableLoading', false, { root: true });
 			if (res.code === 200) {
 				state.pagination = {
 					current: state.pageNum,
@@ -450,13 +441,6 @@ const actions = {
 						percent: res.body.jobProgress,
 						status: res.body.jobStatus
 					});
-					// res.body.cases.map(item => {
-                     //    res.body.scheduleCases.map(items=>{
-                     //    	if(item.id === items.caseId){
-                     //            items.name = item.name
-					// 		}
-					// 	})
-					// });
 					commit('updateDetailTestCase', res.body.scheduleCases);
 					let doneCaseNum = 0, failedCaseNum = 0;
 					if (res.body.scheduleCases && res.body.scheduleCases.length !== 0) {
@@ -480,9 +464,9 @@ const actions = {
 	},
 
 	getTestJobCaseExecutions({ dispatch, commit }, { record, expanded, message }) {
-		commit('setTestCaseChildtableLoading', true);
+        dispatch('loading/tableLoading', true, { root: true });
 		axiosget(API.testJobMgt.testJobCaseExecutions.replace(":requestId", record.requestId)).then(res => {
-			commit('setTestCaseChildtableLoading', false);
+                dispatch('loading/tableLoading', false, { root: true });
 			if (Number(res.code) === 200) {
 				if (res.body.length !== 0) {
 					commit('updateExpandedRowKeys', { key: record.index, expanded });
@@ -493,7 +477,7 @@ const actions = {
 			}
 		},
 			() => {
-				commit('setTestCaseChildtableLoading', false);
+                dispatch('loading/tableLoading', false, { root: true });
                 dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 			})
 	},

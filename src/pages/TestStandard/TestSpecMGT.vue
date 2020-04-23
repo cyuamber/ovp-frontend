@@ -96,7 +96,7 @@ export default {
       pagination: state => state.testSpecMGT.pagination,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
       loadingMessage: state => state.loading.loadingMessage,
-      tableLoading: state => state.testSpecMGT.tableLoading,
+      tableLoading: state => state.loading.tableLoading,
       testCasetableLoading: state => state.testSpecMGT.testCasetableLoading,
       visible: state => state.testSpecMGT.visible
     })

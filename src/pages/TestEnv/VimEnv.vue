@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     ...mapState({
-      tableLoading: state => state.testENV.tableLoading,
+      tableLoading: state => state.loading.tableLoading,
       loadingMessage: state => state.loading.loadingMessage,
       VIMTableData: state => state.testENV.VIMTableData,
       VNFMTableData: state => state.testENV.VNFMTableData,

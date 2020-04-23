@@ -7,7 +7,6 @@ import moment from 'moment';
 const state = {
   tableData: [],
   singleData: {},
-  tableLoading: false,
   pagination: { current: 1, total: 0 }
 };
 const mutations = {
@@ -25,10 +24,7 @@ const mutations = {
   },
   updatePagination(state, Options) {
     state.pagination = Options;
-  },
-  updateTableLoading(state, tableLoading) {
-    state.tableLoading = tableLoading
-  },
+  }
 };
 const actions = {
   getTableData({ dispatch, commit }, obj) {
@@ -38,12 +34,12 @@ const actions = {
         req[item] = obj[item];
       }
     });
-    commit('updateTableLoading', true);
+    dispatch('loading/tableLoading', true, { root: true });
     let axiosrequest = axiosgetType ? axiospost : axiosget;
     axiosrequest(API.instrumentMgs.instrumentMgsTable, req).then(res => {
       if (res.code === 200) {
         commit('updateTableData', res);
-        commit('updateTableLoading', false);
+        dispatch('loading/tableLoading', false, { root: true });
         if (req.createTime || req.name) {
             dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
         }

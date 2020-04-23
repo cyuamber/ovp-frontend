@@ -15,7 +15,6 @@ const state = {
 	VNFTest: {},
 	source: null,
 	visible: false,
-	tableLoading: false,
 	pagination: {},
 	createTime: '',
 	keyword: '',
@@ -47,9 +46,6 @@ const mutations = {
 	},
 	updateVNFOptions(state, options) {
 		if (options) state.VNFOptions = options
-	},
-	updateTableLoading(state, tableLoading) {
-		state.tableLoading = tableLoading
 	},
 	updateToken(state, source) {
 		state.source = source
@@ -95,7 +91,7 @@ const actions = {
 		})
 	},
 	getTableData({ dispatch, commit, state }, { paramsObj, isFilter }) {
-		commit('updateTableLoading', true);
+        dispatch('loading/tableLoading', true, { root: true });
 		paramsObj.flag = state.currentTab;
 		paramsObj.pageNum = state.pageNum;
 		paramsObj.pageSize = state.pageSize;
@@ -103,7 +99,7 @@ const actions = {
 		axiosrequest(API.sutMgt.sutMgtTable, paramsObj).then(res => {
 			if (res.code === 200) {
 				commit('updateTableData', res);
-				commit('updateTableLoading', false);
+                dispatch('loading/tableLoading', false, { root: true });
 				if (isFilter) {
                     dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
                 }

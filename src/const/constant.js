@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV;
-const axiosgetType = env !== "development" ? false : true;
+const axiosgetType = env === "development" ? false : true;
 
 const mockcolumns = [{
     title: "Avatar",
@@ -265,6 +265,10 @@ const testJobDetailCaseListColumns = [
     {
         title: 'Id',
         dataIndex: 'id'
+    },
+    {
+        title: 'Case Name',
+        dataIndex: 'caseName',
     },
     {
         title: 'Case Id',

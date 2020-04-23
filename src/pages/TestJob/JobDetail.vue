@@ -90,7 +90,7 @@
                   class="test-case__table"
                   slot-scope="record"
                   slot="expandedRowRender"
-                  :loading="testCaseChildtableLoading"
+                  :loading="tableLoading"
                   :columns="innerColumns"
                   :dataSource="record.caseMgt"
                   rowKey="executionId"
@@ -147,11 +147,8 @@ export default {
       percent: state => state.testJob.percent,
       statusText: state => state.testJob.statusText,
       detailTestCase: state => state.testJob.detailTestCase,
-      // testFailDetail: state => state.testJob.testFailDetail,
-      failLoading: state => state.testJob.failLoading,
       executionStartTime: state => state.testJob.executionStartTime,
-      testCaseChildtableLoading: state =>
-        state.testJob.testCaseChildtableLoading,
+      tableLoading: state => state.loading.tableLoading,
       expandedRowKeys: state => state.testJob.expandedRowKeys
     }),
     infoList() {

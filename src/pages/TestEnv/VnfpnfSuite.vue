@@ -67,7 +67,7 @@ export default {
       SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
       loadingMessage: state => state.loading.loadingMessage,
       currentTab: state => state.VnfpnfSuite.currentTab,
-      tableLoading: state => state.VnfpnfSuite.tableLoading
+      tableLoading: state => state.loading.tableLoading
     })
   },
   watch: {

@@ -16,8 +16,7 @@ const state = {
     visible: false,
     cloudTypeOptions: [],
     regionIdOptions: [],
-    initValues: {},
-    tableLoading: false
+    initValues: {}
 }
 
 const mutations = {
@@ -42,9 +41,6 @@ const mutations = {
     },
     changeTab(state, tab) {
         state.currentTab = tab
-    },
-    updateTableLoading(state, tableLoading) {
-        state.tableLoading = tableLoading
     },
     setFilterItem(state, { time, key, pageObj, isSearch, message }) {
         if (isSearch) {
@@ -126,7 +122,7 @@ const actions = {
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
         let axiosrequest = axiosgetType ? axiospost : axiosget;
-        commit('updateTableLoading', true);
+        dispatch('loading/tableLoading', true, { root: true });
         let failedCallback = () => {
             if (isFilter) {
                 dispatch('loading/showLoading', { type: 'failed', toast: "Failed to get form data" }, { root: true })
@@ -135,7 +131,7 @@ const actions = {
         axiosrequest(url, paramsObj,failedCallback).then(res => {
             if (res.code === 200) {
                 commit('updateTableData', res);
-                commit('updateTableLoading', false);
+                dispatch('loading/tableLoading', false, { root: true });
                 if (isFilter) dispatch('loading/showLoading', { type: 'success', toast: 'Successfully get table data' }, { root: true })
             }
         }, () => { if (isFilter) dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true }) }
