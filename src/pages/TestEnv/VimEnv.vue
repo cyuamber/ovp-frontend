@@ -144,8 +144,8 @@ export default {
       this.keyword = "";
       let paramsObj = {};
       this.getTableData({ paramsObj, isFilter: false });
-      if(key === 'MANO ENV'){
-          this.getMANOTypeOptions()
+      if (key === "MANO ENV") {
+        this.getMANOTypeOptions();
       }
     },
     handleRigister() {
@@ -178,7 +178,7 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.deleteData({
-                data:record
+              data: record
             });
           }
         });
@@ -216,6 +216,7 @@ export default {
   .tag {
     padding: 0 8px;
     border-radius: 12px;
+    cursor: pointer;
   }
   .showState {
     display: block;

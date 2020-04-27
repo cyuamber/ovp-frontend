@@ -169,10 +169,10 @@ export default {
       if (item === "Edit") {
         this.getTestSpec(testSpecSingleData);
         this.getTestCaseList({
-            sutCode: testSpecSingleData.sutTypeCH.code,
-            subSutCode: testSpecSingleData.subSutTypeCH.code,
-            testSpecSingleData: testSpecSingleData,
-            message: this.$message
+          sutCode: testSpecSingleData.sutTypeCH.code,
+          subSutCode: testSpecSingleData.subSutTypeCH.code,
+          testSpecSingleData: testSpecSingleData,
+          message: this.$message
         });
         this.updateVisible(true);
         this.isEdit = true;
@@ -225,6 +225,7 @@ export default {
   .test-spec__tag {
     padding: 0 8px;
     border-radius: 12px;
+    cursor: pointer;
   }
   .test-case__table {
     .test-case__showState {

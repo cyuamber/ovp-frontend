@@ -112,9 +112,7 @@ const actions = {
 			if (isFilter) {
                 dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
             }
-		}
-
-		)
+		})
 	},
 	getVNFOptions({ commit, state }) {
 		let url = API.sutMgt.sutMgtType.replace(":flag", state.currentTab);
@@ -137,8 +135,7 @@ const actions = {
 					let paramsObj = { flag: state.currentTab };
 					dispatch('getTableData', { paramsObj, isFilter: false })
 				}
-			},
-				() => {
+			},() => {
                     dispatch('loading/showLoading', { type: 'failed', toast: "Network exception, please try again" }, { root: true })
 				})
 	},
@@ -175,7 +172,6 @@ const actions = {
 		window.open(window.location.protocol + "//" + window.location.host + url);
         dispatch('loading/showLoading', { type: 'success', toast: 'DownLoad File successfully' }, { root: true });
 	}
-
 }
 const getters = {
 

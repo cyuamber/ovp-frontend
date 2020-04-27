@@ -132,7 +132,7 @@ export default {
           cancelText: "No",
           onOk: () => {
             this.deleteMeterSys({
-                id: singleData.id
+              id: singleData.id
             });
           }
         });
@@ -161,6 +161,7 @@ export default {
   .tag {
     padding: 0 8px;
     border-radius: 12px;
+    cursor: pointer;
   }
 }
 </style>

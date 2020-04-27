@@ -3,7 +3,7 @@
     <div class="layout-header__router">
       <a-breadcrumb separator="-">
         <a-breadcrumb-item>OVP</a-breadcrumb-item>
-        <a-breadcrumb-item v-for="(route,index) in updateBread" :key="index">{{$t(`T.${route}`)}}</a-breadcrumb-item>
+        <a-breadcrumb-item v-for="(route,index) in breadcrumbArr" :key="index">{{$t(`T.${route}`)}}</a-breadcrumb-item>
       </a-breadcrumb>
     </div>
     <div>
@@ -35,16 +35,13 @@
           {{userName}}
         </a-button>
       </a-dropdown>
-      <a-button
-        :style="headerbuttonStyle"
-        @click="(() => handleLangChange(lang))"
-      >{{$t('T.lang')}}</a-button>
+      <a-button :style="headerbuttonStyle" @click="(() => handleLangChange(lang))">{{$t('T.lang')}}</a-button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 
 const headerbuttonStyle = {
   height: "100%",
@@ -64,18 +61,18 @@ export default {
     };
   },
   mounted() {
-      this.$store.dispatch('getCurrentLanguage',{}).then(()=>{
-          this.$i18n.locale = this.lang;
-      });
+    this.$store.dispatch("getCurrentLanguage", {}).then(() => {
+      this.$i18n.locale = this.lang;
+    });
   },
   computed: {
-    ...mapGetters(["updateBread"]),
     ...mapState({
-        lang: state => state.router.lang
+      lang: state => state.router.lang,
+      breadcrumbArr: state => state.router.breadcrumbArr
     })
   },
   watch: {
-      lang(val) {
+    lang(val) {
       this.$i18n.locale = val;
     }
   },
