@@ -70,7 +70,7 @@ export default {
       visible: state => state.testSUT.visible,
       createTime: state => state.testSUT.createTime,
       currentTab: state => state.testSUT.currentTab,
-      tableLoading: state => state.testSUT.tableLoading
+      tableLoading: state => state.loading.tableLoading
     }),
     keyword: {
       get() {
@@ -206,7 +206,6 @@ export default {
   .table__tag {
     padding: 0 8px;
     border-radius: 12px;
-    cursor: pointer;
   }
 }
 </style>>

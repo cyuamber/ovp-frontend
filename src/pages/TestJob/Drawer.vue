@@ -115,9 +115,7 @@
         <div class="form__spin-content">
           <a-form-item v-if="testCaseList.length !== 0">
             <h3>Test Case List:</h3>
-            <a-checkbox  @change="onCheckAllChange" :checked="testCaseCheckAll">
-              Check all
-            </a-checkbox>
+            <a-checkbox @change="onCheckAllChange" :checked="testCaseCheckAll">Check all</a-checkbox>
             <a-checkbox-group
               class="form__checkboxgroup--margin"
               v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
@@ -342,12 +340,14 @@ export default {
       this.setIsShow(false);
     },
     onCheckAllChange(e) {
-        this.changeCaseCheckAll(e.target.checked);
-        let caseCheckedList = !e.target.checked?[]:this.testCaseList.map(item=>{
-            return item.id
-        });
-        console.log(e.target.checked,"e.target.checked-------")
-        this.updateInitcheckboxGroup(caseCheckedList);
+      this.changeCaseCheckAll(e.target.checked);
+      let caseCheckedList = !e.target.checked
+        ? []
+        : this.testCaseList.map(item => {
+            return item.id;
+          });
+      console.log(e.target.checked, "e.target.checked-------");
+      this.updateInitcheckboxGroup(caseCheckedList);
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
@@ -456,7 +456,7 @@ export default {
     },
     onChange(e) {
       this.updateInitcheckboxGroup(e);
-        this.changeCaseCheckAll(e.length === this.testCaseList.length);
+      this.changeCaseCheckAll(e.length === this.testCaseList.length);
     },
     caseParamsEdit(caseData) {
       if (this.isEdit) {

@@ -68,15 +68,13 @@ module.exports = {
   css: {
     // extract: true,
     // sourceMap: false,
-    // loaderOptions: {},
+    // loaderOptions: {
+    //     less: {
+    //     modifyVars: {
+    //       'border-radius-base': '2px'
+    //     },
+    //     javascriptEnabled: true
+    //   }},
     // requireModuleExtension: false
-    loaderOptions: {
-      less: {
-        modifyVars: {
-          'border-radius-base': '2px'
-        },
-        javascriptEnabled: true
-      }
-    }
   }
 }

@@ -249,8 +249,8 @@ export default {
     submitFormData(data) {
       let { isEdit } = this;
       this.createOrEditVNFTest({
-          isEdit,
-          data
+        isEdit,
+        data
       }).then(
         () => {
           this.updateVisible(false);

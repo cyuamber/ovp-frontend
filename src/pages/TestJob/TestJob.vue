@@ -345,7 +345,6 @@ export default {
       padding: 0 8px;
       border-radius: 12px;
       font-size: 14px;
-      cursor: pointer;
     }
   }
   .tab-content__button {

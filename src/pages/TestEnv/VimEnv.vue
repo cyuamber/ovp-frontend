@@ -216,7 +216,6 @@ export default {
   .tag {
     padding: 0 8px;
     border-radius: 12px;
-    cursor: pointer;
   }
   .showState {
     display: block;

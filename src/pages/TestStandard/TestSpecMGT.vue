@@ -225,7 +225,6 @@ export default {
   .test-spec__tag {
     padding: 0 8px;
     border-radius: 12px;
-    cursor: pointer;
   }
   .test-case__table {
     .test-case__showState {
