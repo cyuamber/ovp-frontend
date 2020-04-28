@@ -34,7 +34,7 @@ module.exports = {
     proxy: proxyObj
   },
   //webpack配置
-  chainWebpack: config => {
+  chainWebpack: () => {
     // console.log(config, "===>config")
   },
   configureWebpack: config => {
