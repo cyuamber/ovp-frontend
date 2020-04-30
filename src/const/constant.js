@@ -1,5 +1,18 @@
 const env = process.env.NODE_ENV
-const axiosgetType = env === 'development' ? false : true
+let axiosgetType
+
+switch (env) {
+  case 'development':
+    axiosgetType = env === 'development' ? false : true
+    break
+  case 'production':
+    axiosgetType = env !== 'development' ? false : true
+    break
+  default:
+    break
+}
+
+//  axiosgetType = env !== 'development' ? false : true
 
 const mockcolumns = [
   {
