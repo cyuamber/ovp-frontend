@@ -187,7 +187,7 @@ const actions = {
     { dispatch, commit },
     { sutCode, subSutCode, testSpecSingleData, message }
   ) {
-    console.log(sutCode, subSutCode, '---sutCode, subSutCode')
+    // console.log(sutCode, subSutCode, '---sutCode, subSutCode')
     axiosget(
       API.TestSpecMgt.testCaseList
         .replace(':flag', sutCode)
