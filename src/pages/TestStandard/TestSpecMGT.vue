@@ -25,14 +25,14 @@
         @change="handleTableChange"
         @expand="caseMgtTableShow"
       >
-        <span slot="action" slot-scope="action,record">
+        <span slot="action" slot-scope="action, record">
           <a-tag
             v-for="item in action"
             :key="item"
-            :color="item === 'Edit'? 'blue' : 'red'"
+            :color="item === 'Edit' ? 'blue' : 'red'"
             class="test-spec__tag"
-            @click="(() => showEditOrDeleteModal(item,record))"
-          >{{item}}</a-tag>
+            @click="() => showEditOrDeleteModal(item, record)"
+          >{{ item }}</a-tag>
         </span>
         <a-table
           class="test-case__table"
@@ -44,21 +44,27 @@
           rowKey="id"
           size="default"
           :pagination="record.specpagination"
-          @change="((pagination) => handleSpecTableChange(pagination,record.index))"
+          @change="
+                        (pagination) =>
+                            handleSpecTableChange(pagination, record.index)
+                    "
         >
           <span slot="status" slot-scope="status">
             <span
               class="test-case__showState"
-              :style="{backgroundColor: status==='enable'? '#7ED321': '#d0021b'}"
-              :title="status=== 'enable'? 'enable': 'disable'"
+              :style="{
+                                backgroundColor:
+                                    status === 'enable' ? '#7ED321' : '#d0021b',
+                            }"
+              :title="status === 'enable' ? 'enable' : 'disable'"
             ></span>
           </span>
-          <span slot="action" slot-scope="action,record">
+          <span slot="action" slot-scope="action, record">
             <a-switch
               checkedChildren="enable"
               unCheckedChildren="disable"
-              :checked="record.status=== 'enable'"
-              @click="(() => activationModal(record))"
+              :checked="record.status === 'enable'"
+              @click="() => activationModal(record)"
             />
           </span>
         </a-table>
@@ -159,7 +165,10 @@ export default {
       let obj = {};
       if (isSearch) this.keyword = keyword;
       if (!(keyword === "" && this.publishTime === "")) {
-        obj = { testSpecName: this.keyword, publishTime: this.publishTime };
+        obj = {
+          testSpecName: this.keyword,
+          publishTime: this.publishTime
+        };
       }
       this.clearPagination();
       // Simulation request

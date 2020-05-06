@@ -2,20 +2,21 @@ const baseUrl = "/portal/business";
 export default {
     //mock api
     mock: {
-        address: '/address',
-        customerinfo: '/customer/info',
-        xurantest: '/xuran/test/json',
-        alarmformdata: '/alarm/formdata/v1/multiple',
-        home: '/home',
-        deleteaddress: '/delete/address',
-        putname: '/articles',
+        address: "/address",
+        customerinfo: "/customer/info",
+        xurantest: "/xuran/test/json",
+        alarmformdata: "/alarm/formdata/v1/multiple",
+        home: "/home",
+        deleteaddress: "/delete/address",
+        putname: "/articles",
     },
     getCurrentLanguage: "/lang/local",
     uploadFile: baseUrl + "/files/upload",
     downloadFile: baseUrl + "/files/:filealias/:filename",
     dashboard: {
         liveCaseAmount: baseUrl + "/dashboard/statisticLiveCaseAmount",
-        PassCaseAmount7Days: baseUrl + "/dashboard/statisticPassCaseAmount7Days",
+        PassCaseAmount7Days:
+            baseUrl + "/dashboard/statisticPassCaseAmount7Days",
         jobsFlowAmount: baseUrl + "/dashboard/statisticJobsFlowAmount",
         sutAmount: baseUrl + "/dashboard/sutAmount",
         jobsAmount: baseUrl + "/dashboard/statisticJobsAmount",
@@ -34,9 +35,9 @@ export default {
         vnfmEnvMgtInsert: baseUrl + "/vnfmEnvMgt/insert",
         vnfmEnvMgtUpdate: baseUrl + "/vnfmEnvMgt/update",
         vnfmEnvMgtDelete: baseUrl + "/vnfmEnvMgt/:id/delete",
-        manoMgtInsert:baseUrl + "/manos/insert",
-        manoMgtUpdate:baseUrl + "/manos/:manoId/update",
-        manoMgtDelete:baseUrl + "/manos/:id/delete"
+        manoMgtInsert: baseUrl + "/manos/insert",
+        manoMgtUpdate: baseUrl + "/manos/:manoId/update",
+        manoMgtDelete: baseUrl + "/manos/:id/delete",
     },
     instrumentMgs: {
         instrumentMgsTable: baseUrl + "/instrumentMgs",
@@ -56,7 +57,7 @@ export default {
         sutMgtInsert: baseUrl + "/sutMgt/insert",
         sutMgtUpdate: baseUrl + "/sutMgt/update",
         sutMgtDelete: baseUrl + "/sutMgt/:id/delete",
-        sutMgtType: baseUrl + "/types/:flag"
+        sutMgtType: baseUrl + "/types/:flag",
     },
     testJobMgt: {
         testJobTable: baseUrl + "/jobs",
@@ -73,7 +74,8 @@ export default {
         testJobTestCase: baseUrl + "/testCase/jobCase",
         testJobDownLoad: baseUrl + "/jobs/cases/download/:jobId",
         testFailedDetail: baseUrl + "/jobs/case/executions/retrieve/:requestId",
-        testJobCaseExecutions: baseUrl + "/jobs/case/executions/list/:requestId",
+        testJobCaseExecutions:
+            baseUrl + "/jobs/case/executions/list/:requestId",
         testJobCaseVNFUplaod: baseUrl + "/jobs/:jobId/csars/upload",
         testJobCaseVNFReupload: baseUrl + "/jobs/:jobId/csars/reupload",
     },
@@ -87,5 +89,5 @@ export default {
         TestSpecVNFType: baseUrl + "/types/:flag",
         testCaseList: baseUrl + "/testCase/box/:flag/:subSutType",
         specMgtCaseActivate: baseUrl + "/testCase/updateStatus/:id/:status",
-    }
-}
+    },
+};
