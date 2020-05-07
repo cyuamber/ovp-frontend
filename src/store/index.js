@@ -4,13 +4,13 @@ import login from "./modules/login";
 import router from "./modules/router";
 import loading from "./modules/loading";
 import testInstrument from "./modules/testInstrument";
-import testSpecMGT from "./modules/testSpecMGT";
+import testSpecMGT from "./modules/TestSpecMGT";
 import VnfpnfSuite from "./modules/VnfpnfSuite";
-import testSUT from "./modules/testSUT";
+import testSUT from "./modules/TestSUT";
 import testCase from "./modules/testCase";
-import testJob from "./modules/testJob";
-import testENV from "./modules/testENV";
-import dashBoard from "./modules/dashBoard";
+import testJob from "./modules/TestJob";
+import testENV from "./modules/TestENV";
+import dashBoard from "./modules/DashBoard";
 // import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex);

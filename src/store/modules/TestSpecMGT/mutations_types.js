@@ -1,0 +1,12 @@
+export const updateTableData = 'updateTableData';
+export const updatecaseMgtTableData = 'updatecaseMgtTableData';
+export const updateVNFTest = 'updateVNFTest';
+export const updateSUTOptions = 'updateSUTOptions';
+export const updateVNFOptions = 'updateVNFOptions';
+export const updateTestCaseList = 'updateTestCaseList';
+export const changeCaseCheckAll = 'changeCaseCheckAll';
+export const updateCheckboxGroup = 'updateCheckboxGroup';
+export const updatePagination = 'updatePagination';
+export const updateSpecPagination = 'updateSpecPagination';
+export const updateTestCaseTableLoading = 'updateTestCaseTableLoading';
+export const updateVisible = 'updateVisible';

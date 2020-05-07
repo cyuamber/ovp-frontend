@@ -1,0 +1,42 @@
+const state = {
+  isShow: false,
+  detailLoading: true,
+  SUTTypeList: [],
+  SUTNameList: [],
+  getSUTName: false,
+  nameSpin: false,
+  getSpecification: false,
+  specificationSpin: false,
+  specificationList: [],
+  testCaseCheckAll: false,
+  testCaseList: [],
+  testFailDetail: '',
+  testCaseSpin: false,
+  tableData: [],
+  pagination: {},
+  percent: 0,
+  statusText: 'normal',
+  isJobDetail: false,
+  searchKeyword: 'All',
+  createTime: '',
+  pageNum: 1,
+  pageSize: 10,
+  detailTestCase: [],
+  VNFMOption: [],
+  VIMOption: [],
+  MANOOption: [],
+  TestInstrumentOption: [],
+  executionStartTime: '',
+  testCasePieData: [
+    { name: 'DONE', y: 0, color: '#cae76e' },
+    { name: 'FAILED', y: 0, color: '#e94e75' }
+  ],
+  testJobSingleData: {},
+  dashboardJumpStatus: 'All',
+  initcheckboxGroup: [],
+  caseParamsIsShow: false,
+  caseParamsData: [],
+  expandedRowKeys: []
+}
+
+export default state
