@@ -1,75 +1,75 @@
-import moment from 'moment'
-import * as types from './mutations_types'
+import moment from 'moment';
+import * as types from './mutations_types';
 
 const mutations = {
-  [types.updateTableData] (state, res) {
+  [types.UPDATE_TABLE_DATA] (state, res) {
     state.pagination = {
       current: state.pageNum,
       total: res.total
-    }
+    };
     let data = res.body.map((item, index) => {
-      item.action = ['Edit', 'Delete']
-      item.index = res.body.length * (state.pagination.current - 1) + index + 1
+      item.action = ['Edit', 'Delete'];
+      item.index = res.body.length * (state.pagination.current - 1) + index + 1;
       item.createTime =
         item.createTime !== null
           ? moment(item.createTime).format('YYYY-MM-DD')
-          : item.createTime
-      return item
-    })
+          : item.createTime;
+      return item;
+    });
     if (state.currentTab === 'VIM ENV') {
-      state.VIMTableData = data
+      state.VIMTableData = data;
     } else if (state.currentTab === 'VNFM ENV') {
-      state.VNFMTableData = data
+      state.VNFMTableData = data;
     } else if (state.currentTab === 'MANO ENV') {
-      state.MANOTableData = data
+      state.MANOTableData = data;
     }
   },
-  [types.changeTab] (state, tab) {
-    state.currentTab = tab
+  [types.CHANGE_TAB] (state, tab) {
+    state.currentTab = tab;
   },
-  [types.setFilterItem] (state, { time, key, pageObj, isSearch, message }) {
+  [types.SET_FILTER_ITEM] (state, { time, key, pageObj, isSearch, message }) {
     if (isSearch) {
       if (key === '' && state.createTime === '' && state.searchKeyword === '') {
-        message.warning('Please enter valid search information')
-        return
+        message.warning('Please enter valid search information');
+        return;
       }
     }
     if (time !== undefined) {
-      state.createTime = time
+      state.createTime = time;
       // Jump to the first page after adding search criteria
       if (state.pageNum !== 1) {
-        state.pageNum = 1
+        state.pageNum = 1;
       }
     } else if (key !== undefined) {
-      state.searchKeyword = key
+      state.searchKeyword = key;
       // Jump to the first page after adding search criteria
       if (state.pageNum !== 1) {
-        state.pageNum = 1
+        state.pageNum = 1;
       }
     } else if (pageObj !== undefined) {
-      state.pageNum = pageObj.current
-      state.pageSize = pageObj.pageSize
+      state.pageNum = pageObj.current;
+      state.pageSize = pageObj.pageSize;
     }
   },
-  [types.updateVisible] (state, bool) {
-    state.visible = bool
+  [types.UPDATE_VISIBLE] (state, bool) {
+    state.visible = bool;
   },
-  [types.updateRegionIdOptions] (state, { regionIdList }) {
-    state.regionIdOptions = regionIdList
+  [types.UPDATE_REGION_ID_OPTIONS] (state, { regionIdList }) {
+    state.regionIdOptions = regionIdList;
   },
-  [types.updateCloudTypeOptions] (state, { CloudTypeList }) {
-    state.cloudTypeOptions = CloudTypeList
+  [types.UPDATE_CLOUD_TYPE_OPTIONS] (state, { CloudTypeList }) {
+    state.cloudTypeOptions = CloudTypeList;
   },
-  [types.setInitValues] (state, values) {
+  [types.SET_INIT_VALUES] (state, values) {
     if (values.item !== 'Edit') {
-      state.initValues = values
+      state.initValues = values;
     } else {
-      state.initValues = values.record
+      state.initValues = values.record;
     }
   },
-  [types.updateMANOTypeOptions] (state, { CloudTypeList }) {
-    state.MANOTypeOptions = CloudTypeList
+  [types.UPDATE_MANO_TYPE_OPTIONS] (state, { CloudTypeList }) {
+    state.MANOTypeOptions = CloudTypeList;
   }
-}
+};
 
-export default mutations
+export default mutations;

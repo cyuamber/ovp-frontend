@@ -1,70 +1,70 @@
-import moment from 'moment'
-import * as types from './mutations_types'
+import moment from 'moment';
+import * as types from './mutations_types';
 
 const mutations = {
-  [types.updateTableData] (state, tableData) {
-    state.pagination.total = tableData.total
+  [types.UPDATE_TABLE_DATA] (state, tableData) {
+    state.pagination.total = tableData.total;
     state.tableData = tableData.body.map((item, index) => {
       item.publishTime =
         item.publishTime !== null
           ? moment(item.publishTime).format('YYYY-MM-DD')
-          : item.publishTime
-      item.index = index
-      item.caseMgt = []
-      item.specpagination = { current: 1, total: 0, pageSize: 5 }
-      item.action = ['Edit', 'Delete']
-      return item
-    })
+          : item.publishTime;
+      item.index = index;
+      item.caseMgt = [];
+      item.specpagination = { current: 1, total: 0, pageSize: 5 };
+      item.action = ['Edit', 'Delete'];
+      return item;
+    });
   },
-  [types.updatecaseMgtTableData] (state, { testCaseData, record }) {
-    let index = record.index
+  [types.UPDATE_CASEMGT_TABLE_DATA] (state, { testCaseData, record }) {
+    let index = record.index;
     if (testCaseData.length > 0) {
-      state.tableData[index].specpagination.total = testCaseData.length
+      state.tableData[index].specpagination.total = testCaseData.length;
       state.tableData[index].caseMgt = testCaseData.map(item => {
-        item.action = 'activate'
-        return item
-      })
+        item.action = 'activate';
+        return item;
+      });
     }
   },
-  [types.updateVNFTest] (state, testSpecSingleData) {
-    state.testSpecSingleData = testSpecSingleData
+  [types.UPDATE_VNF_TEST] (state, testSpecSingleData) {
+    state.testSpecSingleData = testSpecSingleData;
   },
-  [types.updateSUTOptions] (state, Options) {
-    state.SUTOptions = Options
+  [types.UPDATE_SUT_OPTIONS] (state, Options) {
+    state.SUTOptions = Options;
   },
-  [types.updateVNFOptions] (state, Options) {
-    state.VNFOptions = Options
+  [types.UPDATE_VNF_OPTIONS] (state, Options) {
+    state.VNFOptions = Options;
   },
-  [types.updateTestCaseList] (state, { list }) {
-    state.testCaseList = []
-    if (list) state.testCaseList = list
+  [types.UPDATE_TEST_CASE_LIST] (state, { list }) {
+    state.testCaseList = [];
+    if (list) state.testCaseList = list;
   },
-  [types.changeCaseCheckAll] (state, bool) {
-    state.testCaseCheckAll = bool
+  [types.CHANGE_CASE_CHECK_ALL] (state, bool) {
+    state.testCaseCheckAll = bool;
   },
-  [types.updateCheckboxGroup] (state, { testCaseData }) {
+  [types.UPDATE_CHECKBOX_GROUP] (state, { testCaseData }) {
     if (testCaseData) {
       state.initcheckboxGroup = testCaseData.map(item => {
-        return item.id
-      })
+        return item.id;
+      });
     } else {
-      state.initcheckboxGroup = []
+      state.initcheckboxGroup = [];
     }
     state.testCaseCheckAll =
-      state.initcheckboxGroup.length === state.testCaseList.length
+      state.initcheckboxGroup.length === state.testCaseList.length;
   },
-  [types.updatePagination] (state, Options) {
-    state.pagination = Options
+  [types.UPDATE_PAGINATION] (state, Options) {
+    state.pagination = Options;
   },
-  [types.updateSpecPagination] (state, { pagination, index }) {
-    state.tableData[index].specpagination = pagination
+  [types.UPDATE_SPEC_PAGINATION] (state, { pagination, index }) {
+    state.tableData[index].specpagination = pagination;
   },
-  [types.updateTestCaseTableLoading] (state, testCasetableLoading) {
-    state.testCasetableLoading = testCasetableLoading
+  [types.UPDATE_TEST_CASE_TABLE_LOADING] (state, testCasetableLoading) {
+    state.testCasetableLoading = testCasetableLoading;
   },
-  [types.updateVisible] (state, bool) {
-    state.visible = bool
+  [types.UPDATE_VISIBLE] (state, bool) {
+    state.visible = bool;
   }
-}
+};
 
-export default mutations
+export default mutations;

@@ -1,167 +1,167 @@
-import * as types from './mutations_types'
+import * as types from './mutations_types';
 
 const mutations = {
-  [types.setIsShow] (state, bool) {
-    state.isShow = bool
+  [types.SET_IS_SHOW] (state, bool) {
+    state.isShow = bool;
   },
-  [types.setCaseParamsIsShow] (state, bool) {
-    state.caseParamsIsShow = bool
+  [types.SET_CASE_PARAMS_IS_SHOW] (state, bool) {
+    state.caseParamsIsShow = bool;
   },
-  [types.updateExpandedRowKeys] (state, { key, expanded }) {
+  [types.UPDATE_EXPANDED_ROW_KEYS] (state, { key, expanded }) {
     if (expanded) {
       if (state.expandedRowKeys.indexOf(key) > -1) {
-        let index = state.expandedRowKeys.indexOf(key)
-        state.expandedRowKeys.splice(index, 1)
+        let index = state.expandedRowKeys.indexOf(key);
+        state.expandedRowKeys.splice(index, 1);
       }
-      state.expandedRowKeys.push(key)
+      state.expandedRowKeys.push(key);
     } else {
-      state.expandedRowKeys.splice(key, 1)
+      state.expandedRowKeys.splice(key, 1);
     }
   },
-  [types.updateDetailLoading] (state, detailLoading) {
-    state.detailLoading = detailLoading
+  [types.UPDATE_DETAIL_LOADING] (state, detailLoading) {
+    state.detailLoading = detailLoading;
   },
-  [types.updataSUTType] (state, { list }) {
+  [types.UPDATA_SUT_TYPE] (state, { list }) {
     if (list) {
-      state.SUTTypeList = list
+      state.SUTTypeList = list;
     } else {
-      state.getSpecification = false
-      state.specificationSpin = false
-      state.SUTNameList = []
-      state.specificationList = []
-      state.testCaseList = []
+      state.getSpecification = false;
+      state.specificationSpin = false;
+      state.SUTNameList = [];
+      state.specificationList = [];
+      state.testCaseList = [];
     }
   },
-  [types.updataSUTName] (state, { get, spin, list }) {
-    state.getSUTName = get
-    state.nameSpin = spin
+  [types.UPDATA_SUT_NAME] (state, { get, spin, list }) {
+    state.getSUTName = get;
+    state.nameSpin = spin;
     if (list) {
-      state.SUTNameList = list
+      state.SUTNameList = list;
     } else {
-      state.getSpecification = false
-      state.specificationSpin = false
-      state.specificationList = []
-      state.testCaseList = []
+      state.getSpecification = false;
+      state.specificationSpin = false;
+      state.specificationList = [];
+      state.testCaseList = [];
     }
   },
-  [types.updateFailDetail] (state, detail) {
-    state.testFailDetail = detail
+  [types.UPDATE_FAIL_DETAIL] (state, detail) {
+    state.testFailDetail = detail;
   },
-  [types.updateSpecification] (state, { get, spin, list }) {
-    state.getSpecification = get
-    state.specificationSpin = spin
+  [types.UPDATE_SPECIFICATION] (state, { get, spin, list }) {
+    state.getSpecification = get;
+    state.specificationSpin = spin;
     if (list) {
-      state.specificationList = list
+      state.specificationList = list;
     } else {
-      state.testCaseList = []
+      state.testCaseList = [];
     }
   },
-  [types.updateTestCaseList] (state, { spin, list }) {
-    state.testCaseSpin = spin
+  [types.UPDATE_TEST_CASE_LIST] (state, { spin, list }) {
+    state.testCaseSpin = spin;
     if (list) {
-      state.testCaseList = list
+      state.testCaseList = list;
     }
     state.testCaseCheckAll =
-      state.initcheckboxGroup.length === state.testCaseList.length
+      state.initcheckboxGroup.length === state.testCaseList.length;
   },
-  [types.clean] (state) {
-    state.getSUTName = false
-    state.SUTNameList = []
-    state.specificationList = []
-    state.getSpecification = false
-    state.specificationSpin = false
-    state.testCaseList = []
-    state.testCaseSpin = false
-    state.testJobSingleData = {}
-    state.initcheckboxGroup = []
-    state.VNFMOption = []
-    state.VIMOption = []
-    state.MANOOption = []
-    state.TestInstrumentOption = []
+  [types.CLEAN] (state) {
+    state.getSUTName = false;
+    state.SUTNameList = [];
+    state.specificationList = [];
+    state.getSpecification = false;
+    state.specificationSpin = false;
+    state.testCaseList = [];
+    state.testCaseSpin = false;
+    state.testJobSingleData = {};
+    state.initcheckboxGroup = [];
+    state.VNFMOption = [];
+    state.VIMOption = [];
+    state.MANOOption = [];
+    state.TestInstrumentOption = [];
   },
-  [types.clearexpandedRowKeys] (state) {
-    state.expandedRowKeys = []
+  [types.CLEAR_EXPANDED_ROW_KEYS] (state) {
+    state.expandedRowKeys = [];
   },
-  [types.updateTableData] (state, tableData) {
-    state.tableData = tableData
+  [types.UPDATE_TABLE_DATA] (state, tableData) {
+    state.tableData = tableData;
   },
-  [types.updateProgress] (state, { percent, status }) {
-    state.percent = percent
-    state.statusText = status
+  [types.UPDATE_PROGRESS] (state, { percent, status }) {
+    state.percent = percent;
+    state.statusText = status;
   },
-  [types.changeComponent] (state, bool) {
-    state.isJobDetail = bool
+  [types.CHANGE_COMPONENT] (state, bool) {
+    state.isJobDetail = bool;
   },
-  [types.changeCaseCheckAll] (state, bool) {
-    state.testCaseCheckAll = bool
+  [types.CHANGE_CASE_CHECK_ALL] (state, bool) {
+    state.testCaseCheckAll = bool;
   },
-  [types.setFilter] (state, { time, key, pageObj }) {
+  [types.SET_FILTER] (state, { time, key, pageObj }) {
     if (time !== undefined) {
-      state.createTime = time
+      state.createTime = time;
       if (state.pageNum !== 1) {
-        state.pageNum = 1
+        state.pageNum = 1;
       }
     }
     if (key !== 'All') {
-      state.searchKeyword = key
-      state.dashboardJumpStatus = 'All'
+      state.searchKeyword = key;
+      state.dashboardJumpStatus = 'All';
       if (state.pageNum !== 1) {
-        state.pageNum = 1
+        state.pageNum = 1;
       }
     }
     if (pageObj !== undefined) {
-      state.pageNum = pageObj.current
-      state.pageSize = pageObj.pageSize
+      state.pageNum = pageObj.current;
+      state.pageSize = pageObj.pageSize;
     }
   },
-  [types.updateTableItemData] (state, data) {
-    let index = data.index - 1
-    state.tableData.splice(index, 1, data)
+  [types.UPDATE_TABLE_ITEM_DATA] (state, data) {
+    let index = data.index - 1;
+    state.tableData.splice(index, 1, data);
   },
-  [types.updateDetailTestCase] (state, detailTestCase) {
+  [types.UPDATE_DETAIL_TEST_CASE] (state, detailTestCase) {
     state.detailTestCase = detailTestCase.map((item, index) => {
-      item.index = index
-      return item
-    })
+      item.index = index;
+      return item;
+    });
   },
-  [types.updateVNFMOption] (state, options) {
-    state.VNFMOption = options
+  [types.UPDATE_VNFM_OPTION] (state, options) {
+    state.VNFMOption = options;
   },
-  [types.updateVIMOption] (state, options) {
-    state.VIMOption = options
+  [types.UPDATE_VIM_OPTION] (state, options) {
+    state.VIMOption = options;
   },
-  [types.updateMANOOption] (state, options) {
-    state.MANOOption = options
+  [types.UPDATE_MANO_OPTION] (state, options) {
+    state.MANOOption = options;
   },
-  [types.updateTestInstrumentOption] (state, options) {
-    state.TestInstrumentOption = options
+  [types.UPDATE_TEST_INSTRUMENT_OPTION] (state, options) {
+    state.TestInstrumentOption = options;
   },
-  [types.updateExecutionStartTime] (state, options) {
-    state.executionStartTime = options
+  [types.UPDATE_EXECUTION_START_TIME] (state, options) {
+    state.executionStartTime = options;
   },
-  [types.updateTestCasePieData] (state, { doneCaseNum, failedCaseNum }) {
-    state.testCasePieData[0].y = doneCaseNum
-    state.testCasePieData[1].y = failedCaseNum
+  [types.UPDATE_TEST_CASE_PIE_DATA] (state, { doneCaseNum, failedCaseNum }) {
+    state.testCasePieData[0].y = doneCaseNum;
+    state.testCasePieData[1].y = failedCaseNum;
   },
-  [types.updateTestJobSingleData] (state, data) {
-    state.testJobSingleData = data
+  [types.UPDATE_TESTJOB_SINGLE_DATA] (state, data) {
+    state.testJobSingleData = data;
   },
-  [types.updateDashboardJumpStatus] (state, data) {
-    state.dashboardJumpStatus = data
+  [types.UPDATE_DASHBOARD_JUMP_STATUS] (state, data) {
+    state.dashboardJumpStatus = data;
   },
-  [types.clearSearchKeyword] (state, data) {
-    state.searchKeyword = data
+  [types.CLEAR_SEARCH_KEYWORD] (state, data) {
+    state.searchKeyword = data;
   },
-  [types.updateInitcheckboxGroup] (state, data) {
-    state.initcheckboxGroup = data
+  [types.UPDATE_INIT_CHECKBOX_GROUP] (state, data) {
+    state.initcheckboxGroup = data;
   },
-  [types.updateCaseParamsData] (state, data) {
-    state.caseParamsData = data
+  [types.UPDATE_CASE_PARAMS_DATA] (state, data) {
+    state.caseParamsData = data;
   },
-  [types.updatecaseChildTableData] (state, { testCaseChildData, record }) {
-    let index = record.index
-    state.detailTestCase[index].caseMgt = testCaseChildData
+  [types.UPDATE_CASE_CHILD_TABLE_DATA] (state, { testCaseChildData, record }) {
+    let index = record.index;
+    state.detailTestCase[index].caseMgt = testCaseChildData;
   }
-}
+};
 
-export  default mutations
+export  default mutations;
