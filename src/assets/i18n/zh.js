@@ -1,18 +1,18 @@
 export const T = {
-    "lang": "EN",
-    "LOGIN": "登录",
+    lang: "EN",
+    LOGIN: "登录",
     "Log in": "登录",
     "Change E-mail": "修改邮箱",
     "Change passport": "修改密码",
     "Log out": "退出登录",
-    "CreateTestJob": "测试任务创建",
+    CreateTestJob: "测试任务创建",
     //header
     //sidebar
-    "Dashboard": "首页",
+    Dashboard: "首页",
     "Test Objects MGT": "测试对象管理",
     "Test SUT MGT": "VNF测试对象管理",
     "Test ENV MGT": "测试环境管理",
-    "VIM/VNFM ENV MGT": "VIM/VNFM环境管理",
+    "VIM/VNFM/MANO ENV MGT": "VIM/VNFM/MANO环境管理",
     "Test Instrument MGT": "测试管理",
     "Instrument MGS MGT": "测试仪表管理",
     "Instrument Package MGT": "测试仪表VNF/PNF包管理",
@@ -26,5 +26,5 @@ export const T = {
     "Publish ORG": "发布组织",
     "Publish Time": "发布时间",
     //Job Detail
-    "Failed Reason": "粘贴成功！请在剪贴板查看错误原因"
-}
+    "Failed Reason": "粘贴成功！请在剪贴板查看错误原因",
+};
