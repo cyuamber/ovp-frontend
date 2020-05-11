@@ -263,11 +263,13 @@ export default {
       }
     },
     initcheckboxGroup(val) {
-      this.form.setFieldsValue({
-        checkboxGroup: val
-      });
-      if (val.length === this.testCaseList.length) {
-        this.changeCaseCheckAll(true);
+      if(this.visible){
+          this.form.setFieldsValue({
+              checkboxGroup: val
+          });
+          if (val.length === this.testCaseList.length) {
+              this.changeCaseCheckAll(true);
+          }
       }
     }
   },

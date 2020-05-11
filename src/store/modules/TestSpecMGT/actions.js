@@ -47,7 +47,7 @@ const actions = {
       }
     );
   },
-  getTestCaseTableData ({ dispatch, commit, state }, { record, expanded }) {
+  getTestCaseTableData ({ dispatch, commit, state }, { record, expanded, editModelShow = false }) {
     commit(types.UPDATE_TEST_CASE_TABLE_LOADING, true);
     state.dropdownSpec[record.index] = Object.assign({}, record);
     state.dropdownSpecIndex = record.index;
@@ -55,7 +55,7 @@ const actions = {
       res => {
         if (res.code === 200) {
           commit(types.UPDATE_CASEMGT_TABLE_DATA, { testCaseData: res.body, record });
-          if (!expanded) {
+          if (!expanded && editModelShow === true) {
             commit(types.UPDATE_CHECKBOX_GROUP, { testCaseData: res.body });
           }
           commit(types.UPDATE_TEST_CASE_TABLE_LOADING, false);
@@ -115,7 +115,8 @@ const actions = {
           if (Object.keys(testSpecSingleData).length > 0) {
             dispatch('getTestCaseTableData', {
               record: testSpecSingleData,
-              expanded: false
+              expanded: false,
+              editModelShow: true
             });
           }
         } else {
