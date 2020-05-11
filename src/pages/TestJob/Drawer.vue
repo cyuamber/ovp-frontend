@@ -114,30 +114,44 @@
       <a-spin :spinning="testCaseSpin" tip="loading...">
         <div class="form__spin-content">
           <a-form-item v-if="testCaseList.length !== 0">
-            <h3>Test Case List:</h3>
-            <a-checkbox @change="onCheckAllChange" :checked="testCaseCheckAll">Check all</a-checkbox>
+            <h3 class="form__checkboxtitle">
+              <span>Test Case List:</span>
+              <a-checkbox @change="onCheckAllChange" :checked="testCaseCheckAll">Check all</a-checkbox>
+            </h3>
             <a-checkbox-group
               class="form__checkboxgroup--margin"
               v-decorator="['checkboxGroup', { rules: [{ required: true, message: 'At least one test case to choose'}],initialValue:initcheckboxGroup}]"
               @change="onChange"
             >
-              <a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card--padding">
-                <a-checkbox
-                  :value="item.id"
-                  :checked="initcheckboxGroup.includes(item.id)"
-                  class="form__checkbox--size"
-                />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
-                <a-tooltip placement="topLeft" :title="item.description">
-                  <a-icon type="info-circle" class="form__info-cursor" />
-                </a-tooltip>
-                <a-icon
-                  v-if="initcheckboxGroup.includes(item.id)"
-                  type="unordered-list"
-                  class="form__info-cursor"
-                  @click="(() => caseParamsEdit(item))"
-                />
-              </a-card-grid>
+              <a-list
+                      itemLayout="vertical"
+                      :pagination="caseListPagination"
+                      :dataSource="testCaseList"
+                      bordered
+              >
+                <a-list-item
+                      slot="renderItem"
+                      slot-scope="item"
+                      :key="item.id"
+                      class="form__card--padding"
+              >
+                  <a-checkbox
+                    :value="item.id"
+                    :checked="initcheckboxGroup.includes(item.id)"
+                    class="form__checkbox--size"
+                  />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}
+                  <a-tooltip placement="topLeft" :title="item.description">
+                    <a-icon type="info-circle" class="form__info-cursor" />
+                  </a-tooltip>
+                  <a-icon
+                    v-if="initcheckboxGroup.includes(item.id)"
+                    type="unordered-list"
+                    class="form__info-cursor"
+                    @click="(() => caseParamsEdit(item))"
+                  />
+              </a-list-item>
+              </a-list>
             </a-checkbox-group>
             <CaseParams :isEdit="isEdit" />
           </a-form-item>
@@ -196,7 +210,15 @@ export default {
         name: null,
         code: null
       },
-      count: 0
+      count: 0,
+      caseListPagination: {
+          onChange: page => {
+              console.log(page);
+          },
+          pageSize: 5,
+          size: "small",
+          showLessItems: true
+      }
     };
   },
   computed: {
@@ -346,7 +368,6 @@ export default {
         : this.testCaseList.map(item => {
             return item.id;
           });
-      console.log(e.target.checked, "e.target.checked-------");
       this.updateInitcheckboxGroup(caseCheckedList);
     },
     handleSubmit() {
@@ -501,7 +522,7 @@ export default {
     height: 80px;
   }
   .form__card--padding {
-    width: 100%;
+    /*width: 100%;*/
     padding: 14px;
     text-indent: 0.5em;
     .form__info-cursor {
@@ -509,9 +530,12 @@ export default {
       margin-right: 10px;
     }
   }
+  .form__checkboxtitle>span{
+    margin-right: 15px;
+  }
   .form__checkboxgroup--margin {
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
   }
 }
 .footer {
