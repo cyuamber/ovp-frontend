@@ -6,3 +6,4 @@ export const UPDATE_REGION_ID_OPTIONS = 'updateRegionIdOptions';
 export const UPDATE_CLOUD_TYPE_OPTIONS = 'updateCloudTypeOptions';
 export const SET_INIT_VALUES = 'setInitValues';
 export const UPDATE_MANO_TYPE_OPTIONS = 'updateMANOTypeOptions';
+export const EDIT_STATUS = "updateEdit";

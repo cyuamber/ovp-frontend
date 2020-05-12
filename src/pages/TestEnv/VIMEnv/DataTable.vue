@@ -84,14 +84,15 @@ export default {
       "changeTab",
       "updateVisible",
       "setFilterItem",
-      "setInitValues"
+      "setInitValues",
+      "updateEdit"
     ]),
     ...mapActions("testENV", ["setParams", "deleteData"]),
     showEditOrDeleteModal(item, record) {
       if (item === "Edit") {
         this.setInitValues({ record, item });
         this.updateVisible(true);
-        this.isEdit = true;
+        this.updateEdit(true);
       } else {
         this.$confirm({
           title: "Are you sure delete this task?",

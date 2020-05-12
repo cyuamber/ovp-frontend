@@ -6,7 +6,7 @@
     </a-tabs>
     <Toolbar :tableType="currentTab" />
     <DataTable :tableType="currentTab" />
-    <CreateOrEditModal :isEdit="isEdit" />
+    <CreateOrEditModal :isEdit="editStatus" />
   </div>
 </template>
 
@@ -28,7 +28,8 @@ export default {
   computed: {
     ...mapState({
       loadingMessage: state => state.loading.loadingMessage,
-      currentTab: state => state.testENV.currentTab
+      currentTab: state => state.testENV.currentTab,
+      editStatus: state => state.testENV.editStatus,
     })
   },
   components: {

@@ -75,6 +75,9 @@ const mutations = {
     [types.UPDATE_MANO_TYPE_OPTIONS](state, { CloudTypeList }) {
         state.MANOTypeOptions = CloudTypeList;
     },
+    [types.EDIT_STATUS](state, bool) {
+        state.editStatus = bool;
+    },
 };
 
 export default mutations;

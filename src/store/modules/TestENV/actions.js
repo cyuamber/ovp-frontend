@@ -151,9 +151,9 @@ const actions = {
         });
         // Simulation request
     },
-    loginVIN({ state, dispatch }, { isEdit, data }) {
-        if (isEdit) data.id = state.initValues.id;
-        let url = isEdit
+    loginVIN({ state, dispatch }, { data }) {
+        if (state.editStatus) data.id = state.initValues.id;
+        let url = state.editStatus
             ? state.currentTab === "VIM ENV"
                 ? API.vimVnfmMgt.vimEnvMgtUpdate
                 : state.currentTab === "VNFM ENV"
@@ -164,7 +164,7 @@ const actions = {
             : state.currentTab === "VNFM ENV"
             ? API.vimVnfmMgt.vnfmEnvMgtInsert
             : API.vimVnfmMgt.manoMgtInsert;
-        let axiosType = isEdit ? axiosput : axiospost;
+        let axiosType = state.editStatus ? axiosput : axiospost;
         axiosType(url, data).then(
             (res) => {
                 if (res.code === 200) {
@@ -172,7 +172,7 @@ const actions = {
                         "loading/showLoading",
                         {
                             type: "success",
-                            toast: this.isEdit
+                            toast: state.editStatus
                                 ? "Successfully updated"
                                 : "Has been added successfully",
                         },
