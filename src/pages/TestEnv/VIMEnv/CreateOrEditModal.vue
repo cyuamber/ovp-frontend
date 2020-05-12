@@ -161,7 +161,7 @@ import {
   MANOForm,
   MANOONAPForm,
   customProfiles
-} from "../../../const/constant";
+} from "./constant";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {

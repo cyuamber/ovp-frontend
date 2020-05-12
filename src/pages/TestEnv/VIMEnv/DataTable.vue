@@ -59,7 +59,7 @@ import {
   testEnvVIMColumns,
   testEvnVNFMColumns,
   testMANOColumns
-} from "../../../const/constant";
+} from "./constant";
 export default {
   props: ["tableType"],
   name: "DataTable",
