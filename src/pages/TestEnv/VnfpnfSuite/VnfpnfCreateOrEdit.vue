@@ -162,7 +162,7 @@ export default {
             Version: this.SuiteSingleData.version,
             manage: this.SuiteSingleData.instrumentMgs.id
           });
-        } else if (!this.isEdit && this.count > 1) {
+        } else if (this.VNFOptions.length!==0 && !this.isEdit && this.count > 1) {
           this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
         }
       }
@@ -171,7 +171,7 @@ export default {
       if (val.length) {
         this.spin = false;
       }
-      if (val.length && !this.isEdit) {
+      if (val.length !== 0 && !this.isEdit) {
         this.initNVFTypeValue = val[0].code;
       }
     },
@@ -187,6 +187,9 @@ export default {
         this.initManageSystemValue = val.instrumentMgs.id;
         this.spin = false;
       }
+    },
+    currentTab() {
+        this.initNVFTypeValue = null
     }
   },
   methods: {
