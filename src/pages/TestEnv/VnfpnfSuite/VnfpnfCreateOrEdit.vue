@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    v-bind:title="this.isEdit ? 'Edit ' + (currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (currentTab === 101?'VNF':'PNF') + 'TT'"
+    v-bind:title="this.isEdit ? 'Edit ' + (currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (currentTab === 101?'VNF':'PNF') + ' TT'"
     v-model="visible"
     :footer="null"
     @cancel="handleCancel"
@@ -101,9 +101,9 @@
   </a-modal>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import { axiosCancelToken } from "../../utils/http";
+import { axiosCancelToken } from "../../../utils/http";
 export default {
   props: ["isEdit"],
   data() {
@@ -196,7 +196,11 @@ export default {
       "uploadVNFFile",
       "createOrEditTestMeter"
     ]),
-    ...mapMutations("VnfpnfSuite", ["updateVNFTest", "updateVisible"]),
+    ...mapMutations("VnfpnfSuite", [
+      "updateVNFTest",
+      "updateVisible",
+      "updateVNFOptions"
+    ]),
     handleChange(info) {
       this.editUploadtextShow = false;
       this.uploadAliasFilename = info.file.response
@@ -276,9 +280,9 @@ export default {
     },
     submitFormData(data) {
       this.createOrEditTestMeter({
-          isEdit: this.isEdit,
-          data,
-          message: this.$message
+        isEdit: this.isEdit,
+        data,
+        message: this.$message.success("Sumbit successfully")
       }).then(
         () => {
           this.updateVisible(false);
