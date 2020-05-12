@@ -13,7 +13,7 @@ import Dashboard from "../pages/Dashboard/Dashboard.vue";
 //Test Objects MGT
 import TestSUT from "../pages/TestObject/TestSUT.vue";
 //Test ENV MGT
-import VimEnv from "../pages/TestEnv/VimEnv.vue";
+import VimEnv from "../pages/TestEnv/VIMEnv/VimEnv.vue";
 //Test MGT
 import TestInstrument from "../pages/TestEnv/TestInstrument.vue";
 import VnfpnfSuite from "../pages/TestEnv/VnfpnfSuite.vue";
