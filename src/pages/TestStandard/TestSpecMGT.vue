@@ -147,7 +147,9 @@ export default {
       this.getTableData(obj);
     },
     caseMgtTableShow(expanded, record) {
-      this.getTestCaseTableData({ record, expanded });
+      if(expanded){
+          this.getTestCaseTableData({ record, expanded });
+      }
       if (!expanded) {
         let pagination = { current: 1, total: 0, pageSize: 5 };
         this.getSpecPagination({ pagination, index: record.index });

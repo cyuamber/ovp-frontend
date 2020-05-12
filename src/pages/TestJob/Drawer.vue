@@ -23,7 +23,7 @@
         <a-textarea
           v-if="item === formList[1]"
           v-decorator="[keyList[i],{ rules: [{ required: true, message: item +' is required'}],initialValue:testJobSingleData.remark}]"
-          :autosize="{minRows: 3, maxRows: 10}"
+          :auto-size="{minRows: 3, maxRows: 10}"
         />
         <a-select
           v-else-if="item === 'SUT Type'"
