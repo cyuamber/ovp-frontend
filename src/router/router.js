@@ -11,7 +11,7 @@ import Layout from "../components/layout/layout.vue";
 //Dashboard
 import Dashboard from "../pages/Dashboard/Dashboard.vue";
 //Test Objects MGT
-import TestSUT from "../pages/TestObject/TestSUT.vue";
+import TestSUT from "../pages/TestObject/TestSUT/TestSUT.vue";
 //Test ENV MGT
 import VimEnv from "../pages/TestEnv/VIMEnv/VimEnv.vue";
 //Test MGT

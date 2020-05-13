@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Search from "../../components/Search/Search";
+import Search from "../../../components/Search/Search";
 import { TestSUTTabs, TestSUTColumns } from "./constant";
 import { mapState, mapActions, mapMutations } from "vuex";
 

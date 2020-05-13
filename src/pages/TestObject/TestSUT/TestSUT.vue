@@ -15,7 +15,7 @@ import SUTCreateOrEdit from "./SUTCreateOrEdit";
 import Toolbar from "./Toolbar";
 import DataTable from "./DataTable";
 import { TestSUTTabs } from "./constant";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../../components/Loading/Loading";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
