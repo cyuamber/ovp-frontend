@@ -1,12 +1,19 @@
 <template>
   <div class="components-input-demo-presuffix">
-    <a-input placeholder="Input Name" v-model="keyword" class="search" @keyup.enter="searchTypeID">
+    <a-input
+      placeholder="Input Name"
+      v-model="keyword"
+      class="search"
+      @change="setSearchWord"
+      @keyup.enter="searchTypeID"
+    >
       <a-icon slot="prefix" type="search" />
     </a-input>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
+import { mapState, mapMutations } from "vuex";
 import { axiosget } from "../../utils/http";
 export default {
   props: ["currentPage"],
@@ -18,7 +25,21 @@ export default {
       event: ""
     };
   },
+  computed: {
+    ...mapState({
+      searchKeyword: state => state.searching.keyword
+    })
+  },
+  watch: {
+    searchKeyword(val) {
+      this.keyword = val;
+    }
+  },
   methods: {
+    ...mapMutations("searching", ["setKeyword"]),
+    setSearchWord(e) {
+      this.setKeyword(e.target.value);
+    },
     searchTypeID() {
       if (
         this.currentPage === "TestSUT" ||

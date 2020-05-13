@@ -1,5 +1,5 @@
-import { axiosget } from "../../utils/http";
-import API from "../../const/apis";
+import { axiosget } from "../../../utils/http";
+import API from "../../../const/apis";
 const router = {
     state: {
         breadcrumbArr: [],

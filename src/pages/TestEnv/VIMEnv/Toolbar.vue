@@ -5,6 +5,7 @@
       class="tab-content__button"
       :placeholder="tableType === 'VIM ENV'?'Cloud Type':'Name'"
       @keyup.enter="searchTypeID"
+      @change="setSearchWord"
       v-model="keyword"
     >
       <a-icon slot="prefix" type="search" />
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   props: ["tableType"],
   name: "Toolbar",
@@ -28,16 +29,30 @@ export default {
       keyword: ""
     };
   },
+  computed: {
+    ...mapState({
+      searchKeyword: state => state.searching.keyword
+    })
+  },
+  watch: {
+    searchKeyword(val) {
+      this.keyword = val;
+    }
+  },
   methods: {
     ...mapMutations("testENV", [
       "updateVisible",
       "setFilterItem",
       "updateEdit"
     ]),
+    ...mapMutations("searching", ["setKeyword"]),
     ...mapActions("testENV", ["setParams"]),
     handleRigister() {
       this.updateVisible(true);
       this.updateEdit(false);
+    },
+    setSearchWord(e) {
+      this.setKeyword(e.target.value);
     },
     searchTypeID() {
       this.setFilterItem({

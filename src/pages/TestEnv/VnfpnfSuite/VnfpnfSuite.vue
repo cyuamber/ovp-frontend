@@ -61,11 +61,13 @@ export default {
   methods: {
     ...mapActions("VnfpnfSuite", ["getTableData", "getVNFOptions"]),
     ...mapMutations("VnfpnfSuite", ["changeTab"]),
+    ...mapMutations("searching", ["setKeyword"]),
     initVnfPnfSuiteTable() {
       this.getVNFOptions();
       this.getTableData({});
     },
     handleTabsChanges(key) {
+      this.setKeyword("");
       this.changeTab(key);
       this.getTableData({});
     }

@@ -29,7 +29,6 @@ export default {
     },
     keyword: {
       get() {
-        console.log(this.$store.state.testSUT.keyword, "===>get keyword");
         return this.$store.state.testSUT.keyword;
       },
       set(val) {

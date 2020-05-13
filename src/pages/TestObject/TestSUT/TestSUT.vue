@@ -30,17 +30,7 @@ export default {
       loadingMessage: state => state.loading.loadingMessage,
       currentTab: state => state.testSUT.currentTab,
       editStatus: state => state.testSUT.editStatus
-    }),
-    keyword: {
-      get() {
-        return this.$store.state.testSUT.keyword;
-      },
-      set(val) {
-        if (val) {
-          this.$store.state.testSUT.keyword = "";
-        }
-      }
-    }
+    })
   },
   watch: {
     currentTab(val) {
@@ -64,6 +54,7 @@ export default {
   methods: {
     ...mapActions("testSUT", ["getTableData", "getVNFOptions"]),
     ...mapMutations("testSUT", ["changeTab"]),
+    ...mapMutations("searching", ["setKeyword"]),
     initTestSUTeTable() {
       this.getVNFOptions();
       let paramsObj = {};
@@ -71,7 +62,7 @@ export default {
     },
     handleTabsChange(key) {
       this.changeTab(key);
-      this.keyword = "";
+      this.setKeyword("");
       let paramsObj = {};
       this.getTableData({ paramsObj, isFilter: false });
     }

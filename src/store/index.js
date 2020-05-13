@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import login from "./modules/login";
-import router from "./modules/router";
-import loading from "./modules/loading";
+import login from "./modules/components/login";
+import router from "./modules/components/router";
+import loading from "./modules/components/loading";
+import searching from "./modules/components/searching";
 import testInstrument from "./modules/testInstrument";
 import testSpecMGT from "./modules/TestSpecMGT";
 import VnfpnfSuite from "./modules/VnfpnfSuite";
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
         login,
         router,
         loading,
+        searching,
         testInstrument,
         testSpecMGT,
         VnfpnfSuite,
