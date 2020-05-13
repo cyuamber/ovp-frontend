@@ -29,7 +29,7 @@ export default {
     ...mapState({
       loadingMessage: state => state.loading.loadingMessage,
       currentTab: state => state.testENV.currentTab,
-      editStatus: state => state.testENV.editStatus,
+      editStatus: state => state.testENV.editStatus
     })
   },
   components: {

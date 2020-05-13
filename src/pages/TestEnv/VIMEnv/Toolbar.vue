@@ -29,11 +29,15 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("testENV", ["updateVisible", "setFilterItem"]),
+    ...mapMutations("testENV", [
+      "updateVisible",
+      "setFilterItem",
+      "updateEdit"
+    ]),
     ...mapActions("testENV", ["setParams"]),
     handleRigister() {
       this.updateVisible(true);
-      this.isEdit = false;
+      this.updateEdit(false);
     },
     searchTypeID() {
       this.setFilterItem({

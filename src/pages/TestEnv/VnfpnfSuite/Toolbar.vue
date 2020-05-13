@@ -1,6 +1,6 @@
 <template>
   <div class="top">
-    <a-button type="primary" @click="handleCreatePackage">Create {{PackageName}} TT</a-button>
+    <a-button type="primary" @click="handleCreatePackage">Create {{packageName}} TT</a-button>
     <Search class="search" @VNFSuiteSearch="VNFSuiteSearch" :currentPage="currentPage" />
     <a-date-picker class="calendar" @change="handleTimeChange" placeholder="Select date" />
   </div>
@@ -11,7 +11,6 @@ import Search from "../../../components/Search/Search";
 import { PackageMGTTabs } from "./constant";
 import { mapState, mapActions, mapMutations } from "vuex";
 export default {
-  props: ["tableType"],
   name: "Toolbar",
   components: { Search },
   data() {
@@ -25,7 +24,7 @@ export default {
     ...mapState({
       currentTab: state => state.VnfpnfSuite.currentTab
     }),
-    PackageName: function() {
+    packageName: function() {
       return PackageMGTTabs.filter(item => item.val === this.currentTab)[0].key;
     }
   },
