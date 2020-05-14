@@ -16,13 +16,13 @@ export default {
   data() {
     return {
       currentPage: "VNF/PNFSuiteMGT",
-      createTime: "",
-      keyword: ""
+      createTime: ""
     };
   },
   computed: {
     ...mapState({
-      currentTab: state => state.VnfpnfSuite.currentTab
+      currentTab: state => state.VnfpnfSuite.currentTab,
+      searchKeyword: state => state.searching.keyword
     }),
     packageName: function() {
       return PackageMGTTabs.filter(item => item.val === this.currentTab)[0].key;
@@ -47,12 +47,15 @@ export default {
       this.createTime = d;
       this.VNFSuiteSearch();
     },
-    VNFSuiteSearch(keyword, isSearch) {
-      let obj = { flag: this.currentTab };
-      if (isSearch) this.keyword = keyword;
-      if (!(keyword === "" && this.createTime === "")) {
-        obj = { name: this.keyword, createTime: this.createTime };
-      }
+    VNFSuiteSearch() {
+      let obj = Object.assign(
+        {},
+        {
+          flag: this.currentTab,
+          name: this.searchKeyword,
+          createTime: this.createTime
+        }
+      );
       this.clearPagination();
       this.getTableData(obj);
     }
