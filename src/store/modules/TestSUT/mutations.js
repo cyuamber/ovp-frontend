@@ -50,13 +50,15 @@ const mutations = {
             if (state.pageNum !== 1) {
                 state.pageNum = 1;
             }
-        } else if (key !== undefined) {
+        }
+        if (key !== undefined) {
             state.keyword = key;
             // Jump to the first page after adding search criteria
             if (state.pageNum !== 1) {
                 state.pageNum = 1;
             }
-        } else if (pageObj !== undefined) {
+        }
+        if (pageObj !== undefined) {
             state.pageNum = pageObj.current;
             state.pageSize = pageObj.pageSize;
         }

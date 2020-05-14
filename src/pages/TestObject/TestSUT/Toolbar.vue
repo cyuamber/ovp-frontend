@@ -22,7 +22,8 @@ export default {
   },
   computed: {
     ...mapState({
-      currentTab: state => state.testSUT.currentTab
+      currentTab: state => state.testSUT.currentTab,
+      keyword: state => state.searching.keyword
     }),
     SUTName: function() {
       return TestSUTTabs.filter(item => item.val === this.currentTab)[0].key;
@@ -61,7 +62,7 @@ export default {
     },
     // Filter by creating time
     onChange(date, d) {
-      this.setFilterItem({ time: d });
+      this.setFilterItem({ time: d, key: this.$store.state.searching.keyword });
       this.setParams(true);
     }
   }

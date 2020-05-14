@@ -162,7 +162,11 @@ export default {
             Version: this.SuiteSingleData.version,
             manage: this.SuiteSingleData.instrumentMgs.id
           });
-        } else if (this.VNFOptions.length!==0 && !this.isEdit && this.count > 1) {
+        } else if (
+          this.VNFOptions.length !== 0 &&
+          !this.isEdit &&
+          this.count > 1
+        ) {
           this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
         }
       }
@@ -189,7 +193,7 @@ export default {
       }
     },
     currentTab() {
-        this.initNVFTypeValue = null
+      this.initNVFTypeValue = null;
     }
   },
   methods: {
@@ -326,5 +330,8 @@ export default {
 .form__uploadtext-height {
   display: inline-block;
   line-height: 20px;
+}
+.ant-modal-body {
+  background: chartreuse;
 }
 </style>
