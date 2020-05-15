@@ -21,6 +21,7 @@
         :loading="tableLoading"
         rowKey="id"
         size="default"
+        bordered
         :pagination="pagination"
         @change="handleTableChange"
         @expand="caseMgtTableShow"
@@ -44,18 +45,12 @@
           rowKey="id"
           size="default"
           :pagination="record.specpagination"
-          @change="
-                        (pagination) =>
-                            handleSpecTableChange(pagination, record.index)
-                    "
+          @change="(pagination) =>handleSpecTableChange(pagination, record.index)"
         >
           <span slot="status" slot-scope="status">
             <span
               class="test-case__showState"
-              :style="{
-                                backgroundColor:
-                                    status === 'enable' ? '#7ED321' : '#d0021b',
-                            }"
+              :style="{ backgroundColor:status === 'enable' ? '#7ED321' : '#d0021b' }"
               :title="status === 'enable' ? 'enable' : 'disable'"
             ></span>
           </span>
@@ -75,7 +70,7 @@
 </template>
 <script>
 import Search from "../../components/Search/Search";
-import { TestSpecColumns, TestCaseColumns } from "../../const/constant";
+import { TestSpecColumns, TestCaseColumns } from "./constant";
 import { mapState, mapActions, mapMutations } from "vuex";
 import Loading from "../../components/Loading/Loading";
 import TestSpecMGTAddOrEdit from "./TestSpecMGTAddOrEdit";
@@ -147,8 +142,8 @@ export default {
       this.getTableData(obj);
     },
     caseMgtTableShow(expanded, record) {
-      if(expanded){
-          this.getTestCaseTableData({ record, expanded });
+      if (expanded) {
+        this.getTestCaseTableData({ record, expanded });
       }
       if (!expanded) {
         let pagination = { current: 1, total: 0, pageSize: 5 };
@@ -238,6 +233,7 @@ export default {
     border-radius: 12px;
   }
   .test-case__table {
+    margin: auto;
     .test-case__showState {
       display: block;
       margin: 0 auto;

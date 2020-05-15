@@ -48,8 +48,8 @@
 </template>
 
 <script>
-import { testJobColumns } from "../../const/constant.js";
-import { statusOptions } from "./constants";
+// import { testJobColumns } from "../../const/constant.js";
+import { statusOptions, testJobColumns } from "./constants";
 import Loading from "../../components/Loading/Loading";
 import Drawer from "./Drawer";
 import { mapState, mapActions, mapMutations } from "vuex";

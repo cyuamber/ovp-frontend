@@ -115,15 +115,16 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import testCasePie from "./testCasePie";
 import Loading from "../../components/Loading/Loading";
 import {
   testJobColumns,
   testJobDetailCaseListColumns,
   testJobDetailCaseChildColumns
-} from "../../const/constant";
+} from "./constants";
 import { mapState, mapMutations, mapActions } from "vuex";
+
 export default {
   name: "JobDetail",
   components: { testCasePie, Loading },
@@ -137,7 +138,7 @@ export default {
       progressTimer: "",
       caseChildlistTimer: [],
       progressStatus: "normal",
-      sutvalidLind: "http://192.168.235.16:8080/onapui/vnfmarket"
+      sutvalidLind: "http://192.168.235.14:8080/onapui/vnfmarket"
     };
   },
   computed: {
@@ -390,10 +391,10 @@ export default {
         margin-top: 5px;
         border-radius: 50%;
       }
-      .detailtestcase-table{
-        .ant-spin-nested-loading{
-          .ant-pagination{
-            padding: 0 16px!important;
+      .detailtestcase-table {
+        .ant-spin-nested-loading {
+          .ant-pagination {
+            padding: 0 16px !important;
           }
         }
       }

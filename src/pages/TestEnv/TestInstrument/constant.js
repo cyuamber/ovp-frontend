@@ -1,14 +1,4 @@
-export const PackageMGTTabs = [
-    {
-        key: "VNF",
-        val: 101,
-    },
-    {
-        key: "PNF",
-        val: 102,
-    },
-];
-export const VnfpnfSuiteColumns = [
+export const TestInsrigisterColumns = [
     {
         title: "ID",
         dataIndex: "id",
@@ -22,12 +12,8 @@ export const VnfpnfSuiteColumns = [
         dataIndex: "vendor",
     },
     {
-        title: "Version",
-        dataIndex: "version",
-    },
-    {
-        title: "Type",
-        dataIndex: "typeCH.dictLabel",
+        title: "Mnt Address",
+        dataIndex: "mntAddress",
     },
     {
         title: "Create Time",
@@ -36,7 +22,7 @@ export const VnfpnfSuiteColumns = [
     {
         title: "Action",
         dataIndex: "action",
-        width: 300,
+        width: 180,
         scopedSlots: { customRender: "action" },
     },
 ];

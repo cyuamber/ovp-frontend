@@ -124,17 +124,17 @@
               @change="onChange"
             >
               <a-list
-                      itemLayout="vertical"
-                      :pagination="caseListPagination"
-                      :dataSource="testCaseList"
-                      bordered
+                itemLayout="vertical"
+                :pagination="caseListPagination"
+                :dataSource="testCaseList"
+                bordered
               >
                 <a-list-item
-                      slot="renderItem"
-                      slot-scope="item"
-                      :key="item.id"
-                      class="form__card--padding"
-              >
+                  slot="renderItem"
+                  slot-scope="item"
+                  :key="item.id"
+                  class="form__card--padding"
+                >
                   <a-checkbox
                     :value="item.id"
                     :checked="initcheckboxGroup.includes(item.id)"
@@ -150,7 +150,7 @@
                     class="form__info-cursor"
                     @click="(() => caseParamsEdit(item))"
                   />
-              </a-list-item>
+                </a-list-item>
               </a-list>
             </a-checkbox-group>
             <CaseParams :isEdit="isEdit" />
@@ -165,7 +165,7 @@
   </a-drawer>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import { formList } from "./constants";
 import CaseParams from "./CaseParams";
@@ -212,12 +212,12 @@ export default {
       },
       count: 0,
       caseListPagination: {
-          onChange: page => {
-              console.log(page);
-          },
-          pageSize: 5,
-          size: "small",
-          showLessItems: true
+        onChange: page => {
+          console.log(page);
+        },
+        pageSize: 5,
+        size: "small",
+        showLessItems: true
       }
     };
   },
@@ -530,7 +530,7 @@ export default {
       margin-right: 10px;
     }
   }
-  .form__checkboxtitle>span{
+  .form__checkboxtitle > span {
     margin-right: 15px;
   }
   .form__checkboxgroup--margin {

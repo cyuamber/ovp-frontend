@@ -1,4 +1,4 @@
-const customProfiles = [
+export const customProfiles = [
     {
         title: "key",
         dataIndex: "key",
@@ -18,7 +18,7 @@ const customProfiles = [
         width: "5%",
     },
 ];
-const VIMForm = [
+export const VIMForm = [
     {
         title: "Cloud Owner",
         key: "cloudOwner",
@@ -64,7 +64,7 @@ const VIMForm = [
         key: "defaultTenant",
     },
 ];
-const VNFMForm = [
+export const VNFMForm = [
     {
         title: "Name",
         key: "name",
@@ -102,7 +102,7 @@ const VNFMForm = [
         key: "password",
     },
 ];
-const MANOForm = [
+export const MANOForm = [
     {
         title: "Name",
         key: "name",
@@ -120,7 +120,7 @@ const MANOForm = [
         key: "manoType",
     },
 ];
-const MANOONAPForm = [
+export const MANOONAPForm = [
     {
         key: "aai:host-url:",
         value: "aaiHostUrl",
@@ -143,7 +143,7 @@ const MANOONAPForm = [
     },
 ];
 
-const testEnvVIMColumns = [
+export const testEnvVIMColumns = [
     {
         title: "ID",
         dataIndex: "id",
@@ -203,7 +203,7 @@ const testEnvVIMColumns = [
         width: 180,
     },
 ];
-const testEvnVNFMColumns = [
+export const testEvnVNFMColumns = [
     {
         title: "ID",
         dataIndex: "id",
@@ -252,7 +252,7 @@ const testEvnVNFMColumns = [
         fixed: "right",
     },
 ];
-const testMANOColumns = [
+export const testMANOColumns = [
     {
         title: "ID",
         dataIndex: "id",
@@ -292,14 +292,3 @@ const testMANOColumns = [
         width: 180,
     },
 ];
-
-export {
-    testEnvVIMColumns,
-    testEvnVNFMColumns,
-    testMANOColumns,
-    VIMForm,
-    VNFMForm,
-    MANOForm,
-    MANOONAPForm,
-    customProfiles,
-};

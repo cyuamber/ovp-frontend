@@ -38,10 +38,10 @@
 </template>
 
 <script>
-import Search from "../../components/Search/Search";
-import { TestInsrigisterColumns } from "../../const/constant";
+import Search from "../../../components/Search/Search";
+import { TestInsrigisterColumns } from "./constant";
 import RigisterOrEdit from "./TestInsrigisterOrEdit";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../../components/Loading/Loading";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "TestInstrument",
