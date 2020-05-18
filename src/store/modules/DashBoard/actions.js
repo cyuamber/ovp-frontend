@@ -72,7 +72,7 @@ const actions = {
       );
   },
   clearData({ commit }) {
-      commit(types.UPDATE_LIVE_DATA, { x: null, y: null });
+      commit(types.UPDATE_LIVE_DATA, { x: (new Date()).getTime(), y: null });
       commit(types.UPDATE_LINES_DATA, []);
       commit(types.UPDATE_TESTJOB_CIRCLES_DATA, []);
       commit(types.UPDATE_SUT_AMOUNT_DATA, []);

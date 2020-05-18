@@ -1,6 +1,6 @@
 const state = {
   liveData: {
-      x: null,
+      x: (new Date()).getTime(),
       y: null
   },
   linesData: {

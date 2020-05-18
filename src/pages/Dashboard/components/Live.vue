@@ -76,10 +76,9 @@ export default {
             data: (function() {
               // generate an array of random data
               var data = [],
-                time = new Date().getTime(),
-                i;
+                time = new Date().getTime();
 
-              for (i = -10; i <= 0; i += 1) {
+              for (var i = -10; i <= 0; i += 1) {
                 data.push({
                   x: time + i * 5000,
                   y: 0
@@ -95,7 +94,6 @@ export default {
   methods: {
     initLive(val) {
       this.chartOptions.series[0].data.push([val.x, val.y]);
-      // console.log(this.chartOptions.series[0].data,"this.chartOptions.series[0].data")
     }
   }
 };
