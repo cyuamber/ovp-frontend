@@ -1,4 +1,7 @@
 const UglifyPlugin = require("uglifyjs-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+    .BundleAnalyzerPlugin;
+const { ProgressPlugin } = require("webpack");
 
 const devProxy = ["/api"]; // proxy route
 let proEnv = require("./config/pro.env");
@@ -34,8 +37,31 @@ module.exports = {
         proxy: proxyObj,
     },
     //webpack配置
-    chainWebpack: () => {
+    chainWebpack: (config) => {
         // console.log(config, "===>config")
+        if (process.env.NODE_ENV === "development") {
+            config
+                .plugin("webpack-bundle-analyzer")
+                .use(BundleAnalyzerPlugin)
+                .end();
+        }
+        config
+            .plugin("progress")
+            .use(ProgressPlugin)
+            .tap((options) => {
+                options = [
+                    {
+                        // handler(percentage, msg) {
+                        //     console.info(
+                        //         percentage.toFixed(2) * 100 + "%",
+                        //         msg
+                        //     );
+                        // },
+                        profile: true,
+                    },
+                ];
+                return options;
+            });
     },
     configureWebpack: (config) => {
         if (process.env.NODE_ENV === "production") {
