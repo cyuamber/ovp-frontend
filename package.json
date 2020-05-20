@@ -55,7 +55,8 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "validate-commit-msg": "^2.14.0",
     "vue-template-compiler": "^2.6.11",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-parallel-uglify-plugin": "^1.1.2"
   },
   "config": {
     "commitizen": {

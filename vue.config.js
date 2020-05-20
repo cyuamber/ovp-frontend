@@ -1,4 +1,6 @@
 const UglifyPlugin = require("uglifyjs-webpack-plugin");
+const ParallelUglifyPlugin = require("webpack-parallel-uglify-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
     .BundleAnalyzerPlugin;
 const { ProgressPlugin } = require("webpack");
@@ -70,7 +72,15 @@ module.exports = {
                 minimizer: [
                     new UglifyPlugin({
                         sourceMap: true,
-                        uglifyOptions: {
+                        // uglifyOptions: {},
+                    }),
+                    new ParallelUglifyPlugin({
+                        cacheDir: ".cache/",
+                        uglifyJS: {
+                            output: {
+                                beautify: false,
+                                comments: false,
+                            },
                             compress: {
                                 drop_console: true, // console
                                 dead_code: true, //remove unreachable code
@@ -78,6 +88,12 @@ module.exports = {
                                 pure_funcs: ["console.log"], // remove console
                             },
                         },
+                    }),
+                    new TerserPlugin({
+                        cache: true,
+                        parallel: true,
+                        sourceMap: true,
+                        // terserOptions: {},
                     }),
                 ],
             };
