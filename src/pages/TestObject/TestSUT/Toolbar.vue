@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content tab-content--margin">
-    <a-button type="primary" @click="handleCreate">Create {{SUTName}} SUT</a-button>
+    <a-button type="primary" @click="createOrEditSUTshow">Create {{SUTName}} SUT</a-button>
     <Search class="tab-content__button" @searchInput="serchTestSUT" />
     <DatePicker class="calendar" @changeDate="changeDate"/>
   </div>
@@ -48,7 +48,7 @@ export default {
       "updateEdit",
       "setFilterItem"
     ]),
-    handleCreate() {
+    createOrEditSUTshow() {
       this.updateVisible(true);
       this.updateEdit(false);
     },

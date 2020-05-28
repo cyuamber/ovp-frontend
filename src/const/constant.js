@@ -12,8 +12,6 @@ switch (env) {
         break;
 }
 
-//  axiosgetType = env !== 'development' ? false : true
-
 const mockcolumns = [
     {
         title: "Avatar",

@@ -29,7 +29,7 @@
       </a-table>
     </div>
     <RigisterOrEdit
-      v-if="visible"
+      v-if="isVisibleEditModel"
       @close="close"
       :isEdit="isEdit"
       @getAllMeterSys="getAllMeterSys"
@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      visible: false,
+      isVisibleEditModel: false,
       columns: TestInsrigisterColumns,
       currentPage: "TestInstrumentMGT",
       isEdit: false,
@@ -91,7 +91,7 @@ export default {
     },
     handleCreateClick() {
       this.getMeterSys("");
-      this.visible = true;
+      this.isVisibleEditModel = true;
       this.isEdit = false;
     },
     handleTableChange(pagination) {
@@ -121,11 +121,11 @@ export default {
       this.getTableData(obj);
     },
     close() {
-      this.visible = false;
+      this.isVisibleEditModel = false;
     },
     showEditOrDeleteModal(item, singleData) {
       if (item === "Edit") {
-        this.visible = true;
+        this.isVisibleEditModel = true;
         this.isEdit = true;
         this.getMeterSys(singleData);
       } else {

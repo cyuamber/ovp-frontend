@@ -2,7 +2,7 @@
   <div class="test-spec">
     <div class="test-spec__top">
       <Loading :loadingMessage="loadingMessage" />
-      <a-button type="primary" @click="handleCreateClick">Add Spec</a-button>
+      <a-button type="primary" @click="createOrEditSpecShow">Add Spec</a-button>
       <Search
         class="search test-spec__search"
         @searchInput="testSpecSearch"
@@ -125,7 +125,7 @@ export default {
       this.getSUTOptions();
       this.getTableData({});
     },
-    handleCreateClick() {
+    createOrEditSpecShow() {
       this.updateVisible(true);
       this.isEdit = false;
       this.getTestSpec("");

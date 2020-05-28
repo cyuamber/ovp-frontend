@@ -1,6 +1,6 @@
 <template>
   <div class="tab-content tab-content--margin">
-    <a-button type="primary" @click="handleRigister">Register {{tableType}}</a-button>
+    <a-button type="primary" @click="showRigisterOrEditModel">Register {{tableType}}</a-button>
     <Search class="search" @searchInput="testENVSearch"/>
     <DatePicker v-if="tableType!=='MANO ENV'" class="calendar" @changeDate="changeDate"/>
   </div>
@@ -40,7 +40,7 @@ export default {
       "updateEdit"
     ]),
     ...mapActions("testENV", ["setParams"]),
-    handleRigister() {
+    showRigisterOrEditModel() {
       this.updateVisible(true);
       this.updateEdit(false);
     },

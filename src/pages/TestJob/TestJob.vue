@@ -2,7 +2,7 @@
   <div class="test-job__container">
     <Loading :loadingMessage="loadingMessage" />
     <div class="test-job__top">
-      <a-button type="primary" @click="handleCreate">Create Test Job</a-button>
+      <a-button type="primary" @click="createOrEditTestJobShow">Create Test Job</a-button>
       <a-select
         class="select"
         :defaultValue="dashboardJumpStatus"
@@ -120,7 +120,7 @@ export default {
       //   this.getTableData({bool:false,loading:false});
       // }, 5000);
     },
-    handleCreate() {
+    createOrEditTestJobShow() {
       this.isEdit = false;
       this.setIsShow(true);
       this.getSUTType({

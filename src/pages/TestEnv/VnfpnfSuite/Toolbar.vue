@@ -1,6 +1,6 @@
 <template>
   <div class="top">
-    <a-button type="primary" @click="handleCreatePackage">Create {{packageName}} TT</a-button>
+    <a-button type="primary" @click="createOrEditPackage">Create {{packageName}} TT</a-button>
     <Search class="search" @searchInput="VNFSuiteSearch"/>
     <DatePicker class="calendar" @changeDate="changeDate"/>
   </div>
@@ -39,7 +39,7 @@ export default {
       "updateVNFTest"
     ]),
 
-    handleCreatePackage() {
+    createOrEditPackage() {
       this.updateVisible(true);
       this.updateEdit(false);
       this.updateVNFTest({});

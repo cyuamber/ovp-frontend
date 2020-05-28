@@ -9,8 +9,10 @@
       mode="inline"
       :defaultSelectedKeys="defaultMenu"
       :defaultOpenKeys="defaultOpenKeys"
+      :open-keys="openKeys"
       :selectedKeys="currentMenu"
       @click="clickMenu"
+      @openChange="onOpenChange"
     >
       <template v-for="menu in menus">
         <a-menu-item v-if="!menu.isChildren && menu.auth.includes(getuserAuth)" :key="menu.name">
@@ -50,7 +52,9 @@ export default {
       menuStyle,
       defaultMenu: [],
       defaultOpenKeys: [],
-      menus: []
+      menus: [],
+      rootSubmenuKeys: [],
+      openKeys: []
     };
   },
   computed: {
@@ -61,6 +65,9 @@ export default {
   },
   created() {
     this.menus = MENUITEM.menuItems;
+      this.rootSubmenuKeys = MENUITEM.menuItems.map(item=>{
+        return item.name
+    });
     this.setDefaultmenu();
     window.addEventListener("popstate", () => {
       // this.currentMenu = [];
@@ -110,7 +117,15 @@ export default {
       this.$router.push({
         path: routeStr
       });
-    }
+    },
+      onOpenChange(openKeys) {
+          const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1);
+          if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+              this.openKeys = openKeys;
+          } else {
+              this.openKeys = latestOpenKey ? [latestOpenKey] : [];
+          }
+      },
   }
 };
 </script>
