@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-bind:title="title" v-model="visible" :footer="null" @cancel="handleCancel">
+  <a-modal v-bind:title="title" :visible="visible" :footer="null" @cancel="handleCancel">
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item label="Name" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -181,51 +181,48 @@ export default {
       testCaseList: store => store.testSpecMGT.testCaseList,
       testSpecSingleData: state => state.testSpecMGT.testSpecSingleData,
       testCaseCheckAll: state => state.testSpecMGT.testCaseCheckAll,
-      initcheckboxGroup: state => state.testSpecMGT.initcheckboxGroup
-    }),
-    visible: {
-      get() {
-        return this.$store.state.testSpecMGT.visible;
-      },
-      set(val) {
-        if (!val) {
-          this.clearOptions();
-          this.getTestSpec({});
-          this.form.setFieldsValue({
-            Name: "",
-            Version: "",
-            SUTType: "",
-            subSutType: "",
-            PublishORG: ""
-          });
-        }else{
-            this.count++;
-            if (this.isEdit && this.count > 1) {
-                this.form.setFieldsValue({
-                    Name: this.testSpecSingleData.name,
-                    Version: this.testSpecSingleData.version,
-                    SUTType: this.testSpecSingleData.sutTypeCH.dictLabel,
-                    subSutType: this.testSpecSingleData.subSutTypeCH.dictLabel,
-                    checkboxGroup: this.initcheckboxGroup,
-                    PublishORG: this.testSpecSingleData.publishOrg
-                });
-                this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
-                this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
-            } else if (!this.isEdit && this.count > 1) {
-                this.spin = true;
-                this.initSUTTypeValue = this.SUTOptions[0].code;
-                this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
-                this.getVNFOptions({
-                    SUTType: this.initSUTTypeValue
-                });
-            }
-        }
-      }
-    }
+      initcheckboxGroup: state => state.testSpecMGT.initcheckboxGroup,
+      visible: state => state.testSpecMGT.visible
+    })
   },
   watch: {
+      visible(val) {
+          if (val) {
+              this.count++;
+              if (this.isEdit && this.count > 1) {
+                  this.form.setFieldsValue({
+                      Name: this.testSpecSingleData.name,
+                      Version: this.testSpecSingleData.version,
+                      SUTType: this.testSpecSingleData.sutTypeCH.dictLabel,
+                      subSutType: this.testSpecSingleData.subSutTypeCH.dictLabel,
+                      checkboxGroup: this.initcheckboxGroup,
+                      PublishORG: this.testSpecSingleData.publishOrg
+                  });
+                  this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
+                  this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
+              } else if (!this.isEdit && this.count > 1) {
+                  this.spin = true;
+                  this.initSUTTypeValue = this.SUTOptions[0].code;
+                  this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
+                  this.getVNFOptions({
+                      SUTType: this.initSUTTypeValue
+                  });
+              }
+          }else {
+              this.clearOptions();
+              this.getTestSpec({});
+              this.form.setFieldsValue({
+                  Name: "",
+                  Version: "",
+                  SUTType: "",
+                  subSutType: "",
+                  PublishORG: ""
+              });
+          }
+      },
     SUTOptions(val) {
       if (val.length && !this.isEdit) {
+        this.changeCaseCheckAll(false);
         this.initSUTTypeValue = this.SUTOptions[0].code;
         if (this.count > 1) {
           this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
@@ -235,6 +232,7 @@ export default {
     VNFOptions(val) {
       this.spin = false;
       if (val.length && !this.isEdit) {
+        this.changeCaseCheckAll(false);
         this.initVNFtypeValue = this.VNFOptions[0].code;
         this.getTestCaseList({
           sutCode: this.initSUTTypeValue,

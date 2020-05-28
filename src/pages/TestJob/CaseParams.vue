@@ -1,7 +1,7 @@
 <template>
   <a-modal
     v-bind:title="title"
-    v-model="caseParamsIsShow"
+    :visible="caseParamsIsShow"
     @ok="handleSubmit"
     @cancel="handleCancel"
   >
@@ -44,25 +44,13 @@ export default {
   computed: {
     ...mapState({
       caseParamsData: state => state.testJob.caseParamsData,
-      testCaseList: store => store.testJob.testCaseList
-    }),
-    caseParamsIsShow: {
-      get() {
-        return this.$store.state.testJob.caseParamsIsShow;
-      },
-      set(val) {
-        if (!val) {
-          this.caseParams.forEach(item => {
-            this.form.setFieldsValue({
-              [item.name]:
-                this.isEdit === false
-                  ? item.defaultValue
-                  : this.isEdit === true && item.type === "bool"
-                  ? this.strBool(item.value)
-                  : item.value
-            });
-          });
-        }else {
+      testCaseList: store => store.testJob.testCaseList,
+      caseParamsIsShow: store => store.testJob.caseParamsIsShow
+    })
+  },
+  watch: {
+    caseParamsIsShow(val) {
+        if (val) {
             this.count++;
             if (this.count > 1) {
                 this.caseParams = this.caseParamsData.parameters.filter(item => {
@@ -79,11 +67,19 @@ export default {
                     });
                 });
             }
+        }else{
+            this.caseParams.forEach(item => {
+                this.form.setFieldsValue({
+                    [item.name]:
+                        this.isEdit === false
+                            ? item.defaultValue
+                            : this.isEdit === true && item.type === "bool"
+                            ? this.strBool(item.value)
+                            : item.value
+                });
+            });
         }
-      }
-    }
-  },
-  watch: {
+    },
     caseParamsData(val) {
       this.caseParams = val.parameters.filter(item => {
         return item.visible !== false;

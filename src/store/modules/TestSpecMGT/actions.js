@@ -1,6 +1,5 @@
 import { axiosdelete, axiosget, axiospost, axiosput } from '../../../utils/http';
 import API from '../../../const/apis';
-import { axiosgetType } from '../../../const/constant';
 import state from './state';
 import * as types from './mutations_types';
 
@@ -16,8 +15,7 @@ const actions = {
       }
     });
     dispatch('loading/tableLoading', true, { root: true });
-    let axiosrequest = axiosgetType ? axiospost : axiosget;
-    axiosrequest(API.TestSpecMgt.specMgtTable, req).then(
+      axiospost(API.TestSpecMgt.specMgtTable, req).then(
       res => {
         if (res.code === 200) {
           commit(types.UPDATE_TABLE_DATA, res);

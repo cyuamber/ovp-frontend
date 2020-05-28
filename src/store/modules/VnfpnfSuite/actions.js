@@ -1,6 +1,5 @@
 import { axiosget, axiospost, axiosput, axiosdelete } from '../../../utils/http';
 import API from '../../../const/apis';
-import { axiosgetType } from '../../../const/constant';
 import state from './state';
 import * as types from './mutations_types';
 
@@ -17,8 +16,7 @@ const actions = {
     });
     dispatch('loading/tableLoading', true, { root: true });
     req.flag = state.currentTab;
-    let axiosrequest = axiosgetType ? axiospost : axiosget;
-    axiosrequest(API.suiteMgt.suiteMgtTable, req).then(
+      axiospost(API.suiteMgt.suiteMgtTable, req).then(
       res => {
         if (res.code === 200) {
           commit(types.UPDATE_TABLE_DATA, res);

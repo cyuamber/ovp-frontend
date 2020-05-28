@@ -1,16 +1,3 @@
-const env = process.env.NODE_ENV;
-let axiosgetType;
-
-switch (env) {
-    case "development":
-        axiosgetType = env === "development" ? false : true;
-        break;
-    case "production":
-        axiosgetType = env !== "development" ? false : true;
-        break;
-    default:
-        break;
-}
 
 const mockcolumns = [
     {
@@ -34,4 +21,4 @@ const mockcolumns = [
     },
 ];
 
-export { axiosgetType, mockcolumns };
+export { mockcolumns };

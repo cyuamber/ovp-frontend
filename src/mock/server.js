@@ -2,7 +2,7 @@ const jsonServer = require('json-server');
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults();
 const customersRouters = require('./routers');
-
+const baseUrl = "/portal/business";
 // Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares);
 
@@ -67,19 +67,22 @@ function runServer(db) {
     server.use(jsonServer.router(db));
 }
 
-server.post(`/*`,(req,res,next) =>{
+server.post(`${baseUrl}/*`,(req,res,next) =>{
     console.log(req.url)
-    req.method = 'GET'
+    req.method = 'GET';
+    req.url = '/POST'+req.url;
     next();
 });
-server.put(`/*`,(req,res,next) =>{
+server.put(`${baseUrl}/*`,(req,res,next) =>{
     console.log(req.url);
-    req.method = 'GET'
+    req.method = 'GET';
+    req.url = '/PUT'+req.url;
     next();
 });
-server.delete(`/*`,(req,res,next) =>{
+server.delete(`${baseUrl}/*`,(req,res,next) =>{
     console.log(req.url);
-    req.method = 'GET'
+    req.method = 'GET';
+    req.url = '/DELETE'+req.url;
     next();
 });
 

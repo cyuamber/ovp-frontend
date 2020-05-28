@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :title="(isEdit === true ? 'Edit ': 'Create ') + replaceCurrentTabValue(currentTab) + ' SUT'"
-    v-model="visible"
+    :visible="visible"
     :footer="null"
     @cancel="handleCancel"
   >
@@ -112,23 +112,13 @@ export default {
     ...mapState({
       VNFOptions: state => state.testSUT.VNFOptions,
       VNFTest: state => state.testSUT.VNFTest,
-      currentTab: state => state.testSUT.currentTab
-    }),
-    visible: {
-      get() {
-        return this.$store.state.testSUT.visible;
-      },
-      set(val) {
-        if (!val) {
-          this.updateVNFTest({});
-          this.form.setFieldsValue({
-            name: "",
-            version: "",
-            vendor: "",
-            type: ""
-          });
-          this.uploadAliasFilename = "";
-        }else{
+      currentTab: state => state.testSUT.currentTab,
+      visible: state => state.testSUT.visible
+    })
+  },
+  watch: {
+    visible(val) {
+        if (val) {
             if (!this.isEdit) {
                 this.editUploadtextShow = false;
             } else {
@@ -148,11 +138,17 @@ export default {
                     type: this.VNFOptions.length > 0 ? this.VNFOptions[0].code : ""
                 });
             }
+        }else{
+            this.updateVNFTest({});
+            this.form.setFieldsValue({
+                name: "",
+                version: "",
+                vendor: "",
+                type: ""
+            });
+            this.uploadAliasFilename = "";
         }
-      }
-    }
-  },
-  watch: {
+    },
     VNFOptions(val) {
       if (val.length > 0) {
         this.initNVFTypeValue = val[0].code;

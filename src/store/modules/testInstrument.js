@@ -1,7 +1,5 @@
-import { axiosdelete, axiosget, axiospost, axiosput } from "../../utils/http";
+import { axiosdelete, axiospost, axiosput } from "../../utils/http";
 import API from "../../const/apis";
-import { axiosgetType } from "../../const/constant";
-
 import moment from "moment";
 
 const state = {
@@ -41,8 +39,7 @@ const actions = {
             }
         });
         dispatch("loading/tableLoading", true, { root: true });
-        let axiosrequest = axiosgetType ? axiospost : axiosget;
-        axiosrequest(API.instrumentMgs.instrumentMgsTable, req).then(
+        axiospost(API.instrumentMgs.instrumentMgsTable, req).then(
             (res) => {
                 if (res.code === 200) {
                     commit("updateTableData", res);

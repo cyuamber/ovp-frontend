@@ -1,7 +1,7 @@
 <template>
   <a-modal
     v-bind:title="this.isEdit ? 'Edit ' + (currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (currentTab === 101?'VNF':'PNF') + ' TT'"
-    v-model="visible"
+    :visible="visible"
     :footer="null"
     @cancel="handleCancel"
   >
@@ -126,22 +126,13 @@ export default {
       VNFOptions: state => state.VnfpnfSuite.VNFOptions,
       SystemOptions: state => state.VnfpnfSuite.SystemOptions,
       SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
-      currentTab: state => state.VnfpnfSuite.currentTab
-    }),
-    visible: {
-      get() {
-        return this.$store.state.VnfpnfSuite.visible;
-      },
-      set(val) {
-        if (!val) {
-          this.updateVNFTest({});
-          this.form.setFieldsValue({
-            XNFName: "",
-            XNFType: "",
-            XNFVendor: "",
-            Version: ""
-          });
-        }else{
+      currentTab: state => state.VnfpnfSuite.currentTab,
+      visible: state => state.VnfpnfSuite.visible
+    })
+  },
+  watch: {
+    visible(val) {
+        if (val) {
             if (!this.isEdit) {
                 this.editUploadtextShow = false;
             } else {
@@ -163,11 +154,16 @@ export default {
             ) {
                 this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
             }
+        }else{
+            this.updateVNFTest({});
+            this.form.setFieldsValue({
+                XNFName: "",
+                XNFType: "",
+                XNFVendor: "",
+                Version: ""
+            });
         }
-      }
-    }
-  },
-  watch: {
+    },
     VNFOptions(val) {
       if (val.length) {
         this.spin = false;

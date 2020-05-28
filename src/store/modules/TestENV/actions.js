@@ -4,7 +4,6 @@ import {
     axiosput,
     axiosdelete,
 } from "../../../utils/http";
-import { axiosgetType } from "../../../const/constant";
 import API from "../../../const/apis";
 import * as types from "./mutations_types";
 
@@ -40,7 +39,6 @@ const actions = {
         }
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
-        let axiosrequest = axiosgetType ? axiospost : axiosget;
         dispatch("loading/tableLoading", true, { root: true });
         let failedCallback = () => {
             if (isFilter) {
@@ -51,7 +49,7 @@ const actions = {
                 );
             }
         };
-        axiosrequest(url, paramsObj, failedCallback).then(
+        axiospost(url, paramsObj, failedCallback).then(
             (res) => {
                 if (res.code === 200) {
                     commit(types.UPDATE_TABLE_DATA, res);

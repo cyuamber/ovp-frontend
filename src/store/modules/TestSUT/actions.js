@@ -5,7 +5,6 @@ import {
     axiosdelete,
 } from "../../../utils/http";
 import API from "../../../const/apis";
-import { axiosgetType } from "../../../const/constant";
 import reqwest from "reqwest";
 import * as types from "./mutations_types";
 import state from "./state";
@@ -30,8 +29,7 @@ const actions = {
         paramsObj.flag = state.currentTab;
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
-        let axiosrequest = axiosgetType ? axiospost : axiosget;
-        axiosrequest(API.sutMgt.sutMgtTable, paramsObj).then(
+        axiospost(API.sutMgt.sutMgtTable, paramsObj).then(
             (res) => {
                 if (res.code === 200) {
                     commit(types.UPDATE_TABLE_DATA, res);

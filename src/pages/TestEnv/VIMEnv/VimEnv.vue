@@ -51,6 +51,7 @@ export default {
       "getMANOTypeOptions"
     ]),
     ...mapMutations("testENV", ["changeTab"]),
+    ...mapMutations("datePicker", ["setDateTime"]),
     ...mapMutations("searching", ["setKeyword"]),
     initVimEnvTable() {
       this.getCloudTypeOptions();
@@ -60,6 +61,7 @@ export default {
     handleTabsChange(key) {
       this.changeTab(key);
       this.setKeyword("");
+      this.setDateTime("");
       let paramsObj = {};
       this.getTableData({ paramsObj, isFilter: false });
       if (key === "MANO ENV") {

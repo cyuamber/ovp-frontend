@@ -3,7 +3,6 @@ import API from '../../../const/apis';
 import util from '../../../utils/utils';
 import router from '../../../router/router';
 import { axiospost, axiosget, axiosput, axiosdelete } from '../../../utils/http';
-import { axiosgetType } from '../../../const/constant';
 import state from './state';
 import * as types from './mutations_types';
 
@@ -15,9 +14,8 @@ const actions = {
       obj.jobStatus = state.searchKeyword;
     if (state.searchKeyword === 'All' && state.dashboardJumpStatus !== 'All')
       obj.jobStatus = state.dashboardJumpStatus;
-    let axiosrequest = axiosgetType ? axiospost : axiosget;
     if (loading) dispatch('loading/tableLoading', true, { root: true });
-    axiosrequest(API.testJobMgt.testJobTable, obj)
+      axiospost(API.testJobMgt.testJobTable, obj)
       .then(res => {
         if (loading) dispatch('loading/tableLoading', false, { root: true });
         if (res.code === 200) {
