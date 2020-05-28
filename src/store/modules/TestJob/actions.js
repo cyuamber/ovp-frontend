@@ -18,31 +18,24 @@ const actions = {
       axiospost(API.testJobMgt.testJobTable, obj)
       .then(res => {
         if (loading) dispatch('loading/tableLoading', false, { root: true });
-        if (res.code === 200) {
           state.pagination = {
-            current: state.pageNum,
-            total: res.total
+              current: state.pageNum,
+              total: res.total
           };
           let tableData = res.body.map((item, index) => {
-            item.createTime = moment(item.createTime).format('YYYY-MM-DD');
-            item.index =
-              res.body.length * (state.pagination.current - 1) + index + 1;
-            item.actions = [
-              item.status === 'RUNNING' ? 'Stop' : 'Start',
-              'Edit',
-              'Delete',
-              'Download',
-              'More'
-            ];
-            return item;
+              item.createTime = moment(item.createTime).format('YYYY-MM-DD');
+              item.index =
+                  res.body.length * (state.pagination.current - 1) + index + 1;
+              item.actions = [
+                  item.status === 'RUNNING' ? 'Stop' : 'Start',
+                  'Edit',
+                  'Delete',
+                  'Download',
+                  'More'
+              ];
+              return item;
           });
           commit(types.UPDATE_TABLE_DATA, tableData);
-        } else if (bool)
-          dispatch(
-            'loading/showLoading',
-            { type: 'failed', toast: 'Network exception, please try again' },
-            { root: true }
-          );
       })
       .catch(() => {
         if (bool)
@@ -83,19 +76,12 @@ const actions = {
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, body)
       .then(
-        res => {
-          if (res.code === 200) {
-            dispatch(
+          () => {
+          dispatch(
               'loading/showLoading',
               { type: 'success', toast: 'Has been added successfully' },
               { root: true }
-            );
-          } else
-            dispatch(
-              'loading/showLoading',
-              { type: 'failed', toast: 'add failed' },
-              { root: true }
-            );
+          );
           commit(types.SET_IS_SHOW, false);
           dispatch('getTableData', false);
         },
@@ -118,16 +104,11 @@ const actions = {
     });
     axiosget(API.testJobMgt.testJobSUTType).then(
       res => {
-        if (res.code === 200) {
-          // Simulation request
-          setTimeout(() => {
+        setTimeout(() => {
             commit(types.UPDATA_SUT_TYPE, {
-              list: res.body
+                list: res.body
             });
-          }, 1000);
-        } else {
-          message.error('Failed to get SUT Name list');
-        }
+        }, 1000);
       },
       () => {
         message.error('Network exception, please try again');
@@ -247,15 +228,13 @@ const actions = {
     axiosdelete(
       API.testJobMgt.testJobDelete.replace(':jobId', data.jobId)
     ).then(
-      res => {
-        if (res.code === 200) {
-          dispatch(
+        () => {
+        dispatch(
             'loading/showLoading',
             { type: 'success', toast: 'Deleted successfully' },
             { root: true }
-          );
-          dispatch('getTableData', false);
-        }
+        );
+        dispatch('getTableData', false);
       },
       () => {
         dispatch(
@@ -281,11 +260,10 @@ const actions = {
   runTestJobMGT ({ dispatch, commit }, { data }) {
     axiosput(API.testJobMgt.testJobStart.replace(':jobId', data.jobId)).then(
       res => {
-        if (res.code === 200) {
           dispatch(
-            'loading/showLoading',
-            { type: 'success', toast: 'Successfully started testing' },
-            { root: true }
+              'loading/showLoading',
+              { type: 'success', toast: 'Successfully started testing' },
+              { root: true }
           );
           data.status = 'RUNNING';
           data.jobStatus = 'STARTED';
@@ -294,12 +272,11 @@ const actions = {
           data.executionStartTime = res.body.executionStartTime;
           commit(types.UPDATE_TABLE_ITEM_DATA, data);
           router.push({
-            name: 'JobDetail',
-            query: {
-              detail: JSON.stringify(data)
-            }
+              name: 'JobDetail',
+              query: {
+                  detail: JSON.stringify(data)
+              }
           });
-        }
       },
       () => {
         dispatch(
@@ -313,7 +290,6 @@ const actions = {
   getProgress ({ commit }, { jobId, message }) {
     axiosget(API.testJobMgt.testJobProgress.replace(':jobId', jobId)).then(
       res => {
-        if (res.code === 200) {
           commit(types.UPDATE_PROGRESS, {
             percent: res.body.jobProgress,
             status: res.body.jobStatus
@@ -345,7 +321,6 @@ const actions = {
             commit(types.UPDATE_DETAIL_LOADING, false);
             commit(types.UPDATE_EXECUTION_START_TIME, res.body.executionStartTime);
           }
-        }
       },
       () => {
         message.error('Network exception, please try again');
@@ -366,17 +341,15 @@ const actions = {
     ).then(
       res => {
         dispatch('loading/tableLoading', false, { root: true });
-        if (Number(res.code) === 200) {
           if (res.body.length !== 0) {
-            commit(types.UPDATE_EXPANDED_ROW_KEYS, { key: record.index, expanded });
-            commit(types.UPDATE_CASE_CHILD_TABLE_DATA, {
-              testCaseChildData: res.body,
-              record
-            });
+              commit(types.UPDATE_EXPANDED_ROW_KEYS, { key: record.index, expanded });
+              commit(types.UPDATE_CASE_CHILD_TABLE_DATA, {
+                  testCaseChildData: res.body,
+                  record
+              });
           } else {
-            message.info('No child data under this test case.');
+              message.info('No child data under this test case.');
           }
-        }
       },
       () => {
         commit('setTestCaseChildtableLoading', false);
@@ -392,18 +365,16 @@ const actions = {
   stopJop ({ dispatch, commit }, { data }) {
     // Simulation request
     axiosput(API.testJobMgt.testJobStop.replace(':jobId', data.jobId)).then(
-      res => {
-        if (res.code === 200) {
+        () => {
           dispatch(
-            'loading/showLoading',
-            { type: 'success', toast: 'Successfully stoped testing' },
-            { root: true }
+              'loading/showLoading',
+              { type: 'success', toast: 'Successfully stoped testing' },
+              { root: true }
           );
           data.status = 'STOPPED';
           data.actions[0] = 'Start';
           commit(types.UPDATE_TABLE_ITEM_DATA, data);
           dispatch('getTableData', true);
-        }
       },
       () => {
         dispatch(
@@ -418,12 +389,7 @@ const actions = {
   getVNFMOption ({ commit }, { message }) {
     axiosget(API.vimVnfmMgt.vnfmEnvMgtTable).then(
       res => {
-        if (res.code === 200) {
-          // Simulation request
-          commit(types.UPDATE_VNFM_OPTION, res.body);
-        } else {
-          message.error('Failed to get SUT Name list');
-        }
+        commit(types.UPDATE_VNFM_OPTION, res.body);
       },
       () => {
         message.error('Network exception, please try again');
@@ -433,12 +399,7 @@ const actions = {
   getVIMOption ({ commit }, { message }) {
     axiosget(API.vimVnfmMgt.vimEnvMgtTable).then(
       res => {
-        if (res.code === 200) {
-          // Simulation request
-          commit(types.UPDATE_VIM_OPTION, res.body);
-        } else {
-          message.error('Failed to get SUT Name list');
-        }
+        commit(types.UPDATE_VIM_OPTION, res.body);
       },
       () => {
         message.error('Network exception, please try again');
@@ -449,12 +410,7 @@ const actions = {
     let obj = { pageSize: pageSize };
     axiosget(API.vimVnfmMgt.manoEnvMgtTable, obj).then(
       res => {
-        if (res.code === 200) {
-          // Simulation request
-          commit(types.UPDATE_MANO_OPTION, res.body);
-        } else {
-          message.error('Failed to get SUT Name list');
-        }
+        commit(types.UPDATE_MANO_OPTION, res.body);
       },
       () => {
         message.error('Network exception, please try again');
@@ -468,12 +424,7 @@ const actions = {
     };
     axiosget(API.suiteMgt.suiteMgtTable, obj).then(
       res => {
-        if (res.code === 200) {
-          // Simulation request
-          commit(types.UPDATE_TEST_INSTRUMENT_OPTION, res.body);
-        } else {
-          message.error('Failed to get SUT Name list');
-        }
+        commit(types.UPDATE_TEST_INSTRUMENT_OPTION, res.body);
       },
       () => {
         message.error('Network exception, please try again');
@@ -483,20 +434,18 @@ const actions = {
   getEditTestJob ({ dispatch, commit }, { data }) {
     axiosget(API.testJobMgt.testJobProgress.replace(':jobId', data.jobId)).then(
       res => {
-        if (res.code === 200) {
           commit(types.UPDATE_TESTJOB_SINGLE_DATA, res.body);
           if (Object.keys(res.body).length > 0) {
-            let checkedboxGroup = res.body.cases.map(item => {
-              return item.id;
-            });
-            commit(types.UPDATE_INIT_CHECKBOX_GROUP, checkedboxGroup);
+              let checkedboxGroup = res.body.cases.map(item => {
+                  return item.id;
+              });
+              commit(types.UPDATE_INIT_CHECKBOX_GROUP, checkedboxGroup);
           }
           let obj = {
-            specId: res.body.spec.id,
-            sutId: res.body.sut.id
+              specId: res.body.spec.id,
+              sutId: res.body.sut.id
           };
           dispatch('getTestCase', { obj, message: this.$message });
-        }
       },
       () => {
         dispatch(
@@ -530,15 +479,13 @@ const actions = {
       null,
       updata
     ).then(
-      res => {
-        if (res.code === 200) {
+        () => {
           dispatch(
-            'loading/showLoading',
-            { type: 'success', toast: '', toastOpen: false },
-            { root: true }
+              'loading/showLoading',
+              { type: 'success', toast: '', toastOpen: false },
+              { root: true }
           );
           window.open(sutvalidLind, '_blank');
-        }
       },
       () => {
         dispatch(
@@ -558,10 +505,8 @@ const actions = {
     axiospost(
       API.testJobMgt.testJobCaseVNFReupload.replace(':jobId', jobId)
     ).then(
-      res => {
-        if (res.code === 200) {
-          window.open(sutvalidLind, '_blank');
-        }
+        () => {
+        window.open(sutvalidLind, '_blank');
       },
       () => {
         dispatch(

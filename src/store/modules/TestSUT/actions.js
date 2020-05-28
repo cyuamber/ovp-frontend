@@ -31,30 +31,17 @@ const actions = {
         paramsObj.pageSize = state.pageSize;
         axiospost(API.sutMgt.sutMgtTable, paramsObj).then(
             (res) => {
-                if (res.code === 200) {
-                    commit(types.UPDATE_TABLE_DATA, res);
-                    dispatch("loading/tableLoading", false, { root: true });
-                    if (isFilter) {
-                        dispatch(
-                            "loading/showLoading",
-                            {
-                                type: "success",
-                                toast: "Successfully get table data",
-                            },
-                            { root: true }
-                        );
-                    }
-                } else {
-                    if (isFilter) {
-                        dispatch(
-                            "loading/showLoading",
-                            {
-                                type: "failed",
-                                toast: "Network exception, please try again",
-                            },
-                            { root: true }
-                        );
-                    }
+                commit(types.UPDATE_TABLE_DATA, res);
+                dispatch("loading/tableLoading", false, { root: true });
+                if (isFilter) {
+                    dispatch(
+                        "loading/showLoading",
+                        {
+                            type: "success",
+                            toast: "Successfully get table data",
+                        },
+                        { root: true }
+                    );
                 }
             },
             () => {
@@ -74,11 +61,7 @@ const actions = {
     getVNFOptions({ commit, state }) {
         let url = API.sutMgt.sutMgtType.replace(":flag", state.currentTab);
         axiosget(url).then((res) => {
-            if (res.code === 200) {
-                commit(types.UPDATE_VNF_OPTIONS, res.body);
-            } else {
-                this.$message.error("Network exception, please try again");
-            }
+            commit(types.UPDATE_VNF_OPTIONS, res.body);
         });
     },
     createOrEditVNFTest({ state, dispatch }, { data, isEdit }) {
@@ -86,22 +69,20 @@ const actions = {
         let url = isEdit ? API.sutMgt.sutMgtUpdate : API.sutMgt.sutMgtInsert;
         let apiType = isEdit ? axiosput : axiospost;
         apiType(url, data).then(
-            (res) => {
-                if (res.code === 200) {
-                    dispatch(
-                        "loading/showLoading",
-                        {
-                            type: "success",
-                            toast: isEdit
-                                ? "Successfully updated"
-                                : "Successfully added",
-                            toastOpen: true,
-                        },
-                        { root: true }
-                    );
-                    let paramsObj = { flag: state.currentTab };
-                    dispatch("getTableData", { paramsObj, isFilter: false });
-                }
+            () => {
+                dispatch(
+                    "loading/showLoading",
+                    {
+                        type: "success",
+                        toast: isEdit
+                            ? "Successfully updated"
+                            : "Successfully added",
+                        toastOpen: true,
+                    },
+                    { root: true }
+                );
+                let paramsObj = { flag: state.currentTab };
+                dispatch("getTableData", { paramsObj, isFilter: false });
             },
             () => {
                 dispatch(
@@ -117,16 +98,14 @@ const actions = {
     },
     deleteVNFTest({ dispatch }, { id }) {
         axiosdelete(API.sutMgt.sutMgtDelete.replace(":id", id)).then(
-            (res) => {
-                if (res.code === 200) {
-                    dispatch(
-                        "loading/showLoading",
-                        { type: "success", toast: "Deleted successfully" },
-                        { root: true }
-                    );
-                    let paramsObj = { flag: state.currentTab };
-                    dispatch("getTableData", { paramsObj, isFilter: false });
-                }
+            () => {
+                dispatch(
+                    "loading/showLoading",
+                    { type: "success", toast: "Deleted successfully" },
+                    { root: true }
+                );
+                let paramsObj = { flag: state.currentTab };
+                dispatch("getTableData", { paramsObj, isFilter: false });
             },
             () => {
                 dispatch(

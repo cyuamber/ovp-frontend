@@ -18,23 +18,14 @@ const actions = {
     req.flag = state.currentTab;
       axiospost(API.suiteMgt.suiteMgtTable, req).then(
       res => {
-        if (res.code === 200) {
-          commit(types.UPDATE_TABLE_DATA, res);
-          dispatch('loading/tableLoading', false, { root: true });
-          if (req.createTime || req.name)
+        commit(types.UPDATE_TABLE_DATA, res);
+        dispatch('loading/tableLoading', false, { root: true });
+        if (req.createTime || req.name)
             dispatch(
-              'loading/showLoading',
-              { type: 'success', toast: 'Successfully get table data' },
-              { root: true }
+                'loading/showLoading',
+                { type: 'success', toast: 'Successfully get table data' },
+                { root: true }
             );
-        } else {
-          if (req.createTime || req.name)
-            dispatch(
-              'loading/showLoading',
-              { type: 'failed', toast: 'Network exception, please try again' },
-              { root: true }
-            );
-        }
       },
       () => {
         if (req.createTime || req.name)
@@ -49,21 +40,13 @@ const actions = {
   getVNFOptions ({ commit }) {
     let url = API.suiteMgt.suiteType.replace(':flag', state.currentTab);
     axiosget(url).then(res => {
-      if (res.code === 200) {
         commit(types.UPDATE_VNF_OPTIONS, res.body);
-      } else {
-        this.$message.error('Network exception, please try again');
-      }
     });
   },
   getSystemOptions ({ commit }) {
     let url = API.instrumentMgs.instrumentMgsTable;
     axiosget(url).then(res => {
-      if (res.code === 200) {
         commit(types.UPDATE_SYSTEM_OPTIONS, res.body);
-      } else {
-        this.$message.error('Network exception, please try again');
-      }
     });
   },
   clearOptions ({ commit }) {
@@ -79,8 +62,7 @@ const actions = {
     axiospost(API.uploadFile, { file: formData }, true).then(
       res => {
         commit(types.UPDATE_TOKEN, null);
-        if (res.code === 200) message.success('Upload successfully');
-        else message.error('Upload failed');
+        message.success('Upload successfully');
       },
       () => {
         message.error('Network exception, please try again');
@@ -93,31 +75,22 @@ const actions = {
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data).then(
       res => {
-        if (res.code === 200) {
           dispatch(
-            'loading/showLoading',
-            {
-              type: 'success',
-              toast: isEdit
-                ? 'Successfully updated'
-                : 'Has been added successfully'
-            },
-            { root: true }
+              'loading/showLoading',
+              {
+                  type: 'success',
+                  toast: isEdit
+                      ? 'Successfully updated'
+                      : 'Has been added successfully'
+              },
+              { root: true }
           );
           let obj = {
-            flag: state.currentTab,
-            pageNum: state.pagination.current,
-            pageSize: state.pagination.pageSize
+              flag: state.currentTab,
+              pageNum: state.pagination.current,
+              pageSize: state.pagination.pageSize
           };
           dispatch('getTableData', obj);
-        } else if (res.code === 417) {
-          message.error(res.body);
-        } else
-          dispatch(
-            'loading/showLoading',
-            { type: 'failed', toast: isEdit ? 'Update failed' : 'add failed' },
-            { root: true }
-          );
       },
       () => {
         dispatch(
@@ -131,26 +104,19 @@ const actions = {
   deleteTestMeter ({ dispatch, state }, { id, message }) {
     let url = API.suiteMgt.suiteMgtDelete.replace(':id', id);
     axiosdelete(url).then(res => {
-      if (res.code === 200) {
         dispatch(
-          'loading/showLoading',
-          { type: 'success', toast: 'Deleted successfully' },
-          { root: true }
+            'loading/showLoading',
+            { type: 'success', toast: 'Deleted successfully' },
+            { root: true }
         );
         let obj = {
-          flag: state.currentTab,
-          pageNum: state.pagination.current,
-          pageSize: state.pagination.pageSize
+            flag: state.currentTab,
+            pageNum: state.pagination.current,
+            pageSize: state.pagination.pageSize
         };
         dispatch('getTableData', obj);
-      } else if (res.code === 417) {
-        message.error(res.body);
-      } else
-        dispatch(
-          'loading/showLoading',
-          { type: 'failed', toast: 'Network exception, please try again' },
-          { root: true }
-        );
+    }).catch((err) => {
+        message.error(err);
     });
   },
   downloadFile ({ dispatch }, { fileName, fileAliasName }) {

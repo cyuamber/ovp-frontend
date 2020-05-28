@@ -17,23 +17,14 @@ const actions = {
     dispatch('loading/tableLoading', true, { root: true });
       axiospost(API.TestSpecMgt.specMgtTable, req).then(
       res => {
-        if (res.code === 200) {
           commit(types.UPDATE_TABLE_DATA, res);
           dispatch('loading/tableLoading', false, { root: true });
           if (req.publishTime || req.testSpecName)
-            dispatch(
-              'loading/showLoading',
-              { type: 'success', toast: 'Successfully get table data' },
-              { root: true }
-            );
-        } else {
-          if (req.publishTime || req.testSpecName)
-            dispatch(
-              'loading/showLoading',
-              { type: 'failed', toast: 'Network exception, please try again' },
-              { root: true }
-            );
-        }
+              dispatch(
+                  'loading/showLoading',
+                  { type: 'success', toast: 'Successfully get table data' },
+                  { root: true }
+              );
       },
       () => {
         if (req.publishTime || req.testSpecName)
@@ -51,19 +42,11 @@ const actions = {
     state.dropdownSpecIndex = record.index;
     axiosget(API.TestSpecMgt.testCaseTable.replace(':specId', record.id)).then(
       res => {
-        if (res.code === 200) {
           commit(types.UPDATE_CASEMGT_TABLE_DATA, { testCaseData: res.body, record });
           if (!expanded && editModelShow === true) {
-            commit(types.UPDATE_CHECKBOX_GROUP, { testCaseData: res.body });
+              commit(types.UPDATE_CHECKBOX_GROUP, { testCaseData: res.body });
           }
           commit(types.UPDATE_TEST_CASE_TABLE_LOADING, false);
-        } else {
-          dispatch(
-            'loading/showLoading',
-            { type: 'failed', toast: 'Network exception, please try again' },
-            { root: true }
-          );
-        }
       },
       () => {
         dispatch(
@@ -79,22 +62,14 @@ const actions = {
   },
   getSUTOptions ({ commit, dispatch }) {
     axiosget(API.TestSpecMgt.TestSpecSUTType).then(res => {
-      if (res.code === 200) {
         commit(types.UPDATE_SUT_OPTIONS, res.body);
         dispatch('getVNFOptions', { SUTType: res.body[0].code });
-      } else {
-        this.$message.error('Network exception, please try again');
-      }
     });
   },
   getVNFOptions ({ commit }, obj) {
     let url = API.TestSpecMgt.TestSpecVNFType.replace(':flag', obj.SUTType);
     axiosget(url).then(res => {
-      if (res.code === 200) {
         commit(types.UPDATE_VNF_OPTIONS, res.body);
-      } else {
-        this.$message.error('Network exception, please try again');
-      }
     });
   },
   getTestCaseList (
@@ -108,18 +83,14 @@ const actions = {
         .replace(':subSutType', subSutCode)
     ).then(
       res => {
-        if (res.code === 200) {
           commit(types.UPDATE_TEST_CASE_LIST, { list: res.body });
           if (Object.keys(testSpecSingleData).length > 0) {
-            dispatch('getTestCaseTableData', {
-              record: testSpecSingleData,
-              expanded: false,
-              editModelShow: true
-            });
+              dispatch('getTestCaseTableData', {
+                  record: testSpecSingleData,
+                  expanded: false,
+                  editModelShow: true
+              });
           }
-        } else {
-          message.error('Failed to get Test Case list');
-        }
       },
       () => {
         message.error('Network exception, please try again');
@@ -147,25 +118,23 @@ const actions = {
       : API.TestSpecMgt.specMgtInsert;
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data).then(
-      res => {
-        if (res.code === 200) {
-          dispatch(
+        () => {
+        dispatch(
             'loading/showLoading',
             {
-              type: 'success',
-              toast: isEdit
-                ? 'Successfully updated'
-                : 'Has been added successfully'
+                type: 'success',
+                toast: isEdit
+                    ? 'Successfully updated'
+                    : 'Has been added successfully'
             },
             { root: true }
-          );
-          let obj = {
+        );
+        let obj = {
             flag: state.currentTab,
             pageNum: state.pagination.current,
             pageSize: state.pagination.pageSize
-          };
-          dispatch('getTableData', obj);
-        }
+        };
+        dispatch('getTableData', obj);
       },
       () => {
         dispatch(
@@ -178,20 +147,18 @@ const actions = {
   },
   deleteTestSpec ({ dispatch, state }, { id }) {
     axiosdelete(API.TestSpecMgt.specMgtDelete.replace(':id', id)).then(
-      res => {
-        if (res.code === 200) {
-          dispatch(
+        () => {
+        dispatch(
             'loading/showLoading',
             { type: 'success', toast: 'Deleted successfully' },
             { root: true }
-          );
-          let obj = {
+        );
+        let obj = {
             flag: state.currentTab,
             pageNum: state.pagination.current,
             pageSize: state.pagination.pageSize
-          };
-          dispatch('getTableData', obj);
-        }
+        };
+        dispatch('getTableData', obj);
       },
       () => {
         dispatch(
@@ -208,18 +175,16 @@ const actions = {
         .replace(':id', obj.id)
         .replace(':status', obj.status)
     ).then(
-      res => {
-        if (res.code === 200) {
+        () => {
           dispatch(
-            'loading/showLoading',
-            { type: 'success', toast: 'Update activation status successfully' },
-            { root: true }
+              'loading/showLoading',
+              { type: 'success', toast: 'Update activation status successfully' },
+              { root: true }
           );
           dispatch('getTestCaseTableData', {
-            record: state.dropdownSpec[state.dropdownSpecIndex],
-            expanded: true
+              record: state.dropdownSpec[state.dropdownSpecIndex],
+              expanded: true
           });
-        }
       },
       () => {
         dispatch(

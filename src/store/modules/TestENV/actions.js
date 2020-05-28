@@ -51,19 +51,17 @@ const actions = {
         };
         axiospost(url, paramsObj, failedCallback).then(
             (res) => {
-                if (res.code === 200) {
-                    commit(types.UPDATE_TABLE_DATA, res);
-                    dispatch("loading/tableLoading", false, { root: true });
-                    if (isFilter)
-                        dispatch(
-                            "loading/showLoading",
-                            {
-                                type: "success",
-                                toast: "Successfully get table data",
-                            },
-                            { root: true }
-                        );
-                }
+                commit(types.UPDATE_TABLE_DATA, res);
+                dispatch("loading/tableLoading", false, { root: true });
+                if (isFilter)
+                    dispatch(
+                        "loading/showLoading",
+                        {
+                            type: "success",
+                            toast: "Successfully get table data",
+                        },
+                        { root: true }
+                    );
             },
             () => {
                 if (isFilter)
@@ -94,19 +92,17 @@ const actions = {
                 break;
         }
         axiosdelete(url.replace(":id", data.id))
-            .then((res) => {
-                if (res.code === 200) {
-                    dispatch(
-                        "loading/showLoading",
-                        { type: "success", toast: "Deleted successfully" },
-                        { root: true }
-                    );
-                    let paramsObj = {
-                        pageNumstate: state.pageNum,
-                        pageSize: state.pageSize,
-                    };
-                    dispatch("getTableData", { paramsObj });
-                }
+            .then(() => {
+                dispatch(
+                    "loading/showLoading",
+                    { type: "success", toast: "Deleted successfully" },
+                    { root: true }
+                );
+                let paramsObj = {
+                    pageNumstate: state.pageNum,
+                    pageSize: state.pageSize,
+                };
+                dispatch("getTableData", { paramsObj });
             })
             .catch(() => {
                 dispatch(
@@ -121,31 +117,23 @@ const actions = {
     },
     getRegionIdOptions({ commit, dispatch }) {
         axiosget(API.vimVnfmMgt.cloudRegionID).then((res) => {
-            if (res.code === 200) {
-                let idList = [];
-                res.body.map((item) => {
-                    idList.push(item.dictValue);
-                });
-                commit(types.UPDATE_REGION_ID_OPTIONS, {
-                    regionIdList: idList,
-                });
-                dispatch("getCloudTypeOptions", { selectRegionId: idList[0] });
-            } else {
-                this.$message.error("Network exception, please try again");
-            }
+            let idList = [];
+            res.body.map((item) => {
+                idList.push(item.dictValue);
+            });
+            commit(types.UPDATE_REGION_ID_OPTIONS, {
+                regionIdList: idList,
+            });
+            dispatch("getCloudTypeOptions", { selectRegionId: idList[0] });
         });
         // Simulation request
     },
     getCloudTypeOptions({ commit }) {
         let url = API.vimVnfmMgt.cloudType;
         axiosget(url).then((res) => {
-            if (res.code === 200) {
-                commit(types.UPDATE_CLOUD_TYPE_OPTIONS, {
-                    CloudTypeList: res.body,
-                });
-            } else {
-                this.$message.error("Network exception, please try again");
-            }
+            commit(types.UPDATE_CLOUD_TYPE_OPTIONS, {
+                CloudTypeList: res.body,
+            });
         });
         // Simulation request
     },
@@ -164,24 +152,22 @@ const actions = {
             : API.vimVnfmMgt.manoMgtInsert;
         let axiosType = state.editStatus ? axiosput : axiospost;
         axiosType(url, data).then(
-            (res) => {
-                if (res.code === 200) {
-                    dispatch(
-                        "loading/showLoading",
-                        {
-                            type: "success",
-                            toast: state.editStatus
-                                ? "Successfully updated"
-                                : "Has been added successfully",
-                        },
-                        { root: true }
-                    );
-                    let paramsObj = {
-                        pageNum: state.pageNum,
-                        pageSize: state.pageSize,
-                    };
-                    dispatch("getTableData", { paramsObj });
-                }
+            () => {
+                dispatch(
+                    "loading/showLoading",
+                    {
+                        type: "success",
+                        toast: state.editStatus
+                            ? "Successfully updated"
+                            : "Has been added successfully",
+                    },
+                    { root: true }
+                );
+                let paramsObj = {
+                    pageNum: state.pageNum,
+                    pageSize: state.pageSize,
+                };
+                dispatch("getTableData", { paramsObj });
             },
             () => {
                 dispatch(
@@ -198,13 +184,9 @@ const actions = {
     getMANOTypeOptions({ commit }) {
         let url = API.vimVnfmMgt.MANOType;
         axiosget(url).then((res) => {
-            if (res.code === 200) {
-                commit(types.UPDATE_CLOUD_TYPE_OPTIONS, {
-                    CloudTypeList: res.body,
-                });
-            } else {
-                this.$message.error("Network exception, please try again");
-            }
+            commit(types.UPDATE_CLOUD_TYPE_OPTIONS, {
+                CloudTypeList: res.body,
+            });
         });
     },
 };
