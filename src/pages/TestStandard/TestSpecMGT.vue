@@ -5,14 +5,9 @@
       <a-button type="primary" @click="handleCreateClick">Add Spec</a-button>
       <Search
         class="search test-spec__search"
-        @testSpecSearch="testSpecSearch"
-        :currentPage="currentPage"
+        @searchInput="testSpecSearch"
       />
-      <a-date-picker
-        class="calendar test-spec__calendar"
-        @change="onChange"
-        placeholder="Select date"
-      />
+      <DatePicker class="calendar" @changeDate="changeDate"/>
     </div>
     <div class="test-spec__table">
       <a-table
@@ -74,12 +69,14 @@ import { TestSpecColumns, TestCaseColumns } from "./constant";
 import { mapState, mapActions, mapMutations } from "vuex";
 import Loading from "../../components/Loading/Loading";
 import TestSpecMGTAddOrEdit from "./TestSpecMGTAddOrEdit";
+import DatePicker from "../../components/DatePicker/DatePicker";
 export default {
   name: "TestSpecMGT",
   components: {
     Search,
     TestSpecMGTAddOrEdit,
-    Loading
+    Loading,
+    DatePicker
   },
   data() {
     return {
@@ -99,7 +96,9 @@ export default {
       loadingMessage: state => state.loading.loadingMessage,
       tableLoading: state => state.loading.tableLoading,
       testCasetableLoading: state => state.testSpecMGT.testCasetableLoading,
-      visible: state => state.testSpecMGT.visible
+      visible: state => state.testSpecMGT.visible,
+      searchKeyword: state => state.searching.keyword,
+      selectDateTime: state => state.datePicker.selectDateTime
     })
   },
   mounted() {
@@ -120,6 +119,8 @@ export default {
       "getSpecPagination"
     ]),
     ...mapMutations("testSpecMGT", ["updatecaseMgtTableData", "updateVisible"]),
+    ...mapMutations("searching", ["setKeyword"]),
+    ...mapMutations("datePicker", ["setDateTime"]),
     initTestStandardTable() {
       this.getSUTOptions();
       this.getTableData({});
@@ -154,19 +155,18 @@ export default {
       this.getSpecPagination({ pagination, index });
     },
     // Filter by creating time
-    onChange(date, d) {
-      this.publishTime = d;
+    changeDate() {
+      this.publishTime = this.selectDateTime;
+      this.keyword = this.searchKeyword;
       this.testSpecSearch();
     },
     testSpecSearch(keyword, isSearch) {
       let obj = {};
       if (isSearch) this.keyword = keyword;
-      if (!(keyword === "" && this.publishTime === "")) {
-        obj = {
+      obj = {
           testSpecName: this.keyword,
           publishTime: this.publishTime
-        };
-      }
+      };
       this.clearPagination();
       // Simulation request
       this.getTableData(obj);
@@ -211,7 +211,11 @@ export default {
         }
       });
     }
-  }
+  },
+    beforeDestroy(){
+        this.setKeyword("");
+        this.setDateTime("")
+    }
 };
 </script>
 
@@ -223,7 +227,7 @@ export default {
       display: inline-block;
       margin-left: 40px;
     }
-    .test-spec__calendar {
+    .calendar {
       float: right;
       width: 280px;
     }

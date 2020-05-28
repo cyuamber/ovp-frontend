@@ -62,31 +62,28 @@ export default {
                   : item.value
             });
           });
+        }else {
+            this.count++;
+            if (this.count > 1) {
+                this.caseParams = this.caseParamsData.parameters.filter(item => {
+                    return item.visible !== false;
+                });
+                this.caseParams.forEach(item => {
+                    this.form.setFieldsValue({
+                        [item.name]:
+                            this.isEdit === false
+                                ? item.defaultValue
+                                : this.isEdit === true && item.type === "bool"
+                                ? this.strBool(item.value)
+                                : item.value
+                    });
+                });
+            }
         }
       }
     }
   },
   watch: {
-    caseParamsIsShow(val) {
-      if (val) {
-        this.count++;
-        if (this.count > 1) {
-          this.caseParams = this.caseParamsData.parameters.filter(item => {
-            return item.visible !== false;
-          });
-          this.caseParams.forEach(item => {
-            this.form.setFieldsValue({
-              [item.name]:
-                this.isEdit === false
-                  ? item.defaultValue
-                  : this.isEdit === true && item.type === "bool"
-                  ? this.strBool(item.value)
-                  : item.value
-            });
-          });
-        }
-      }
-    },
     caseParamsData(val) {
       this.caseParams = val.parameters.filter(item => {
         return item.visible !== false;

@@ -1,8 +1,8 @@
 <template>
   <div class="tab-content tab-content--margin">
     <a-button type="primary" @click="handleCreate">Create {{SUTName}} SUT</a-button>
-    <Search class="tab-content__button" @serchTestSUT="serchTestSUT" :currentPage="currentPage" />
-    <a-date-picker class="tab-content__calendar" @change="onChange" placeholder="Select date" />
+    <Search class="tab-content__button" @searchInput="serchTestSUT" />
+    <DatePicker class="calendar" @changeDate="changeDate"/>
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 import Search from "../../../components/Search/Search";
 import { TestSUTTabs, TestSUTColumns } from "./constant";
 import { mapState, mapActions, mapMutations } from "vuex";
-
+import DatePicker from "../../../components/DatePicker/DatePicker";
 export default {
   name: "Toolbar",
   data() {
@@ -23,7 +23,8 @@ export default {
   computed: {
     ...mapState({
       currentTab: state => state.testSUT.currentTab,
-      keyword: state => state.searching.keyword
+      keyword: state => state.searching.keyword,
+      selectDateTime: state => state.datePicker.selectDateTime
     }),
     SUTName: function() {
       return TestSUTTabs.filter(item => item.val === this.currentTab)[0].key;
@@ -39,7 +40,7 @@ export default {
       }
     }
   },
-  components: { Search },
+  components: { Search, DatePicker },
   methods: {
     ...mapActions("testSUT", ["setParams"]),
     ...mapMutations("testSUT", [
@@ -61,8 +62,8 @@ export default {
       this.setParams(true);
     },
     // Filter by creating time
-    onChange(date, d) {
-      this.setFilterItem({ time: d, key: this.$store.state.searching.keyword });
+      changeDate() {
+      this.setFilterItem({ time: this.selectDateTime, key: this.$store.state.searching.keyword });
       this.setParams(true);
     }
   }
@@ -77,7 +78,7 @@ export default {
     display: inline-block;
     margin-left: 40px;
   }
-  .tab-content__calendar {
+  .calendar {
     float: right;
     width: 280px;
   }

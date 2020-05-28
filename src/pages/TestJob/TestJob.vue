@@ -10,7 +10,7 @@
       >
         <a-select-option v-for="status of statusOptions" :key="status" :value="status">{{status}}</a-select-option>
       </a-select>
-      <a-date-picker class="calendar" @change="handleSelectCreateTime" placeholder="Select date" />
+      <DatePicker class="calendar" @changeDate="changeDate"/>
     </div>
     <div class="test-job__table">
       <a-table
@@ -52,6 +52,7 @@
 import { statusOptions, testJobColumns } from "./constants";
 import Loading from "../../components/Loading/Loading";
 import Drawer from "./Drawer";
+import DatePicker from "../../components/DatePicker/DatePicker";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
@@ -73,7 +74,8 @@ export default {
       pagination: state => state.testJob.pagination,
       tableLoading: state => state.loading.tableLoading,
       testJobSingleData: state => state.testJob.testJobSingleData,
-      lang: state => state.router.lang
+      lang: state => state.router.lang,
+      selectDateTime: state => state.datePicker.selectDateTime
     }),
     dashboardJumpStatus: {
       get() {
@@ -81,7 +83,7 @@ export default {
       }
     }
   },
-  components: { Drawer, Loading },
+  components: { Drawer, Loading, DatePicker },
   created() {
     if (window.location.href.includes("?")) {
       let JumpStatus = window.location.href.split("?")[1].split("=")[1];
@@ -111,6 +113,7 @@ export default {
       "updateDashboardJumpStatus",
       "clearSearchKeyword"
     ]),
+    ...mapMutations("datePicker", ["setDateTime"]),
     initTestJobTable() {
       this.getTableData({ bool: false });
       // this.tableQueryTimer = setInterval(() => {
@@ -136,8 +139,8 @@ export default {
         message: this.$message
       });
     },
-    handleSelectCreateTime(date, d) {
-      this.setFilter({ time: d });
+    changeDate() {
+      this.setFilter({ time: this.selectDateTime });
       this.getTableData({ bool: true });
     },
     handleSelectStatusChange(val) {
@@ -316,6 +319,7 @@ export default {
   },
   beforeDestroy: function() {
     clearInterval(this.tableQueryTimer);
+    this.setDateTime("");
   }
 };
 </script>

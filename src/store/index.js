@@ -4,6 +4,7 @@ import login from "./modules/components/login";
 import router from "./modules/components/router";
 import loading from "./modules/components/loading";
 import searching from "./modules/components/searching";
+import datePicker from "./modules/components/datePicker";
 import testInstrument from "./modules/testInstrument";
 import testSpecMGT from "./modules/TestSpecMGT";
 import VnfpnfSuite from "./modules/VnfpnfSuite";
@@ -31,6 +32,7 @@ const store = new Vuex.Store({
         testJob,
         testENV,
         dashBoard,
+        datePicker
     },
 });
 

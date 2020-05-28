@@ -62,12 +62,14 @@ export default {
     ...mapActions("VnfpnfSuite", ["getTableData", "getVNFOptions"]),
     ...mapMutations("VnfpnfSuite", ["changeTab"]),
     ...mapMutations("searching", ["setKeyword"]),
-    initVnfPnfSuiteTable() {
+      ...mapMutations("datePicker", ["setDateTime"]),
+      initVnfPnfSuiteTable() {
       this.getVNFOptions();
       this.getTableData({});
     },
     handleTabsChanges(key) {
       this.setKeyword("");
+      this.setDateTime("");
       this.changeTab(key);
       this.getTableData({});
     }

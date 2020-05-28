@@ -3,8 +3,8 @@
     <Loading :loadingMessage="loadingMessage" />
     <div class="top">
       <a-button type="primary" @click="handleCreateClick">Register TTMS</a-button>
-      <Search class="search" @testInsSearch="testInsSearch" :currentPage="currentPage" />
-      <a-date-picker class="calendar" @change="onChange" placeholder="Select date" />
+      <Search class="search" @searchInput="testInsSearch" />
+      <DatePicker class="calendar" @changeDate="changeDate"/>
     </div>
     <div class="table">
       <a-table
@@ -39,16 +39,18 @@
 
 <script>
 import Search from "../../../components/Search/Search";
+import DatePicker from "../../../components/DatePicker/DatePicker";
 import { TestInsrigisterColumns } from "./constant";
 import RigisterOrEdit from "./TestInsrigisterOrEdit";
 import Loading from "../../../components/Loading/Loading";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "TestInstrument",
   components: {
     Search,
     RigisterOrEdit,
-    Loading
+    Loading,
+    DatePicker
   },
   data() {
     return {
@@ -66,13 +68,17 @@ export default {
       pagination: state => state.testInstrument.pagination,
       singleData: state => state.testInstrument.singleData,
       loadingMessage: state => state.loading.loadingMessage,
-      tableLoading: state => state.loading.tableLoading
+      tableLoading: state => state.loading.tableLoading,
+      searchKeyword: state => state.searching.keyword,
+      selectDateTime: state => state.datePicker.selectDateTime
     })
   },
   mounted() {
     this.initTestInsTable();
   },
   methods: {
+    ...mapMutations("searching", ["setKeyword"]),
+    ...mapMutations("datePicker", ["setDateTime"]),
     ...mapActions("testInstrument", [
       "getTableData",
       "getMeterSys",
@@ -101,16 +107,15 @@ export default {
       this.getTableData(obj);
     },
     // Filter by creating time
-    onChange(date, d) {
-      this.createTime = d;
+    changeDate() {
+      this.createTime = this.selectDateTime;
+      this.keyword = this.searchKeyword;
       this.testInsSearch();
     },
     testInsSearch(keyword, isSearch) {
       let obj = {};
       if (isSearch) this.keyword = keyword;
-      if (!(keyword === "" && this.createTime === "")) {
         obj = { name: this.keyword, createTime: this.createTime };
-      }
       this.clearPagination();
       // Simulation request
       this.getTableData(obj);
@@ -141,6 +146,10 @@ export default {
     getAllMeterSys() {
       this.getTableData({});
     }
+  },
+  beforeDestroy(){
+      this.setKeyword("");
+      this.setDateTime("")
   }
 };
 </script>

@@ -1,29 +1,22 @@
 <template>
   <div class="tab-content tab-content--margin">
     <a-button type="primary" @click="handleRigister">Register {{tableType}}</a-button>
-    <a-input
-      class="tab-content__button"
-      :placeholder="tableType === 'VIM ENV'?'Cloud Type':'Name'"
-      @keyup.enter="searchTypeID"
-      @change="setSearchWord"
-      v-model="keyword"
-    >
-      <a-icon slot="prefix" type="search" />
-    </a-input>
-    <a-date-picker
-      v-if="tableType!=='MANO ENV'"
-      class="tab-content__calendar"
-      @change="selectedTime"
-      placeholder="Select date"
-    />
+    <Search class="search" @searchInput="testENVSearch"/>
+    <DatePicker v-if="tableType!=='MANO ENV'" class="calendar" @changeDate="changeDate"/>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
+import Search from "../../../components/Search/Search";
+import DatePicker from "../../../components/DatePicker/DatePicker";
 export default {
   props: ["tableType"],
   name: "Toolbar",
+  components: {
+      Search,
+      DatePicker
+  },
   data() {
     return {
       keyword: ""
@@ -31,13 +24,14 @@ export default {
   },
   computed: {
     ...mapState({
-      searchKeyword: state => state.searching.keyword
+      searchKeyword: state => state.searching.keyword,
+      selectDateTime: state => state.datePicker.selectDateTime
     })
   },
   watch: {
-    searchKeyword(val) {
-      this.keyword = val;
-    }
+      searchKeyword(val) {
+          this.keyword = val;
+      }
   },
   methods: {
     ...mapMutations("testENV", [
@@ -45,27 +39,24 @@ export default {
       "setFilterItem",
       "updateEdit"
     ]),
-    ...mapMutations("searching", ["setKeyword"]),
     ...mapActions("testENV", ["setParams"]),
     handleRigister() {
       this.updateVisible(true);
       this.updateEdit(false);
     },
-    setSearchWord(e) {
-      this.setKeyword(e.target.value);
-    },
-    searchTypeID() {
+    testENVSearch(keyword, isSearch) {
       this.setFilterItem({
-        key: this.keyword,
-        isSearch: true,
-        message: this.$message
+          key: this.keyword,
+          isSearch: isSearch,
+          message: this.$message
       });
       this.setParams();
     },
-    selectedTime(date, d) {
-      this.setFilterItem({ time: d });
-      this.setParams();
-    }
+    changeDate() {
+        this.keyword = this.searchKeyword;
+        this.setFilterItem({ time: this.selectDateTime, key: this.keyword});
+        this.testENVSearch();
+    },
   }
 };
 </script>
@@ -74,7 +65,7 @@ export default {
 .tab-content--margin {
   margin-top: 10px;
   margin-bottom: 30px;
-  .tab-content__button {
+  .search {
     display: inline-block;
     width: 240px;
     margin-left: 40px;
@@ -82,7 +73,7 @@ export default {
       border-radius: 20px;
     }
   }
-  .tab-content__calendar {
+  .calendar {
     float: right;
     width: 280px;
   }

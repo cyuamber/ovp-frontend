@@ -141,36 +141,33 @@ export default {
             XNFVendor: "",
             Version: ""
           });
+        }else{
+            if (!this.isEdit) {
+                this.editUploadtextShow = false;
+            } else {
+                this.editUploadtextShow = true;
+            }
+            this.count++;
+            if (this.isEdit && this.count > 1) {
+                this.form.setFieldsValue({
+                    XNFName: this.SuiteSingleData.name,
+                    XNFType: this.SuiteSingleData.typeCH.code,
+                    XNFVendor: this.SuiteSingleData.vendor,
+                    Version: this.SuiteSingleData.version,
+                    manage: this.SuiteSingleData.instrumentMgs.id
+                });
+            } else if (
+                this.VNFOptions.length !== 0 &&
+                !this.isEdit &&
+                this.count > 1
+            ) {
+                this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
+            }
         }
       }
     }
   },
   watch: {
-    visible(val) {
-      if (val) {
-        if (!this.isEdit) {
-          this.editUploadtextShow = false;
-        } else {
-          this.editUploadtextShow = true;
-        }
-        this.count++;
-        if (this.isEdit && this.count > 1) {
-          this.form.setFieldsValue({
-            XNFName: this.SuiteSingleData.name,
-            XNFType: this.SuiteSingleData.typeCH.code,
-            XNFVendor: this.SuiteSingleData.vendor,
-            Version: this.SuiteSingleData.version,
-            manage: this.SuiteSingleData.instrumentMgs.id
-          });
-        } else if (
-          this.VNFOptions.length !== 0 &&
-          !this.isEdit &&
-          this.count > 1
-        ) {
-          this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
-        }
-      }
-    },
     VNFOptions(val) {
       if (val.length) {
         this.spin = false;

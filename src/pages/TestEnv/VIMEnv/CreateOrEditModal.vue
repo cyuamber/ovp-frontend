@@ -192,7 +192,6 @@ export default {
       currentTab: state => state.testENV.currentTab,
       cloudTypeOptions: state => state.testENV.cloudTypeOptions,
       initValues: state => state.testENV.initValues,
-      visible: state => state.testENV.visible
     }),
     visible: {
       get() {
@@ -215,71 +214,68 @@ export default {
           list.forEach(item => {
             this.form.setFieldsValue({ [item.key]: "" });
           });
+        }else{
+            this.form = this.$form.createForm(this);
+            if (this.currentTab === "VIM ENV") {
+                this.VIMCount++;
+                if (!this.isEdit && this.VIMCount > 1) {
+                    // this.form.setFieldsValue({cloudType: this.cloudTypeOptions[0].code})
+                    this.initCloudType = {
+                        name: this.cloudTypeOptions[0].dictLabel,
+                        code: this.cloudTypeOptions[0].code
+                    };
+                } else if (this.isEdit && this.VIMCount > 1) {
+                    this.initCloudType = {
+                        name: this.initValues.cloudTypeCH.dictLabel,
+                        code: this.initValues.cloudTypeCH.code
+                    };
+                    // this.form.setFieldsValue({cloudType: this.initValues.cloudTypeCH.dictLabel})
+                }
+            } else if (this.currentTab === "MANO ENV") {
+                this.MANOCount++;
+                if (!this.isEdit && this.MANOCount > 1) {
+                    this.initCloudType = {
+                        name: this.cloudTypeOptions[0].dictLabel,
+                        code: this.cloudTypeOptions[0].dictValue
+                    };
+                    this.customParamsNumber = 0;
+                    this.onapProfileDataSource = [];
+                } else if (this.isEdit && this.MANOCount > 1) {
+                    this.initCloudType = {
+                        name: this.initValues.manoType,
+                        code: this.keyValueConversion(
+                            this.initValues.manoType,
+                            this.cloudTypeOptions
+                        )
+                    };
+                    this.onapProfileDataSource = [];
+                    this.customParamsNumber = 0;
+                    this.initValues.profiles.map(item => {
+                        if (item.edit === true) {
+                            this.customParamsNumber++;
+                            this.onapProfileDataSource.push(item);
+                        } else {
+                            this.initOnapDefaultProfiles[item.key] = item.value;
+                        }
+                    });
+                    if (this.onapProfileDataSource.length > 0) {
+                        this.onapProfileDataSource.map((item, index) => {
+                            item.customParamsNumber = index;
+                            return item;
+                        });
+                    }
+                }
+                if (this.initCloudType.name.toUpperCase() === "ONAP") {
+                    this.onapProfilesShow = true;
+                } else {
+                    this.onapProfilesShow = false;
+                }
+            }
         }
       }
     }
   },
   watch: {
-    visible(val) {
-      if (val) {
-        this.form = this.$form.createForm(this);
-        if (this.currentTab === "VIM ENV") {
-          this.VIMCount++;
-          if (!this.isEdit && this.VIMCount > 1) {
-            // this.form.setFieldsValue({cloudType: this.cloudTypeOptions[0].code})
-            this.initCloudType = {
-              name: this.cloudTypeOptions[0].dictLabel,
-              code: this.cloudTypeOptions[0].code
-            };
-          } else if (this.isEdit && this.VIMCount > 1) {
-            this.initCloudType = {
-              name: this.initValues.cloudTypeCH.dictLabel,
-              code: this.initValues.cloudTypeCH.code
-            };
-            // this.form.setFieldsValue({cloudType: this.initValues.cloudTypeCH.dictLabel})
-          }
-        } else if (this.currentTab === "MANO ENV") {
-          this.MANOCount++;
-          if (!this.isEdit && this.MANOCount > 1) {
-            this.initCloudType = {
-              name: this.cloudTypeOptions[0].dictLabel,
-              code: this.cloudTypeOptions[0].dictValue
-            };
-            this.customParamsNumber = 0;
-            this.onapProfileDataSource = [];
-          } else if (this.isEdit && this.MANOCount > 1) {
-            this.initCloudType = {
-              name: this.initValues.manoType,
-              code: this.keyValueConversion(
-                this.initValues.manoType,
-                this.cloudTypeOptions
-              )
-            };
-            this.onapProfileDataSource = [];
-            this.customParamsNumber = 0;
-            this.initValues.profiles.map(item => {
-              if (item.edit === true) {
-                this.customParamsNumber++;
-                this.onapProfileDataSource.push(item);
-              } else {
-                this.initOnapDefaultProfiles[item.key] = item.value;
-              }
-            });
-            if (this.onapProfileDataSource.length > 0) {
-              this.onapProfileDataSource.map((item, index) => {
-                item.customParamsNumber = index;
-                return item;
-              });
-            }
-          }
-          if (this.initCloudType.name.toUpperCase() === "ONAP") {
-            this.onapProfilesShow = true;
-          } else {
-            this.onapProfilesShow = false;
-          }
-        }
-      }
-    },
     cloudTypeOptions(val) {
       if (val.length) {
         if (!this.isEdit) {

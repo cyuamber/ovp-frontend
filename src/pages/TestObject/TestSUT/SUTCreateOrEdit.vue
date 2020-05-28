@@ -128,34 +128,31 @@ export default {
             type: ""
           });
           this.uploadAliasFilename = "";
+        }else{
+            if (!this.isEdit) {
+                this.editUploadtextShow = false;
+            } else {
+                this.editUploadtextShow = true;
+                this.uploadAliasFilename = this.VNFTest.fileAliasName;
+            }
+            this.count++;
+            if (this.isEdit && this.count > 1) {
+                this.form.setFieldsValue({
+                    name: this.VNFTest.name,
+                    vendor: this.VNFTest.vendor,
+                    version: this.VNFTest.version,
+                    type: this.VNFTest.typeCH.code
+                });
+            } else if (!this.isEdit && this.count > 1) {
+                this.form.setFieldsValue({
+                    type: this.VNFOptions.length > 0 ? this.VNFOptions[0].code : ""
+                });
+            }
         }
       }
     }
   },
   watch: {
-    visible(val) {
-      if (val) {
-        if (!this.isEdit) {
-          this.editUploadtextShow = false;
-        } else {
-          this.editUploadtextShow = true;
-          this.uploadAliasFilename = this.VNFTest.fileAliasName;
-        }
-        this.count++;
-        if (this.isEdit && this.count > 1) {
-          this.form.setFieldsValue({
-            name: this.VNFTest.name,
-            vendor: this.VNFTest.vendor,
-            version: this.VNFTest.version,
-            type: this.VNFTest.typeCH.code
-          });
-        } else if (!this.isEdit && this.count > 1) {
-          this.form.setFieldsValue({
-            type: this.VNFOptions.length > 0 ? this.VNFOptions[0].code : ""
-          });
-        }
-      }
-    },
     VNFOptions(val) {
       if (val.length > 0) {
         this.initNVFTypeValue = val[0].code;

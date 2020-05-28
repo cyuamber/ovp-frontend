@@ -87,6 +87,8 @@ export default {
       "setInitValues",
       "updateEdit"
     ]),
+    ...mapMutations("searching", ["setKeyword"]),
+    ...mapMutations("datePicker", ["setDateTime"]),
     ...mapActions("testENV", ["setParams", "deleteData"]),
     showEditOrDeleteModal(item, record) {
       if (item === "Edit") {
@@ -112,7 +114,11 @@ export default {
       this.setFilterItem({ pageObj });
       this.setParams();
     }
-  }
+  },
+    beforeDestroy(){
+        this.setKeyword("");
+        this.setDateTime("")
+    }
 };
 </script>
 

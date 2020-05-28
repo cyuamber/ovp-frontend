@@ -1,8 +1,8 @@
 <template>
   <div class="top">
     <a-button type="primary" @click="handleCreatePackage">Create {{packageName}} TT</a-button>
-    <Search class="search" @VNFSuiteSearch="VNFSuiteSearch" :currentPage="currentPage" />
-    <a-date-picker class="calendar" @change="handleTimeChange" placeholder="Select date" />
+    <Search class="search" @searchInput="VNFSuiteSearch"/>
+    <DatePicker class="calendar" @changeDate="changeDate"/>
   </div>
 </template>
 
@@ -10,9 +10,10 @@
 import Search from "../../../components/Search/Search";
 import { PackageMGTTabs } from "./constant";
 import { mapState, mapActions, mapMutations } from "vuex";
+import DatePicker from "../../../components/DatePicker/DatePicker";
 export default {
   name: "Toolbar",
-  components: { Search },
+  components: { Search, DatePicker },
   data() {
     return {
       currentPage: "VNF/PNFSuiteMGT",
@@ -22,7 +23,8 @@ export default {
   computed: {
     ...mapState({
       currentTab: state => state.VnfpnfSuite.currentTab,
-      searchKeyword: state => state.searching.keyword
+      searchKeyword: state => state.searching.keyword,
+      selectDateTime: state => state.datePicker.selectDateTime
     }),
     packageName: function() {
       return PackageMGTTabs.filter(item => item.val === this.currentTab)[0].key;
@@ -43,9 +45,10 @@ export default {
       this.updateVNFTest({});
     },
     // Filter by creating time
-    handleTimeChange(date, d) {
-      this.createTime = d;
-      this.VNFSuiteSearch();
+    changeDate() {
+        this.createTime = this.selectDateTime;
+        this.keyword = this.searchKeyword;
+        this.VNFSuiteSearch();
     },
     VNFSuiteSearch() {
       let obj = Object.assign(

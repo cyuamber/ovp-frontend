@@ -55,6 +55,7 @@ export default {
     ...mapActions("testSUT", ["getTableData", "getVNFOptions"]),
     ...mapMutations("testSUT", ["changeTab"]),
     ...mapMutations("searching", ["setKeyword"]),
+    ...mapMutations("datePicker", ["setDateTime"]),
     initTestSUTeTable() {
       this.getVNFOptions();
       let paramsObj = {};
@@ -63,6 +64,7 @@ export default {
     handleTabsChange(key) {
       this.changeTab(key);
       this.setKeyword("");
+      this.setDateTime("");
       let paramsObj = {};
       this.getTableData({ paramsObj, isFilter: false });
     }

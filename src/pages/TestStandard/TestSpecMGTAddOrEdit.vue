@@ -124,14 +124,6 @@
                 </span>
               </a-list-item>
             </a-list>
-            <!--<a-card-grid v-for="item in testCaseList" :key="item.id " class="form__card&#45;&#45;padding">-->
-            <!--<a-checkbox-->
-            <!--:value="item.id"-->
-            <!--:checked="initcheckboxGroup.includes(item.id)"-->
-            <!--class="form__checkbox&#45;&#45;size"-->
-            <!--/>-->
-            <!--<span :title="item.description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.name}}</span>-->
-            <!--</a-card-grid>-->
           </a-checkbox-group>
         </a-form-item>
         <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -206,35 +198,32 @@ export default {
             subSutType: "",
             PublishORG: ""
           });
+        }else{
+            this.count++;
+            if (this.isEdit && this.count > 1) {
+                this.form.setFieldsValue({
+                    Name: this.testSpecSingleData.name,
+                    Version: this.testSpecSingleData.version,
+                    SUTType: this.testSpecSingleData.sutTypeCH.dictLabel,
+                    subSutType: this.testSpecSingleData.subSutTypeCH.dictLabel,
+                    checkboxGroup: this.initcheckboxGroup,
+                    PublishORG: this.testSpecSingleData.publishOrg
+                });
+                this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
+                this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
+            } else if (!this.isEdit && this.count > 1) {
+                this.spin = true;
+                this.initSUTTypeValue = this.SUTOptions[0].code;
+                this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
+                this.getVNFOptions({
+                    SUTType: this.initSUTTypeValue
+                });
+            }
         }
       }
     }
   },
   watch: {
-    visible(val) {
-      if (val) {
-        this.count++;
-        if (this.isEdit && this.count > 1) {
-          this.form.setFieldsValue({
-            Name: this.testSpecSingleData.name,
-            Version: this.testSpecSingleData.version,
-            SUTType: this.testSpecSingleData.sutTypeCH.dictLabel,
-            subSutType: this.testSpecSingleData.subSutTypeCH.dictLabel,
-            checkboxGroup: this.initcheckboxGroup,
-            PublishORG: this.testSpecSingleData.publishOrg
-          });
-          this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
-          this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
-        } else if (!this.isEdit && this.count > 1) {
-          this.spin = true;
-          this.initSUTTypeValue = this.SUTOptions[0].code;
-          this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
-          this.getVNFOptions({
-            SUTType: this.initSUTTypeValue
-          });
-        }
-      }
-    },
     SUTOptions(val) {
       if (val.length && !this.isEdit) {
         this.initSUTTypeValue = this.SUTOptions[0].code;
