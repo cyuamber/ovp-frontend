@@ -60,7 +60,7 @@ const actions = {
   },
   uploadVNFFile ({ commit }, { formData, message }) {
     axiospost(API.uploadFile, { file: formData }, true).then(
-      res => {
+        () => {
         commit(types.UPDATE_TOKEN, null);
         message.success('Upload successfully');
       },
@@ -70,11 +70,11 @@ const actions = {
       }
     );
   },
-  createOrEditTestMeter ({ dispatch, state }, { data, isEdit, message }) {
+  createOrEditTestMeter ({ dispatch, state }, { data, isEdit }) {
     let url = isEdit ? API.suiteMgt.suiteMgtUpdate : API.suiteMgt.suiteMgtInsert;
     let axiosType = isEdit ? axiosput : axiospost;
     axiosType(url, data).then(
-      res => {
+        () => {
           dispatch(
               'loading/showLoading',
               {
@@ -103,7 +103,7 @@ const actions = {
   },
   deleteTestMeter ({ dispatch, state }, { id, message }) {
     let url = API.suiteMgt.suiteMgtDelete.replace(':id', id);
-    axiosdelete(url).then(res => {
+    axiosdelete(url).then(() => {
         dispatch(
             'loading/showLoading',
             { type: 'success', toast: 'Deleted successfully' },

@@ -36,13 +36,13 @@ module.exports =
     "/portal/business/instrumentMgs": "/_getMeterSys",
     "/POST/portal/business/suiteMgt/insert": "/loginMeterSys",
     "/PUT/portal/business/suiteMgt/update": "/updateMeterSys",
-    "/PUT/portal/business/suiteMgt/:id/delete": "/deleteMeterSys",
+    "/DELETE/portal/business/suiteMgt/:id/delete": "/deleteMeterSys",
     "/portal/business/files/:filealias/:filename": "/_downloadFile",
     ///////<-------------TestSUT--------->/////
     "/POST/portal/business/sutMgt": "/_getVNFTest",
     "/POST/portal/business/sutMgt/insert": "/createVNFTest",
     "/PUT/portal/business/sutMgt/update": "/updateVNFTest",
-    "/PUT/portal/business/sutMgt/:id/delete": "/deleteVNFTest",
+    "/DELETE/portal/business/sutMgt/:id/delete": "/deleteVNFTest",
     "/portal/business/types/:flag": "/getVNFType",
     "/PUT/portal/business/files/upload": "/updateVNFTest",
     ///////<-------------Test Spec MGT--------->/////

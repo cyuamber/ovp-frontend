@@ -108,7 +108,7 @@ export default {
   props: ["loadingMessage"],
   watch: {
     loadingMessage(currentState) {
-      this.showLoading = +currentState.showAll;
+      this.showLoading = currentState.showAll;
       this.toastOpen = currentState.toastOpen;
       this.messageType = currentState.type;
       this.toastMessage = currentState.toast;
