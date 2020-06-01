@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-// import TestPage from '../pages/TestPage.vue';
 
 //layout
 import Layout from "../components/layout/layout.vue";
@@ -20,8 +19,6 @@ import VnfpnfSuite from "../pages/TestEnv/VnfpnfSuite/VnfpnfSuite.vue";
 //TestJob
 import TestJob from "../pages/TestJob/TestJob.vue";
 import JobDetail from "../pages/TestJob/JobDetail.vue";
-//TestCase
-// import TestCase from '../pages/TestCase/TestCase.vue';
 //TestSpecMGT
 import TestSpecMGT from "../pages/TestStandard/TestSpecMGT.vue";
 
@@ -122,17 +119,6 @@ export default new Router({
                 },
             ],
         },
-        //   {
-        //   path: '/testcasemgt',
-        //   component: Layout,
-        //   children: [
-        //     {
-        //       path: '',
-        //       name: 'TestCase',
-        //       component: TestCase
-        //     },
-        //   ]
-        // },
         {
             path: "/testspecmgt",
             component: Layout,
@@ -143,21 +129,6 @@ export default new Router({
                     component: TestSpecMGT,
                 },
             ],
-        },
-        // {
-        //   path: '/testresultsmgt',
-        //   name: 'TestResult',
-        //   component: () => import('../pages/TestResult/TestResult.vue')
-        // }
-        // {
-        //   path: '/jobDetail',
-        //   component: Layout,
-        //   children: [{
-        //     path: '',
-        //     name: 'JobDetail',
-        //     component: JobDetail
-        //   }]
-
-        // }
+        }
     ],
 });

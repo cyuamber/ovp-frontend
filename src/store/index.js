@@ -9,7 +9,6 @@ import testInstrument from "./modules/testInstrument";
 import testSpecMGT from "./modules/TestSpecMGT";
 import VnfpnfSuite from "./modules/VnfpnfSuite";
 import testSUT from "./modules/TestSUT";
-import testCase from "./modules/testCase";
 import testJob from "./modules/TestJob";
 import testENV from "./modules/TestENV";
 import dashBoard from "./modules/DashBoard";
@@ -28,7 +27,6 @@ const store = new Vuex.Store({
         testSpecMGT,
         VnfpnfSuite,
         testSUT,
-        testCase,
         testJob,
         testENV,
         dashBoard,

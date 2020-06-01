@@ -43,22 +43,6 @@ export default {
                 },
             ],
         },
-        // {
-        //     auth: ['admin', 'customer'],
-        //     name: 'Test Instrument MGT',
-        //     iconType: 'bar-chart',
-        //     isChildren: true,
-        //     children: [{
-        //         auth: ['admin'],
-        //         name: 'Instrument MGS MGT',
-        //         iconType: '',
-        //     },
-        //     {
-        //         auth: ['admin', 'customer'],
-        //         name: 'Instrument Package MGT',
-        //         iconType: '',
-        //     }]
-        // },
         {
             auth: ["admin"],
             name: "Test Job MGT",
@@ -66,13 +50,6 @@ export default {
             isChildren: false,
             children: null,
         },
-        // {
-        //     auth: ['admin'],
-        //     name: 'Test Case MGT',
-        //     iconType: 'appstore-o',
-        //     isChildren: false,
-        //     children: null
-        // },
         {
             auth: ["admin", "customer"],
             name: "Test Spec MGT",
