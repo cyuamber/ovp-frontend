@@ -111,6 +111,7 @@ export default {
     clickMenu(e) {
       this.$store.commit("setCurrentMenu");
       let routePath = e.keyPath.reverse();
+      this.openKeys = routePath.length>1?[routePath[0]]:[];
       let routeStr = util.transformUrlpathstr(e.key);
       this.$store.commit("setCurrentMenu", [e.key]);
       this.$store.commit("setBreadcrumb", routePath);
@@ -119,12 +120,7 @@ export default {
       });
     },
       onOpenChange(openKeys) {
-          const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1);
-          if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-              this.openKeys = openKeys;
-          } else {
-              this.openKeys = latestOpenKey ? [latestOpenKey] : [];
-          }
+          this.openKeys = openKeys;
       },
   }
 };
