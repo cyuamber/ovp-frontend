@@ -2,6 +2,7 @@
   <div class="login">
     <h1>This is login page</h1>
     <a-button type="primary" @click="turntopage">Launch to project</a-button>
+    <a-button type="primary" @click="login">Launch to project</a-button>
   </div>
 </template>
 
@@ -13,6 +14,9 @@ export default {
       this.$router.push({
         path: "/dashboard"
       });
+    },
+    login() {
+      console.log("Login");
     }
   }
 };
