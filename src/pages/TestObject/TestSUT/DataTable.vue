@@ -33,7 +33,6 @@ export default {
   name: "DataTable",
   data() {
     return {
-      isEdit: false,
       currentPage: "TestSUT",
       columns: TestSUTColumns
     };
@@ -58,7 +57,6 @@ export default {
 
     showEditOrDeleteModal(item, VNFTest) {
       if (item === "Edit") {
-        this.isEdit = true;
         this.updateEdit(true);
         this.updateVNFTest(VNFTest);
         this.updateVisible(true);

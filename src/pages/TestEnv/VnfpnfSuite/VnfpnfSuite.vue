@@ -12,7 +12,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-import { PackageMGTTabs, VnfpnfSuiteColumns } from "./constant";
+import { PackageMGTTabs } from "./constant";
 import Toolbar from "./Toolbar";
 import DataTable from "./DataTable";
 import xNFCreateOrEdit from "./VnfpnfCreateOrEdit";
@@ -30,11 +30,7 @@ export default {
     return {
       PackageMGTTabs,
       tabs: PackageMGTTabs,
-      columns: VnfpnfSuiteColumns,
-      currentPage: "VNF/PNFSuiteMGT",
-      isEdit: false,
-      createTime: "",
-      keyword: ""
+      currentPage: "VNF/PNFSuiteMGT"
     };
   },
   computed: {
@@ -80,22 +76,3 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.test-ins__container {
-  .top {
-    margin-bottom: 30px;
-    .search {
-      display: inline-block;
-      margin-left: 40px;
-    }
-    .calendar {
-      float: right;
-      width: 280px;
-    }
-  }
-  .tag {
-    padding: 0 8px;
-    border-radius: 12px;
-  }
-}
-</style>

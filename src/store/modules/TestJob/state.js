@@ -36,7 +36,8 @@ const state = {
   initcheckboxGroup: [],
   caseParamsIsShow: false,
   caseParamsData: [],
-  expandedRowKeys: []
+  expandedRowKeys: [],
+  editStatus: false
 }
 
 export default state

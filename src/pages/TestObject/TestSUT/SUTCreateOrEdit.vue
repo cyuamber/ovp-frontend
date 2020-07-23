@@ -218,7 +218,6 @@ export default {
               ? values.upload[0].name
               : this.VNFTest.fileName
           };
-          // console.log(data, "===>params");
           if (!data.fileName || !data.fileAliasName) {
             this.$message.error("Upload file error. Please upload again!");
           } else {

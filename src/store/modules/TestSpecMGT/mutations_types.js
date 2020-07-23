@@ -10,3 +10,4 @@ export const UPDATE_PAGINATION = 'updatePagination';
 export const UPDATE_SPEC_PAGINATION = 'updateSpecPagination';
 export const UPDATE_TEST_CASE_TABLE_LOADING = 'updateTestCaseTableLoading';
 export const UPDATE_VISIBLE = 'updateVisible';
+export const UPDATE_EDIT = "updateEdit";

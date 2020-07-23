@@ -1,76 +1,42 @@
 <template>
   <div class="test-ins__container">
     <Loading :loadingMessage="loadingMessage" />
-    <div class="top">
-      <a-button type="primary" @click="handleCreateClick">Register TTMS</a-button>
-      <Search class="search" @searchInput="testInsSearch" />
-      <DatePicker class="calendar" @changeDate="changeDate"/>
-    </div>
-    <div class="table">
-      <a-table
-        :columns="columns"
-        :dataSource="tableData"
-        bordered
-        :loading="tableLoading"
-        rowKey="id"
-        size="default"
-        :pagination="pagination"
-        @change="handleTableChange"
-      >
-        <span slot="action" slot-scope="action,record">
-          <a-tag
-            v-for="item in action"
-            :key="item"
-            :color="item === 'Edit'? 'blue' : 'red'"
-            class="tag"
-            @click="(() => showEditOrDeleteModal(item,record))"
-          >{{item}}</a-tag>
-        </span>
-      </a-table>
-    </div>
-    <RigisterOrEdit
-      v-if="isVisibleEditModel"
-      @close="close"
-      :isEdit="isEdit"
-      @getAllMeterSys="getAllMeterSys"
-    />
+    <Toolbar />
+    <DataTable />
+    <RigisterCreateOrEdit :isEdit="editStatus" />
   </div>
 </template>
 
 <script>
-import Search from "../../../components/Search/Search";
-import DatePicker from "../../../components/DatePicker/DatePicker";
-import { TestInsrigisterColumns } from "./constant";
-import RigisterOrEdit from "./TestInsrigisterOrEdit";
+
 import Loading from "../../../components/Loading/Loading";
+import RigisterCreateOrEdit from "./TestInsrigisterOrEdit";
+import Toolbar from "./Toolbar";
+import DataTable from "./DataTable";
 import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   name: "TestInstrument",
   components: {
-    Search,
-    RigisterOrEdit,
+    DataTable,
+    RigisterCreateOrEdit,
     Loading,
-    DatePicker
+    Toolbar
   },
   data() {
     return {
       isVisibleEditModel: false,
-      columns: TestInsrigisterColumns,
-      currentPage: "TestInstrumentMGT",
-      isEdit: false,
       createTime: "",
       keyword: ""
     };
   },
   computed: {
     ...mapState({
-      tableData: state => state.testInstrument.tableData,
-      pagination: state => state.testInstrument.pagination,
-      singleData: state => state.testInstrument.singleData,
+      tableData: state => state.TestInstrument.tableData,
+      pagination: state => state.TestInstrument.pagination,
+      singleData: state => state.TestInstrument.singleData,
+      editStatus: state => state.TestInstrument.editStatus,
       loadingMessage: state => state.loading.loadingMessage,
-      tableLoading: state => state.loading.tableLoading,
-      searchKeyword: state => state.searching.keyword,
-      selectDateTime: state => state.datePicker.selectDateTime
+      tableLoading: state => state.loading.tableLoading
     })
   },
   mounted() {
@@ -79,9 +45,8 @@ export default {
   methods: {
     ...mapMutations("searching", ["setKeyword"]),
     ...mapMutations("datePicker", ["setDateTime"]),
-    ...mapActions("testInstrument", [
+    ...mapActions("TestInstrument", [
       "getTableData",
-      "getMeterSys",
       "getPagination",
       "clearPagination",
       "deleteMeterSys"
@@ -89,63 +54,6 @@ export default {
     initTestInsTable() {
       this.getTableData({});
     },
-    handleCreateClick() {
-      this.getMeterSys("");
-      this.isVisibleEditModel = true;
-      this.isEdit = false;
-    },
-    handleTableChange(pagination) {
-      this.getPagination({ pagination });
-      let current = pagination.current,
-        pageSize = pagination.pageSize,
-        obj = {
-          name: this.keyword,
-          createTime: this.createTime,
-          pageNum: current,
-          pageSize: pageSize
-        };
-      this.getTableData(obj);
-    },
-    // Filter by creating time
-    changeDate() {
-      this.createTime = this.selectDateTime;
-      this.keyword = this.searchKeyword;
-      this.testInsSearch();
-    },
-    testInsSearch(keyword, isSearch) {
-      let obj = {};
-      if (isSearch) this.keyword = keyword;
-        obj = { name: this.keyword, createTime: this.createTime };
-      this.clearPagination();
-      // Simulation request
-      this.getTableData(obj);
-    },
-    close() {
-      this.isVisibleEditModel = false;
-    },
-    showEditOrDeleteModal(item, singleData) {
-      if (item === "Edit") {
-        this.isVisibleEditModel = true;
-        this.isEdit = true;
-        this.getMeterSys(singleData);
-      } else {
-        this.$confirm({
-          title: "Are you sure delete this TTMS?",
-          content: "Id: " + singleData.id,
-          okText: "Yes",
-          okType: "danger",
-          cancelText: "No",
-          onOk: () => {
-            this.deleteMeterSys({
-              id: singleData.id
-            });
-          }
-        });
-      }
-    },
-    getAllMeterSys() {
-      this.getTableData({});
-    }
   },
   beforeDestroy(){
       this.setKeyword("");
@@ -155,21 +63,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.test-ins__container {
-  .top {
-    margin-bottom: 30px;
-    .search {
-      display: inline-block;
-      margin-left: 40px;
-    }
-    .calendar {
-      float: right;
-      width: 280px;
-    }
-  }
-  .tag {
-    padding: 0 8px;
-    border-radius: 12px;
-  }
-}
+
 </style>

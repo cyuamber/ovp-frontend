@@ -22,7 +22,6 @@ export default {
   data() {
     return {
       tabs: ["VIM ENV", "VNFM ENV", "MANO ENV"],
-      isEdit: false
     };
   },
   computed: {

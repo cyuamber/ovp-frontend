@@ -62,7 +62,7 @@ const mutations = {
             state.pageNum = pageObj.current;
             state.pageSize = pageObj.pageSize;
         }
-    },
+    }
 };
 
 export default mutations;

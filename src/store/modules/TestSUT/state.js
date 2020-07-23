@@ -10,7 +10,7 @@ const state = {
     pageNum: 1,
     pageSize: 10,
     currentTab: 101,
-    editStatus: false,
+    editStatus: false
 };
 
 export default state;

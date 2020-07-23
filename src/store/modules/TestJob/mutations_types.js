@@ -28,3 +28,4 @@ export const CLEAR_SEARCH_KEYWORD = 'clearSearchKeyword';
 export const UPDATE_INIT_CHECKBOX_GROUP = 'updateInitcheckboxGroup';
 export const UPDATE_CASE_PARAMS_DATA = 'updateCaseParamsData';
 export const UPDATE_CASE_CHILD_TABLE_DATA = 'updatecaseChildTableData';
+export const UPDATE_EDIT = "updateEdit";

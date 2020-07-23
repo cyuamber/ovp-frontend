@@ -161,6 +161,9 @@ const mutations = {
   [types.UPDATE_CASE_CHILD_TABLE_DATA] (state, { testCaseChildData, record }) {
     let index = record.index;
     state.detailTestCase[index].caseMgt = testCaseChildData;
+  },
+  [types.UPDATE_EDIT](state, bool) {
+      state.editStatus = bool;
   }
 };
 

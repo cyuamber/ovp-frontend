@@ -1,35 +1,7 @@
-import { axiosdelete, axiospost, axiosput } from "../../utils/http";
-import API from "../../const/apis";
-import moment from "moment";
+import { axiospost, axiosput, axiosdelete } from '../../../utils/http';
+import API from '../../../const/apis';
+import * as types from './mutations_types';
 
-const state = {
-    tableData: [],
-    singleData: {},
-    pagination: { current: 1, total: 0 },
-};
-const mutations = {
-    updateTableData(state, tableData) {
-        state.pagination.total = tableData.total;
-        state.tableData = tableData.body.map((item, index) => {
-            item.createTime =
-                item.createTime !== null
-                    ? moment(item.createTime).format("YYYY-MM-DD")
-                    : item.createTime;
-            item.index =
-                tableData.body.length * (state.pagination.current - 1) +
-                index +
-                1;
-            item.action = ["Edit", "Delete"];
-            return item;
-        });
-    },
-    updateMeterSys(state, singleData) {
-        state.singleData = singleData;
-    },
-    updatePagination(state, Options) {
-        state.pagination = Options;
-    },
-};
 const actions = {
     getTableData({ dispatch, commit }, obj) {
         let req = {};
@@ -42,7 +14,7 @@ const actions = {
         axiospost(API.instrumentMgs.instrumentMgsTable, req).then(
             (res) => {
                 if (res.code === 200) {
-                    commit("updateTableData", res);
+                    commit(types.UPDATE_TABLE_DATA, res);
                     dispatch("loading/tableLoading", false, { root: true });
                     if (req.createTime || req.name) {
                         dispatch(
@@ -80,13 +52,13 @@ const actions = {
         );
     },
     getMeterSys({ commit }, data) {
-        commit("updateMeterSys", data);
+        commit(types.UPDATE_METER_SYS, data);
     },
     getPagination({ commit }, { pagination }) {
-        commit("updatePagination", pagination);
+        commit(types.UPDATE_PAGINATION, pagination);
     },
     clearPagination({ commit }) {
-        commit("updatePagination", { current: 1, total: 0 });
+        commit(types.UPDATE_PAGINATION, { current: 1, total: 0 });
     },
     createOrEditTestIns({ dispatch }, { isEdit, data }) {
         let url = isEdit
@@ -148,11 +120,4 @@ const actions = {
         );
     },
 };
-const getters = {};
-export default {
-    state,
-    mutations,
-    actions,
-    getters,
-    namespaced: true,
-};
+export default actions;

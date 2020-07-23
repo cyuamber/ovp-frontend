@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-bind:title="title" v-model="showModal" :footer="null" @cancel="handleCancel">
+  <a-modal v-bind:title="title" :visible="visible" :footer="null" @cancel="handleCancel">
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item label="Name" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -37,28 +37,56 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   props: ["isEdit"],
   data() {
     return {
       form: this.$form.createForm(this),
-      showModal: true,
-      title: this.isEdit ? "Edit TTMS" : "Rigister TTMS"
+      title: this.isEdit ? "Edit TTMS" : "Rigister TTMS",
+      count: 0
     };
   },
   computed: {
     ...mapState({
-      singleData: state => state.testInstrument.singleData
+      singleData: state => state.TestInstrument.singleData,
+      visible: state => state.TestInstrument.visible
     })
   },
-  destroyed() {
-    this.$store.dispatch("testInstrument/getMeterSys", {});
-  },
+    watch: {
+        visible(val) {
+            if (val) {
+                this.count++;
+                if (this.isEdit && this.count > 1) {
+                    this.form.setFieldsValue({
+                        Name: this.singleData.name,
+                        Vendor: this.singleData.vendor,
+                        MntAddress: this.singleData.mntAddress,
+                        User: this.singleData.username,
+                        Password: this.singleData.password
+                    });
+                }
+            }else{
+                this.updateMeterSys({});
+                this.form.setFieldsValue({
+                    Name: "",
+                    Vendor: "",
+                    MntAddress: "",
+                    User: "",
+                    Password: ""
+                });
+            }
+        }
+    },
+
   methods: {
-    ...mapActions("testInstrument", ["createOrEditTestIns"]),
+    ...mapActions("TestInstrument", ["createOrEditTestIns"]),
+    ...mapMutations("TestInstrument", [
+        "updateVisible",
+        "updateMeterSys"
+    ]),
     handleCancel() {
-      this.$emit("close");
+        this.updateVisible(false);
     },
     handleSubmit(e) {
       e.preventDefault();
@@ -78,15 +106,20 @@ export default {
             data
           }).then(
             () => {
-              this.$emit("close");
+                this.updateVisible(false);
+                this.form.resetFields();
+                this.updateMeterSys({});
             },
             () => {
-              this.$emit("close");
+                this.updateVisible(false);
             }
           );
         }
       });
     }
+  },
+  destroyed() {
+      this.updateMeterSys({});
   }
 };
 </script>

@@ -5,7 +5,7 @@ import router from "./modules/components/router";
 import loading from "./modules/components/loading";
 import searching from "./modules/components/searching";
 import datePicker from "./modules/components/datePicker";
-import testInstrument from "./modules/testInstrument";
+import TestInstrument from "./modules/TestInstrument";
 import testSpecMGT from "./modules/TestSpecMGT";
 import VnfpnfSuite from "./modules/VnfpnfSuite";
 import testSUT from "./modules/TestSUT";
@@ -23,7 +23,7 @@ const store = new Vuex.Store({
         router,
         loading,
         searching,
-        testInstrument,
+        TestInstrument,
         testSpecMGT,
         VnfpnfSuite,
         testSUT,

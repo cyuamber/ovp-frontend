@@ -70,6 +70,9 @@ const mutations = {
     [types.UPDATE_VISIBLE](state, bool) {
         state.visible = bool;
     },
+    [types.UPDATE_EDIT](state, bool) {
+        state.editStatus = bool;
+    },
 };
 
 export default mutations;

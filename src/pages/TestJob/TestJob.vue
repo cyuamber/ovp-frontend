@@ -1,17 +1,7 @@
 <template>
   <div class="test-job__container">
     <Loading :loadingMessage="loadingMessage" />
-    <div class="test-job__top">
-      <a-button type="primary" @click="createOrEditTestJobShow">Create Test Job</a-button>
-      <a-select
-        class="select"
-        :defaultValue="dashboardJumpStatus"
-        @change="handleSelectStatusChange"
-      >
-        <a-select-option v-for="status of statusOptions" :key="status" :value="status">{{status}}</a-select-option>
-      </a-select>
-      <DatePicker class="calendar" @changeDate="changeDate"/>
-    </div>
+    <Toolbar />
     <div class="test-job__table">
       <a-table
         :columns="columns"
@@ -48,11 +38,10 @@
 </template>
 
 <script>
-// import { testJobColumns } from "../../const/constant.js";
-import { statusOptions, testJobColumns } from "./constants";
+import Toolbar from "./Toolbar";
+import { testJobColumns } from "./constants";
 import Loading from "../../components/Loading/Loading";
 import Drawer from "./Drawer";
-import DatePicker from "../../components/DatePicker/DatePicker";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
@@ -60,7 +49,6 @@ export default {
   data() {
     return {
       columns: testJobColumns,
-      statusOptions: statusOptions,
       loading: false,
       tableQueryTimer: "",
       isEdit: false
@@ -74,16 +62,10 @@ export default {
       pagination: state => state.testJob.pagination,
       tableLoading: state => state.loading.tableLoading,
       testJobSingleData: state => state.testJob.testJobSingleData,
-      lang: state => state.router.lang,
-      selectDateTime: state => state.datePicker.selectDateTime
-    }),
-    dashboardJumpStatus: {
-      get() {
-        return this.$store.state.testJob.dashboardJumpStatus;
-      }
-    }
+      lang: state => state.router.lang
+    })
   },
-  components: { Drawer, Loading, DatePicker },
+  components: { Drawer, Loading, Toolbar },
   created() {
     if (window.location.href.includes("?")) {
       let JumpStatus = window.location.href.split("?")[1].split("=")[1];
@@ -119,40 +101,6 @@ export default {
       // this.tableQueryTimer = setInterval(() => {
       //   this.getTableData({bool:false,loading:false});
       // }, 5000);
-    },
-    createOrEditTestJobShow() {
-      this.isEdit = false;
-      this.setIsShow(true);
-      this.getSUTType({
-        message: this.$message
-      });
-      this.getVNFMOption({
-        message: this.$message
-      });
-      this.getVIMOption({
-        message: this.$message
-      });
-      this.getMANOOption({
-        message: this.$message
-      });
-      this.getTestInstrumentOption({
-        message: this.$message
-      });
-    },
-    changeDate() {
-      this.setFilter({ time: this.selectDateTime });
-      this.getTableData({ bool: true });
-    },
-    handleSelectStatusChange(val) {
-      if (window.location.href.includes("?")) {
-        window.location.href = window.location.href.split("?")[0];
-      }
-      this.updateDashboardJumpStatus("All");
-      if (val === "All") this.clearSearchKeyword(val);
-      this.setFilter({
-        key: val
-      });
-      this.getTableData({ bool: true });
     },
     handleActions(action, data) {
       if (action === "Start") this.handleStart(data);
@@ -325,17 +273,6 @@ export default {
 </script>
 <style lang="less" scope>
 .test-job__container {
-  .test-job__top {
-    margin-bottom: 30px;
-    .select {
-      width: 150px;
-      margin-left: 30px;
-    }
-    .calendar {
-      float: right;
-      width: 280px;
-    }
-  }
   .test-job__table {
     .test-job__showState {
       display: block;
