@@ -16,7 +16,7 @@ const actions = {
   getLinesData({ commit }, { message }) {
       axiosget(API.dashboard.PassCaseAmount7Days).then(res => {
           commit(types.UPDATE_LINES_DATA, res.body);
-          commit(types.UPDATE_LINES_XAXIS_LENGTH, res.body.length);
+          commit(types.UPDATE_LINES_XAXIS_LENGTH, res.body);
       },
           () => {
               message.error('Network exception, please try again');

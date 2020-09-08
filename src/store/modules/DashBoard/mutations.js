@@ -6,7 +6,7 @@ const mutations = {
       // console.log(state.liveData,"state.liveData")
   },
   [types.UPDATE_LINES_DATA](state, data) {
-      if (data.length > 0) {
+      if (data && typeof(data) === 'object' && data.length > 0) {
           data.forEach((item) => {
               Object.keys(data[0]).forEach((items) => {
                   if (items === 'range') state.linesData.xAxis.push(item[items]);
@@ -33,23 +33,23 @@ const mutations = {
               series: []
           };
       }
-      // console.log(state.linesData, "----> state.linesData")
   },
   [types.UPDATE_LINES_XAXIS_LENGTH](state, data) {
-      state.linesxAxisLength = data;
+      if (data && typeof(data) === 'object') {
+          state.linesxAxisLength = data.length;
+      }
   },
   [types.UPDATE_TESTJOB_CIRCLES_DATA](state, data) {
-      if (Object.keys(data).length > 0) {
+      if (data && typeof(data) === 'object' && Object.keys(data).length > 0) {
           Object.keys(data).forEach((item) => {
               let singleData = [];
               singleData.push(item, data[item]);
               state.testJobCirclesData.push(singleData);
           });
       } else state.testJobCirclesData = [];
-      // console.log(state.testJobCirclesData, "----> state.testJobCirclesData")
   },
   [types.UPDATE_SUT_AMOUNT_DATA](state, data) {
-      if (Object.keys(data).length > 0) {
+      if (data && typeof(data) === 'object' && Object.keys(data).length > 0) {
           Object.keys(data).forEach((item, index) => {
               state.SUTAmountData.push({
                   name: item === 'pnfcount' ? 'PNF Count' : (item === 'nfvicount' ? 'NFVI Count' : 'VNF Count'),
@@ -58,10 +58,9 @@ const mutations = {
               });
           });
       } else state.SUTAmountData = [];
-      // console.log(state.SUTAmountData, "----> state.SUTAmountData")
   },
   [types.UPDATE_JOB_AMOUNT_DATA](state, data) {
-      if (Object.keys(data).length > 0) {
+      if (data && typeof(data) === 'object' && Object.keys(data).length > 0) {
           Object.keys(data).forEach((item, index) => {
               state.jobAmountData.push({
                   name: item === 'successcount' ? 'DONE' : 'FAILED',
@@ -69,7 +68,6 @@ const mutations = {
                   color: state.jobAmountColors[index],
                   events: {
                       click: () => {
-                          // console.log("click:", state.jobAmountClickText[index]);
                           window.location.href =
                               window.location.origin + window.location.pathname + "/#/testjobmgt?status=" + state.jobAmountClickText[index];
                       }
@@ -77,10 +75,9 @@ const mutations = {
               });
           });
       } else state.jobAmountData = [];
-      // console.log(state.jobAmountData, "----> state.jobAmountData")
   },
   [types.UPDATE_TESTENV_AMOUNT_DATA](state, data) {
-      if (Object.keys(data).length > 0) {
+      if (data && typeof(data) === 'object' && Object.keys(data).length > 0) {
           Object.keys(data).forEach((item, index) => {
               state.testEnvAmountData.push({
                   name: item === 'manocount' ? 'Mano Count' : (item === 'vimcount' ? 'VIM Count' : 'VNFM Count'),
@@ -89,7 +86,6 @@ const mutations = {
               });
           });
       } else state.testEnvAmountData = [];
-      // console.log(state.testEnvAmountData, "----> state.testEnvAmountData")
   },
 
 };
