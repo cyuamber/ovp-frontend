@@ -49,7 +49,7 @@ const actions = {
                 );
             }
         };
-        axiospost(url, paramsObj, failedCallback).then(
+        axiosget(url, paramsObj, failedCallback).then(
             (res) => {
                 commit(types.UPDATE_TABLE_DATA, res);
                 dispatch("loading/tableLoading", false, { root: true });

@@ -1,4 +1,4 @@
-import { axiospost, axiosput, axiosdelete } from '../../../utils/http';
+import { axiosget, axiospost, axiosput, axiosdelete } from '../../../utils/http';
 import API from '../../../const/apis';
 import * as types from './mutations_types';
 
@@ -11,7 +11,7 @@ const actions = {
             }
         });
         dispatch("loading/tableLoading", true, { root: true });
-        axiospost(API.instrumentMgs.instrumentMgsTable, req).then(
+        axiosget(API.instrumentMgs.instrumentMgsTable, req).then(
             (res) => {
                 if (res.code === 200) {
                     commit(types.UPDATE_TABLE_DATA, res);

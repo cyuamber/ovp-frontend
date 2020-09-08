@@ -29,7 +29,7 @@ const actions = {
         paramsObj.flag = state.currentTab;
         paramsObj.pageNum = state.pageNum;
         paramsObj.pageSize = state.pageSize;
-        axiospost(API.sutMgt.sutMgtTable, paramsObj).then(
+        axiosget(API.sutMgt.sutMgtTable, paramsObj).then(
             (res) => {
                 commit(types.UPDATE_TABLE_DATA, res);
                 dispatch("loading/tableLoading", false, { root: true });

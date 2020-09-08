@@ -15,7 +15,7 @@ const actions = {
       }
     });
     dispatch('loading/tableLoading', true, { root: true });
-      axiospost(API.TestSpecMgt.specMgtTable, req).then(
+      axiosget(API.TestSpecMgt.specMgtTable, req).then(
       res => {
           commit(types.UPDATE_TABLE_DATA, res);
           dispatch('loading/tableLoading', false, { root: true });

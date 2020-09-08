@@ -15,7 +15,7 @@ const actions = {
     if (state.searchKeyword === 'All' && state.dashboardJumpStatus !== 'All')
       obj.jobStatus = state.dashboardJumpStatus;
     if (loading) dispatch('loading/tableLoading', true, { root: true });
-      axiospost(API.testJobMgt.testJobTable, obj)
+    axiosget(API.testJobMgt.testJobTable, obj)
       .then(res => {
         if (loading) dispatch('loading/tableLoading', false, { root: true });
           state.pagination = {

@@ -16,7 +16,7 @@ const actions = {
     });
     dispatch('loading/tableLoading', true, { root: true });
     req.flag = state.currentTab;
-      axiospost(API.suiteMgt.suiteMgtTable, req).then(
+    axiosget(API.suiteMgt.suiteMgtTable, req).then(
       res => {
         commit(types.UPDATE_TABLE_DATA, res);
         dispatch('loading/tableLoading', false, { root: true });
