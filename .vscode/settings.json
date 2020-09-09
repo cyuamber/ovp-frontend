@@ -1,0 +1,28 @@
+{
+    "deploy": {
+        "packages": [
+            {
+                "files": ["**/*"],
+
+                "exclude": [
+                    "node_modules/**",
+                    ".git/**",
+                    ".vscode/**",
+                    "**/node_modules/**"
+                ],
+                "deployOnSave": false
+            }
+        ],
+        "targets": [
+            {
+                "type": "sftp",
+                "name": "OVP",
+                "dir": "/opt/controller/webapps",
+                "host": "192.168.235.36",
+                "port": 22,
+                "user": "ubuntu",
+                "privateKey": "/Users/xuran/Desktop/cmcc-dev"
+            }
+        ]
+    }
+}
