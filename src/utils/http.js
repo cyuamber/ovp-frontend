@@ -30,6 +30,7 @@ export function axiospost(url, data, uploadHeader, callback) {
             })
             .catch((err) => {
                 reject(err);
+                message.error(err+". Network exception, please try again.");
             });
     });
 }
@@ -54,6 +55,7 @@ export function axiosget(url, data, callback) {
             })
             .catch((err) => {
                 reject(err);
+                message.error(err+", Network exception, please try again.");
             });
     });
 }
@@ -77,6 +79,7 @@ export function axiosput(url, data, callback) {
             })
             .catch((err) => {
                 reject(err);
+                message.error(err+", Network exception, please try again.");
             });
     });
 }
@@ -101,6 +104,7 @@ export function axiosdelete(url, data, callback) {
             })
             .catch((err) => {
                 reject(err);
+                message.error(err+", Network exception, please try again.");
             });
     });
 }
