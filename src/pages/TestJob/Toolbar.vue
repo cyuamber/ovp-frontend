@@ -97,5 +97,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+  .test-job__top {
+    margin-bottom: 30px;
+    .select {
+      width: 150px;
+      margin-left: 30px;
+    }
+    .calendar {
+      float: right;
+      width: 280px;
+    }
+  }
 </style>

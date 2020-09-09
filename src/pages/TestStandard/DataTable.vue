@@ -20,18 +20,19 @@
                   @click="() => showEditOrDeleteModal(item, record)"
           >{{ item }}</a-tag>
         </span>
-            <a-table
-                    class="test-case__table"
-                    slot="expandedRowRender"
-                    slot-scope="record"
-                    :loading="testCasetableLoading"
-                    :columns="innerColumns"
-                    :dataSource="record.caseMgt"
-                    rowKey="id"
-                    size="default"
-                    :pagination="record.specpagination"
-                    @change="(pagination) =>handleSpecTableChange(pagination, record.index)"
-            >
+            <div v-if="tableData.length>0">
+                <a-table
+                        class="test-case__table"
+                        slot="expandedRowRender"
+                        slot-scope="record"
+                        :loading="testCasetableLoading"
+                        :columns="innerColumns"
+                        :dataSource="record.caseMgt"
+                        rowKey="id"
+                        size="default"
+                        :pagination="record.specpagination"
+                        @change="(pagination) =>handleSpecTableChange(pagination, record.index)"
+                >
           <span slot="status" slot-scope="status">
             <span
                     class="test-case__showState"
@@ -39,7 +40,7 @@
                     :title="status === 'enable' ? 'enable' : 'disable'"
             ></span>
           </span>
-                <span slot="action" slot-scope="action, record">
+                    <span slot="action" slot-scope="action, record">
             <a-switch
                     checkedChildren="enable"
                     unCheckedChildren="disable"
@@ -47,7 +48,8 @@
                     @click="() => activationModal(record)"
             />
           </span>
-            </a-table>
+                </a-table>
+            </div>
         </a-table>
     </div>
 </template>
