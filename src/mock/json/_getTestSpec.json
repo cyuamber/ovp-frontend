@@ -3,7 +3,7 @@
   "message": "OK",
   "body": [
     {
-      "id": 1,
+      "id": "4444444444444444444",
       "name": "FW-SPEC",
       "version": "V1.0",
       "sutType": 1,
@@ -29,7 +29,7 @@
       },
       "caseId":[4]
     },{
-      "id": 2,
+      "id": "888888889654323124235",
       "name": "MME-SPEC",
       "version": "V1.0",
       "sutType": 2,
@@ -54,7 +54,7 @@
         "lang": null
       }
     },{
-      "id": 3,
+      "id": "3232333333333333333333",
       "name": "PCRF-SPEC",
       "version": "V1.0",
       "sutType": 3,
@@ -79,7 +79,7 @@
         "lang": null
       }
     },{
-      "id": 4,
+      "id": "121324342353464",
       "name": "FW-SPEC",
       "version": "V1.0",
       "sutType": 101001,

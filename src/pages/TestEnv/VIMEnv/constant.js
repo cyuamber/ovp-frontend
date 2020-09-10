@@ -148,7 +148,7 @@ export const testEnvVIMColumns = [
         title: "ID",
         dataIndex: "id",
         fixed: "left",
-        width: 50,
+        // width: 50,
     },
     {
         title: "Status",
@@ -208,7 +208,7 @@ export const testEvnVNFMColumns = [
         title: "ID",
         dataIndex: "id",
         fixed: "left",
-        width: 50,
+        // width: 50,
     },
     {
         title: "Name",
@@ -256,7 +256,7 @@ export const testMANOColumns = [
     {
         title: "ID",
         dataIndex: "id",
-        width: 180,
+        // width: 180,
     },
     {
         title: "Name",
