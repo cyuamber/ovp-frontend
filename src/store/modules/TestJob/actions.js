@@ -333,7 +333,7 @@ const actions = {
     { record, expanded, sutName, message }
   ) {
     dispatch('loading/tableLoading', true, { root: true });
-    const url = sutName.tolocaleUpperCase() !== 'DRA' ? API.testJobMgt.testJobCaseExecutions : API.testJobMgt.testJobCaseInstrument //2020.12.01新增
+    const url = sutName.toUpperCase() !== 'DRA' ? API.testJobMgt.testJobCaseExecutions : API.testJobMgt.testJobCaseInstrument //2020.12.01新增
     axiosget(
       url.replace(
         ':requestId',

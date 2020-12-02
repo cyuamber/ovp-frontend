@@ -91,12 +91,12 @@
                   slot-scope="record"
                   slot="expandedRowRender"
                   :loading="tableLoading"
-                  :columns="this.currentJob.sut.name.tolocaleUpperCase() !== 'DRA'? innerColumns : testJobDetailInstrumentColumns"
+                  :columns="currentJob.sut.name.toUpperCase() !== 'DRA'? innerColumns : testJobDetailInstrumentColumns"
                   :dataSource="record.caseMgt"
                   rowKey="executionId"
                   size="default"
                 >
-                  <span slot="status" slot-scope="status" v-if="this.currentJob.sut.name.tolocaleUpperCase() !== 'DRA'">
+                  <span slot="status" slot-scope="status" v-if="currentJob.sut.name.toUpperCase() !== 'DRA'">
                     {{status}}
                     <!--<a-tooltip placement="top">-->
                     <!--<template slot="title">-->
