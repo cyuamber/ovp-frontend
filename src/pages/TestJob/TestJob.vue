@@ -143,12 +143,10 @@ export default {
         message: this.$message
       });
       this.getMANOOption({
-        message: this.$message,
-        pageSize: 100
+        message: this.$message
       });
       this.getTestInstrumentOption({
-        message: this.$message,
-        pageSize: 100
+        message: this.$message
       });
     },
     handleDelete(data) {

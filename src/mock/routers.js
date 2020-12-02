@@ -33,6 +33,7 @@ module.exports =
     "/DELETE/portal/business/instrumentMgs/:name/delete": "/deleteMeterSys",
     ///////<-------------Instrument Package MGT--------->/////
     "/portal/business/suiteMgt?pageNum=:pageNum&pageSize=:pageSize&flag=:flag": "/_getTestMeter",
+    "/portal/business/suiteMgt?pageSize=:pageSize&flag=:flag": "/_getTestMeter",
     // "/portal/business/instrumentMgs": "/_getMeterSys",
     "/POST/portal/business/suiteMgt/insert": "/loginMeterSys",
     "/PUT/portal/business/suiteMgt/update": "/updateMeterSys",

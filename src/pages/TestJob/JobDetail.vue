@@ -121,7 +121,8 @@ import Loading from "../../components/Loading/Loading";
 import {
   testJobColumns,
   testJobDetailCaseListColumns,
-  testJobDetailCaseChildColumns
+  testJobDetailCaseChildColumns,
+  testJobDetailInstrumentColumns
 } from "./constants";
 import { mapState, mapMutations, mapActions } from "vuex";
 
@@ -132,6 +133,7 @@ export default {
     return {
       columns: testJobDetailCaseListColumns,
       innerColumns: testJobDetailCaseChildColumns,
+      testJobDetaiInnerlInstrumentColumns: testJobDetailInstrumentColumns, // 2020.12.01 新增的子表格配置项
       statusColor: "",
       stompClient: "",
       timer: "",

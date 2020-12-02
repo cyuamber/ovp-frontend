@@ -180,9 +180,15 @@
       "manoType": null,
       "profiles": null
     },
-    "suite": {
-      "id":null,
-      "name":null
-    }
+    "suite": [
+      {
+        "id":"33323234343434343434343",
+        "name":"STVc-FW"
+      },
+      {
+        "id":"656565423131314364563",
+        "name":"STVc-DNS"
+      }
+    ]
   }
 }

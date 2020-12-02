@@ -406,8 +406,8 @@ const actions = {
       }
     );
   },
-  getMANOOption ({ commit }, { message, pageSize }) {
-    let obj = { pageSize: pageSize };
+  getMANOOption ({ commit }, { message }) {
+    let obj = { pageSize: 100 };
     axiosget(API.vimVnfmMgt.manoEnvMgtTable, obj).then(
       res => {
         commit(types.UPDATE_MANO_OPTION, res.body);
@@ -417,11 +417,12 @@ const actions = {
       }
     );
   },
-  getTestInstrumentOption ({ commit }, { message, pageSize }) {
+  getTestInstrumentOption ({ commit }, { message }) {
     let obj = {
-      pageSize: pageSize,
+      pageSize: 100,
       flag: 101
     };
+    console.log(obj, 'obj')
     axiosget(API.suiteMgt.suiteMgtTable, obj).then(
       res => {
         commit(types.UPDATE_TEST_INSTRUMENT_OPTION, res.body);

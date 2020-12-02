@@ -95,6 +95,7 @@
           v-else-if="item === 'Test Instrument'"
           v-decorator="[keyList[i],{initialValue:initTestInstrument.name}]"
           class="form__select--width"
+          mode="multiple"
         >
           <a-select-option
             v-for="type in TestInstrumentOption"
@@ -303,11 +304,15 @@ export default {
         };
         this.initTestInstrument = {
           name: this.testJobSingleData.suite
-            ? this.testJobSingleData.suite.name
-            : "",
+            ? this.testJobSingleData.suite.map(item => {
+              return item.name
+            })
+            : null,
           code: this.testJobSingleData.suite
-            ? this.testJobSingleData.suite.id
-            : ""
+            ? this.testJobSingleData.suite.map(item => {
+              return item.id
+            })
+            : null
         };
         // setTimeout()
         if (this.isEdit && this.count > 1) {
@@ -375,6 +380,7 @@ export default {
         if (!error) {
           let { isEdit } = this;
           if (isEdit) {
+            console.log(values, '-----values')
             values.SUTName =
               values.SUTName === this.initSUTName.name
                 ? this.initSUTName.name + "+" + this.initSUTName.code

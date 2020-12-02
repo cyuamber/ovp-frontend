@@ -125,3 +125,26 @@ export const testJobDetailCaseChildColumns = [
         width: 120,
     },
 ];
+export const testJobDetailInstrumentColumns = [ // 2020.12.01 新增的子表格配置项
+    {
+        title: "Call Rate",
+        dataIndex: "call_rate",
+    },
+    {
+        title: "Elapsed Time",
+        dataIndex: "Elapsed_time",
+    },
+    {
+        title: "Outgoing Calls",
+        dataIndex: "outgoing_calls",
+    },
+    {
+        title: "Incoming Calls",
+        dataIndex: "incoming_calls",
+    },
+    {
+        title: "Failed Calls",
+        dataIndex: "failed_calls",
+        width: 120
+    }
+];
