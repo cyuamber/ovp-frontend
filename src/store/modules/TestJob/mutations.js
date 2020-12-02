@@ -15,7 +15,8 @@ const mutations = {
       }
       state.expandedRowKeys.push(key);
     } else {
-      state.expandedRowKeys.splice(key, 1);
+      state.expandedRowKeys.splice(state.expandedRowKeys.indexOf(key), 1);
+      state.expandedRowKeys = [...state.expandedRowKeys]
     }
   },
   [types.UPDATE_DETAIL_LOADING] (state, detailLoading) {

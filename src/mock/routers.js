@@ -67,6 +67,7 @@ module.exports =
     "/portal/business/jobs/:jobId": "/_getJobProgress",
     "/portal/business/jobs/cases/:jobId/:ExecutionStartTime": "/_testJobDetail",
     "/portal/business/jobs/case/executions/list/:requestId": "/_getcaseExecutionsList",
+    "/portal/business/jobs/case/instrument/list/:requestId": "/_getcaseInstrumentList", //2020.12.01新增
     "/portal/business/jobs/cases/download/:jobId": "/_downloadFile",
     "/portal/business/testCase/:caseId/:sutId": "/_downloadFile",
     ///////<-------------general interface--------->/////

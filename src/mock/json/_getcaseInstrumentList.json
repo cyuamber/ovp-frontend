@@ -1,0 +1,22 @@
+{
+  "code": 200,
+  "message": "OK",
+  "body": [
+    {
+      "instrument": "onap-dublin01",
+      "call_rate": "complex-delete",
+      "Elapsed_time": "aai",
+      "outgoing_calls": "eff19a6e-a386-4521-911b-6a9e8095be4c-1585139625971",
+      "incoming_calls": "eff19a6e-a386-4521-911b-6a9e8095be4c",
+      "failed_calls": "onap-dublin"
+    },
+    {
+      "instrument": "onap-dublin02",
+      "call_rate": "complex-delete",
+      "Elapsed_time": "so",
+      "outgoing_calls": "eff19a6e-a386-4521-911b-6a9e8095be4c-11111111222",
+      "incoming_calls": "eff19a6e-a386-4521-911b-6a9e8095be4c",
+      "failed_calls": "onap-dublin"
+    }
+  ]
+}

@@ -13,7 +13,7 @@
       "createTime": "2019-11-14",
       "sut": {
         "id": 1,
-        "name": "sut1",
+        "name": "Nokia_vSPGW",
         "type": 1,
         "vendor": null,
         "version": null,

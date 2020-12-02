@@ -127,6 +127,10 @@ export const testJobDetailCaseChildColumns = [
 ];
 export const testJobDetailInstrumentColumns = [ // 2020.12.01 新增的子表格配置项
     {
+        title: "Instrument",
+        dataIndex: "instrument",
+    },
+    {
         title: "Call Rate",
         dataIndex: "call_rate",
     },
@@ -145,6 +149,6 @@ export const testJobDetailInstrumentColumns = [ // 2020.12.01 新增的子表格
     {
         title: "Failed Calls",
         dataIndex: "failed_calls",
-        width: 120
+        width: 150
     }
 ];

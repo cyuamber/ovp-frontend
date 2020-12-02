@@ -330,11 +330,12 @@ const actions = {
 
   getTestJobCaseExecutions (
     { dispatch, commit },
-    { record, expanded, message }
+    { record, expanded, sutName, message }
   ) {
     dispatch('loading/tableLoading', true, { root: true });
+    const url = sutName.tolocaleUpperCase() !== 'DRA' ? API.testJobMgt.testJobCaseExecutions : API.testJobMgt.testJobCaseInstrument //2020.12.01新增
     axiosget(
-      API.testJobMgt.testJobCaseExecutions.replace(
+      url.replace(
         ':requestId',
         record.requestId
       )

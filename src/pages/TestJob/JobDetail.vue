@@ -91,12 +91,12 @@
                   slot-scope="record"
                   slot="expandedRowRender"
                   :loading="tableLoading"
-                  :columns="innerColumns"
+                  :columns="this.currentJob.sut.name.tolocaleUpperCase() !== 'DRA'? innerColumns : testJobDetailInstrumentColumns"
                   :dataSource="record.caseMgt"
                   rowKey="executionId"
                   size="default"
                 >
-                  <span slot="status" slot-scope="status">
+                  <span slot="status" slot-scope="status" v-if="this.currentJob.sut.name.tolocaleUpperCase() !== 'DRA'">
                     {{status}}
                     <!--<a-tooltip placement="top">-->
                     <!--<template slot="title">-->
@@ -277,6 +277,7 @@ export default {
         this.getTestJobCaseExecutions({
           record,
           expanded,
+          sutName: this.currentJob.sut.name,
           message: this.$message
         });
         if (
@@ -288,6 +289,7 @@ export default {
             this.getTestJobCaseExecutions({
               record,
               expanded,
+              sutName: this.currentJob.sut.name,
               message: this.$message
             });
           }, 5000);

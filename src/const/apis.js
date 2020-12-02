@@ -74,8 +74,8 @@ export default {
         testJobTestCase: baseUrl + "/testCase/jobCase",
         testJobDownLoad: baseUrl + "/jobs/cases/download/:jobId",
         testFailedDetail: baseUrl + "/jobs/case/executions/retrieve/:requestId",
-        testJobCaseExecutions:
-            baseUrl + "/jobs/case/executions/list/:requestId",
+        testJobCaseExecutions: baseUrl + "/jobs/case/executions/list/:requestId",
+        testJobCaseInstrument: baseUrl + "/jobs/case/instrument/list/:requestId", //2020.12.01新增接口
         testJobCaseVNFUplaod: baseUrl + "/jobs/:jobId/csars/upload",
         testJobCaseVNFReupload: baseUrl + "/jobs/:jobId/csars/reupload",
     },
