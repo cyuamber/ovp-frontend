@@ -57,31 +57,42 @@
             "visible": true
           },
           {
-            "name": "string2",
-            "value": "string",
+            "name": "Checkbox1",
+            "value": ["a","b","c","d","e"],
+            "allValue":["a","b","c","d","e","f"],
             "description": "string",
-            "type": "string",
-            "defaultValue": "456",
+            "type": "checkbox",
+            "defaultValue": ["a","b","c","d"],
             "isOptional": false,
             "visible": true
           },
           {
-            "name": "string3",
-            "value": "string",
+            "name": "Checkbox2",
+            "value": ["d","e","f","g","h"],
+            "allValue":["a","b","c","d","e","f","g","h"],
             "description": "string",
-            "type": "bool",
-            "defaultValue": "false",
+            "type": "checkbox",
+            "defaultValue": ["d","e","f","g","h"],
             "isOptional": true,
             "visible": true
           },
           {
-            "name": "string4",
+            "name": "bool2",
             "value": "string",
             "description": "string",
             "type": "bool",
             "defaultValue": "true",
             "isOptional": true,
             "visible": false
+          },
+          {
+            "name": "bool1",
+            "value": "string",
+            "description": "string",
+            "type": "bool",
+            "defaultValue": "true",
+            "isOptional": true,
+            "visible": true
           }
         ]
       }

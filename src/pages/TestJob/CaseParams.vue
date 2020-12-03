@@ -22,6 +22,22 @@
             v-if="item.visible===true &&item.type==='bool'"
             v-decorator="[item.name,{ valuePropName: 'checked',rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:isEdit === true ?strBool(item.value):strBool(item.defaultValue) }]"
           />
+          <a-checkbox-group
+            v-if="item.visible===true &&item.type==='checkbox'"
+            v-decorator="[item.name, { initialValue: !isEdit?item.defaultValue:item.value }]"
+          >
+           <a-row>
+            <a-col 
+            :span="8" 
+            v-for="items in item.allValue"
+            :key="items"
+            >
+              <a-checkbox :value="items">
+                {{items}}
+              </a-checkbox>
+            </a-col>
+           </a-row>
+          </a-checkbox-group>
         </a-form-item>
       </a-form>
     </template>
