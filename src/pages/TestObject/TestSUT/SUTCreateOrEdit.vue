@@ -278,7 +278,7 @@ export default {
               ? this.VNFTest.createTime
               : moment(new Date()).format("YYYY-MM-DD")
             };
-          if (values.upload) {
+          if (values.upload && values.upload.length !==0 ) {
             if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
               values.upload.forEach(file => {
                 formData.append("file", file);

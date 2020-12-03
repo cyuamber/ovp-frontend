@@ -260,11 +260,8 @@ export default {
             vendor: values.XNFVendor,
             version: values.Version,
             fileAliasName: this.uploadAliasFilename,
-            fileName: !this.editUploadtextShow
-              ? values.upload[0].name
-              : this.SuiteSingleData.fileName
           };
-          if (values.upload) {
+          if (values.upload && values.upload.length !==0) {
             if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
               formData.append("file", values.upload[0]);
             }
