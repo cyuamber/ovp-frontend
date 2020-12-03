@@ -91,7 +91,7 @@
                   slot-scope="record"
                   slot="expandedRowRender"
                   :loading="tableLoading"
-                  :columns="currentJob.sut.name.toUpperCase() !== 'DRA'? innerColumns : testJobDetailInstrumentColumns"
+                  :columns="currentJob.sut.name.toUpperCase() !== 'DRA'? innerColumns : testJobDetaiInnerlInstrumentColumns"
                   :dataSource="record.caseMgt"
                   rowKey="executionId"
                   size="default"
@@ -280,27 +280,42 @@ export default {
           sutName: this.currentJob.sut.name,
           message: this.$message
         });
-        if (
+        if (this.currentJob.sut.name.toUpperCase() === 'DRA') {
+          this.caseChildlistTimer[record.index] = setInterval(() => {
+              this.getTestJobCaseExecutions({
+                record,
+                expanded,
+                sutName: this.currentJob.sut.name,
+                message: this.$message
+              });
+            }, 5000);
+        } else {
+          if (
           record.caseStatus !== "DONE" &&
           record.caseStatus !== "FAILED" &&
           record.caseStatus !== "STARTED"
         ) {
-          this.caseChildlistTimer[record.index] = setInterval(() => {
-            this.getTestJobCaseExecutions({
-              record,
-              expanded,
-              sutName: this.currentJob.sut.name,
-              message: this.$message
-            });
-          }, 5000);
+            this.caseChildlistTimer[record.index] = setInterval(() => {
+              this.getTestJobCaseExecutions({
+                record,
+                expanded,
+                sutName: this.currentJob.sut.name,
+                message: this.$message
+              });
+            }, 5000);
+          }
         }
       } else {
-        if (
-          record.caseStatus !== "DONE" &&
-          record.caseStatus !== "FAILED" &&
-          record.caseStatus !== "STARTED"
-        ) {
+        if (this.currentJob.sut.name.toUpperCase() === 'DRA') {
           clearInterval(this.caseChildlistTimer[record.index]);
+        } else {
+          if (
+              record.caseStatus !== "DONE" &&
+              record.caseStatus !== "FAILED" &&
+              record.caseStatus !== "STARTED"
+            ) {
+              clearInterval(this.caseChildlistTimer[record.index]);
+          }
         }
         this.updateExpandedRowKeys({
           key: record.index,

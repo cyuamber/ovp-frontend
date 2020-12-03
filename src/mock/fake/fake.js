@@ -52,6 +52,15 @@ module.exports = {
         message: "OK",
         body: [
             {
+                code: 0,
+                dictLabel: "DRA",
+                dictValue: "DRA",
+                dictParentCode: null,
+                status: "\u0000",
+                remark: null,
+                lang: null
+            },
+            {
                 code: 1,
                 dictLabel: "MME",
                 dictValue: "MME",
