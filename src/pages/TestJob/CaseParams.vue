@@ -13,6 +13,7 @@
           :label="item.name"
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 14 }"
+          :class="{'checkboxgroup': item.visible===true &&item.type==='checkbox'}"
         >
           <a-input
             v-if="item.visible===true &&item.type==='string'"
@@ -133,3 +134,10 @@ export default {
   }
 };
 </script>
+<style lang="less">
+.checkboxgroup.ant-form-item {
+  .ant-form-item-label{
+    line-height: inherit!important
+  }
+}
+</style>
