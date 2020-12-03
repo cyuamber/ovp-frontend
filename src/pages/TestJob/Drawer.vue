@@ -291,7 +291,7 @@ export default {
         this.selectedSUTName = "";
         this.selectedSpecification = "";
         this.keyList.forEach(item => {
-          this.form.setFieldsValue({ [item]: "" });
+          this.form.setFieldsValue({ [item]: item !=="TestInstrument"? "":[] });
         });
       } else {
         this.count++;
@@ -341,12 +341,16 @@ export default {
         this.initTestInstrument = {
           name: this.testJobSingleData.suite
             ? this.testJobSingleData.suite.map(item => {
-              return item.name
+                if(item.name && item.name !== null){
+                  return item.name
+                }
             })
             : [],
           code: this.testJobSingleData.suite
             ? this.testJobSingleData.suite.map(item => {
-              return item.id
+               if(item.id && item.id !== null){
+                  return item.id
+               }
             })
             : []
         };
