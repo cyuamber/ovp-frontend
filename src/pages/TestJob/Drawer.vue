@@ -373,7 +373,7 @@ export default {
               : "",
             TestInstrument: this.testJobSingleData.suite
               ? this.testJobSingleData.suite.map(item => {
-              return item.name
+              return item.id
             })
             : []
           });
@@ -422,7 +422,7 @@ export default {
         if (!error) {
           let { isEdit } = this;
           if (isEdit) {
-            console.log(values, '-----values')
+            console.log(values, this.initTestInstrument,'-----values')
             values.SUTName =
               values.SUTName === this.initSUTName.name
                 ? this.initSUTName.name + "+" + this.initSUTName.code
