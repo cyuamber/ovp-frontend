@@ -203,9 +203,11 @@ export default {
     ]),
     handleChange(info) {
       this.editUploadtextShow = false;
-      this.uploadAliasFilename = info.file.response
-        ? info.file.response.body.filename
-        : "";
+      if (info.file.respons && typeof info.file.respons === 'object') {
+        this.uploadAliasFilename = info.file.response.body.filename? info.file.response.body.filename: ""
+      } else {
+        this.uploadAliasFilename = ""
+      }
     },
 
     normFile(e) {
@@ -251,9 +253,6 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           const formData = new FormData();
-          if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
-            formData.append("file", values.upload[0]);
-          }
           let data = {
             flag: this.currentTab,
             name: values.XNFName,
@@ -261,20 +260,24 @@ export default {
             vendor: values.XNFVendor,
             version: values.Version,
             fileAliasName: this.uploadAliasFilename,
-            fileName: !this.editUploadtextShow
-              ? values.upload[0].name
-              : this.SuiteSingleData.fileName
           };
+          if (values.upload && values.upload.length !==0) {
+            if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
+              formData.append("file", values.upload[0]);
+            }
+            data.fileAliasName = this.uploadAliasFilename;
+            data.fileName = !this.editUploadtextShow? values.upload[0].name: this.VNFTest.fileName;
+            if (!data.fileName || !data.fileAliasName) {
+              this.$message.error("Upload file error. Please upload again!");
+              return;
+            } 
+          }
           if (this.currentTab === 101) {
             Object.assign(data, { instrumentMgsId: values.manage });
           }
           // console.log(data, "===>params");
           if (this.isEdit) data.id = this.SuiteSingleData.id;
-          if (!data.fileName || !data.fileAliasName) {
-            this.$message.error("Upload file error. Please upload again!");
-          } else {
-            this.submitFormData(data);
-          }
+          this.submitFormData(data);
         }
       });
     },
