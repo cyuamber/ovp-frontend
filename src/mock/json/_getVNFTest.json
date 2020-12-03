@@ -19,7 +19,9 @@
       "createTime": 1570838400000,
       "updateTime": null,
       "flag": 101,
-      "fileName": null
+      "fileName": null,
+      "ip": "192.168.0.1",
+      "port": "8081"
     },
     {
       "id": "3142342342345241313",
@@ -38,7 +40,9 @@
       "createTime": 1568160000000,
       "updateTime": null,
       "flag": 101,
-      "fileName": null
+      "fileName": null,
+      "ip": "192.168.0.1",
+      "port": "8081"
     },
     {
       "id": "876859345241231314354364",
@@ -57,7 +61,9 @@
       "createTime": 1572566400000,
       "updateTime": null,
       "flag": 101,
-      "fileName": null
+      "fileName": null,
+      "ip": "192.168.0.1",
+      "port": "8081"
     },
     {
       "id": "98085352342353234523",
@@ -76,10 +82,12 @@
       "createTime": 1568160000000,
       "updateTime": null,
       "flag": 101,
-      "fileName": null
+      "fileName": null,
+      "ip": "192.168.0.1",
+      "port": "8081"
     },
     {
-      "id": "7777777777777777",
+      "id": "777777777777777799999",
       "name": "ZTE_vPCRF",
       "type":5,
       "typeCH":{
@@ -95,7 +103,9 @@
       "createTime": 1564704000000 ,
       "updateTime": null,
       "flag": 101,
-      "fileName": null
+      "fileName": null,
+      "ip": "192.168.0.1",
+      "port": "8081"
     }
   ],
   "total": 5,
