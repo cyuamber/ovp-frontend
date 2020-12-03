@@ -172,6 +172,11 @@ export default {
             }
         }else{
             this.updateVNFTest({});
+            // 消除图标
+            this.ipCheck = {
+              validateStatus: null,
+              errorMsg: null
+            }
             this.form.setFieldsValue({
                 name: "",
                 version: "",
@@ -208,7 +213,6 @@ export default {
       const value = e.target.value
       if (value && value!=='') {
         if (ipReg.test(value)) {
-          console.log('right')
           this.ipCheck = {
             validateStatus: 'success',
             errorMsg: null
@@ -234,9 +238,11 @@ export default {
     },
     handleChange(info) {
       this.editUploadtextShow = false;
-      this.uploadAliasFilename = info.file.response
-        ? info.file.response.body.filename
-        : "";
+      if (info.file.respons && typeof info.file.respons === 'object') {
+        this.uploadAliasFilename = info.file.response.body.filename? info.file.response.body.filename: ""
+      } else {
+        this.uploadAliasFilename = ""
+      }
     },
     normFile(e) {
       if (Array.isArray(e)) {
@@ -259,11 +265,7 @@ export default {
         if (!err) {
           // Did not implement the check if there is a change
           const formData = new FormData();
-          if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
-            values.upload.forEach(file => {
-              formData.append("file", file);
-            });
-          }
+          // file is optional
           let data = {
             flag: this.currentTab,
             name: values.name,
@@ -274,15 +276,22 @@ export default {
             port: values.port,
             createTime: this.isEdit
               ? this.VNFTest.createTime
-              : moment(new Date()).format("YYYY-MM-DD"),
-            fileAliasName: this.uploadAliasFilename,
-            fileName: !this.editUploadtextShow
-              ? values.upload[0].name
-              : this.VNFTest.fileName
-          };
-          if (!data.fileName || !data.fileAliasName) {
-            this.$message.error("Upload file error. Please upload again!");
-          } else if (this.ipCheck.validateStatus === 'error'){
+              : moment(new Date()).format("YYYY-MM-DD")
+            };
+          if (values.upload) {
+            if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
+              values.upload.forEach(file => {
+                formData.append("file", file);
+              });
+            }
+            data.fileAliasName = this.uploadAliasFilename;
+            data.fileName = !this.editUploadtextShow? values.upload[0].name: this.VNFTest.fileName;
+            if (!data.fileName || !data.fileAliasName) {
+              this.$message.error("Upload file error. Please upload again!");
+              return;
+            }
+          }
+          if (this.ipCheck.validateStatus === 'error'){
             // check ip address
             this.$message.error("Illegal ip address!");
           }
