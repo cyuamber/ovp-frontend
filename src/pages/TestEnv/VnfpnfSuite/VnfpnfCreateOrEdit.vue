@@ -62,7 +62,7 @@
             :remove="handleRemove"
             @change="handleChange"
             name="file"
-            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile,rules: [{ required: isEdit && editUploadtextShow?false:true,}]}]"
+            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile}]"
           >
             <p class="ant-upload-text form__upload-text--font-size">Click or drag to upload</p>
           </a-upload-dragger>
