@@ -31,6 +31,11 @@
               v-decorator="[item.key,{ rules: [{ required: true }], initialValue: initCloudType.name}]"
               :disabled="cloudTypeOptions.length ===0"
               class="select"
+              :getPopupContainer="
+                triggerNode => {
+                  return triggerNode.parentNode || document.body;
+                }
+              "
             >
               <a-select-option
                 v-for="type in cloudTypeOptions"
@@ -81,6 +86,11 @@
               :disabled="cloudTypeOptions.length ===0"
               class="select"
               @change="handleMANOTypeChange"
+              :getPopupContainer="
+                triggerNode => {
+                  return triggerNode.parentNode || document.body;
+                }
+              "
             >
               <a-select-option
                 v-for="type in cloudTypeOptions"

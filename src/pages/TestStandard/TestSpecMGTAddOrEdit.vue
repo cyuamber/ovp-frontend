@@ -45,6 +45,11 @@
                             },
                         ]"
             @change="handleSelectSUTChange"
+            :getPopupContainer="
+                triggerNode => {
+                  return triggerNode.parentNode || document.body;
+                }
+              "
           >
             <a-select-option
               v-for="type of SUTOptions"
@@ -65,6 +70,11 @@
                         ]"
             @change="handleSelectSubSUTTypeChange"
             @dropdownVisibleChange="dropdownVisibleChange"
+            :getPopupContainer="
+                triggerNode => {
+                  return triggerNode.parentNode || document.body;
+                }
+              "
           >
             <a-select-option
               v-for="type in VNFOptions"

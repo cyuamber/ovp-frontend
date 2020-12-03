@@ -30,6 +30,11 @@
           v-decorator="[keyList[i],{ rules: [{ required: true, }],initialValue:initSUTType.name}]"
           @select="((key) => selectSUTType(key))"
           class="form__select--width"
+          :getPopupContainer="
+            triggerNode => {
+              return triggerNode.parentNode || document.body;
+            }
+          "
         >
           <a-select-option
             v-for="type in SUTTypeList"
@@ -44,6 +49,11 @@
           v-decorator="[keyList[i],{ rules: [{ required: true }],initialValue:initSUTName.name}]"
           :title="!getSUTNames ? 'Please select SUT Type first' : ''"
           @select="((key) => selectSUTName(key))"
+          :getPopupContainer="
+            triggerNode => {
+              return triggerNode.parentNode || document.body;
+            }
+          "
         >
           <a-select-option
             v-for="types in SUTNameList"
@@ -58,6 +68,11 @@
           v-decorator="[keyList[i],{ rules: [{ required: true }],initialValue:initSpecification.name}]"
           @select="((key)=> selectSpecification(key))"
           :title="!getSUTNames ? 'Please select SUT Type and SUT Name first' : (!getSpecifications ? 'Please select SUT Name first': '')"
+          :getPopupContainer="
+            triggerNode => {
+              return triggerNode.parentNode || document.body;
+            }
+          "
         >
           <a-select-option
             v-for="type in specificationList"
@@ -70,6 +85,11 @@
           v-else-if="item === 'Test VNFM ENV'"
           v-decorator="[keyList[i],{initialValue:initTestVNFMENV.name}]"
           class="form__select--width"
+          :getPopupContainer="
+            triggerNode => {
+              return triggerNode.parentNode || document.body;
+            }
+          "
         >
           <a-select-option v-for="type in VNFMOption" :key="type.id" :value="type.id">{{type.name}}</a-select-option>
         </a-select>
@@ -77,6 +97,11 @@
           v-else-if="item === 'Test VIM ENV'"
           v-decorator="[keyList[i],{initialValue:initTestVIMENV.name}]"
           class="form__select--width"
+          :getPopupContainer="
+            triggerNode => {
+              return triggerNode.parentNode || document.body;
+            }
+          "
         >
           <a-select-option
             v-for="type in VIMOption"
@@ -88,6 +113,11 @@
           v-else-if="item === 'Test MANO ENV'"
           v-decorator="[keyList[i],{initialValue:initMANOENV.name}]"
           class="form__select--width"
+          :getPopupContainer="
+            triggerNode => {
+              return triggerNode.parentNode || document.body;
+            }
+          "
         >
           <a-select-option v-for="type in MANOOption" :key="type.id" :value="type.id">{{type.name}}</a-select-option>
         </a-select>
@@ -96,6 +126,12 @@
           v-decorator="[keyList[i],{initialValue:initTestInstrument.name}]"
           class="form__select--width"
           mode="multiple"
+          :showArrow="true"
+          :getPopupContainer="
+            triggerNode => {
+              return triggerNode.parentNode || document.body;
+            }
+          "
         >
           <a-select-option
             v-for="type in TestInstrumentOption"
@@ -208,8 +244,8 @@ export default {
         code: null
       },
       initTestInstrument: {
-        name: null,
-        code: null
+        name: [],
+        code: []
       },
       count: 0,
       caseListPagination: {
@@ -307,12 +343,12 @@ export default {
             ? this.testJobSingleData.suite.map(item => {
               return item.name
             })
-            : null,
+            : [],
           code: this.testJobSingleData.suite
             ? this.testJobSingleData.suite.map(item => {
               return item.id
             })
-            : null
+            : []
         };
         // setTimeout()
         if (this.isEdit && this.count > 1) {
@@ -332,8 +368,10 @@ export default {
               ? this.testJobSingleData.mano.name
               : "",
             TestInstrument: this.testJobSingleData.suite
-              ? this.testJobSingleData.suite.name
-              : ""
+              ? this.testJobSingleData.suite.map(item => {
+              return item.name
+            })
+            : []
           });
         }
       }
@@ -511,6 +549,9 @@ export default {
 .ant-drawer-body {
   padding-left: 40px;
 }
+// .ant-select-dropdown{
+//   top:67px!important
+// }
 .form {
   .ant-form-item-label {
     text-align: left;
