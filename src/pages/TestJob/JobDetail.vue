@@ -277,7 +277,7 @@ export default {
         this.getTestJobCaseExecutions({
           record,
           expanded,
-          sutName: this.currentJob.sut.name,
+          jobId: this.currentJob.jobId,
           message: this.$message
         });
         if (this.currentJob.sut.name.toUpperCase() === 'DRA') {
@@ -285,7 +285,7 @@ export default {
               this.getTestJobCaseExecutions({
                 record,
                 expanded,
-                sutName: this.currentJob.sut.name,
+                jobId: this.currentJob.jobId,
                 message: this.$message
               });
             }, 5000);
@@ -299,7 +299,7 @@ export default {
               this.getTestJobCaseExecutions({
                 record,
                 expanded,
-                sutName: this.currentJob.sut.name,
+                jobId: this.currentJob.jobId,
                 message: this.$message
               });
             }, 5000);
