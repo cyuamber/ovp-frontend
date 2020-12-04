@@ -127,6 +127,7 @@
           class="form__select--width"
           mode="multiple"
           :showArrow="true"
+          @change="onChangeTestInstrument"
           :getPopupContainer="
             triggerNode => {
               return triggerNode.parentNode || document.body;
@@ -535,15 +536,18 @@ export default {
           }
         });
       }
-      let hasvisible = caseData.parameters.map(item => {
+      let hasvisible = caseData.parameters && caseData.parameters.length>0 ? caseData.parameters.map(item => {
         return item.visible;
-      });
+      }) : [];
       if (hasvisible.indexOf(true) < 0) {
         this.$message.info("This testCase has no editable parameters.");
         return false;
       }
       this.updateCaseParamsData(caseData);
       this.setCaseParamsIsShow(true);
+    },
+    onChangeTestInstrument(value) {
+      console.log(value,'-----value, option')
     }
   }
 };

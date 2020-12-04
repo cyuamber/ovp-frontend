@@ -1,7 +1,7 @@
 <template>
   <div class="test-job__container">
     <Loading :loadingMessage="loadingMessage" />
-    <Toolbar />
+    <Toolbar :isEdit="isEdit" @toolbarChangeIsEdit="toolbarChangeIsEdit"  />
     <div class="test-job__table">
       <a-table
         :columns="columns"
@@ -109,6 +109,9 @@ export default {
       else if (action === "More") this.handleOpenDetail(data);
       else if (action === "Download") this.handleDownload(data);
       else if (action === "Stop") this.handleStop(data);
+    },
+    toolbarChangeIsEdit (isEdit) {
+      this.isEdit = isEdit
     },
     handleStart(data) {
       data.currentAction = "Start";

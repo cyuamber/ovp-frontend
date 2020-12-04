@@ -19,6 +19,7 @@ import DatePicker from "../../components/DatePicker/DatePicker";
 export default {
   name: "Toolbar",
   components: {  DatePicker },
+  props: ["isEdit"],
   data() {
     return {
       statusOptions: statusOptions,
@@ -59,7 +60,7 @@ export default {
     },
 
     createOrEditTestJobShow() {
-        this.isEdit = false;
+        this.$emit("toolbarChangeIsEdit", false)
         this.setIsShow(true);
         this.getSUTType({
             message: this.$message

@@ -76,11 +76,13 @@ export default {
                 this.caseParams.forEach(item => {
                     this.form.setFieldsValue({
                         [item.name]:
-                            this.isEdit === false
+                            this.isEdit === false && item.type !== "bool"
                                 ? item.defaultValue
-                                : this.isEdit === true && item.type === "bool"
-                                ? this.strBool(item.value)
-                                : item.value
+                                : this.isEdit === false && item.type === "bool"
+                                ? this.strBool(item.defaultValue)
+                                : this.isEdit === true && item.type !== "bool"
+                                ? item.value
+                                : this.strBool(item.value)
                     });
                 });
             }
@@ -88,13 +90,16 @@ export default {
             this.caseParams.forEach(item => {
                 this.form.setFieldsValue({
                     [item.name]:
-                        this.isEdit === false
-                            ? item.defaultValue
-                            : this.isEdit === true && item.type === "bool"
-                            ? this.strBool(item.value)
-                            : item.value
+                        this.isEdit === false && item.type !== "bool"
+                                ? item.defaultValue
+                                : this.isEdit === false && item.type === "bool"
+                                ? this.strBool(item.defaultValue)
+                                : this.isEdit === true && item.type !== "bool"
+                                ? item.value
+                                : this.strBool(item.value)
                 });
             });
+            console.log(this.form.getFieldValue('string3'),typeof this.form.getFieldValue('string3'), '-----string3')
         }
     },
     caseParamsData(val) {

@@ -27,7 +27,45 @@
         "status": "6",
         "remark": null,
         "lang": null
-      }
+      },
+      "parameters":[
+        {
+          "name": "string1",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string2",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": false,
+          "visible": true
+        },
+        {
+          "name": "string3",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string4",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": false
+        }
+      ]
     },
     {
       "id": 2,
@@ -54,7 +92,45 @@
         "status": "5",
         "remark": null,
         "lang": null
-      }
+      },
+      "parameters":[
+        {
+          "name": "string1",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string2",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": false,
+          "visible": true
+        },
+        {
+          "name": "string3",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string4",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": false
+        }
+      ]
     },
     {
       "id": 3,
@@ -81,7 +157,45 @@
         "status": "5",
         "remark": null,
         "lang": null
-      }
+      },
+      "parameters":[
+        {
+          "name": "string1",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string2",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": false,
+          "visible": true
+        },
+        {
+          "name": "string3",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string4",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": false
+        }
+      ]
     },
     {
       "id": 4,
@@ -108,7 +222,45 @@
         "status": "5",
         "remark": null,
         "lang": null
-      }
+      },
+      "parameters":[
+        {
+          "name": "string1",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string2",
+          "value": "string",
+          "description": "string",
+          "type": "string",
+          "defaultValue": "123456",
+          "isOptional": false,
+          "visible": true
+        },
+        {
+          "name": "string3",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": true
+        },
+        {
+          "name": "string4",
+          "value": "string",
+          "description": "string",
+          "type": "bool",
+          "defaultValue": "true",
+          "isOptional": true,
+          "visible": false
+        }
+      ]
     }
   ],
   "total": 4,
