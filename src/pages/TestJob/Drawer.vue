@@ -549,7 +549,6 @@ export default {
       const selectedSUTNames = this.isEdit && this.selectedSUTType === '' ? this.initSUTType.name : this.SUTTypeList.find(item => {
         return item.code === this.selectedSUTType
       }).dictLabel
-      console.log(caseData, '------------caseData')
       if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
         if(caseData.parameters.length > 0){
           this.cheangeTestInstrument.map( (itm,index) => {
@@ -558,11 +557,9 @@ export default {
                 if(items.defaultValue === '' || items.value === '' || items.defaultValue.split(';').length < this.cheangeTestInstrument.length || items.value.split(';').length < this.cheangeTestInstrument.length){
                   items.defaultValue = items.defaultValue+';'
                   items.value= items.value+';'
-                  console.log(111111111111)
                 } else if((items.defaultValue !== '' || items.value !== '') && items.defaultValue.split(';').length > this.cheangeTestInstrument.length || items.value.split(';').length > this.cheangeTestInstrument.length){
                   items.defaultValue = items.defaultValue.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
                   items.value = items.value.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
-                   console.log(22222222)
                 }
                 
               }
