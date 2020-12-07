@@ -145,6 +145,7 @@ export default {
             caseParameters.parameters.forEach(item => {
               if (DRAValues[item.name] !== undefined) {
                 item.value = DRAValues[item.name];
+                item.defaultValue = DRAValues[item.name];
               }
             });
           } else {

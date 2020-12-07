@@ -549,19 +549,29 @@ export default {
       const selectedSUTNames = this.isEdit && this.selectedSUTType === '' ? this.initSUTType.name : this.SUTTypeList.find(item => {
         return item.code === this.selectedSUTType
       }).dictLabel
-      
-      if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >1){
+      console.log(caseData, '------------caseData')
+      if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
         if(caseData.parameters.length > 0){
-          console.log(this.cheangeTestInstrument, '----this.cheangeTestInstrument')
           this.cheangeTestInstrument.map( (itm,index) => {
             caseData.parameters.map(items => {
-              if(items.name === 'vm_ips' || items.name === 'caps') {
+              if((items.name === 'vm_ips' || items.name === 'caps') && (items.defaultValue === '' || items.value === '' || items.defaultValue.split(';').length-1 !== this.cheangeTestInstrument.length || items.value.split(';').length-1 !== this.cheangeTestInstrument.length)) {
                 items.defaultValue = items.defaultValue+';'
                 items.value= items.value+';'
               }
             })
           })
+          caseData.parameters.map(items => {
+              if(items.name === 'vm_ips' || items.name === 'caps') {
+                items.defaultValue = items.defaultValue.charAt(items.defaultValue.length-1) === ';' ? items.defaultValue.substring(0, items.defaultValue.length - 1) : items.defaultValue
+                items.value = items.value.charAt(items.value.length-1) === ';' ? items.value.substring(0, items.value.length - 1) : items.value
+              }
+            })
         }
+      }else if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length === 0){
+        caseData.parameters.map(items => {
+          items.defaultValue = ''
+          items.value= ''
+        })
       }
       console.log(selectedSUTNames, caseData,'-----selectedSUTNames')
       this.updateCaseParamsData(caseData);
