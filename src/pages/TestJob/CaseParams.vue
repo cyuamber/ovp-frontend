@@ -23,7 +23,7 @@
             <a-input
               v-for="(items, index) in (!isEdit?item.defaultValue.split(';'):item.value.split(';'))"
               :key="index"
-              v-decorator="[item.name === 'vm_ips'?'vm_ips'+index:'caps'+index,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:items }]"
+              v-decorator="[item.name === 'vm_ips'?'vm_ips'+index+caseParamsData.id:'caps'+index+caseParamsData.id,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:items }]"
             />
           </div>
           <a-switch

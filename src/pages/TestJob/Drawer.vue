@@ -554,14 +554,22 @@ export default {
         if(caseData.parameters.length > 0){
           this.cheangeTestInstrument.map( (itm,index) => {
             caseData.parameters.map(items => {
-              if((items.name === 'vm_ips' || items.name === 'caps') && (items.defaultValue === '' || items.value === '' || items.defaultValue.split(';').length-1 !== this.cheangeTestInstrument.length || items.value.split(';').length-1 !== this.cheangeTestInstrument.length)) {
-                items.defaultValue = items.defaultValue+';'
-                items.value= items.value+';'
+              if(items.name === 'vm_ips' || items.name === 'caps') {
+                if(items.defaultValue === '' || items.value === '' || items.defaultValue.split(';').length < this.cheangeTestInstrument.length || items.value.split(';').length < this.cheangeTestInstrument.length){
+                  items.defaultValue = items.defaultValue+';'
+                  items.value= items.value+';'
+                  console.log(111111111111)
+                } else if((items.defaultValue !== '' || items.value !== '') && items.defaultValue.split(';').length > this.cheangeTestInstrument.length || items.value.split(';').length > this.cheangeTestInstrument.length){
+                  items.defaultValue = items.defaultValue.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
+                  items.value = items.value.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
+                   console.log(22222222)
+                }
+                
               }
             })
           })
           caseData.parameters.map(items => {
-              if(items.name === 'vm_ips' || items.name === 'caps') {
+              if((items.name === 'vm_ips' || items.name === 'caps') && (items.defaultValue.split(';').length > this.cheangeTestInstrument.length || items.value.split(';').length > this.cheangeTestInstrument.length)) {
                 items.defaultValue = items.defaultValue.charAt(items.defaultValue.length-1) === ';' ? items.defaultValue.substring(0, items.defaultValue.length - 1) : items.defaultValue
                 items.value = items.value.charAt(items.value.length-1) === ';' ? items.value.substring(0, items.value.length - 1) : items.value
               }
