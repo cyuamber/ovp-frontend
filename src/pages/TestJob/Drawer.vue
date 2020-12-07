@@ -549,6 +549,7 @@ export default {
       const selectedSUTNames = this.isEdit && this.selectedSUTType === '' ? this.initSUTType.name : this.SUTTypeList.find(item => {
         return item.code === this.selectedSUTType
       }).dictLabel
+      this.cheangeTestInstrument = this.form.getFieldValue('TestInstrument');
       if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
         if(caseData.parameters.length > 0){
           this.cheangeTestInstrument.map( (itm,index) => {
@@ -578,7 +579,6 @@ export default {
           items.value= ''
         })
       }
-      console.log(selectedSUTNames, caseData,'-----selectedSUTNames')
       this.updateCaseParamsData(caseData);
       this.setCaseParamsIsShow(true);
     },

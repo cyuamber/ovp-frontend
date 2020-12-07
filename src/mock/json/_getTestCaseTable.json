@@ -44,7 +44,7 @@
           "description": "string",
           "type": "string",
           "defaultValue": "",
-          "isOptional": true,
+          "isOptional": false,
           "visible": true
         },
         {
@@ -100,7 +100,7 @@
           "description": "string",
           "type": "string",
           "defaultValue": "d;e",
-          "isOptional": true,
+          "isOptional": false,
           "visible": true
         },
         {
@@ -156,7 +156,7 @@
           "description": "string",
           "type": "string",
           "defaultValue": "d;e",
-          "isOptional": true,
+          "isOptional": false,
           "visible": true
         },
         {
@@ -212,7 +212,7 @@
           "description": "string",
           "type": "string",
           "defaultValue": "d;e",
-          "isOptional": true,
+          "isOptional": false,
           "visible": true
         },
         {
