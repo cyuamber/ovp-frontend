@@ -30,40 +30,31 @@
       },
       "parameters":[
         {
-          "name": "string1",
-          "value": "string",
+          "name": "vm_ips",
+          "value": "",
           "description": "string",
           "type": "string",
-          "defaultValue": "123456",
-          "isOptional": true,
-          "visible": true
-        },
-        {
-          "name": "string2",
-          "value": "string",
-          "description": "string",
-          "type": "string",
-          "defaultValue": "123456",
+          "defaultValue": "",
           "isOptional": false,
           "visible": true
         },
         {
-          "name": "string3",
-          "value": "string",
+          "name": "caps",
+          "value": "",
           "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
+          "type": "string",
+          "defaultValue": "",
           "isOptional": true,
           "visible": true
         },
         {
-          "name": "string4",
-          "value": "string",
-          "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
-          "isOptional": true,
-          "visible": false
+          "defaultValue": "",
+          "description": "",
+          "isOptional": false,
+          "name": "test_times",
+          "type": "datetime",
+          "value": "123456",
+          "visible": true
         }
       ]
     },
@@ -95,40 +86,31 @@
       },
       "parameters":[
         {
-          "name": "string1",
-          "value": "string",
+          "name": "vm_ips",
+          "value": "a;b",
           "description": "string",
           "type": "string",
-          "defaultValue": "123456",
-          "isOptional": true,
-          "visible": true
-        },
-        {
-          "name": "string2",
-          "value": "string",
-          "description": "string",
-          "type": "string",
-          "defaultValue": "123456",
+          "defaultValue": "a;f",
           "isOptional": false,
           "visible": true
         },
         {
-          "name": "string3",
-          "value": "string",
+          "name": "caps",
+          "value": "d;e",
           "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
+          "type": "string",
+          "defaultValue": "d;e",
           "isOptional": true,
           "visible": true
         },
         {
-          "name": "string4",
-          "value": "string",
-          "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
-          "isOptional": true,
-          "visible": false
+          "defaultValue": "",
+          "description": "",
+          "isOptional": false,
+          "name": "test_times",
+          "type": "datetime",
+          "value": "123456",
+          "visible": true
         }
       ]
     },
@@ -160,40 +142,31 @@
       },
       "parameters":[
         {
-          "name": "string1",
-          "value": "string",
+          "name": "vm_ips",
+          "value": "a;b",
           "description": "string",
           "type": "string",
-          "defaultValue": "123456",
-          "isOptional": true,
-          "visible": true
-        },
-        {
-          "name": "string2",
-          "value": "string",
-          "description": "string",
-          "type": "string",
-          "defaultValue": "123456",
+          "defaultValue": "a;f",
           "isOptional": false,
           "visible": true
         },
         {
-          "name": "string3",
-          "value": "string",
+          "name": "caps",
+          "value": "d;e",
           "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
+          "type": "string",
+          "defaultValue": "d;e",
           "isOptional": true,
           "visible": true
         },
         {
-          "name": "string4",
-          "value": "string",
-          "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
-          "isOptional": true,
-          "visible": false
+          "defaultValue": "",
+          "description": "",
+          "isOptional": false,
+          "name": "test_times",
+          "type": "datetime",
+          "value": "123456",
+          "visible": true
         }
       ]
     },
@@ -225,40 +198,31 @@
       },
       "parameters":[
         {
-          "name": "string1",
-          "value": "string",
+          "name": "vm_ips",
+          "value": "a;b",
           "description": "string",
           "type": "string",
-          "defaultValue": "123456",
-          "isOptional": true,
-          "visible": true
-        },
-        {
-          "name": "string2",
-          "value": "string",
-          "description": "string",
-          "type": "string",
-          "defaultValue": "123456",
+          "defaultValue": "a;f",
           "isOptional": false,
           "visible": true
         },
         {
-          "name": "string3",
-          "value": "string",
+          "name": "caps",
+          "value": "d;e",
           "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
+          "type": "string",
+          "defaultValue": "d;e",
           "isOptional": true,
           "visible": true
         },
         {
-          "name": "string4",
-          "value": "string",
-          "description": "string",
-          "type": "bool",
-          "defaultValue": "true",
-          "isOptional": true,
-          "visible": false
+          "defaultValue": "",
+          "description": "",
+          "isOptional": false,
+          "name": "test_times",
+          "type": "datetime",
+          "value": "123456",
+          "visible": true
         }
       ]
     }

@@ -248,6 +248,7 @@ export default {
         name: [],
         code: []
       },
+      cheangeTestInstrument: [],
       count: 0,
       caseListPagination: {
         onChange: page => {
@@ -291,6 +292,7 @@ export default {
         this.selectedSUTType = "";
         this.selectedSUTName = "";
         this.selectedSpecification = "";
+        this.cheangeTestInstrument = [];
         this.keyList.forEach(item => {
           this.form.setFieldsValue({ [item]: item !=="TestInstrument"? "":[] });
         });
@@ -494,6 +496,7 @@ export default {
     },
     selectSUTType(key) {
       if (key === this.selectedSUTType) return;
+      this.selectedSUTType = key
       this.selectedSUTName = "";
       this.selectedSpecification = "";
       this.getSUTName({
@@ -543,11 +546,29 @@ export default {
         this.$message.info("This testCase has no editable parameters.");
         return false;
       }
+      const selectedSUTNames = this.isEdit && this.selectedSUTType === '' ? this.initSUTType.name : this.SUTTypeList.find(item => {
+        return item.code === this.selectedSUTType
+      }).dictLabel
+      
+      if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >1){
+        if(caseData.parameters.length > 0){
+          console.log(this.cheangeTestInstrument, '----this.cheangeTestInstrument')
+          this.cheangeTestInstrument.map( (itm,index) => {
+            caseData.parameters.map(items => {
+              if(items.name === 'vm_ips' || items.name === 'caps') {
+                items.defaultValue = items.defaultValue+';'
+                items.value= items.value+';'
+              }
+            })
+          })
+        }
+      }
+      console.log(selectedSUTNames, caseData,'-----selectedSUTNames')
       this.updateCaseParamsData(caseData);
       this.setCaseParamsIsShow(true);
     },
     onChangeTestInstrument(value) {
-      console.log(value,'-----value, option')
+      this.cheangeTestInstrument = value
     }
   }
 };

@@ -48,50 +48,30 @@
         "executions":null,
         "parameters":[
           {
-            "name": "string1",
-            "value": "string",
+            "name": "vm_ips",
+            "value": "a;b",
             "description": "string",
             "type": "string",
-            "defaultValue": "789",
-            "isOptional": true,
-            "visible": true
-          },
-          {
-            "name": "Checkbox1",
-            "value": ["a","b","c","d","e"],
-            "allValue":["a","b","c","d","e","f"],
-            "description": "string",
-            "type": "checkbox",
-            "defaultValue": ["a","b","c","d"],
+            "defaultValue": "a;f",
             "isOptional": false,
             "visible": true
           },
           {
-            "name": "Checkbox2",
-            "value": ["d","e","f","g","h"],
-            "allValue":["a","b","c","d","e","f","g","h"],
+            "name": "caps",
+            "value": "d;e",
             "description": "string",
-            "type": "checkbox",
-            "defaultValue": ["d","e","f","g","h"],
+            "type": "string",
+            "defaultValue": "d;e",
             "isOptional": true,
             "visible": true
           },
           {
-            "name": "bool2",
-            "value": "string",
-            "description": "string",
-            "type": "bool",
-            "defaultValue": "true",
-            "isOptional": true,
-            "visible": false
-          },
-          {
-            "name": "bool1",
-            "value": "string",
-            "description": "string",
-            "type": "bool",
-            "defaultValue": "true",
-            "isOptional": true,
+            "defaultValue": "",
+            "description": "",
+            "isOptional": false,
+            "name": "test_times",
+            "type": "datetime",
+            "value": "123456",
             "visible": true
           }
         ]

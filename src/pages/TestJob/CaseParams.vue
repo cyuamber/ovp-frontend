@@ -16,9 +16,16 @@
           :class="{'checkboxgroup': item.visible===true &&item.type==='checkbox'}"
         >
           <a-input
-            v-if="item.visible===true &&item.type==='string'"
+            v-if="item.visible===true &&(item.type==='string' || item.type==='datetime') && item.name !== 'vm_ips' & item.name !== 'caps'"
             v-decorator="[item.name,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:!isEdit?item.defaultValue:item.value }]"
           />
+          <div v-if="item.visible===true &&item.type==='string' && (item.name === 'vm_ips' || item.name === 'caps')">
+            <a-input
+              v-for="(items, index) in (!isEdit?item.defaultValue.split(';'):item.value.split(';'))"
+              :key="index"
+              v-decorator="[item.name === 'vm_ips'?'vm_ips'+index:'caps'+index,{ rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:items }]"
+            />
+          </div>
           <a-switch
             v-if="item.visible===true &&item.type==='bool'"
             v-decorator="[item.name,{ valuePropName: 'checked',rules: [{ required: item.isOptional,message: item.name+'is required'}],initialValue:isEdit === true ?strBool(item.value):strBool(item.defaultValue) }]"
@@ -99,7 +106,6 @@ export default {
                                 : this.strBool(item.value)
                 });
             });
-            console.log(this.form.getFieldValue('string3'),typeof this.form.getFieldValue('string3'), '-----string3')
         }
     },
     caseParamsData(val) {
@@ -116,18 +122,44 @@ export default {
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
+          // console.log(values, this.caseParamsData,'---values')
           let caseParameters = this.caseParamsData;
           let testCaseLists = this.testCaseList;
-          caseParameters.parameters.forEach(item => {
-            if (values[item.name] !== undefined) {
-              item.value = values[item.name];
-            }
-          });
+          let DRAValues = {
+            vm_ips: '',
+            caps: '',
+            test_times: ''
+          }
+          if( Object.keys(values).indexOf('test_times')>-1){
+            Object.keys(values).map(items => {
+              if(items.indexOf('vm_ips')>-1){
+                DRAValues.vm_ips = DRAValues.vm_ips + values[items]+";"
+              }else if (items.indexOf('caps')>-1){
+                DRAValues.caps = DRAValues.caps + values[items]+";"
+              }else if (items.indexOf('test_times')>-1) {
+                DRAValues.test_times = DRAValues.test_times + values[items]
+              }
+            })
+            DRAValues.vm_ips = DRAValues.vm_ips.charAt(DRAValues.vm_ips.length-1) === ';' ? DRAValues.vm_ips.substring(0, DRAValues.vm_ips.length - 1) : DRAValues.vm_ips
+            DRAValues.caps = DRAValues.caps.charAt(DRAValues.caps.length-1) === ';' ? DRAValues.caps.substring(0, DRAValues.caps.length - 1) : DRAValues.caps
+            caseParameters.parameters.forEach(item => {
+              if (DRAValues[item.name] !== undefined) {
+                item.value = DRAValues[item.name];
+              }
+            });
+          } else {
+            caseParameters.parameters.forEach(item => {
+              if (values[item.name] !== undefined) {
+                item.value = values[item.name];
+              }
+            });
+          }
           testCaseLists.map((item, index) => {
             if (item.id === caseParameters.id) {
               testCaseLists.splice(index, 1, caseParameters);
             }
           });
+          console.log(testCaseLists, '---testCaseLists')
           this.updateTestCaseList({ spin: false, list: testCaseLists });
           this.setCaseParamsIsShow(false);
         }
