@@ -42,8 +42,7 @@ module.exports = {
                 },
                 createTime: faker.date.recent(),
                 VNFFileName: faker.name.firstName(),
-                ip: "192.168.0.1",
-                port: '8081'
+                address: "192.168.0.1:8080",
             }
         })
     },

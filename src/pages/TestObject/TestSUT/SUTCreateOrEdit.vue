@@ -157,13 +157,19 @@ export default {
             }
             this.count++;
             if (this.isEdit && this.count > 1) {
+                let ip = '';
+                let port = '';
+                if (this.VNFTest.address) {
+                  ip = this.VNFTest.address.split(':')[0];
+                  port = this.VNFTest.address.split(':')[1]? this.VNFTest.address.split(':')[1]: '';
+                }
                 this.form.setFieldsValue({
                     name: this.VNFTest.name,
                     vendor: this.VNFTest.vendor,
                     version: this.VNFTest.version,
                     type: this.VNFTest.typeCH.code,
-                    ip: this.VNFTest.ip,
-                    port: this.VNFTest.port
+                    ip: ip,
+                    port: port
                 });
             } else if (!this.isEdit && this.count > 1) {
                 this.form.setFieldsValue({
@@ -272,12 +278,12 @@ export default {
             vendor: values.vendor,
             version: values.version,
             type: values.type,
-            ip: values.ip,
-            port: values.port,
+            address: values.ip && values.address? values.ip + ':' + values.port: '',
             createTime: this.isEdit
               ? this.VNFTest.createTime
               : moment(new Date()).format("YYYY-MM-DD")
             };
+            console.log(data)
           if (values.upload && values.upload.length !==0 ) {
             if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
               values.upload.forEach(file => {
@@ -294,6 +300,10 @@ export default {
           if (this.ipCheck.validateStatus === 'error'){
             // check ip address
             this.$message.error("Illegal ip address!");
+          } else if (!values.ip && values.port) { // 有port没有ip
+            this.$message.error("Only port number without IP address is not allowed");
+          } else if (values.ip && !values.port) {
+            this.$message.error("Only IP address without port number is not allowed");
           }
           else {
             this.submitFormData(data);
