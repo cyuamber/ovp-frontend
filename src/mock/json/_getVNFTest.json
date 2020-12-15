@@ -20,8 +20,7 @@
       "updateTime": null,
       "flag": 101,
       "fileName": null,
-      "ip": "192.168.0.1",
-      "port": "8081"
+      "address": "192.168.0.1:8080"
     },
     {
       "id": "3142342342345241313",
@@ -41,8 +40,7 @@
       "updateTime": null,
       "flag": 101,
       "fileName": null,
-      "ip": "192.168.0.1",
-      "port": "8081"
+      "address": "192.168.0.1:8080"
     },
     {
       "id": "876859345241231314354364",
@@ -62,8 +60,7 @@
       "updateTime": null,
       "flag": 101,
       "fileName": null,
-      "ip": "192.168.0.1",
-      "port": "8081"
+      "address": "192.168.0.1:8080"
     },
     {
       "id": "98085352342353234523",
@@ -83,8 +80,7 @@
       "updateTime": null,
       "flag": 101,
       "fileName": null,
-      "ip": "192.168.0.1",
-      "port": "8081"
+      "address": "192.168.0.1:8080"
     },
     {
       "id": "777777777777777799999",
@@ -104,8 +100,7 @@
       "updateTime": null,
       "flag": 101,
       "fileName": null,
-      "ip": "192.168.0.1",
-      "port": "8081"
+      "address": "192.168.0.1:8080"
     }
   ],
   "total": 5,
