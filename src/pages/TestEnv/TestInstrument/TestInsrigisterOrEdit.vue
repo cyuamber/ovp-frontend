@@ -12,9 +12,9 @@
             v-decorator="['Vendor',{ rules: [{ required: true,}],initialValue:singleData.vendor }]"
           />
         </a-form-item>
-        <a-form-item label="Mnt Address" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+        <a-form-item label="Address" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
           <a-input
-            v-decorator="['MntAddress',{ rules: [{ required: true,}],initialValue:singleData.mntAddress }]"
+            v-decorator="['address',{ rules: [{ required: true,}],initialValue:singleData.address }]"
           />
         </a-form-item>
         <a-form-item label="User" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
@@ -61,7 +61,7 @@ export default {
                     this.form.setFieldsValue({
                         Name: this.singleData.name,
                         Vendor: this.singleData.vendor,
-                        MntAddress: this.singleData.mntAddress,
+                        address: this.singleData.address,
                         User: this.singleData.username,
                         Password: this.singleData.password
                     });
@@ -71,7 +71,7 @@ export default {
                 this.form.setFieldsValue({
                     Name: "",
                     Vendor: "",
-                    MntAddress: "",
+                    address: "",
                     User: "",
                     Password: ""
                 });
@@ -95,7 +95,7 @@ export default {
           let data = {
             name: values.Name,
             vendor: values.Vendor,
-            mntAddress: values.MntAddress,
+            address: values.address,
             username: values.User,
             password: values.Password
           };

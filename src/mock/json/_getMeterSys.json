@@ -5,7 +5,7 @@
     {
       "createTime": 1573516800000,
       "id": "2121222222222222222",
-      "mntAddress": "http://10.12.33.4:8082",
+      "address": "http://10.12.33.4:8082",
       "name": "CloudSure",
       "password": "string",
       "updateTime": 1573516800000,
@@ -14,7 +14,7 @@
     },{
       "createTime": 1570492800000,
       "id": "33323234343434343434343",
-      "mntAddress": "http://10.22.13.4:6553",
+      "address": "http://10.22.13.4:6553",
       "name": "OpenTap",
       "password": "demo!123456",
       "updateTime": 1570492800000,
@@ -23,7 +23,7 @@
     },{
       "createTime": 1566432000000,
       "id":"3332323434343434343433",
-      "mntAddress": "http://10.22.13.4:8483",
+      "address": "http://10.22.13.4:8483",
       "name": "VTP",
       "password": "demo!123456",
       "updateTime": 1566432000000,
