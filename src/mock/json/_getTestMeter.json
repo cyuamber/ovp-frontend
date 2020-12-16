@@ -12,6 +12,7 @@
     "fileName": "test.casr",
     "fileAliasName": "fakefilename01.casr",
     "flag": 0,
+    "address": "22.22.2.1",
     "typeCH": {
       "code": "2",
       "dictLabel": "FW",
@@ -42,6 +43,7 @@
     "fileName": "file name.yaml",
     "fileAliasName": "fakefilename02.yaml",
     "flag": 0,
+    "address": "22.22.2.2",
     "typeCH": {
       "code": "2",
       "dictLabel": "DNS",

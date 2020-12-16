@@ -21,7 +21,8 @@
       "flag": "101",
       "flagName":"DRA",
       "fileName": null,
-      "typeCH": null
+      "typeCH": null,
+      "address": "10.10.13"
     },
     "spec": {
       "id": 1001,
@@ -174,11 +175,13 @@
     "suite": [
       {
         "id":"33323234343434343434343",
-        "name":"STVc-FW"
+        "name":"STVc-FW",
+        "address":"10.10.1"
       },
       {
         "id":"656565423131314364563",
-        "name":"STVc-DNS"
+        "name":"STVc-DNS",
+        "address":"10.10.2"
       }
     ]
   }

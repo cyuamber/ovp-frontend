@@ -562,7 +562,8 @@ module.exports = {
                 "updateTime": null,
                 "flag": 0,
                 "fileName": null,
-                "typeCH": null
+                "typeCH": null,
+                "address": "10.10.1"
             },
             {
                 "id": 2,
@@ -574,7 +575,8 @@ module.exports = {
                 "updateTime": null,
                 "flag": 0,
                 "fileName": null,
-                "typeCH": null
+                "typeCH": null,
+                "address": "10.10.2"
             },
             {
                 "id": 3,
@@ -586,7 +588,8 @@ module.exports = {
                 "updateTime": null,
                 "flag": 0,
                 "fileName": null,
-                "typeCH": null
+                "typeCH": null,
+                "address": "10.10.3"
             },
             {
                 "id": 4,
@@ -598,7 +601,8 @@ module.exports = {
                 "updateTime": null,
                 "flag": 0,
                 "fileName": null,
-                "typeCH": null
+                "typeCH": null,
+                "address": "10.10.4"
             }
         ],
         "total": 4,

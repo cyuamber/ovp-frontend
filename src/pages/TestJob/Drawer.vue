@@ -183,7 +183,7 @@
                     <a-icon type="info-circle" class="form__info-cursor" />
                   </a-tooltip>
                   <a-icon
-                    v-if="initcheckboxGroup.includes(item.id)"
+                    v-if="initcheckboxGroup.includes(item.id) && cheangeTestInstrument.length >0"
                     type="unordered-list"
                     class="form__info-cursor"
                     @click="(() => caseParamsEdit(item))"
@@ -218,7 +218,9 @@ export default {
       keyList: [],
       form: this.$form.createForm(this),
       selectedSUTType: "",
-      selectedSUTName: "",
+      selectedSUTNameId: "",
+      selectedSUTNames: "",
+      selectedSUTNameAdress: "",
       selectedSpecification: "",
       initSUTType: {
         name: null,
@@ -290,7 +292,8 @@ export default {
       if (!val) {
         this.clean();
         this.selectedSUTType = "";
-        this.selectedSUTName = "";
+        this.selectedSUTNameId = "";
+        this.selectedSUTNameAdress = "";
         this.selectedSpecification = "";
         this.cheangeTestInstrument = [];
         this.keyList.forEach(item => {
@@ -357,6 +360,13 @@ export default {
             })
             : []
         };
+        this.selectedSUTNames = this.testJobSingleData.sut.flagName
+        this.selectedSUTNameAdress = this.testJobSingleData.sut.address
+        this.cheangeTestInstrument = this.testJobSingleData.suite.map(item => {
+               if(item.id && item.id !== null && item.address){
+                  return item.address
+               }
+            })
         // setTimeout()
         if (this.isEdit && this.count > 1) {
           this.form.setFieldsValue({
@@ -453,6 +463,13 @@ export default {
           }
           let caseReqs = [];
           if (this.initcheckboxGroup.length > 0) {
+            this.testCaseList.map(item => {
+              item.parameters.push(
+                {
+                  "address":this.selectedSUTNameAdress
+                }
+              )
+            })
             if (!isEdit) {
               this.testCaseList.forEach(item => {
                 if (this.initcheckboxGroup.includes(item.id)) {
@@ -497,30 +514,36 @@ export default {
     selectSUTType(key) {
       if (key === this.selectedSUTType) return;
       this.selectedSUTType = key
-      this.selectedSUTName = "";
+      this.selectedSUTNameId = "";
       this.selectedSpecification = "";
       this.getSUTName({
         SUTType: key,
         message: this.$message
       });
       this.form.setFieldsValue({ SUTName: "", TestSpecification: "" });
+      this.selectedSUTNames = this.SUTTypeList.find(item => {
+        return item.code === key
+      }).dictLabel
     },
     selectSUTName(key) {
       // if (key === this.selectedSUTName) return;
-      this.selectedSUTName = key.split("+")[1];
+      this.selectedSUTNameId = key.split("+")[1];
       this.selectedSpecification = "";
       this.getSpecification({
         SUTName: key.split("+")[0],
         message: this.$message
       });
       this.form.setFieldsValue({ TestSpecification: "" });
+      this.selectedSUTNameAdress = this.SUTNameList.find(item => {
+        return Number(item.type) === Number(key.split("+")[0])
+      }).address
     },
     selectSpecification(key) {
       if (key === this.selectedSpecification) return;
       this.selectedSpecification = key;
       let obj = {
         specId: key,
-        sutId: this.selectedSUTName
+        sutId: this.selectedSUTNameId
       };
       this.getTestCase({
         obj,
@@ -530,6 +553,19 @@ export default {
     onChange(e) {
       this.updateInitcheckboxGroup(e);
       this.changeCaseCheckAll(e.length === this.testCaseList.length);
+      if(this.selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
+        this.testCaseList.map(item => {
+          if(e.indexOf(item.id)>-1){
+            item.parameters.map(items => {
+                if(items.name === 'vm_ips') {
+                  items.defaultValue = this.cheangeTestInstrument.join(";")
+                  items.value= this.cheangeTestInstrument.join(";")
+                }
+            })
+          }
+        })
+        console.log(this.testCaseList, '-----this.testCaseList')
+      }
     },
     caseParamsEdit(caseData) {
       if (this.isEdit) {
@@ -546,15 +582,22 @@ export default {
         this.$message.info("This testCase has no editable parameters.");
         return false;
       }
-      const selectedSUTNames = this.isEdit && this.selectedSUTType === '' ? this.initSUTType.name : this.SUTTypeList.find(item => {
-        return item.code === this.selectedSUTType
-      }).dictLabel
-      this.cheangeTestInstrument = this.form.getFieldValue('TestInstrument');
-      if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
+      this.cheangeTestInstrument = this.TestInstrumentOption.map(item => {
+        if(this.form.getFieldValue('TestInstrument').indexOf(item.id)>-1){
+          return item.address
+        }
+      })
+      if(this.cheangeTestInstrument.length >0){
+        this.cheangeTestInstrument = this.cheangeTestInstrument.filter(item => {
+         return item !== undefined
+        })
+      }
+      if(this.selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
+        console.log(caseData, '----caseData')
         if(caseData.parameters.length > 0){
           this.cheangeTestInstrument.map( (itm,index) => {
             caseData.parameters.map(items => {
-              if(items.name === 'vm_ips' || items.name === 'caps') {
+              if(items.name === 'caps') {
                 if(items.defaultValue === '' || items.value === '' || items.defaultValue.split(';').length < this.cheangeTestInstrument.length || items.value.split(';').length < this.cheangeTestInstrument.length){
                   items.defaultValue = items.defaultValue+';'
                   items.value= items.value+';'
@@ -562,28 +605,47 @@ export default {
                   items.defaultValue = items.defaultValue.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
                   items.value = items.value.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
                 }
-                
+              }
+              if(items.name === 'vm_ips') {
+                if(items.defaultValue === '' || items.value === '' || items.defaultValue.split(';').length < this.cheangeTestInstrument.length || items.value.split(';').length < this.cheangeTestInstrument.length){
+                  items.defaultValue = this.cheangeTestInstrument.join(";")
+                  items.value= this.cheangeTestInstrument.join(";")
+                } else if((items.defaultValue !== '' || items.value !== '') && items.defaultValue.split(';').length > this.cheangeTestInstrument.length || items.value.split(';').length > this.cheangeTestInstrument.length){
+                  items.defaultValue = items.defaultValue.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
+                  items.value = items.value.split(';').slice(0,this.cheangeTestInstrument.length).join(';')
+                }
               }
             })
           })
           caseData.parameters.map(items => {
-              if((items.name === 'vm_ips' || items.name === 'caps') && (items.defaultValue.split(';').length > this.cheangeTestInstrument.length || items.value.split(';').length > this.cheangeTestInstrument.length)) {
+              if((items.name === 'caps' || items.name === 'vm_ips') && (items.defaultValue.split(';').length > this.cheangeTestInstrument.length || items.value.split(';').length > this.cheangeTestInstrument.length)) {
                 items.defaultValue = items.defaultValue.charAt(items.defaultValue.length-1) === ';' ? items.defaultValue.substring(0, items.defaultValue.length - 1) : items.defaultValue
                 items.value = items.value.charAt(items.value.length-1) === ';' ? items.value.substring(0, items.value.length - 1) : items.value
               }
             })
         }
-      }else if(selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length === 0){
+      }else if(this.selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length === 0){
         caseData.parameters.map(items => {
-          items.defaultValue = ''
-          items.value= ''
+          if(items.name === 'vm_ips' || items.name === 'caps' || items.name === 'test_times'){
+            items.defaultValue = ''
+            items.value= ''
+          }
         })
       }
       this.updateCaseParamsData(caseData);
       this.setCaseParamsIsShow(true);
     },
     onChangeTestInstrument(value) {
-      this.cheangeTestInstrument = value
+      this.cheangeTestInstrument = this.TestInstrumentOption.map(item => {
+        if(value.indexOf(item.id)>-1){
+          return item.address
+        }
+      })
+      if(this.cheangeTestInstrument.length >0){
+        this.cheangeTestInstrument = this.cheangeTestInstrument.filter(item => {
+         return item !== undefined
+        })
+      }
     }
   }
 };
