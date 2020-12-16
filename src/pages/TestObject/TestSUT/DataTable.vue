@@ -11,14 +11,18 @@
         :pagination="pagination"
         @change="pageChange"
       >
-        <span slot="action" slot-scope="action,record">
+        <span slot="action" slot-scope="action, record">
           <a-tag
             v-for="item in action"
             :key="item"
-            :color="item === 'Edit'? 'blue': (item === 'Delete'?'red': 'green')"
+            :color="
+              item === 'Edit' ? 'blue' : item === 'Delete' ? 'red' : 'green'
+            "
             class="table__tag"
-            @click="(() => showEditOrDeleteModal(item,record))"
-          >{{item}}</a-tag>
+            @click="() => showEditOrDeleteModal(item, record)"
+          >
+            {{ item }}
+          </a-tag>
         </span>
       </a-table>
     </div>
@@ -34,16 +38,16 @@ export default {
   data() {
     return {
       currentPage: "TestSUT",
-      columns: TestSUTColumns
+      columns: TestSUTColumns,
     };
   },
   computed: {
     ...mapState({
-      tableData: state => state.testSUT.tableData,
-      pagination: state => state.testSUT.pagination,
-      VNFTest: state => state.testSUT.VNFTest,
-      tableLoading: state => state.loading.tableLoading
-    })
+      tableData: (state) => state.testSUT.tableData,
+      pagination: (state) => state.testSUT.pagination,
+      VNFTest: (state) => state.testSUT.VNFTest,
+      tableLoading: (state) => state.loading.tableLoading,
+    }),
   },
 
   methods: {
@@ -52,7 +56,7 @@ export default {
       "updateVisible",
       "updateEdit",
       "setFilterItem",
-      "updateVNFTest"
+      "updateVNFTest",
     ]),
 
     showEditOrDeleteModal(item, VNFTest) {
@@ -63,19 +67,22 @@ export default {
       } else if (item === "Delete")
         this.showConfirm(item, "Are you sure delete this task?", VNFTest);
       else {
-        this.$confirm({
-          title: "Are you sure download this Spec?",
-          content: "fileName: " + VNFTest.fileName,
-          okText: "Yes",
-          okType: "danger",
-          cancelText: "No",
-          onOk: () => {
-            this.downloadFile({
-              fileName: VNFTest.fileName,
-              fileAliasName: VNFTest.fileAliasName
-            });
-          }
-        });
+        if (VNFTest.fileName) {
+          this.$confirm({
+            title: "Are you sure download this Spec?",
+            content: "fileName: " + VNFTest.fileName,
+            okText: "Yes",
+            cancelText: "No",
+            onOk: () => {
+              this.downloadFile({
+                fileName: VNFTest.fileName,
+                fileAliasName: VNFTest.fileAliasName,
+              });
+            },
+          });
+        } else {
+          this.$message.warning("There's no file for this package");
+        }
       }
     },
     showConfirm(item, title, VNFTest) {
@@ -87,16 +94,16 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.deleteVNFTest({
-            id: VNFTest.id
+            id: VNFTest.id,
           });
-        }
+        },
       });
     },
     pageChange(pageObj) {
       this.setFilterItem({ pageObj });
       this.setParams(true);
-    }
-  }
+    },
+  },
 };
 </script>
 

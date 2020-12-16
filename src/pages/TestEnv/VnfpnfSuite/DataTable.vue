@@ -10,14 +10,18 @@
       :pagination="pagination"
       @change="handleTableChange"
     >
-      <span slot="action" slot-scope="action,record">
+      <span slot="action" slot-scope="action, record">
         <a-tag
-          v-for="(item,index) in action"
+          v-for="(item, index) in action"
           :key="index"
-          :color="item === 'Edit'? 'blue' : (item === 'Delete'?'red':'green')"
+          :color="
+            item === 'Edit' ? 'blue' : item === 'Delete' ? 'red' : 'green'
+          "
           class="tag"
-          @click="(() => showEditOrDeleteModal(item,record))"
-        >{{item}}</a-tag>
+          @click="() => showEditOrDeleteModal(item, record)"
+        >
+          {{ item }}
+        </a-tag>
       </span>
     </a-table>
   </div>
@@ -35,17 +39,17 @@ export default {
       columns: VnfpnfSuiteColumns,
       currentPage: "VNF/PNFSuiteMGT",
       createTime: "",
-      keyword: ""
+      keyword: "",
     };
   },
   computed: {
     ...mapState({
-      tableData: state => state.VnfpnfSuite.tableData,
-      pagination: state => state.VnfpnfSuite.pagination,
-      SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
-      loadingMessage: state => state.loading.loadingMessage,
-      tableLoading: state => state.loading.tableLoading
-    })
+      tableData: (state) => state.VnfpnfSuite.tableData,
+      pagination: (state) => state.VnfpnfSuite.pagination,
+      SuiteSingleData: (state) => state.VnfpnfSuite.SuiteSingleData,
+      loadingMessage: (state) => state.loading.loadingMessage,
+      tableLoading: (state) => state.loading.tableLoading,
+    }),
   },
 
   methods: {
@@ -53,12 +57,12 @@ export default {
       "getTableData",
       "getPagination",
       "deleteTestMeter",
-      "downloadFile"
+      "downloadFile",
     ]),
     ...mapMutations("VnfpnfSuite", [
       "updateVisible",
       "updateEdit",
-      "updateVNFTest"
+      "updateVNFTest",
     ]),
 
     handleTableChange(pagination) {
@@ -69,7 +73,7 @@ export default {
           name: this.keyword,
           createTime: this.createTime,
           pageNum: current,
-          pageSize: pageSize
+          pageSize: pageSize,
         };
       this.getTableData(obj);
     },
@@ -89,27 +93,30 @@ export default {
           onOk: () => {
             this.deleteTestMeter({
               id: SuiteSingleData.id,
-              message: this.$message
+              message: this.$message,
             });
-          }
+          },
         });
       } else {
-        this.$confirm({
-          title: "Are you sure download this xNF TT?",
-          content: "File Name: " + SuiteSingleData.fileName,
-          okText: "Yes",
-          okType: "danger",
-          cancelText: "No",
-          onOk: () => {
-            this.downloadFile({
-              fileName: SuiteSingleData.fileName,
-              fileAliasName: SuiteSingleData.fileAliasName
-            });
-          }
-        });
+        if (SuiteSingleData.fileName) {
+          this.$confirm({
+            title: "Are you sure download this xNF TT?",
+            content: "File Name: " + SuiteSingleData.fileName,
+            okText: "Yes",
+            cancelText: "No",
+            onOk: () => {
+              this.downloadFile({
+                fileName: SuiteSingleData.fileName,
+                fileAliasName: SuiteSingleData.fileAliasName,
+              });
+            },
+          });
+        } else {
+          this.$message.warning("There's no file for this package");
+        }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
