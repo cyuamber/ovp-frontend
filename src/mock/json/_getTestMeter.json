@@ -28,7 +28,7 @@
       "id": 1,
       "name": null,
       "vendor": null,
-      "mntAddress": null,
+      "address": null,
       "username": null,
       "password": null
     }
@@ -59,7 +59,7 @@
       "id": 3,
       "name": null,
       "vendor": null,
-      "mntAddress": null,
+      "address": null,
       "username": null,
       "password": null
     }

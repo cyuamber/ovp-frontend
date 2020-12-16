@@ -46,6 +46,7 @@
 
             <a-spin :spinning="cloudTypeOptions.length ===0" v-if="item.title === 'Cloud Type'">
               <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+              <!-- :todo  loading-->
             </a-spin>
           </a-form-item>
         </div>

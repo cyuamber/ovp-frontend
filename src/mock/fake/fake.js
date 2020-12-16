@@ -155,7 +155,7 @@ module.exports = {
                 id: n + 1,
                 name: faker.name.findName(),
                 vendor: faker.company.companyName(),
-                mntAddress: faker.internet.url(),
+                address: faker.internet.url(),
                 createTime: faker.date.recent(),
                 updateTime: faker.date.recent(),
                 username: faker.name.findName(),

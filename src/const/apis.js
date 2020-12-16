@@ -26,7 +26,7 @@ export default {
         vimEnvMgtTable: baseUrl + "/vimEnvMgt",
         manoEnvMgtTable: baseUrl + "/manos",
         cloudRegionID: baseUrl + "/cloudRegionID",
-        cloudType: baseUrl + "/types/1000",
+        cloudType: baseUrl + "/types/300",
         MANOType: baseUrl + "/types/200",
         vimEnvMgtInsert: baseUrl + "/vimEnvMgt/insert",
         vimEnvMgtUpdate: baseUrl + "/vimEnvMgt/update",

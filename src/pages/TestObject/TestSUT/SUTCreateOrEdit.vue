@@ -84,14 +84,11 @@
             class="form__uploadtext-height"
           >{{this.VNFTest.fileName}}</span>
         </a-form-item>
-        <a-form-item label="Address" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(70% - 12px)', margin: '0 5px 0 0' }" 
-          hasFeedback
-          :validateStatus="ipCheck.validateStatus" 
-          :help="ipCheck.errorMsg">
+        <a-form-item label="Address" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }" required>
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(70% - 12px)', margin: '0 5px 0 0' }" >
             <a-input
               v-decorator="[
-                'ip', {initialValue: VNFTest.ip}, 
+                'ip', {rules: [{ validator: checkIp }],initialValue: VNFTest.ip}, 
                 ]"
               @change="changeIp"
             />
@@ -100,7 +97,7 @@
           <a-form-item :style="{ display: 'inline-block', width: 'calc(30% - 12px)', margin: '0 0 0 5px '}">
             <a-input
               v-decorator="[
-                'port', {initialValue: VNFTest.port},
+                'port', {rules: [{ required: true, message: 'Port is required' }], initialValue: VNFTest.port},
                 ]"
               onkeyup="this.value=this.value.replace(/\D/g,'')"
             />
@@ -236,6 +233,17 @@ export default {
           }
       }
     },
+    checkIp(rule, value, callback) {
+      console.log('jhhhh')
+      if (value !== '' && value!==null && this.ipCheck.validateStatus!=='error') {
+        callback();
+        return;
+      } else if (value === '' || value===null) {
+        callback('Ip is required')
+      } else {
+        callback(this.ipCheck.errorMsg);
+      }
+    },
     handleCancel() {
       if (!this.uploading) {
         this.handleRemove();
@@ -278,7 +286,7 @@ export default {
             vendor: values.vendor,
             version: values.version,
             type: values.type,
-            address: values.ip && values.address? values.ip + ':' + values.port: '',
+            address: values.ip && values.port? values.ip + ':' + values.port: '',
             createTime: this.isEdit
               ? this.VNFTest.createTime
               : moment(new Date()).format("YYYY-MM-DD")
@@ -297,17 +305,7 @@ export default {
               return;
             }
           }
-          if (this.ipCheck.validateStatus === 'error'){
-            // check ip address
-            this.$message.error("Illegal ip address!");
-          } else if (!values.ip && values.port) { // 有port没有ip
-            this.$message.error("Only port number without IP address is not allowed");
-          } else if (values.ip && !values.port) {
-            this.$message.error("Only IP address without port number is not allowed");
-          }
-          else {
             this.submitFormData(data);
-          }
         }
       });
     },

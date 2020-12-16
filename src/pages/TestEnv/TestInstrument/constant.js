@@ -12,8 +12,8 @@ export const TestInsrigisterColumns = [
         dataIndex: "vendor",
     },
     {
-        title: "Mnt Address",
-        dataIndex: "mntAddress",
+        title: "Address",
+        dataIndex: "address",
     },
     {
         title: "Create Time",
