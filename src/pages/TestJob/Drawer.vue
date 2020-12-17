@@ -444,7 +444,7 @@ export default {
         this.cheangeTestInstrument = this.testJobSingleData.suite
           ? this.testJobSingleData.suite.map((item) => {
               if (item.id && item.id !== null && item.address) {
-                return item.address;
+                return item.instrumentMgs.address? item.instrumentMgs.address: '';
               }
             })
           : [];
@@ -641,7 +641,7 @@ export default {
       this.updateInitcheckboxGroup(e);
       this.changeCaseCheckAll(e.length === this.testCaseList.length);
       if (
-        this.selectedSUTNames === "DRA" &&
+        this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length > 0
       ) {
         this.testCaseList.map((item) => {
@@ -677,7 +677,7 @@ export default {
       }
       this.cheangeTestInstrument = this.TestInstrumentOption.map((item) => {
         if (this.form.getFieldValue("TestInstrument").indexOf(item.id) > -1) {
-          return item.address;
+          return item.instrumentMgs.address? item.instrumentMgs.address: '';
         }
       });
       if (this.cheangeTestInstrument.length > 0) {
@@ -693,10 +693,11 @@ export default {
       ) {
         console.log(caseData, "----caseData");
         if (caseData.parameters.length > 0) {
-          this.cheangeTestInstrument.map((itm, index) => {
+        console.log('case',this.cheangeTestInstrument)
             caseData.parameters.map((items) => {
               if (items.name === "caps") {
                 if (
+                  items.defaultValue === null ||
                   items.defaultValue === "" ||
                   items.value === "" ||
                   items.defaultValue.split(";").length <
@@ -725,6 +726,7 @@ export default {
               }
               if (items.name === "vm_ips") {
                 if (
+                  items.defaultValue === null ||
                   items.defaultValue === "" ||
                   items.value === "" ||
                   items.defaultValue.split(";").length <
@@ -752,7 +754,6 @@ export default {
                 }
               }
             });
-          });
           caseData.parameters.map((items) => {
             if (
               (items.name === "caps" || items.name === "vm_ips") &&
@@ -796,16 +797,17 @@ export default {
     onChangeTestInstrument(value) {
       this.cheangeTestInstrument = this.TestInstrumentOption.map((item) => {
         if (value.indexOf(item.id) > -1) {
-          return item.address;
+          return item.instrumentMgs.address? item.instrumentMgs.address: '';
         }
       });
-      if (this.cheangeTestInstrument.length > 0) {
-        this.cheangeTestInstrument = this.cheangeTestInstrument.filter(
-          (item) => {
-            return item !== undefined;
-          }
-        );
-      }
+      // if (this.cheangeTestInstrument.length > 0) {
+      //   this.cheangeTestInstrument = this.cheangeTestInstrument.filter(
+      //     (item) => {
+      //       return item !== undefined;
+      //     }
+      //   );
+      // }
+      console.log('ins', this.cheangeTestInstrument)
     },
   },
 };
