@@ -444,7 +444,9 @@ export default {
         this.cheangeTestInstrument = this.testJobSingleData.suites
           ? this.testJobSingleData.suites.map((item) => {
               if (item.id && item.id !== null && item.address) {
-                return item.instrumentMgs.address? item.instrumentMgs.address: '';
+                return item.instrumentMgs.address
+                  ? item.instrumentMgs.address
+                  : "";
               }
             })
           : [];
@@ -509,7 +511,6 @@ export default {
         : this.testCaseList.map((item) => {
             return item.id;
           });
-      console.log(caseCheckedList);
       this.updateInitcheckboxGroup(caseCheckedList);
     },
     handleSubmit() {
@@ -517,7 +518,6 @@ export default {
         if (!error) {
           let { isEdit } = this;
           if (isEdit) {
-            console.log(values, this.initTestInstrument, "-----values");
             values.SUTName =
               values.SUTName === this.initSUTName.name
                 ? this.initSUTName.name + "+" + this.initSUTName.code
@@ -637,7 +637,6 @@ export default {
       });
     },
     onChange(e) {
-      console.log("hello", e);
       this.updateInitcheckboxGroup(e);
       this.changeCaseCheckAll(e.length === this.testCaseList.length);
       if (
@@ -654,7 +653,6 @@ export default {
             });
           }
         });
-        console.log(this.testCaseList, "-----this.testCaseList");
       }
     },
     caseParamsEdit(caseData) {
@@ -677,7 +675,7 @@ export default {
       }
       this.cheangeTestInstrument = this.TestInstrumentOption.map((item) => {
         if (this.form.getFieldValue("TestInstrument").indexOf(item.id) > -1) {
-          return item.instrumentMgs.address? item.instrumentMgs.address: '';
+          return item.instrumentMgs.address ? item.instrumentMgs.address : "";
         }
       });
       if (this.cheangeTestInstrument.length > 0) {
@@ -691,69 +689,67 @@ export default {
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length > 0
       ) {
-        console.log(caseData, "----caseData");
         if (caseData.parameters.length > 0) {
-        console.log('case',this.cheangeTestInstrument)
-            caseData.parameters.map((items) => {
-              if (items.name === "caps") {
-                if (
-                  items.defaultValue === null ||
-                  items.defaultValue === "" ||
-                  items.value === "" ||
-                  items.defaultValue.split(";").length <
-                    this.cheangeTestInstrument.length ||
-                  items.value.split(";").length <
-                    this.cheangeTestInstrument.length
-                ) {
-                  items.defaultValue = items.defaultValue + ";";
-                  items.value = items.value + ";";
-                } else if (
-                  ((items.defaultValue !== "" || items.value !== "") &&
-                    items.defaultValue.split(";").length >
-                      this.cheangeTestInstrument.length) ||
-                  items.value.split(";").length >
-                    this.cheangeTestInstrument.length
-                ) {
-                  items.defaultValue = items.defaultValue
-                    .split(";")
-                    .slice(0, this.cheangeTestInstrument.length)
-                    .join(";");
-                  items.value = items.value
-                    .split(";")
-                    .slice(0, this.cheangeTestInstrument.length)
-                    .join(";");
-                }
+          caseData.parameters.map((items) => {
+            if (items.name === "caps") {
+              if (
+                items.defaultValue === null ||
+                items.defaultValue === "" ||
+                items.value === "" ||
+                items.defaultValue.split(";").length <
+                  this.cheangeTestInstrument.length ||
+                items.value.split(";").length <
+                  this.cheangeTestInstrument.length
+              ) {
+                items.defaultValue = items.defaultValue + ";";
+                items.value = items.value + ";";
+              } else if (
+                ((items.defaultValue !== "" || items.value !== "") &&
+                  items.defaultValue.split(";").length >
+                    this.cheangeTestInstrument.length) ||
+                items.value.split(";").length >
+                  this.cheangeTestInstrument.length
+              ) {
+                items.defaultValue = items.defaultValue
+                  .split(";")
+                  .slice(0, this.cheangeTestInstrument.length)
+                  .join(";");
+                items.value = items.value
+                  .split(";")
+                  .slice(0, this.cheangeTestInstrument.length)
+                  .join(";");
               }
-              if (items.name === "vm_ips") {
-                if (
-                  items.defaultValue === null ||
-                  items.defaultValue === "" ||
-                  items.value === "" ||
-                  items.defaultValue.split(";").length <
-                    this.cheangeTestInstrument.length ||
-                  items.value.split(";").length <
-                    this.cheangeTestInstrument.length
-                ) {
-                  items.defaultValue = this.cheangeTestInstrument.join(";");
-                  items.value = this.cheangeTestInstrument.join(";");
-                } else if (
-                  ((items.defaultValue !== "" || items.value !== "") &&
-                    items.defaultValue.split(";").length >
-                      this.cheangeTestInstrument.length) ||
-                  items.value.split(";").length >
-                    this.cheangeTestInstrument.length
-                ) {
-                  items.defaultValue = items.defaultValue
-                    .split(";")
-                    .slice(0, this.cheangeTestInstrument.length)
-                    .join(";");
-                  items.value = items.value
-                    .split(";")
-                    .slice(0, this.cheangeTestInstrument.length)
-                    .join(";");
-                }
+            }
+            if (items.name === "vm_ips") {
+              if (
+                items.defaultValue === null ||
+                items.defaultValue === "" ||
+                items.value === "" ||
+                items.defaultValue.split(";").length <
+                  this.cheangeTestInstrument.length ||
+                items.value.split(";").length <
+                  this.cheangeTestInstrument.length
+              ) {
+                items.defaultValue = this.cheangeTestInstrument.join(";");
+                items.value = this.cheangeTestInstrument.join(";");
+              } else if (
+                ((items.defaultValue !== "" || items.value !== "") &&
+                  items.defaultValue.split(";").length >
+                    this.cheangeTestInstrument.length) ||
+                items.value.split(";").length >
+                  this.cheangeTestInstrument.length
+              ) {
+                items.defaultValue = items.defaultValue
+                  .split(";")
+                  .slice(0, this.cheangeTestInstrument.length)
+                  .join(";");
+                items.value = items.value
+                  .split(";")
+                  .slice(0, this.cheangeTestInstrument.length)
+                  .join(";");
               }
-            });
+            }
+          });
           caseData.parameters.map((items) => {
             if (
               (items.name === "caps" || items.name === "vm_ips") &&
@@ -797,17 +793,16 @@ export default {
     onChangeTestInstrument(value) {
       this.cheangeTestInstrument = this.TestInstrumentOption.map((item) => {
         if (value.indexOf(item.id) > -1) {
-          return item.instrumentMgs.address? item.instrumentMgs.address: '';
+          return item.instrumentMgs.address ? item.instrumentMgs.address : "";
         }
       });
-      // if (this.cheangeTestInstrument.length > 0) {
-      //   this.cheangeTestInstrument = this.cheangeTestInstrument.filter(
-      //     (item) => {
-      //       return item !== undefined;
-      //     }
-      //   );
-      // }
-      console.log('ins', this.cheangeTestInstrument)
+      if (this.cheangeTestInstrument.length > 0) {
+        this.cheangeTestInstrument = this.cheangeTestInstrument.filter(
+          (item) => {
+            return item !== undefined;
+          }
+        );
+      }
     },
   },
 };
