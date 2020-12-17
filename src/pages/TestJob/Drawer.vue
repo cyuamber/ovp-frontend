@@ -219,6 +219,7 @@ export default {
       form: this.$form.createForm(this),
       selectedSUTType: "",
       selectedSUTNameId: "",
+      selectedSUTNameType: "",
       selectedSUTNames: "",
       selectedSUTNameAdress: "",
       selectedSpecification: "",
@@ -428,6 +429,7 @@ export default {
         : this.testCaseList.map(item => {
             return item.id;
           });
+      console.log(caseCheckedList)
       this.updateInitcheckboxGroup(caseCheckedList);
     },
     handleSubmit() {
@@ -466,7 +468,7 @@ export default {
             this.testCaseList.map(item => {
               item.parameters.push(
                 {
-                  "address":this.selectedSUTNameAdress
+                  "address":this.selectedSUTNameAdress // 如果是海鸥将其放到参数中返回给后端？todo
                 }
               )
             })
@@ -528,6 +530,7 @@ export default {
     selectSUTName(key) {
       // if (key === this.selectedSUTName) return;
       this.selectedSUTNameId = key.split("+")[1];
+      this.selectedSUTNameType = Number(key.split("+")[0]);
       this.selectedSpecification = "";
       this.getSpecification({
         SUTName: key.split("+")[0],
@@ -551,6 +554,7 @@ export default {
       });
     },
     onChange(e) {
+      console.log('hello', e)
       this.updateInitcheckboxGroup(e);
       this.changeCaseCheckAll(e.length === this.testCaseList.length);
       if(this.selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
@@ -592,7 +596,7 @@ export default {
          return item !== undefined
         })
       }
-      if(this.selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length >0){
+      if(this.selectedSUTNameType ===  101009 && this.cheangeTestInstrument.length >0){
         console.log(caseData, '----caseData')
         if(caseData.parameters.length > 0){
           this.cheangeTestInstrument.map( (itm,index) => {
@@ -624,7 +628,7 @@ export default {
               }
             })
         }
-      }else if(this.selectedSUTNames === 'DRA' && this.cheangeTestInstrument.length === 0){
+      }else if(this.selectedSUTNameType === 101009 && this.cheangeTestInstrument.length === 0){
         caseData.parameters.map(items => {
           if(items.name === 'vm_ips' || items.name === 'caps' || items.name === 'test_times'){
             items.defaultValue = ''

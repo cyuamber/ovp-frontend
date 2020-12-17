@@ -152,28 +152,31 @@ export default {
                 this.editUploadtextShow = true;
                 this.uploadAliasFilename = this.VNFTest.fileAliasName;
             }
-            this.count++;
-            if (this.isEdit && this.count > 1) {
-                let ip = '';
-                let port = '';
-                if (this.VNFTest.address) {
-                  ip = this.VNFTest.address.split(':')[0];
-                  port = this.VNFTest.address.split(':')[1]? this.VNFTest.address.split(':')[1]: '';
-                }
-                this.form.setFieldsValue({
-                    name: this.VNFTest.name,
-                    vendor: this.VNFTest.vendor,
-                    version: this.VNFTest.version,
-                    type: this.VNFTest.typeCH.code,
-                    ip: ip,
-                    port: port
-                });
-            } else if (!this.isEdit && this.count > 1) {
+            if (this.isEdit) { // 编辑时
+                setTimeout(() => {
+                  let ip = '';
+                  let port = '';
+                  if (this.VNFTest.address) {
+                    ip = this.VNFTest.address.split(':')[0];
+                    port = this.VNFTest.address.split(':')[1]? this.VNFTest.address.split(':')[1]: '';
+                  }
+                  this.form.setFieldsValue({
+                      name: this.VNFTest.name,
+                      vendor: this.VNFTest.vendor,
+                      version: this.VNFTest.version,
+                      type: this.VNFTest.typeCH.code,
+                      ip: ip,
+                      port: port
+                  });
+                }, 100);
+            } else if (!this.isEdit) { // 创建时
+              setTimeout(() => {
                 this.form.setFieldsValue({
                     type: this.VNFOptions.length > 0 ? this.VNFOptions[0].code : ""
-                });
+                });             
+              }, 100)
             }
-        }else{
+        } else { // 关闭时
             this.updateVNFTest({});
             // 消除图标
             this.ipCheck = {
