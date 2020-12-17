@@ -16,12 +16,14 @@
           :class="{
             checkboxgroup: item.visible === true && item.type === 'checkbox',
           }"
+          v-show="!(ifSeagull && (item.name!=='vm-ips' && item.name!=='caps' && item.name!=='timeout'))"
         >
+                  <!-- 海鸥时，只有这三项会显示出来 -->
           <a-input
             v-if="
               item.visible === true &&
               (item.type === 'string' || item.type === 'datetime') &&
-              (item.name !== 'vm_ips') & (item.name !== 'caps')
+              (item.name !== 'vm-ips') & (item.name !== 'caps')
             "
             v-decorator="[
               item.name,
@@ -40,7 +42,7 @@
             v-if="
               item.visible === true &&
               item.type === 'string' &&
-              (item.name === 'vm_ips' || item.name === 'caps')
+              (item.name === 'vm-ips' || item.name === 'caps')
             "
           >
             <!-- 这是一段神奇的代码，!isEdit后面是一大坨返回结果哦 -->
@@ -50,10 +52,10 @@
                 ? item.defaultValue.split(';') || item.value.split(';')
                 : []"
               :key="index"
-              :disabled="item.name === 'vm_ips' ? true : false"
+              :disabled="item.name === 'vm-ips' ? true : false"
               v-decorator="[
-                item.name === 'vm_ips'
-                  ? 'vm_ips' + index + caseParamsData.id
+                item.name === 'vm-ips'
+                  ? 'vm-ips' + index + caseParamsData.id
                   : 'caps' + index + caseParamsData.id,
                 {
                   rules: [
@@ -68,7 +70,7 @@
             />
           </div>
           <a-switch
-            v-if="item.visible === true && item.type === 'bool'"
+            v-if="item.visible === true && item.type === 'bool' && !ifSeagull"
             v-decorator="[
               item.name,
               {
@@ -87,7 +89,7 @@
             ]"
           />
           <a-checkbox-group
-            v-if="item.visible === true && item.type === 'checkbox'"
+            v-if="item.visible === true && item.type === 'checkbox' && !ifSeagull"
             v-decorator="[
               item.name,
               { initialValue: !isEdit ? item.defaultValue : item.value },
@@ -111,13 +113,14 @@
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "CaseParams",
-  props: ["isEdit"],
+  props: ["isEdit", "ifSeagull"],
   data() {
     return {
       form: this.$form.createForm(this),
       title: this.isEdit ? "Edit Case Parameters" : "Add Case Parameters",
       caseParams: [],
       count: 0,
+      displayList: []
     };
   },
   computed: {
@@ -127,7 +130,17 @@ export default {
       caseParamsIsShow: (store) => store.testJob.caseParamsIsShow,
     }),
   },
+  mounted () {
+    console.log(this.ifSeagull)
+  },
   watch: {
+    ifSeagull (val) {
+      if (val) {
+        this.displayList = this.caseParams.filter((item) => {
+          return item.name === "vm-ips" || item.name === "caps" || item.name === "timeout"
+        })
+      }
+    },
     caseParamsIsShow(val) {
       if (val) {
         this.count++;
@@ -181,24 +194,24 @@ export default {
           let caseParameters = this.caseParamsData;
           let testCaseLists = this.testCaseList;
           let DRAValues = {
-            vm_ips: "",
+            'vm-ips': "",
             caps: "",
-            test_times: "",
+            timeout: "",
           };
-          if (Object.keys(values).indexOf("test_times") > -1) {
+          if (Object.keys(values).indexOf("timeout") > -1) {
             Object.keys(values).map((items) => {
-              if (items.indexOf("vm_ips") > -1) {
-                DRAValues.vm_ips = DRAValues.vm_ips + values[items] + ";";
+              if (items.indexOf("vm-ips") > -1) {
+                DRAValues['vm-ips'] = DRAValues['vm-ips'] + values[items] + ";";
               } else if (items.indexOf("caps") > -1) {
                 DRAValues.caps = DRAValues.caps + values[items] + ";";
-              } else if (items.indexOf("test_times") > -1) {
-                DRAValues.test_times = DRAValues.test_times + values[items];
+              } else if (items.indexOf("timeout") > -1) {
+                DRAValues.timeout = DRAValues.timeout + values[items];
               }
             });
-            DRAValues.vm_ips =
-              DRAValues.vm_ips.charAt(DRAValues.vm_ips.length - 1) === ";"
-                ? DRAValues.vm_ips.substring(0, DRAValues.vm_ips.length - 1)
-                : DRAValues.vm_ips;
+            DRAValues['vm-ips'] =
+              DRAValues['vm-ips'].charAt(DRAValues['vm-ips'].length - 1) === ";"
+                ? DRAValues['vm-ips'].substring(0, DRAValues['vm-ips'].length - 1)
+                : DRAValues['vm-ips'];
             DRAValues.caps =
               DRAValues.caps.charAt(DRAValues.caps.length - 1) === ";"
                 ? DRAValues.caps.substring(0, DRAValues.caps.length - 1)
