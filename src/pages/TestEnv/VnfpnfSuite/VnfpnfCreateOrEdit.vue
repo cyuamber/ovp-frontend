@@ -142,7 +142,7 @@ export default {
                 setTimeout(() => {
                   this.form.setFieldsValue({
                     XNFName: this.SuiteSingleData.name,
-                    XNFType: Number(this.SuiteSingleData.typeCH.code),
+                    XNFType: this.SuiteSingleData.typeCH.code.toString(),
                     XNFVendor: this.SuiteSingleData.vendor,
                     Version: this.SuiteSingleData.version,
                     manage: this.SuiteSingleData.instrumentMgs.id
