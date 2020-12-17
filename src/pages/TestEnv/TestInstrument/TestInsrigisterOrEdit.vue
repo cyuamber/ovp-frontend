@@ -56,8 +56,8 @@ export default {
     watch: {
         visible(val) {
             if (val) {
-                this.count++;
-                if (this.isEdit && this.count > 1) {
+                setTimeout(() => {
+                  if (this.isEdit) {
                     this.form.setFieldsValue({
                         Name: this.singleData.name,
                         Vendor: this.singleData.vendor,
@@ -66,7 +66,8 @@ export default {
                         Password: this.singleData.password
                     });
                 }
-            }else{
+                }, 100);
+            } else {
                 this.updateMeterSys({});
                 this.form.setFieldsValue({
                     Name: "",

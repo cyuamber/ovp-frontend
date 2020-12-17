@@ -198,8 +198,8 @@ export default {
   watch: {
       visible(val) {
           if (val) {
-              this.count++;
-              if (this.isEdit && this.count > 1) {
+              if (this.isEdit) {
+                setTimeout(() => {
                   this.form.setFieldsValue({
                       Name: this.testSpecSingleData.name,
                       Version: this.testSpecSingleData.version,
@@ -209,14 +209,17 @@ export default {
                       PublishORG: this.testSpecSingleData.publishOrg
                   });
                   this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
-                  this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
-              } else if (!this.isEdit && this.count > 1) {
-                  this.spin = true;
-                  this.initSUTTypeValue = this.SUTOptions[0].code;
-                  this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
-                  this.getVNFOptions({
-                      SUTType: this.initSUTTypeValue
-                  });
+                  this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;                
+                }, 100);
+              } else if (!this.isEdit) {
+                  setTimeout(() => {
+                    this.spin = true;
+                    this.initSUTTypeValue = this.SUTOptions[0].code;
+                    this.form.setFieldsValue({ SUTType: this.SUTOptions[0].code });
+                    this.getVNFOptions({
+                        SUTType: this.initSUTTypeValue
+                    });
+                  }, 100)
               }
           }else {
               this.clearOptions();

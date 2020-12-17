@@ -555,7 +555,7 @@ module.exports = {
             {
                 "id": 1,
                 "name": "ZTE_vPCRF",
-                "type": 101002,
+                "type": 101009,
                 "vendor": null,
                 "version": null,
                 "createTime": null,

@@ -138,23 +138,29 @@ export default {
             } else {
                 this.editUploadtextShow = true;
             }
-            this.count++;
-            if (this.isEdit && this.count > 1) {
-                this.form.setFieldsValue({
+            if (this.isEdit) {
+                setTimeout(() => {
+                  this.form.setFieldsValue({
                     XNFName: this.SuiteSingleData.name,
-                    XNFType: this.SuiteSingleData.typeCH.code,
+                    XNFType: Number(this.SuiteSingleData.typeCH.code),
                     XNFVendor: this.SuiteSingleData.vendor,
                     Version: this.SuiteSingleData.version,
                     manage: this.SuiteSingleData.instrumentMgs.id
-                });
+                  });
+                }, 100)
             } else if (
                 this.VNFOptions.length !== 0 &&
-                !this.isEdit &&
-                this.count > 1
-            ) {
-                this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
+                !this.isEdit
+            ) { // 创建时有option可选则
+                setTimeout (() => {
+                  this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
+                }, 100)
+            } else {
+                setTimeout (() => {
+                  this.form.setFieldsValue({ XNFType: "" });
+                }, 100)
             }
-        }else{
+        } else {
             this.updateVNFTest({});
             this.form.setFieldsValue({
                 XNFName: "",
@@ -165,11 +171,18 @@ export default {
         }
     },
     VNFOptions(val) {
+      console.log(val)
       if (val.length) {
         this.spin = false;
       }
       if (val.length !== 0 && !this.isEdit) {
-        this.initNVFTypeValue = val[0].code;
+        this.initNVFTypeValue = Number(val[0].code);
+        console.log(this.initNVFTypeValue)
+        // setTimeout(() => {
+        //   this.form.setFieldsValue({
+        //     XNFType: this.initNVFTypeValue
+        //   })
+        // }, 1000)
       }
     },
     SystemOptions(val) {
