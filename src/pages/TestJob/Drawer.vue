@@ -424,15 +424,15 @@ export default {
             : "",
         };
         this.initTestInstrument = {
-          name: this.testJobSingleData.suite
-            ? this.testJobSingleData.suite.map((item) => {
+          name: this.testJobSingleData.suites
+            ? this.testJobSingleData.suites.map((item) => {
                 if (item.name && item.name !== null) {
                   return item.name;
                 }
               })
             : [],
-          code: this.testJobSingleData.suite
-            ? this.testJobSingleData.suite.map((item) => {
+          code: this.testJobSingleData.suites
+            ? this.testJobSingleData.suites.map((item) => {
                 if (item.id && item.id !== null) {
                   return item.id;
                 }
@@ -441,8 +441,8 @@ export default {
         };
         this.selectedSUTNames = this.testJobSingleData.sut.flagName;
         this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
-        this.cheangeTestInstrument = this.testJobSingleData.suite
-          ? this.testJobSingleData.suite.map((item) => {
+        this.cheangeTestInstrument = this.testJobSingleData.suites
+          ? this.testJobSingleData.suites.map((item) => {
               if (item.id && item.id !== null && item.address) {
                 return item.instrumentMgs.address? item.instrumentMgs.address: '';
               }
@@ -465,8 +465,8 @@ export default {
             TestMANOENV: this.testJobSingleData.mano
               ? this.testJobSingleData.mano.name
               : "",
-            TestInstrument: this.testJobSingleData.suite
-              ? this.testJobSingleData.suite.map((item) => {
+            TestInstrument: this.testJobSingleData.suites
+              ? this.testJobSingleData.suites.map((item) => {
                   return item.id;
                 })
               : [],
@@ -549,7 +549,7 @@ export default {
               // console.log(item, "=========>item");
               if (+item.subSutType === 101009) {
                 item.parameters.map((param) => {
-                  if (param.name === "instrument") {
+                  if (param.sutaddress === "instrument") {
                     param.address = this.selectedSUTNameAdress; // 如果是海鸥将其放到参数中返回给后端
                   }
                 });
