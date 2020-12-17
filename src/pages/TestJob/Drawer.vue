@@ -441,13 +441,13 @@ export default {
         };
         this.selectedSUTNames = this.testJobSingleData.sut.flagName;
         this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
-        this.cheangeTestInstrument = this.testJobSingleData.suite.map(
-          (item) => {
-            if (item.id && item.id !== null && item.address) {
-              return item.address;
-            }
-          }
-        );
+        this.cheangeTestInstrument = this.testJobSingleData.suite
+          ? this.testJobSingleData.suite.map((item) => {
+              if (item.id && item.id !== null && item.address) {
+                return item.address;
+              }
+            })
+          : [];
         // setTimeout()
         if (this.isEdit && this.count > 1) {
           this.form.setFieldsValue({
