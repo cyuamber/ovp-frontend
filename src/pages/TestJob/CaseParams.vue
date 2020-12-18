@@ -16,9 +16,7 @@
           :class="{
             checkboxgroup: item.visible === true && item.type === 'checkbox',
           }"
-          v-show="!(ifSeagull && (item.name!=='vm-ips' && item.name!=='caps' && item.name!=='timeout'))"
         >
-                  <!-- 海鸥时，只有这三项会显示出来 -->
           <a-input
             v-if="
               item.visible === true &&
@@ -70,7 +68,7 @@
             />
           </div>
           <a-switch
-            v-if="item.visible === true && item.type === 'bool' && !ifSeagull"
+            v-if="item.visible === true && item.type === 'bool'"
             v-decorator="[
               item.name,
               {
@@ -89,7 +87,7 @@
             ]"
           />
           <a-checkbox-group
-            v-if="item.visible === true && item.type === 'checkbox' && !ifSeagull"
+            v-if="item.visible === true && item.type === 'checkbox'"
             v-decorator="[
               item.name,
               { initialValue: !isEdit ? item.defaultValue : item.value },
@@ -113,7 +111,7 @@
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "CaseParams",
-  props: ["isEdit", "ifSeagull"],
+  props: ["isEdit"],
   data() {
     return {
       form: this.$form.createForm(this),
@@ -130,17 +128,7 @@ export default {
       caseParamsIsShow: (store) => store.testJob.caseParamsIsShow,
     }),
   },
-  mounted () {
-    console.log(this.ifSeagull)
-  },
   watch: {
-    ifSeagull (val) {
-      if (val) {
-        this.displayList = this.caseParams.filter((item) => {
-          return item.name === "vm-ips" || item.name === "caps" || item.name === "timeout"
-        })
-      }
-    },
     caseParamsIsShow(val) {
       if (val) {
         this.count++;

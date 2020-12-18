@@ -265,7 +265,7 @@
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <CaseParams :isEdit="isEdit" :ifSeagull="ifSeagull"/>
+            <CaseParams :isEdit="isEdit"/>
           </a-form-item>
         </div>
       </a-spin>
@@ -358,9 +358,6 @@ export default {
       testCaseCheckAll: (state) => state.testJob.testCaseCheckAll,
       initcheckboxGroup: (state) => state.testJob.initcheckboxGroup,
     }),
-    ifSeagull () {
-      return this.selectedSUTNameType === 101009
-    }
   },
   watch: {
     isShow(val) {
