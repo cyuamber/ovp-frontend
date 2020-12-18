@@ -332,6 +332,7 @@ export default {
         this.handleRemove();
       }
       this.updateVisible(false);
+      this.form.resetFields();
     },
     handleChange(info) {
       this.editUploadtextShow = false;
