@@ -730,8 +730,10 @@ export default {
                 items.value.split(";").length <
                   this.cheangeTestInstrument.length
               ) {
+                console.log('33333')
                 items.defaultValue = items.defaultValue + ";";
                 items.value = items.value + ";";
+                console.log(items)
               } else if (
                 ((items.defaultValue !== "" || items.value !== "") &&
                   items.defaultValue.split(";").length >
@@ -739,6 +741,7 @@ export default {
                 items.value.split(";").length >
                   this.cheangeTestInstrument.length
               ) {
+                console.log('??')
                 items.defaultValue = items.defaultValue
                   .split(";")
                   .slice(0, this.cheangeTestInstrument.length)
@@ -793,6 +796,7 @@ export default {
                 items.value.split(";").length >
                   this.cheangeTestInstrument.length)
             ) {
+              console.log(3)
               items.defaultValue =
                 items.defaultValue.charAt(items.defaultValue.length - 1) === ";"
                   ? items.defaultValue.substring(
@@ -811,6 +815,7 @@ export default {
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length === 0
       ) {
+        console.log('5')
         caseData.parameters.map((items) => {
           if (
             items.name === "instrument-ips" ||

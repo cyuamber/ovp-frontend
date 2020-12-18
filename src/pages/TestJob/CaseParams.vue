@@ -47,7 +47,7 @@
             <!-- 这是一段神奇的代码，!isEdit后面是一大坨返回结果哦 -->
             <a-input
               v-for="(items, index) in 
-              (item.defaultValue || item.value)
+              (typeof item.defaultValue !== 'undefined'|| typeof item.value !== 'undefined')
                 ? item.defaultValue.split(';') || item.value.split(';')
                 : []"
               :key="index"
@@ -207,6 +207,10 @@ export default {
               DRAValues.caps.charAt(DRAValues.caps.length - 1) === ";"
                 ? DRAValues.caps.substring(0, DRAValues.caps.length - 1)
                 : DRAValues.caps;
+            DRAValues['number-calls'] =
+              DRAValues['number-calls'].charAt(DRAValues['number-calls'].length - 1) === ";"
+                ? DRAValues['number-calls'].substring(0, DRAValues['number-calls'].length - 1)
+                : DRAValues['number-calls'];
             caseParameters.parameters.forEach((item) => {
               if (DRAValues[item.name] !== undefined) {
                 item.value = DRAValues[item.name];
