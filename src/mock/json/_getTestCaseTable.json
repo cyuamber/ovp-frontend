@@ -30,7 +30,7 @@
       },
       "parameters":[
         {
-          "name": "vm-ips",
+          "name": "instrument-ips",
           "value": "",
           "description": "string",
           "type": "string",
@@ -95,7 +95,7 @@
       },
       "parameters":[
         {
-          "name": "vm-ips",
+          "name": "instrument-ips",
           "value": "a;b",
           "description": "string",
           "type": "string",
@@ -151,7 +151,7 @@
       },
       "parameters":[
         {
-          "name": "vm-ips",
+          "name": "instrument-ips",
           "value": "a;b",
           "description": "string",
           "type": "string",
@@ -207,7 +207,7 @@
       },
       "parameters":[
         {
-          "name": "vm-ips",
+          "name": "instrument-ips",
           "value": "a;b",
           "description": "string",
           "type": "string",

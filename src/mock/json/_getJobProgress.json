@@ -49,7 +49,7 @@
         "executions":null,
         "parameters":[
           {
-            "name": "vm-ips",
+            "name": "instrument-ips",
             "value": "a;b",
             "description": "string",
             "type": "string",
