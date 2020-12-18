@@ -30,7 +30,7 @@
       },
       "parameters":[
         {
-          "name": "vm_ips",
+          "name": "vm-ips",
           "value": "",
           "description": "string",
           "type": "string",
@@ -51,7 +51,16 @@
           "defaultValue": "",
           "description": "",
           "isOptional": false,
-          "name": "test_times",
+          "name": "timeout",
+          "type": "datetime",
+          "value": "123456",
+          "visible": true
+        },
+        {
+          "defaultValue": "",
+          "description": "",
+          "isOptional": false,
+          "name": "hello",
           "type": "datetime",
           "value": "123456",
           "visible": true
@@ -86,7 +95,7 @@
       },
       "parameters":[
         {
-          "name": "vm_ips",
+          "name": "vm-ips",
           "value": "a;b",
           "description": "string",
           "type": "string",
@@ -107,7 +116,7 @@
           "defaultValue": "",
           "description": "",
           "isOptional": false,
-          "name": "test_times",
+          "name": "timeout",
           "type": "datetime",
           "value": "123456",
           "visible": true
@@ -142,7 +151,7 @@
       },
       "parameters":[
         {
-          "name": "vm_ips",
+          "name": "vm-ips",
           "value": "a;b",
           "description": "string",
           "type": "string",
@@ -163,7 +172,7 @@
           "defaultValue": "",
           "description": "",
           "isOptional": false,
-          "name": "test_times",
+          "name": "timout",
           "type": "datetime",
           "value": "123456",
           "visible": true
@@ -198,7 +207,7 @@
       },
       "parameters":[
         {
-          "name": "vm_ips",
+          "name": "vm-ips",
           "value": "a;b",
           "description": "string",
           "type": "string",
@@ -219,7 +228,7 @@
           "defaultValue": "",
           "description": "",
           "isOptional": false,
-          "name": "test_times",
+          "name": "timeout",
           "type": "datetime",
           "value": "123456",
           "visible": true

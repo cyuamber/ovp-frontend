@@ -49,7 +49,7 @@
         "executions":null,
         "parameters":[
           {
-            "name": "vm_ips",
+            "name": "vm-ips",
             "value": "a;b",
             "description": "string",
             "type": "string",
@@ -70,7 +70,16 @@
             "defaultValue": "",
             "description": "",
             "isOptional": false,
-            "name": "test_times",
+            "name": "timeout",
+            "type": "datetime",
+            "value": "123456",
+            "visible": true
+          },
+          {
+            "defaultValue": "",
+            "description": "",
+            "isOptional": false,
+            "name": "hellll",
             "type": "datetime",
             "value": "123456",
             "visible": true

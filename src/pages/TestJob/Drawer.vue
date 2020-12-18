@@ -265,7 +265,7 @@
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <CaseParams :isEdit="isEdit" />
+            <CaseParams :isEdit="isEdit"/>
           </a-form-item>
         </div>
       </a-spin>
@@ -646,7 +646,7 @@ export default {
         this.testCaseList.map((item) => {
           if (e.indexOf(item.id) > -1) {
             item.parameters.map((items) => {
-              if (items.name === "vm_ips") {
+              if (items.name === "vm-ips") {
                 items.defaultValue = this.cheangeTestInstrument.join(";");
                 items.value = this.cheangeTestInstrument.join(";");
               }
@@ -719,40 +719,40 @@ export default {
                   .slice(0, this.cheangeTestInstrument.length)
                   .join(";");
               }
-            }
-            if (items.name === "vm_ips") {
-              if (
-                items.defaultValue === null ||
-                items.defaultValue === "" ||
-                items.value === "" ||
-                items.defaultValue.split(";").length <
-                  this.cheangeTestInstrument.length ||
-                items.value.split(";").length <
-                  this.cheangeTestInstrument.length
-              ) {
-                items.defaultValue = this.cheangeTestInstrument.join(";");
-                items.value = this.cheangeTestInstrument.join(";");
-              } else if (
-                ((items.defaultValue !== "" || items.value !== "") &&
-                  items.defaultValue.split(";").length >
-                    this.cheangeTestInstrument.length) ||
-                items.value.split(";").length >
-                  this.cheangeTestInstrument.length
-              ) {
-                items.defaultValue = items.defaultValue
-                  .split(";")
-                  .slice(0, this.cheangeTestInstrument.length)
-                  .join(";");
-                items.value = items.value
-                  .split(";")
-                  .slice(0, this.cheangeTestInstrument.length)
-                  .join(";");
+              if (items.name === "vm-ips") {
+                if (
+                  items.defaultValue === null ||
+                  items.defaultValue === "" ||
+                  items.value === "" ||
+                  items.defaultValue.split(";").length <
+                    this.cheangeTestInstrument.length ||
+                  items.value.split(";").length <
+                    this.cheangeTestInstrument.length
+                ) {
+                  items.defaultValue = this.cheangeTestInstrument.join(";");
+                  items.value = this.cheangeTestInstrument.join(";");
+                } else if (
+                  ((items.defaultValue !== "" || items.value !== "") &&
+                    items.defaultValue.split(";").length >
+                      this.cheangeTestInstrument.length) ||
+                  items.value.split(";").length >
+                    this.cheangeTestInstrument.length
+                ) {
+                  items.defaultValue = items.defaultValue
+                    .split(";")
+                    .slice(0, this.cheangeTestInstrument.length)
+                    .join(";");
+                  items.value = items.value
+                    .split(";")
+                    .slice(0, this.cheangeTestInstrument.length)
+                    .join(";");
+                }
               }
             }
           });
           caseData.parameters.map((items) => {
             if (
-              (items.name === "caps" || items.name === "vm_ips") &&
+              (items.name === "caps" || items.name === "vm-ips") &&
               (items.defaultValue.split(";").length >
                 this.cheangeTestInstrument.length ||
                 items.value.split(";").length >
@@ -778,9 +778,9 @@ export default {
       ) {
         caseData.parameters.map((items) => {
           if (
-            items.name === "vm_ips" ||
+            items.name === "vm-ips" ||
             items.name === "caps" ||
-            items.name === "test_times"
+            items.name === "timeout"
           ) {
             items.defaultValue = "";
             items.value = "";
