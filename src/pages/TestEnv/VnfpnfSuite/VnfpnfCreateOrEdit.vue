@@ -1,6 +1,10 @@
 <template>
   <a-modal
-    v-bind:title="this.isEdit ? 'Edit ' + (currentTab === 101?'VNF':'PNF') + ' TT' : 'Create ' + (currentTab === 101?'VNF':'PNF') + ' TT'"
+    v-bind:title="
+      this.isEdit
+        ? 'Edit ' + (currentTab === 101 ? 'VNF' : 'PNF') + ' TT'
+        : 'Create ' + (currentTab === 101 ? 'VNF' : 'PNF') + ' TT'
+    "
     :visible="visible"
     :footer="null"
     @cancel="handleCancel"
@@ -8,53 +12,115 @@
     <template>
       <a-form :form="form" @submit="handleSubmit">
         <a-form-item
-          :label="(currentTab === 101?'VNF':'PNF')+' Name'"
+          :label="(currentTab === 101 ? 'VNF' : 'PNF') + ' Name'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['XNFName',{ rules: [{ required: true,message: (currentTab === 101?'VNF':'PNF') +' Name is required' }],initialValue:SuiteSingleData.name }]"
+            v-decorator="[
+              'XNFName',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (currentTab === 101 ? 'VNF' : 'PNF') +
+                      ' Name is required',
+                  },
+                ],
+                initialValue: SuiteSingleData.name,
+              },
+            ]"
           />
         </a-form-item>
         <a-form-item
-          :label="(currentTab === 101?'VNF':'PNF')+'  Type'"
+          :label="(currentTab === 101 ? 'VNF' : 'PNF') + '  Type'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 8 }"
         >
           <a-select
             :disabled="spin"
             class="select"
-            v-decorator="['XNFType',{ rules: [{ required: true, message: (currentTab === 101?'VNF':'PNF') +' Type is required' }],initialValue:initNVFTypeValue}]"
+            v-decorator="[
+              'XNFType',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (currentTab === 101 ? 'VNF' : 'PNF') +
+                      ' Type is required',
+                  },
+                ],
+                initialValue: initNVFTypeValue,
+              },
+            ]"
           >
             <a-select-option
               v-for="types in VNFOptions"
               :key="types.code"
               :value="types.code"
-            >{{types.dictLabel}}</a-select-option>
+              >{{ types.dictLabel }}</a-select-option
+            >
           </a-select>
           <a-spin :spinning="spin" class="skip-size">
-            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+            <a-icon
+              slot="indicator"
+              type="loading-3-quarters"
+              size="small"
+              spin
+            />
           </a-spin>
         </a-form-item>
         <a-form-item
-          :label="(currentTab === 101?'VNF':'PNF')+' Vendor'"
+          :label="(currentTab === 101 ? 'VNF' : 'PNF') + ' Vendor'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['XNFVendor',{ rules: [{ required: true, message: (currentTab === 101?'VNF':'PNF') +' Vendor is required' }],initialValue:SuiteSingleData.vendor }]"
+            v-decorator="[
+              'XNFVendor',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (currentTab === 101 ? 'VNF' : 'PNF') +
+                      ' Vendor is required',
+                  },
+                ],
+                initialValue: SuiteSingleData.vendor,
+              },
+            ]"
           />
         </a-form-item>
         <a-form-item
-          :label="(currentTab === 101?'VNF':'PNF')+' Version'"
+          :label="(currentTab === 101 ? 'VNF' : 'PNF') + ' Version'"
           :label-col="{ span: 7 }"
           :wrapper-col="{ span: 12 }"
         >
           <a-input
-            v-decorator="['Version',{ rules: [{ required: true, message: (currentTab === 101?'VNF':'PNF') +' Version is required' }],initialValue:SuiteSingleData.version }]"
+            v-decorator="[
+              'Version',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (currentTab === 101 ? 'VNF' : 'PNF') +
+                      ' Version is required',
+                  },
+                ],
+                initialValue: SuiteSingleData.version,
+              },
+            ]"
           />
         </a-form-item>
-        <a-form-item label="Upload CSAR File" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+        <a-form-item
+          label="Upload CSAR File"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
           <a-upload-dragger
             enctype="multipart/form-data"
             class="upload-float"
@@ -62,18 +128,29 @@
             :remove="handleRemove"
             @change="handleChange"
             name="file"
-            v-decorator="['upload',{valuePropName: 'fileList',getValueFromEvent: normFile}]"
+            v-decorator="[
+              'upload',
+              { valuePropName: 'fileList', getValueFromEvent: normFile },
+            ]"
           >
-            <p class="ant-upload-text form__upload-text--font-size">Click or drag to upload</p>
+            <p class="ant-upload-text form__upload-text--font-size">
+              Click or drag to upload
+            </p>
           </a-upload-dragger>
           <a-spin :spinning="disabled" class="skip-size skip-float">
-            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+            <a-icon
+              slot="indicator"
+              type="loading-3-quarters"
+              size="small"
+              spin
+            />
           </a-spin>
           <br />
           <span
             v-if="isEdit && editUploadtextShow"
             class="form__uploadtext-height"
-          >{{SuiteSingleData.fileName}}</span>
+            >{{ SuiteSingleData.fileName }}</span
+          >
         </a-form-item>
         <a-form-item
           label="Manage System"
@@ -84,17 +161,28 @@
           <a-select
             :disabled="spin"
             class="select"
-            v-decorator="['manage',{ rules: [{ required: true, message: 'Manage System is required' }],initialValue: initManageSystemValue}]"
+            v-decorator="[
+              'manage',
+              {
+                rules: [
+                  { required: true, message: 'Manage System is required' },
+                ],
+                initialValue: initManageSystemValue,
+              },
+            ]"
           >
             <a-select-option
               v-for="system in SystemOptions"
               :key="system.id"
               :value="system.id"
-            >{{system.name}}</a-select-option>
+              >{{ system.name }}</a-select-option
+            >
           </a-select>
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-          <a-button type="primary" html-type="submit" :disabled="disabled">Submit</a-button>
+          <a-button type="primary" html-type="submit" :disabled="disabled"
+            >Submit</a-button
+          >
         </a-form-item>
       </a-form>
     </template>
@@ -115,7 +203,7 @@ export default {
       uploadAliasFilename: "",
       initNVFTypeValue: null,
       initManageSystemValue: null,
-      editUploadtextShow: true
+      editUploadtextShow: true,
     };
   },
   mounted() {
@@ -123,66 +211,57 @@ export default {
   },
   computed: {
     ...mapState({
-      VNFOptions: state => state.VnfpnfSuite.VNFOptions,
-      SystemOptions: state => state.VnfpnfSuite.SystemOptions,
-      SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
-      currentTab: state => state.VnfpnfSuite.currentTab,
-      visible: state => state.VnfpnfSuite.visible
-    })
+      VNFOptions: (state) => state.VnfpnfSuite.VNFOptions,
+      SystemOptions: (state) => state.VnfpnfSuite.SystemOptions,
+      SuiteSingleData: (state) => state.VnfpnfSuite.SuiteSingleData,
+      currentTab: (state) => state.VnfpnfSuite.currentTab,
+      visible: (state) => state.VnfpnfSuite.visible,
+    }),
   },
   watch: {
     visible(val) {
-        if (val) {
-            if (!this.isEdit) {
-                this.editUploadtextShow = false;
-            } else {
-                this.editUploadtextShow = true;
-            }
-            if (this.isEdit) {
-                setTimeout(() => {
-                  this.form.setFieldsValue({
-                    XNFName: this.SuiteSingleData.name,
-                    XNFType: this.SuiteSingleData.typeCH.code.toString(),
-                    XNFVendor: this.SuiteSingleData.vendor,
-                    Version: this.SuiteSingleData.version,
-                    manage: this.SuiteSingleData.instrumentMgs.id
-                  });
-                }, 100)
-            } else if (
-                this.VNFOptions.length !== 0 &&
-                !this.isEdit
-            ) { // 创建时有option可选则
-                setTimeout (() => {
-                  this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
-                }, 100)
-            } else {
-                setTimeout (() => {
-                  this.form.setFieldsValue({ XNFType: "" });
-                }, 100)
-            }
+      if (val) {
+        if (!this.isEdit) {
+          this.editUploadtextShow = false;
         } else {
-            this.updateVNFTest({});
-            this.form.setFieldsValue({
-                XNFName: "",
-                XNFType: "",
-                XNFVendor: "",
-                Version: ""
-            });
+          this.editUploadtextShow = true;
         }
+        if (this.isEdit) {
+          setTimeout(() => {
+            this.form.setFieldsValue({
+              XNFName: this.SuiteSingleData.name,
+              XNFType: this.SuiteSingleData.typeCH.code.toString(),
+              XNFVendor: this.SuiteSingleData.vendor,
+              Version: this.SuiteSingleData.version,
+              manage: this.SuiteSingleData.instrumentMgs.id,
+            });
+          }, 100);
+        } else if (this.VNFOptions.length !== 0 && !this.isEdit) {
+          // 创建时有option可选则
+          setTimeout(() => {
+            this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
+          }, 100);
+        } else {
+          setTimeout(() => {
+            this.form.setFieldsValue({ XNFType: "" });
+          }, 100);
+        }
+      } else {
+        this.updateVNFTest({});
+        this.form.setFieldsValue({
+          XNFName: "",
+          XNFType: "",
+          XNFVendor: "",
+          Version: "",
+        });
+      }
     },
     VNFOptions(val) {
-      console.log(val)
       if (val.length) {
         this.spin = false;
       }
       if (val.length !== 0 && !this.isEdit) {
         this.initNVFTypeValue = Number(val[0].code);
-        console.log(this.initNVFTypeValue)
-        // setTimeout(() => {
-        //   this.form.setFieldsValue({
-        //     XNFType: this.initNVFTypeValue
-        //   })
-        // }, 1000)
       }
     },
     SystemOptions(val) {
@@ -200,26 +279,27 @@ export default {
     },
     currentTab() {
       this.initNVFTypeValue = null;
-    }
+    },
   },
   methods: {
     ...mapActions("VnfpnfSuite", [
       "getSystemOptions",
       "clearOptions",
       "uploadVNFFile",
-      "createOrEditTestMeter"
+      "createOrEditTestMeter",
     ]),
     ...mapMutations("VnfpnfSuite", [
       "updateVNFTest",
       "updateVisible",
-      "updateVNFOptions"
+      "updateVNFOptions",
     ]),
     handleChange(info) {
       this.editUploadtextShow = false;
-      if (info.file.respons && typeof info.file.respons === 'object') {
-        this.uploadAliasFilename = info.file.response.body.filename? info.file.response.body.filename: ""
+      if (info.file.response && typeof info.file.response === "object") {
+        const filename = info.file.response.body.filename;
+        this.uploadAliasFilename = filename ? filename : "";
       } else {
-        this.uploadAliasFilename = ""
+        this.uploadAliasFilename = "";
       }
     },
 
@@ -227,14 +307,16 @@ export default {
       if (Array.isArray(e)) {
         return e;
       }
+      // console.log(e.fileList, "----");
       if (e.fileList.length > 1) {
         e.fileList.splice(0, e.fileList.length - 1);
       }
       return e && e.fileList;
     },
     handleRemove() {
+      // console.log("====handle remove");
       if (this.disabled) {
-        axiosCancelToken("/portal/business/files/upload").then(res => {
+        axiosCancelToken("/portal/business/files/upload").then((res) => {
           if (res.code === 200) {
             this.disabled = false;
             this.$message.success("cancel upload successfully.");
@@ -274,16 +356,18 @@ export default {
             version: values.Version,
             fileAliasName: this.uploadAliasFilename,
           };
-          if (values.upload && values.upload.length !==0) {
+          if (values.upload && values.upload.length !== 0) {
             if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
               formData.append("file", values.upload[0]);
             }
             data.fileAliasName = this.uploadAliasFilename;
-            data.fileName = !this.editUploadtextShow? values.upload[0].name: this.VNFTest.fileName;
+            data.fileName = !this.editUploadtextShow
+              ? values.upload[0].name
+              : this.VNFTest.fileName;
             if (!data.fileName || !data.fileAliasName) {
               this.$message.error("Upload file error. Please upload again!");
               return;
-            } 
+            }
           }
           if (this.currentTab === 101) {
             Object.assign(data, { instrumentMgsId: values.manage });
@@ -298,7 +382,7 @@ export default {
       this.createOrEditTestMeter({
         isEdit: this.isEdit,
         data,
-        message: this.$message.success("Sumbit successfully")
+        message: this.$message.success("Sumbit successfully"),
       }).then(
         () => {
           this.updateVisible(false);
@@ -309,8 +393,8 @@ export default {
           this.updateVisible(false);
         }
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
