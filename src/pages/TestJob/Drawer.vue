@@ -387,6 +387,18 @@ export default {
         this.title = "Create Test Job";
       }
     },
+    // testCaseList (val) {
+    //   if (this.selectedSUTNameAdress) {
+    //     if (val.length!==0) {
+    //       val[0].parameters.forEach((item) => {
+    //         if (item.name === 'sutaddress') {
+    //           item.value = this.selectedSUTNameAdress
+    //         }
+    //       })
+    //       this.updateCaseParamsData(val[0])
+    //     }
+    //   }
+    // },
     testJobSingleData(val) {
       if (Object.keys(val).length > 0) {
         this.initSUTType = {
@@ -545,16 +557,17 @@ export default {
           }
           let caseReqs = [];
           if (this.initcheckboxGroup.length > 0) {
-            this.testCaseList.map((item) => {
-              // console.log(item, "=========>item");
-              if (+item.subSutType === 101009) {
-                item.parameters.map((param) => {
-                  if (param.sutaddress === "instrument") {
-                    param.address = this.selectedSUTNameAdress; // 如果是海鸥将其放到参数中返回给后端
-                  }
-                });
-              }
-            });
+            // this.testCaseList.map((item) => {
+            //   // console.log(item, "=========>item");
+            //   if (+item.subSutType === 101009) {
+            //     console.log(this.parameters)
+            //     item.parameters.map((param) => {
+            //       if (param.sutaddress === "instrument") {
+            //         param.address = this.selectedSUTNameAdress; // todo: 如果是海鸥将其放到subaddress
+            //       }
+            //     });
+            //   }
+            // });
             if (!isEdit) {
               this.testCaseList.forEach((item) => {
                 if (this.initcheckboxGroup.includes(item.id)) {
@@ -623,6 +636,17 @@ export default {
       this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
         return Number(item.type) === Number(key.split("+")[0]);
       }).address;
+      // 如果pramas已经有了，则修改params里面的subaddress。若还没有，则选择了specification有了后修改
+      // console.log('修改前', this.testCaseList)
+      // if (this.testCaseList.length!==0) {
+      //   this.testCaseList[0].parameters.forEach((item) => {
+      //     if (item.name === 'sutaddress') {
+      //       item.value = this.selectedSUTNameAdress
+      //     }
+      //   })
+      //   this.updateCaseParamsData(this.testCaseList[0])
+      // }
+      // console.log('修改后', this.testCaseList)
     },
     selectSpecification(key) {
       if (key === this.selectedSpecification) return;
@@ -646,7 +670,7 @@ export default {
         this.testCaseList.map((item) => {
           if (e.indexOf(item.id) > -1) {
             item.parameters.map((items) => {
-              if (items.name === "vm-ips") {
+              if (items.name === "instrument-ips") {
                 items.defaultValue = this.cheangeTestInstrument.join(";");
                 items.value = this.cheangeTestInstrument.join(";");
               }
@@ -656,6 +680,7 @@ export default {
       }
     },
     caseParamsEdit(caseData) {
+      console.log(caseData)
       if (this.isEdit) {
         this.testJobSingleData.cases.map((item) => {
           if (item.id === caseData.id) {
@@ -685,13 +710,17 @@ export default {
           }
         );
       }
+      caseData.parameters.forEach((item) => {
+        item.value === null? item.value = '': null
+        item.defaultValue === null? item.defaultValue = '': null
+      })
       if (
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length > 0
       ) {
         if (caseData.parameters.length > 0) {
           caseData.parameters.map((items) => {
-            if (items.name === "caps") {
+            if (items.name === "caps" || items.name === "number-calls") {
               if (
                 items.defaultValue === null ||
                 items.defaultValue === "" ||
@@ -701,8 +730,40 @@ export default {
                 items.value.split(";").length <
                   this.cheangeTestInstrument.length
               ) {
+                console.log('33333')
                 items.defaultValue = items.defaultValue + ";";
                 items.value = items.value + ";";
+                console.log(items)
+              } else if (
+                ((items.defaultValue !== "" || items.value !== "") &&
+                  items.defaultValue.split(";").length >
+                    this.cheangeTestInstrument.length) ||
+                items.value.split(";").length >
+                  this.cheangeTestInstrument.length
+              ) {
+                console.log('??')
+                items.defaultValue = items.defaultValue
+                  .split(";")
+                  .slice(0, this.cheangeTestInstrument.length)
+                  .join(";");
+                items.value = items.value
+                  .split(";")
+                  .slice(0, this.cheangeTestInstrument.length)
+                  .join(";");
+              }
+            }
+            if (items.name === "instrument-ips") {
+              if (
+                items.defaultValue === null ||
+                items.defaultValue === "" ||
+                items.value === "" ||
+                items.defaultValue.split(";").length <
+                  this.cheangeTestInstrument.length ||
+                items.value.split(";").length <
+                  this.cheangeTestInstrument.length
+              ) {
+                items.defaultValue = this.cheangeTestInstrument.join(";");
+                items.value = this.cheangeTestInstrument.join(";");
               } else if (
                 ((items.defaultValue !== "" || items.value !== "") &&
                   items.defaultValue.split(";").length >
@@ -719,45 +780,23 @@ export default {
                   .slice(0, this.cheangeTestInstrument.length)
                   .join(";");
               }
-              if (items.name === "vm-ips") {
-                if (
-                  items.defaultValue === null ||
-                  items.defaultValue === "" ||
-                  items.value === "" ||
-                  items.defaultValue.split(";").length <
-                    this.cheangeTestInstrument.length ||
-                  items.value.split(";").length <
-                    this.cheangeTestInstrument.length
-                ) {
-                  items.defaultValue = this.cheangeTestInstrument.join(";");
-                  items.value = this.cheangeTestInstrument.join(";");
-                } else if (
-                  ((items.defaultValue !== "" || items.value !== "") &&
-                    items.defaultValue.split(";").length >
-                      this.cheangeTestInstrument.length) ||
-                  items.value.split(";").length >
-                    this.cheangeTestInstrument.length
-                ) {
-                  items.defaultValue = items.defaultValue
-                    .split(";")
-                    .slice(0, this.cheangeTestInstrument.length)
-                    .join(";");
-                  items.value = items.value
-                    .split(";")
-                    .slice(0, this.cheangeTestInstrument.length)
-                    .join(";");
-                }
-              }
+            }
+            if (items.name === "sutaddress") {
+              console.log('selected', this.selectedSUTNameAdress)
+              items.value = this.selectedSUTNameAdress
+              items.defaultValue = this.selectedSUTNameAdress
             }
           });
-          caseData.parameters.map((items) => {
+          caseData.parameters.map((items) => {  
             if (
-              (items.name === "caps" || items.name === "vm-ips") &&
+              (items.name === "caps" || items.name === "instrument-ips" || items.name === "number-calls") &&
+              (items.defaultValue!==null && items.value!==null) &&
               (items.defaultValue.split(";").length >
                 this.cheangeTestInstrument.length ||
                 items.value.split(";").length >
                   this.cheangeTestInstrument.length)
             ) {
+              console.log(3)
               items.defaultValue =
                 items.defaultValue.charAt(items.defaultValue.length - 1) === ";"
                   ? items.defaultValue.substring(
@@ -776,11 +815,12 @@ export default {
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length === 0
       ) {
+        console.log('5')
         caseData.parameters.map((items) => {
           if (
-            items.name === "vm-ips" ||
+            items.name === "instrument-ips" ||
             items.name === "caps" ||
-            items.name === "timeout"
+            items.name === "number-calls"
           ) {
             items.defaultValue = "";
             items.value = "";

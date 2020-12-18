@@ -18,10 +18,11 @@
           }"
         >
           <a-input
+            :disabled="item.name === 'sutaddress'"
             v-if="
               item.visible === true &&
               (item.type === 'string' || item.type === 'datetime') &&
-              (item.name !== 'vm-ips') & (item.name !== 'caps')
+              (item.name !== 'instrument-ips') & (item.name !== 'caps') & (item.name !== 'number-calls')
             "
             v-decorator="[
               item.name,
@@ -40,21 +41,22 @@
             v-if="
               item.visible === true &&
               item.type === 'string' &&
-              (item.name === 'vm-ips' || item.name === 'caps')
+              (item.name === 'instrument-ips' || item.name === 'caps' || item.name === 'number-calls')
             "
           >
             <!-- 这是一段神奇的代码，!isEdit后面是一大坨返回结果哦 -->
             <a-input
-              v-for="(items, index) in !isEdit &&
-              (item.defaultValue || item.value)
+              v-for="(items, index) in 
+              (typeof item.defaultValue !== 'undefined'|| typeof item.value !== 'undefined')
                 ? item.defaultValue.split(';') || item.value.split(';')
                 : []"
               :key="index"
-              :disabled="item.name === 'vm-ips' ? true : false"
+              :disabled="item.name === 'instrument-ips' ? true : false"
+              onkeyup="this.value=this.value.replace(/\D/g,'')"
               v-decorator="[
-                item.name === 'vm-ips'
-                  ? 'vm-ips' + index + caseParamsData.id
-                  : 'caps' + index + caseParamsData.id,
+                item.name === 'instrument-ips'
+                  ? 'instrument-ips' + index + caseParamsData.id
+                  : (item.name === 'caps'? 'caps' + index + caseParamsData.id: 'number-calls' + index + caseParamsData.id),
                 {
                   rules: [
                     {
@@ -177,33 +179,38 @@ export default {
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
+        console.log(values)
         if (!error) {
           // console.log(values, this.caseParamsData,'---values')
           let caseParameters = this.caseParamsData;
           let testCaseLists = this.testCaseList;
           let DRAValues = {
-            'vm-ips': "",
+            'instrument-ips': "",
             caps: "",
-            timeout: "",
+            'number-calls': "",
           };
-          if (Object.keys(values).indexOf("timeout") > -1) {
+          if (Object.keys(values).indexOf("sutaddress") > -1) { // 是不是海鸥
             Object.keys(values).map((items) => {
-              if (items.indexOf("vm-ips") > -1) {
-                DRAValues['vm-ips'] = DRAValues['vm-ips'] + values[items] + ";";
+              if (items.indexOf("instrument-ips") > -1) {
+                DRAValues['instrument-ips'] = DRAValues['instrument-ips'] + values[items] + ";";
               } else if (items.indexOf("caps") > -1) {
                 DRAValues.caps = DRAValues.caps + values[items] + ";";
-              } else if (items.indexOf("timeout") > -1) {
-                DRAValues.timeout = DRAValues.timeout + values[items];
+              } else if (items.indexOf("number-calls") > -1) {
+                DRAValues["number-calls"] = DRAValues["number-calls"] + values[items] + ";";
               }
             });
-            DRAValues['vm-ips'] =
-              DRAValues['vm-ips'].charAt(DRAValues['vm-ips'].length - 1) === ";"
-                ? DRAValues['vm-ips'].substring(0, DRAValues['vm-ips'].length - 1)
-                : DRAValues['vm-ips'];
+            DRAValues['instrument-ips'] =
+              DRAValues['instrument-ips'].charAt(DRAValues['instrument-ips'].length - 1) === ";"
+                ? DRAValues['instrument-ips'].substring(0, DRAValues['instrument-ips'].length - 1)
+                : DRAValues['instrument-ips'];
             DRAValues.caps =
               DRAValues.caps.charAt(DRAValues.caps.length - 1) === ";"
                 ? DRAValues.caps.substring(0, DRAValues.caps.length - 1)
                 : DRAValues.caps;
+            DRAValues['number-calls'] =
+              DRAValues['number-calls'].charAt(DRAValues['number-calls'].length - 1) === ";"
+                ? DRAValues['number-calls'].substring(0, DRAValues['number-calls'].length - 1)
+                : DRAValues['number-calls'];
             caseParameters.parameters.forEach((item) => {
               if (DRAValues[item.name] !== undefined) {
                 item.value = DRAValues[item.name];

@@ -49,7 +49,7 @@
         "executions":null,
         "parameters":[
           {
-            "name": "vm-ips",
+            "name": "instrument-ips",
             "value": "a;b",
             "description": "string",
             "type": "string",
@@ -67,6 +67,15 @@
             "visible": true
           },
           {
+            "name": "number-calls",
+            "value": "1;2",
+            "description": "string",
+            "type": "string",
+            "defaultValue": "3;4",
+            "isOptional": false,
+            "visible": true
+          },
+          {
             "defaultValue": "",
             "description": "",
             "isOptional": false,
@@ -79,9 +88,9 @@
             "defaultValue": "",
             "description": "",
             "isOptional": false,
-            "name": "hellll",
+            "name": "sutaddress",
             "type": "datetime",
-            "value": "123456",
+            "value": "",
             "visible": true
           }
         ]
@@ -181,7 +190,7 @@
       "manoType": null,
       "profiles": null
     },
-    "suite": [
+    "suites": [
       {
         "id":"33323234343434343434343",
         "name":"STVc-FW",
