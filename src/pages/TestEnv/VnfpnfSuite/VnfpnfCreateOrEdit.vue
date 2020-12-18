@@ -180,9 +180,9 @@
           </a-select>
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
-          <a-button type="primary" html-type="submit" :disabled="disabled"
-            >Submit</a-button
-          >
+          <a-button type="primary" html-type="submit" :disabled="disabled">
+            Submit
+          </a-button>
         </a-form-item>
       </a-form>
     </template>
@@ -302,46 +302,34 @@ export default {
         this.uploadAliasFilename = "";
       }
     },
-
     normFile(e) {
       if (Array.isArray(e)) {
         return e;
       }
-      // console.log(e.fileList, "----");
       if (e.fileList.length > 1) {
         e.fileList.splice(0, e.fileList.length - 1);
       }
       return e && e.fileList;
     },
     handleRemove() {
-      // console.log("====handle remove");
       if (this.disabled) {
         axiosCancelToken("/portal/business/files/upload").then((res) => {
           if (res.code === 200) {
             this.disabled = false;
-            this.$message.success("cancel upload successfully.");
+            this.$message.success("Cancel successfully.");
           } else {
-            this.$message.error("cancel upload failed.");
+            this.$message.error("Cancel failed.");
           }
         });
       }
     },
-    handleUpload(data, formData) {
-      this.disabled = true;
-      this.uploadVNFFile({ formData, message: this.$message }).then(
-        () => {
-          this.submitFormData(data);
-        },
-        () => {
-          this.disabled = false;
-        }
-      );
-    },
+
     handleCancel() {
       this.updateVisible(false);
       if (!this.disabled) {
         this.handleRemove();
       }
+      this.form.resetFields();
     },
     handleSubmit(e) {
       e.preventDefault();
