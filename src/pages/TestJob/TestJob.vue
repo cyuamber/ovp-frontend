@@ -30,7 +30,7 @@
             v-for="item in record.actions"
             :key="item"
             class="test-job__tag"
-            :color="getActionsColor(record.actions, item)"
+            :color="actionColors[item]"
             @click="() => handleActions(item, record)"
             >{{ item }}</a-tag
           >
@@ -43,7 +43,7 @@
 
 <script>
 import Toolbar from "./Toolbar";
-import { testJobColumns } from "./constants";
+import { testJobColumns, jobOptions } from "./constants";
 import Loading from "../../components/Loading/Loading";
 import Drawer from "./Drawer";
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -56,6 +56,7 @@ export default {
       loading: false,
       tableQueryTimer: "",
       isEdit: false,
+      actionColors: jobOptions,
     };
   },
   computed: {
@@ -257,17 +258,6 @@ export default {
           break;
       }
       return { backgroundColor: color };
-    },
-    getActionsColor(actions, item) {
-      return item === actions[0]
-        ? "blue"
-        : item === actions[1]
-        ? "green"
-        : item === actions[2]
-        ? "red"
-        : item === actions[3]
-        ? "#D3B230"
-        : "purple";
     },
   },
   beforeDestroy: function () {

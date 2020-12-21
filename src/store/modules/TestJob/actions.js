@@ -18,14 +18,18 @@ const actions = {
         if (
             state.searchKeyword !== "All" &&
             state.dashboardJumpStatus === "All"
-        )
+        ) {
             obj.jobStatus = state.searchKeyword;
+        }
         if (
             state.searchKeyword === "All" &&
             state.dashboardJumpStatus !== "All"
-        )
+        ) {
             obj.jobStatus = state.dashboardJumpStatus;
-        if (loading) dispatch("loading/tableLoading", true, { root: true });
+        }
+        if (loading) {
+            dispatch("loading/tableLoading", true, { root: true });
+        }
         axiosget(API.testJobMgt.testJobTable, obj)
             .then((res) => {
                 if (loading)
@@ -207,7 +211,6 @@ const actions = {
         );
     },
     getTestCase({ commit }, { obj, message }) {
-        console.log(obj, "======getTestCase");
         commit(types.UPDATE_TEST_CASE_LIST, { spin: true });
         commit(types.UPDATE_FAIL_DETAIL, "");
         axiosget(API.testJobMgt.testJobTestCase, obj).then(
@@ -377,7 +380,6 @@ const actions = {
             }
         );
     },
-
     getTestJobCaseExecutions(
         { dispatch, commit },
         { record, expanded, jobId, message }
@@ -419,7 +421,6 @@ const actions = {
             }
         );
     },
-
     stopJop({ dispatch, commit }, { data }) {
         // Simulation request
         axiosput(API.testJobMgt.testJobStop.replace(":jobId", data.jobId)).then(
@@ -483,7 +484,6 @@ const actions = {
             pageSize: 100,
             flag: 101,
         };
-        console.log(obj, "obj");
         axiosget(API.suiteMgt.suiteMgtTable, obj).then(
             (res) => {
                 commit(types.UPDATE_TEST_INSTRUMENT_OPTION, res.body);

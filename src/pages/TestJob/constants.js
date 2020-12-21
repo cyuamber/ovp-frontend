@@ -20,6 +20,15 @@ export const statusOptions = [
     "DONE",
     "FAILED",
 ];
+export const jobOptions = {
+    Start: "blue",
+    Stop: "pink",
+    Edit: "green",
+    Delete: "red",
+    Download: "#D3B230",
+    More: "purple",
+};
+
 export const testJobColumns = [
     {
         title: "ID",
@@ -125,7 +134,8 @@ export const testJobDetailCaseChildColumns = [
         width: 120,
     },
 ];
-export const testJobDetailInstrumentColumns = [ // 2020.12.01 新增的子表格配置项
+export const testJobDetailInstrumentColumns = [
+    // 2020.12.01 新增的子表格配置项
     {
         title: "Instrument",
         dataIndex: "instrument",
@@ -149,6 +159,6 @@ export const testJobDetailInstrumentColumns = [ // 2020.12.01 新增的子表格
     {
         title: "Failed Calls",
         dataIndex: "failed_calls",
-        width: 150
-    }
+        width: 150,
+    },
 ];
