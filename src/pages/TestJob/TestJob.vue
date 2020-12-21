@@ -1,7 +1,7 @@
 <template>
   <div class="test-job__container">
     <Loading :loadingMessage="loadingMessage" />
-    <Toolbar :isEdit="isEdit" @toolbarChangeIsEdit="toolbarChangeIsEdit"  />
+    <Toolbar :isEdit="isEdit" @toolbarChangeIsEdit="toolbarChangeIsEdit" />
     <div class="test-job__table">
       <a-table
         :columns="columns"
@@ -11,25 +11,29 @@
         rowKey="index"
         size="default"
         :pagination="pagination"
-        :scroll="{x: 1630}"
+        :scroll="{ x: 1630 }"
         @change="handlePageChange"
       >
         <span slot="status" slot-scope="status">
           <a-tooltip placement="top">
             <template slot="title">
-              <span>{{status}}</span>
+              <span>{{ status }}</span>
             </template>
-            <span class="test-job__showState" :style="getStatusStyle(status)"></span>
+            <span
+              class="test-job__showState"
+              :style="getStatusStyle(status)"
+            ></span>
           </a-tooltip>
         </span>
-        <span slot="action" slot-scope="action,record">
+        <span slot="action" slot-scope="action, record">
           <a-tag
             v-for="item in record.actions"
             :key="item"
             class="test-job__tag"
-            :color="getActionsColor(record.actions,item)"
-            @click="(()=> handleActions(item,record))"
-          >{{item}}</a-tag>
+            :color="getActionsColor(record.actions, item)"
+            @click="() => handleActions(item, record)"
+            >{{ item }}</a-tag
+          >
         </span>
       </a-table>
     </div>
@@ -51,19 +55,19 @@ export default {
       columns: testJobColumns,
       loading: false,
       tableQueryTimer: "",
-      isEdit: false
+      isEdit: false,
     };
   },
   computed: {
     ...mapState({
-      isShow: state => state.testJob.isShow,
-      loadingMessage: state => state.loading.loadingMessage,
-      tableData: state => state.testJob.tableData,
-      pagination: state => state.testJob.pagination,
-      tableLoading: state => state.loading.tableLoading,
-      testJobSingleData: state => state.testJob.testJobSingleData,
-      lang: state => state.router.lang
-    })
+      isShow: (state) => state.testJob.isShow,
+      loadingMessage: (state) => state.loading.loadingMessage,
+      tableData: (state) => state.testJob.tableData,
+      pagination: (state) => state.testJob.pagination,
+      tableLoading: (state) => state.loading.tableLoading,
+      testJobSingleData: (state) => state.testJob.testJobSingleData,
+      lang: (state) => state.router.lang,
+    }),
   },
   components: { Drawer, Loading, Toolbar },
   created() {
@@ -87,13 +91,13 @@ export default {
       "getVIMOption",
       "getMANOOption",
       "getTestInstrumentOption",
-      "getEditTestJob"
+      "getEditTestJob",
     ]),
     ...mapMutations("testJob", [
       "setIsShow",
       "setFilter",
       "updateDashboardJumpStatus",
-      "clearSearchKeyword"
+      "clearSearchKeyword",
     ]),
     ...mapMutations("datePicker", ["setDateTime"]),
     initTestJobTable() {
@@ -110,8 +114,8 @@ export default {
       else if (action === "Download") this.handleDownload(data);
       else if (action === "Stop") this.handleStop(data);
     },
-    toolbarChangeIsEdit (isEdit) {
-      this.isEdit = isEdit
+    toolbarChangeIsEdit(isEdit) {
+      this.isEdit = isEdit;
     },
     handleStart(data) {
       data.currentAction = "Start";
@@ -124,32 +128,32 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.runTestJobMGT({
-            data
+            data,
           });
         },
-        onCancel() {}
+        onCancel() {},
       });
     },
     handleEdit(data) {
       this.isEdit = true;
       this.setIsShow(true);
       this.getEditTestJob({
-        data
+        data,
       });
       this.getSUTType({
-        message: this.$message
+        message: this.$message,
       });
       this.getVNFMOption({
-        message: this.$message
+        message: this.$message,
       });
       this.getVIMOption({
-        message: this.$message
+        message: this.$message,
       });
       this.getMANOOption({
-        message: this.$message
+        message: this.$message,
       });
       this.getTestInstrumentOption({
-        message: this.$message
+        message: this.$message,
       });
     },
     handleDelete(data) {
@@ -160,10 +164,10 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.delete({
-            data
+            data,
           });
         },
-        onCancel() {}
+        onCancel() {},
       });
     },
     handleDownload(data) {
@@ -176,7 +180,7 @@ export default {
         onOk: () => {
           this.download({ jobId: data.jobId, lang: this.lang });
         },
-        onCancel() {}
+        onCancel() {},
       });
     },
     handleOpenDetail(data) {
@@ -184,8 +188,8 @@ export default {
       this.$router.push({
         path: "/JobDetail",
         query: {
-          detail: JSON.stringify(data)
-        }
+          detail: JSON.stringify(data),
+        },
       });
       // this.$router.push({ name: "JobDetail", params: data });
     },
@@ -202,10 +206,10 @@ export default {
         cancelText: "No",
         onOk: () => {
           this.stopJop({
-            data
+            data,
           });
         },
-        onCancel() {}
+        onCancel() {},
       });
     },
     getStatusTitle(status) {
@@ -264,12 +268,12 @@ export default {
         : item === actions[3]
         ? "#D3B230"
         : "purple";
-    }
+    },
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     clearInterval(this.tableQueryTimer);
     this.setDateTime("");
-  }
+  },
 };
 </script>
 <style lang="less" scope>

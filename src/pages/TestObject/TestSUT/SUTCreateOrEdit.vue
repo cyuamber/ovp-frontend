@@ -364,36 +364,42 @@ export default {
         // check
         if (!err) {
           // Did not implement the check if there is a change
-          const formData = new FormData();
+          // const formData = new FormData();
           // file is optional
-          let data = {
+          const data = {
             flag: this.currentTab,
             name: values.name,
             vendor: values.vendor,
             version: values.version,
             type: values.type,
+            fileName: this.uploadAliasFilename,
             address:
               values.ip && values.port ? values.ip + ":" + values.port : "",
             createTime: this.isEdit
               ? this.VNFTest.createTime
               : moment(new Date()).format("YYYY-MM-DD"),
           };
-          console.log(data);
-          if (values.upload && values.upload.length !== 0) {
-            if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
-              values.upload.forEach((file) => {
-                formData.append("file", file);
-              });
-            }
-            data.fileAliasName = this.uploadAliasFilename;
-            data.fileName = !this.editUploadtextShow
-              ? values.upload[0].name
-              : this.VNFTest.fileName;
-            if (!data.fileName || !data.fileAliasName) {
-              this.$message.error("Upload file error. Please upload again!");
-              return;
-            }
+          // data.fileName = this.uploadAliasFilename;
+          if (!data.fileName) {
+            this.$message.error("Upload file error. Please upload again!");
+            return;
           }
+          console.log(data, "---->上传参数");
+          // if (values.upload && values.upload.length !== 0) {
+          //   if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
+          //     values.upload.forEach((file) => {
+          //       formData.append("file", file);
+          //     });
+          //   }
+          //   data.fileName = this.uploadAliasFilename;
+          //   data.fileName = !this.editUploadtextShow
+          //     ? values.upload[0].name
+          //     : this.VNFTest.fileName;
+          //   if (!data.fileAliasName) {
+          //     this.$message.error("Upload file error. Please upload again!");
+          //     return;
+          //   }
+          // }
           this.submitFormData(data);
         }
       });
