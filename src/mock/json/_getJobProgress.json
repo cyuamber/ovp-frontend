@@ -29,7 +29,7 @@
       "name": "MME-SPEC",
       "version": null,
       "sutType": "101",
-      "subSutType": null,
+      "subSutType": 101009,
       "publishOrg": null,
       "publishTime": null,
       "subSutTypeCH": null,
