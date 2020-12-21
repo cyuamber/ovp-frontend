@@ -130,6 +130,11 @@ export default {
       caseParamsIsShow: (store) => store.testJob.caseParamsIsShow,
     }),
   },
+  mounted () {
+    console.log(this.caseParamsData)
+    console.log(this.testCaseList)
+    console.log(this.caseParamsIsShow)
+  },
   watch: {
     caseParamsIsShow(val) {
       if (val) {

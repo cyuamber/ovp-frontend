@@ -167,7 +167,7 @@
         </a-select>
         <a-select
           v-else-if="item === 'Test Instrument'"
-          v-decorator="[keyList[i], { initialValue: initTestInstrument.name }]"
+          v-decorator="[keyList[i], { initialValue: initTestInstrument.code }]"
           class="form__select--width"
           mode="multiple"
           :showArrow="true"
@@ -387,24 +387,19 @@ export default {
         this.title = "Create Test Job";
       }
     },
-    // testCaseList (val) {
-    //   if (this.selectedSUTNameAdress) {
-    //     if (val.length!==0) {
-    //       val[0].parameters.forEach((item) => {
-    //         if (item.name === 'sutaddress') {
-    //           item.value = this.selectedSUTNameAdress
-    //         }
-    //       })
-    //       this.updateCaseParamsData(val[0])
-    //     }
-    //   }
-    // },
     testJobSingleData(val) {
+      // 初始值
       if (Object.keys(val).length > 0) {
+        this.selectedSUTNameType = val.spec.subSutType
         this.initSUTType = {
           name: this.testJobSingleData.sut.flagName,
           code: this.testJobSingleData.sut.flag,
         };
+        // 根据初始的suttype获取sutname列表, 根据出事sutname找到其在列表中对应的address
+        this.getSUTName({
+          SUTType: this.initSUTType.code,
+          message: this.$message,
+        });
         this.initSUTName = {
           name: this.testJobSingleData.sut.name,
           code: this.testJobSingleData.sut.id,
@@ -453,15 +448,8 @@ export default {
         };
         this.selectedSUTNames = this.testJobSingleData.sut.flagName;
         this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
-        this.cheangeTestInstrument = this.testJobSingleData.suites
-          ? this.testJobSingleData.suites.map((item) => {
-              if (item.id && item.id !== null && item.address) {
-                return item.instrumentMgs.address
-                  ? item.instrumentMgs.address
-                  : "";
-              }
-            })
-          : [];
+        // 最开始选择的testInstrument组合
+        this.cheangeTestInstrument = this.initTestInstrument.code
         // setTimeout()
         if (this.isEdit && this.count > 1) {
           this.form.setFieldsValue({
@@ -516,14 +504,15 @@ export default {
       this.visible = false;
       this.setIsShow(false);
     },
-    onCheckAllChange(e) {
+    onCheckAllChange(e) { // 全选
       this.changeCaseCheckAll(e.target.checked);
       let caseCheckedList = !e.target.checked
         ? []
         : this.testCaseList.map((item) => {
             return item.id;
-          });
+          }); // 选了全部后
       this.updateInitcheckboxGroup(caseCheckedList);
+      this.form.setFieldsValue({'checkboxGroup': caseCheckedList})
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
@@ -557,17 +546,6 @@ export default {
           }
           let caseReqs = [];
           if (this.initcheckboxGroup.length > 0) {
-            // this.testCaseList.map((item) => {
-            //   // console.log(item, "=========>item");
-            //   if (+item.subSutType === 101009) {
-            //     console.log(this.parameters)
-            //     item.parameters.map((param) => {
-            //       if (param.sutaddress === "instrument") {
-            //         param.address = this.selectedSUTNameAdress; // todo: 如果是海鸥将其放到subaddress
-            //       }
-            //     });
-            //   }
-            // });
             if (!isEdit) {
               this.testCaseList.forEach((item) => {
                 if (this.initcheckboxGroup.includes(item.id)) {
@@ -626,6 +604,7 @@ export default {
     selectSUTName(key) {
       // if (key === this.selectedSUTName) return;
       this.selectedSUTNameId = key.split("+")[1];
+      // 选择了才有，如果没选用默认值
       this.selectedSUTNameType = Number(key.split("+")[0]);
       this.selectedSpecification = "";
       this.getSpecification({
@@ -633,20 +612,10 @@ export default {
         message: this.$message,
       });
       this.form.setFieldsValue({ TestSpecification: "" });
-      this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
-        return Number(item.type) === Number(key.split("+")[0]);
-      }).address;
-      // 如果pramas已经有了，则修改params里面的subaddress。若还没有，则选择了specification有了后修改
-      // console.log('修改前', this.testCaseList)
-      // if (this.testCaseList.length!==0) {
-      //   this.testCaseList[0].parameters.forEach((item) => {
-      //     if (item.name === 'sutaddress') {
-      //       item.value = this.selectedSUTNameAdress
-      //     }
-      //   })
-      //   this.updateCaseParamsData(this.testCaseList[0])
-      // }
-      // console.log('修改后', this.testCaseList)
+      // 选择了才有，如果没选用默认值
+      // this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
+      //   return Number(item.type) === Number(key.split("+")[0]);
+      // }).address;
     },
     selectSpecification(key) {
       if (key === this.selectedSpecification) return;
@@ -660,33 +629,24 @@ export default {
         message: this.$message,
       });
     },
-    onChange(e) {
+    onChange(e) { // 改变checkbox时
       this.updateInitcheckboxGroup(e);
-      this.changeCaseCheckAll(e.length === this.testCaseList.length);
-      if (
-        this.selectedSUTNameType === 101009 &&
-        this.cheangeTestInstrument.length > 0
-      ) {
-        this.testCaseList.map((item) => {
-          if (e.indexOf(item.id) > -1) {
-            item.parameters.map((items) => {
-              if (items.name === "instrument-ips") {
-                items.defaultValue = this.cheangeTestInstrument.join(";");
-                items.value = this.cheangeTestInstrument.join(";");
-              }
-            });
-          }
-        });
-      }
+      this.changeCaseCheckAll(e.length === this.testCaseList.length); // boolean值
     },
     caseParamsEdit(caseData) {
-      console.log(caseData)
+      // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       if (this.isEdit) {
         this.testJobSingleData.cases.map((item) => {
           if (item.id === caseData.id) {
-            caseData.parameters = [].concat(item.parameters);
+            caseData.parameters = [].concat(JSON.parse(JSON.stringify(item.parameters)));
           }
         });
+      }
+      // 根据sutnametype获得地址
+      if (this.selectedSUTNameType) {
+        this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
+          return Number(item.type) === Number(this.selectedSUTNameType);
+        }).address;
       }
       let hasvisible =
         caseData.parameters && caseData.parameters.length > 0
@@ -698,31 +658,26 @@ export default {
         this.$message.info("This testCase has no editable parameters.");
         return false;
       }
-      this.cheangeTestInstrument = this.TestInstrumentOption.map((item) => {
-        if (this.form.getFieldValue("TestInstrument").indexOf(item.id) > -1) {
-          return item.instrumentMgs.address ? item.instrumentMgs.address : "";
-        }
-      });
-      if (this.cheangeTestInstrument.length > 0) {
-        this.cheangeTestInstrument = this.cheangeTestInstrument.filter(
-          (item) => {
-            return item !== undefined;
-          }
-        );
-      }
-      caseData.parameters.forEach((item) => {
+      caseData.parameters.forEach((item) => { // 把null都换成空字符串
         item.value === null? item.value = '': null
         item.defaultValue === null? item.defaultValue = '': null
       })
-      if (
+      if ( // 海鸥情况下
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length > 0
       ) {
         if (caseData.parameters.length > 0) {
           caseData.parameters.map((items) => {
             if (items.name === "caps" || items.name === "number-calls") {
+              // defaultValue和value最后一位是;的话删掉;
+              if (typeof items.defaultValue === 'string' && items.defaultValue.charAt(items.defaultValue.length-1) === ';') {
+                items.defaultValue.substr(0,items.defaultValue.length-1)
+              }
+              if (typeof items.value === 'string' && items.value.charAt(items.value.length-1) === ';') {
+                items.value.substr(0,items.value.length-1)
+              }
               if (
-                items.defaultValue === null ||
+                // 空或者数量小于界面所选testInstrument,代表新增了,在后面加一空行
                 items.defaultValue === "" ||
                 items.value === "" ||
                 items.defaultValue.split(";").length <
@@ -730,18 +685,17 @@ export default {
                 items.value.split(";").length <
                   this.cheangeTestInstrument.length
               ) {
-                console.log('33333')
                 items.defaultValue = items.defaultValue + ";";
                 items.value = items.value + ";";
-                console.log(items)
-              } else if (
+                // console.log('新增，默认少了')
+              } else if ( // 不是空或者比界面所选的多，用部分初始值
                 ((items.defaultValue !== "" || items.value !== "") &&
                   items.defaultValue.split(";").length >
                     this.cheangeTestInstrument.length) ||
                 items.value.split(";").length >
                   this.cheangeTestInstrument.length
               ) {
-                console.log('??')
+                //  console.log('删除，默认多了')
                 items.defaultValue = items.defaultValue
                   .split(";")
                   .slice(0, this.cheangeTestInstrument.length)
@@ -753,36 +707,48 @@ export default {
               }
             }
             if (items.name === "instrument-ips") {
-              if (
-                items.defaultValue === null ||
+              // defaultValue和value最后一位是;的话删掉;
+              if (typeof items.defaultValue === 'string' && items.defaultValue.charAt(items.defaultValue.length-1) === ';') {
+                items.defaultValue.substr(0,items.defaultValue.length-1)
+              }
+              if (typeof items.value === 'string' && items.value.charAt(items.value.length-1) === ';') {
+                items.value.substr(0,items.value.length-1)
+              }
+              // 取出选择的instrument的address
+              let instrumentAddress = []
+              this.TestInstrumentOption.forEach((item) => {
+                if (this.cheangeTestInstrument.indexOf(item.id) > -1) {
+                  instrumentAddress.push(item.instrumentMgs.address)
+                }
+              })
+              if ( // 如果初始值是空, 直接按页面选择的来
                 items.defaultValue === "" ||
-                items.value === "" ||
-                items.defaultValue.split(";").length <
-                  this.cheangeTestInstrument.length ||
-                items.value.split(";").length <
-                  this.cheangeTestInstrument.length
-              ) {
-                items.defaultValue = this.cheangeTestInstrument.join(";");
-                items.value = this.cheangeTestInstrument.join(";");
-              } else if (
+                items.value === "") {
+                  items.defaultValue = instrumentAddress.join(";")
+                  items.value = instrumentAddress.join(";")
+                } else if ( // 少于界面选择的, 新增项按页面选择的来
+                items.defaultValue.split(";").length < instrumentAddress.length ||
+                items.value.split(";").length < instrumentAddress.length) {
+                  items.defaultValue = `${items.defaultValue};${instrumentAddress.slice(items.defaultValue.split(';').length, instrumentAddress.length).join(";")}` ;
+                  items.value = `${items.value};${instrumentAddress.slice(items.value.split(';').length, instrumentAddress.length).join(";")}` ;
+                } else if ( // 不是空或多于页面选择的, 按部分初始值
                 ((items.defaultValue !== "" || items.value !== "") &&
                   items.defaultValue.split(";").length >
-                    this.cheangeTestInstrument.length) ||
+                    instrumentAddress.length) ||
                 items.value.split(";").length >
-                  this.cheangeTestInstrument.length
-              ) {
-                items.defaultValue = items.defaultValue
-                  .split(";")
-                  .slice(0, this.cheangeTestInstrument.length)
-                  .join(";");
-                items.value = items.value
-                  .split(";")
-                  .slice(0, this.cheangeTestInstrument.length)
-                  .join(";");
+                  instrumentAddress.length
+                ) {
+                  items.defaultValue = items.defaultValue
+                    .split(";")
+                    .slice(0, instrumentAddress.length)
+                    .join(";");
+                  items.value = items.value
+                    .split(";")
+                    .slice(0, instrumentAddress.length)
+                    .join(";");
               }
             }
             if (items.name === "sutaddress") {
-              console.log('selected', this.selectedSUTNameAdress)
               items.value = this.selectedSUTNameAdress
               items.defaultValue = this.selectedSUTNameAdress
             }
@@ -796,7 +762,6 @@ export default {
                 items.value.split(";").length >
                   this.cheangeTestInstrument.length)
             ) {
-              console.log(3)
               items.defaultValue =
                 items.defaultValue.charAt(items.defaultValue.length - 1) === ";"
                   ? items.defaultValue.substring(
@@ -815,7 +780,6 @@ export default {
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length === 0
       ) {
-        console.log('5')
         caseData.parameters.map((items) => {
           if (
             items.name === "instrument-ips" ||
@@ -833,9 +797,10 @@ export default {
     onChangeTestInstrument(value) {
       this.cheangeTestInstrument = this.TestInstrumentOption.map((item) => {
         if (value.indexOf(item.id) > -1) {
-          return item.instrumentMgs.address ? item.instrumentMgs.address : "";
+          return item.id ? item.id : "";
         }
       });
+      // 删除一项的时候该项会变为undefined，所以要过滤
       if (this.cheangeTestInstrument.length > 0) {
         this.cheangeTestInstrument = this.cheangeTestInstrument.filter(
           (item) => {

@@ -62,6 +62,38 @@
       "password": null,
       "address": "22.22.2.1"
     }
+  },
+  {
+    "id": "556565423131314364563",
+    "name": "STVc-DNS2",
+    "vendor": "Spirent",
+    "version": "V1.0",
+    "type": 2,
+    "createTime": 1570492800000,
+    "updateTime": null,
+    "fileName": "file name.yaml",
+    "fileAliasName": "fakefilename02.yaml",
+    "flag": 0,
+    "typeCH": {
+      "code": "2",
+      "dictLabel": "DNS",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "instrumentMgs": {
+      "createTime": null,
+      "updateTime": null,
+      "id": 4,
+      "name": null,
+      "vendor": null,
+      "address": null,
+      "username": null,
+      "password": null,
+      "address": "22.22.2.1"
+    }
   }],
   "total": 2,
   "pageTotal": 1
