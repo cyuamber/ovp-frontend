@@ -129,7 +129,7 @@
           <span
             v-if="isEdit && editUploadtextShow"
             class="form__uploadtext-height"
-            >{{ this.VNFTest.fileName }}</span
+            >{{ currentFilename }}</span
           >
         </a-form-item>
         <a-form-item
@@ -187,6 +187,7 @@
 import moment from "moment";
 import { TestSUTTabs } from "./constant";
 import { axiosCancelToken } from "../../../utils/http";
+import util from "../../../utils/utils";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
@@ -200,6 +201,7 @@ export default {
       initNVFTypeValue: null,
       uploading: false,
       uploadAliasFilename: "",
+      currentFilename: "",
       editUploadtextShow: true,
       ipCheck: {
         validateStatus: null,
@@ -223,7 +225,7 @@ export default {
           this.editUploadtextShow = false;
         } else {
           this.editUploadtextShow = true;
-          this.uploadAliasFilename = this.VNFTest.fileAliasName;
+          this.uploadAliasFilename = this.VNFTest.fileName;
         }
         if (this.isEdit) {
           // 编辑时
@@ -279,9 +281,12 @@ export default {
       }
     },
     VNFTest(val) {
+      this.currentFilename = val.fileName
+        ? util.seperateStr(val.fileName)
+        : val.fileName;
       if (val.code !== undefined) {
         this.initNVFTypeValue = val.code;
-        this.uploadAliasFilename = val.fileAliasName;
+        this.uploadAliasFilename = val.fileName;
         this.spin = false;
       }
     },
@@ -313,7 +318,6 @@ export default {
       }
     },
     checkIp(rule, value, callback) {
-      console.log("jhhhh");
       if (
         value !== "" &&
         value !== null &&
@@ -380,11 +384,11 @@ export default {
               : moment(new Date()).format("YYYY-MM-DD"),
           };
           // data.fileName = this.uploadAliasFilename;
-          if (!data.fileName) {
-            this.$message.error("Upload file error. Please upload again!");
-            return;
-          }
-          console.log(data, "---->上传参数");
+          // if (!data.fileName) {
+          //   this.$message.error("Upload file error. Please upload again!");
+          //   return;
+          // }
+          // console.log(data, "---->上传参数");
           // if (values.upload && values.upload.length !== 0) {
           //   if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
           //     values.upload.forEach((file) => {

@@ -149,7 +149,7 @@
           <span
             v-if="isEdit && editUploadtextShow"
             class="form__uploadtext-height"
-            >{{ SuiteSingleData.fileName }}</span
+            >{{ currentFilename }}</span
           >
         </a-form-item>
         <a-form-item
@@ -192,6 +192,8 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import { axiosCancelToken } from "../../../utils/http";
+import util from "../../../utils/utils";
+
 export default {
   props: ["isEdit"],
   data() {
@@ -204,6 +206,7 @@ export default {
       initNVFTypeValue: null,
       initManageSystemValue: null,
       editUploadtextShow: true,
+      currentFilename: "",
     };
   },
   mounted() {
@@ -272,7 +275,10 @@ export default {
     SuiteSingleData(val) {
       if (Object.keys(val).length > 0) {
         this.initNVFTypeValue = val.type;
-        this.uploadAliasFilename = val.fileAliasName;
+        this.currentFilename = val.fileName
+          ? util.seperateStr(val.fileName)
+          : val.fileName;
+        this.uploadAliasFilename = val.fileName;
         this.initManageSystemValue = val.instrumentMgs.id;
         this.spin = false;
       }
@@ -344,10 +350,11 @@ export default {
             version: values.Version,
             fileName: this.uploadAliasFilename,
           };
-          if (!data.fileName) {
-            this.$message.error("Upload file error. Please upload again!");
-            return;
-          }
+          console.log(data);
+          // if (!data.fileName) {
+          //   this.$message.error("Upload file error. Please upload again!");
+          //   return;
+          // }
           // if (values.upload && values.upload.length !== 0) {
           //   if (!this.isEdit || (this.isEdit && !this.editUploadtextShow)) {
           //     formData.append("file", values.upload[0]);
