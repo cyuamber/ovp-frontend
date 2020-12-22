@@ -131,15 +131,13 @@ export default {
     }),
   },
   mounted () {
-    console.log(this.caseParamsData)
-    console.log(this.testCaseList)
-    console.log(this.caseParamsIsShow)
   },
   watch: {
     caseParamsIsShow(val) {
-      if (val) {
+      if (val) { 
         this.count++;
-        if (this.count > 1) {
+        if (this.count > 1) { // 只有首次用的initialValue，后面每次打开都重新设置值
+          console.log('1')
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
             return item.visible !== false;
           });
@@ -157,6 +155,7 @@ export default {
           });
         }
       } else {
+        console.log('2')
         this.caseParams.forEach((item) => {
           this.form.setFieldsValue({
             [item.name]:
@@ -171,7 +170,8 @@ export default {
         });
       }
     },
-    caseParamsData(val) {
+    caseParamsData(val) { // 只有第一次监控到打开
+      console.log('change')
       this.caseParams = val.parameters.filter((item) => {
         return item.visible !== false;
       });
@@ -234,8 +234,8 @@ export default {
               testCaseLists.splice(index, 1, caseParameters);
             }
           });
-          console.log(testCaseLists, "---testCaseLists");
           this.updateTestCaseList({ spin: false, list: testCaseLists });
+          console.log(testCaseLists, "---testCaseLists");
           this.setCaseParamsIsShow(false);
         }
       });
