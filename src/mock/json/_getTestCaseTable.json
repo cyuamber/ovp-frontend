@@ -105,10 +105,10 @@
       "parameters":[
         {
           "name": "instrument-ips",
-          "value": "a;b",
+          "value": "1;2;5;6",
           "description": "string",
           "type": "string",
-          "defaultValue": "a;f",
+          "defaultValue": "1;2;5;6",
           "isOptional": false,
           "visible": true
         },

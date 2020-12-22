@@ -546,7 +546,7 @@ export default {
           }
           let caseReqs = [];
           if (this.initcheckboxGroup.length > 0) {
-            if (!isEdit) {
+            // if (!isEdit) { // 创建时
               this.testCaseList.forEach((item) => {
                 if (this.initcheckboxGroup.includes(item.id)) {
                   caseReqs.push({
@@ -555,26 +555,26 @@ export default {
                   });
                 }
               });
-            } else {
-              this.testJobSingleData.cases.map((item) => {
-                if (this.initcheckboxGroup.includes(item.id)) {
-                  let index = this.initcheckboxGroup.indexOf(item.id);
-                  caseReqs.push({
-                    caseId: item.id.toString(),
-                    parameters: item.parameters,
-                  });
-                  this.initcheckboxGroup.splice(index, 1);
-                }
-              });
-              this.testCaseList.forEach((item) => {
-                if (this.initcheckboxGroup.includes(item.id)) {
-                  caseReqs.push({
-                    caseId: item.id.toString(),
-                    parameters: item.parameters,
-                  });
-                }
-              });
-            }
+            // } else { // 编辑时
+            //   this.testJobSingleData.cases.map((item) => {
+            //     if (this.initcheckboxGroup.includes(item.id)) {
+            //       let index = this.initcheckboxGroup.indexOf(item.id);
+            //       caseReqs.push({
+            //         caseId: item.id.toString(),
+            //         parameters: item.parameters,
+            //       });
+            //       this.initcheckboxGroup.splice(index, 1);
+            //     }
+            //   });
+            //   this.testCaseList.forEach((item) => {
+            //     if (this.initcheckboxGroup.includes(item.id)) {
+            //       caseReqs.push({
+            //         caseId: item.id.toString(),
+            //         parameters: item.parameters,
+            //       });
+            //     }
+            //   });
+            // }
           }
           this.createrTestJobMGT({
             isEdit,
@@ -637,7 +637,7 @@ export default {
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       if (this.isEdit) {
         this.testJobSingleData.cases.map((item) => {
-          if (item.id === caseData.id) {
+          if (item.id === caseData.id) { // 有初始值的case提取出来
             caseData.parameters = [].concat(JSON.parse(JSON.stringify(item.parameters)));
           }
         });
@@ -669,15 +669,8 @@ export default {
         if (caseData.parameters.length > 0) {
           caseData.parameters.map((items) => {
             if (items.name === "caps" || items.name === "number-calls") {
-              // defaultValue和value最后一位是;的话删掉;
-              if (typeof items.defaultValue === 'string' && items.defaultValue.charAt(items.defaultValue.length-1) === ';') {
-                items.defaultValue.substr(0,items.defaultValue.length-1)
-              }
-              if (typeof items.value === 'string' && items.value.charAt(items.value.length-1) === ';') {
-                items.value.substr(0,items.value.length-1)
-              }
               if (
-                // 空或者数量小于界面所选testInstrument,代表新增了,在后面加一空行
+                // 空或者数量小于界面所选testInstrument,代表新增了,少多少加多少行
                 items.defaultValue === "" ||
                 items.value === "" ||
                 items.defaultValue.split(";").length <
@@ -685,8 +678,11 @@ export default {
                 items.value.split(";").length <
                   this.cheangeTestInstrument.length
               ) {
-                items.defaultValue = items.defaultValue + ";";
-                items.value = items.value + ";";
+                const diff = this.cheangeTestInstrument.length - items.value.split(';').length
+                for (let i = 0; i < diff; i++) {
+                  items.defaultValue = items.defaultValue + ";";
+                  items.value = items.value + ";";
+                }
                 // console.log('新增，默认少了')
               } else if ( // 不是空或者比界面所选的多，用部分初始值
                 ((items.defaultValue !== "" || items.value !== "") &&
@@ -707,13 +703,6 @@ export default {
               }
             }
             if (items.name === "instrument-ips") {
-              // defaultValue和value最后一位是;的话删掉;
-              if (typeof items.defaultValue === 'string' && items.defaultValue.charAt(items.defaultValue.length-1) === ';') {
-                items.defaultValue.substr(0,items.defaultValue.length-1)
-              }
-              if (typeof items.value === 'string' && items.value.charAt(items.value.length-1) === ';') {
-                items.value.substr(0,items.value.length-1)
-              }
               // 取出选择的instrument的address
               let instrumentAddress = []
               this.TestInstrumentOption.forEach((item) => {
@@ -748,7 +737,7 @@ export default {
                     .join(";");
               }
             }
-            if (items.name === "sutaddress") {
+            if (items.name === "sutaddress") {  // 只有海鸥有这个参数
               items.value = this.selectedSUTNameAdress
               items.defaultValue = this.selectedSUTNameAdress
             }
@@ -790,7 +779,7 @@ export default {
             items.value = "";
           }
         });
-      }
+      } 
       this.updateCaseParamsData(caseData);
       this.setCaseParamsIsShow(true);
     },
