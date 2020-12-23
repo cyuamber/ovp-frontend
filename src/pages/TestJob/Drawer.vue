@@ -265,7 +265,7 @@
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <CaseParams :isEdit="isEdit"/>
+            <CaseParams :isEdit="isEdit" @updateSingleCase = "updateSingleCase"/>
           </a-form-item>
         </div>
       </a-spin>
@@ -299,6 +299,7 @@ export default {
       selectedSUTNames: "",
       selectedSUTNameAdress: "",
       selectedSpecification: "",
+      testCaseStash: [], // test cases列表的初始值暂存
       initSUTType: {
         name: null,
         code: null,
@@ -388,6 +389,7 @@ export default {
       }
     },
     testJobSingleData(val) {
+      this.testCaseStash = val.cases // 用来暂存cases初始信息的，此处获得初始cases
       // 初始值
       if (Object.keys(val).length > 0) {
         this.selectedSUTNameType = val.spec.subSutType
@@ -500,6 +502,10 @@ export default {
       "updateCaseParamsData",
       "changeCaseCheckAll",
     ]),
+    updateSingleCase (id) {
+      // 子组件修改后删除该项初始值
+      this.testCaseStash = this.testCaseStash.filter((item) => {return item.id !== id})
+    },
     onClose() {
       this.visible = false;
       this.setIsShow(false);
@@ -636,7 +642,7 @@ export default {
     caseParamsEdit(caseData) {
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       if (this.isEdit) {
-        this.testJobSingleData.cases.map((item) => {
+        this.testCaseStash.map((item) => {
           if (item.id === caseData.id) { // 有初始值的case提取出来
             caseData.parameters = [].concat(JSON.parse(JSON.stringify(item.parameters)));
           }
