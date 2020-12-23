@@ -170,7 +170,7 @@ export default {
         });
       }
     },
-    caseParamsData(val) { // 只有第一次监控到打开
+    caseParamsData(val) { // 只有第一次监控到打开 
       console.log('change')
       this.caseParams = val.parameters.filter((item) => {
         return item.visible !== false;
@@ -192,7 +192,7 @@ export default {
           let DRAValues = {
             'instrument-ips': "",
             caps: "",
-            'number-calls': "",
+            'number-calls': ""
           };
           if (Object.keys(values).indexOf("sutaddress") > -1) { // 是不是海鸥
             Object.keys(values).map((items) => {
@@ -200,8 +200,8 @@ export default {
                 DRAValues['instrument-ips'] = DRAValues['instrument-ips'] + values[items] + ";";
               } else if (items.indexOf("caps") > -1) {
                 DRAValues.caps = DRAValues.caps + values[items] + ";";
-              } else if (items.indexOf("number-calls") > -1) {
-                DRAValues["number-calls"] = DRAValues["number-calls"] + values[items] + ";";
+              } else if (items.indexOf('number-calls') > -1) {
+                DRAValues['number-calls'] = DRAValues['number-calls'] + values[items] + ";"
               }
             });
             DRAValues['instrument-ips'] =
@@ -216,16 +216,20 @@ export default {
               DRAValues['number-calls'].charAt(DRAValues['number-calls'].length - 1) === ";"
                 ? DRAValues['number-calls'].substring(0, DRAValues['number-calls'].length - 1)
                 : DRAValues['number-calls'];
-            caseParameters.parameters.forEach((item) => {
+            caseParameters.parameters.forEach((item) => { // caps和instrument
               if (DRAValues[item.name] !== undefined) {
                 item.value = DRAValues[item.name];
                 item.defaultValue = DRAValues[item.name];
+              } else { // 其他
+                item.value = values[item.name]
+                item.defaultValue = values[item.name]
               }
             });
           } else {
             caseParameters.parameters.forEach((item) => {
               if (values[item.name] !== undefined) {
                 item.value = values[item.name];
+                item.defaultValue = values[item.name]
               }
             });
           }
@@ -235,7 +239,7 @@ export default {
             }
           });
           this.updateTestCaseList({ spin: false, list: testCaseLists });
-          console.log(testCaseLists, "---testCaseLists");
+          this.$emit('updateSingleCase', caseParameters.id) // 告诉父组件该项不用初始值
           this.setCaseParamsIsShow(false);
         }
       });
