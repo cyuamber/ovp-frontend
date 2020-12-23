@@ -38,6 +38,7 @@
           :wrapper-col="{ span: 8 }"
         >
           <a-select
+            style="width: 150px"
             class="form__select"
             :getPopupContainer="
               (triggerNoder) => {

@@ -70,6 +70,7 @@
                         ]"
             @change="handleSelectSubSUTTypeChange"
             @dropdownVisibleChange="dropdownVisibleChange"
+            style="width: 150px"
             :getPopupContainer="
                 triggerNode => {
                   return triggerNode.parentNode || document.body;

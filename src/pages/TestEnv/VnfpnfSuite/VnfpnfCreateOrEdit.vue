@@ -41,6 +41,7 @@
           <a-select
             :disabled="spin"
             class="select"
+            style="width: 150px"
             v-decorator="[
               'XNFType',
               {
@@ -161,6 +162,7 @@
           <a-select
             :disabled="spin"
             class="select"
+            style="width: 150px"
             v-decorator="[
               'manage',
               {
