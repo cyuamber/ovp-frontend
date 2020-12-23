@@ -171,6 +171,7 @@
           class="form__select--width"
           mode="multiple"
           :showArrow="true"
+          style="width: 200px"
           @change="onChangeTestInstrument"
           :getPopupContainer="
             (triggerNode) => {
