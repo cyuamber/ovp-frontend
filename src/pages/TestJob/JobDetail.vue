@@ -91,12 +91,12 @@
                   slot-scope="record"
                   slot="expandedRowRender"
                   :loading="tableLoading"
-                  :columns="currentJob.sut.name.toUpperCase() !== 'DRA'? innerColumns : testJobDetaiInnerlInstrumentColumns"
+                  :columns="currentJob.sut.type !== seagullType? innerColumns : testJobDetaiInnerlInstrumentColumns"
                   :dataSource="record.caseMgt"
                   rowKey="executionId"
                   size="default"
                 >
-                  <span slot="status" slot-scope="status" v-if="currentJob.sut.name.toUpperCase() !== 'DRA'">
+                  <span slot="status" slot-scope="status" v-if="currentJob.sut.type !== seagullType">
                     {{status}}
                     <!--<a-tooltip placement="top">-->
                     <!--<template slot="title">-->
@@ -125,7 +125,6 @@ import {
   testJobDetailInstrumentColumns
 } from "./constants";
 import { mapState, mapMutations, mapActions } from "vuex";
-
 export default {
   name: "JobDetail",
   components: { testCasePie, Loading },
@@ -140,7 +139,9 @@ export default {
       progressTimer: "",
       caseChildlistTimer: [],
       progressStatus: "normal",
-      sutvalidLind: "http://192.168.235.14:8080/onapui/vnfmarket"
+      sutvalidLind: "http://192.168.235.14:8080/onapui/vnfmarket",
+      seagullType: 101009,
+      seagullSubData: []
     };
   },
   computed: {
@@ -164,6 +165,7 @@ export default {
       return list;
     },
     currentJob() {
+      console.log(JSON.parse(this.$route.query.detail).sut.type)
       return JSON.parse(this.$route.query.detail);
     }
   },
@@ -205,17 +207,19 @@ export default {
       "clearexpandedRowKeys"
     ]),
     initJobDetail() {
+      console.log('hello')
       if (this.currentJob.jobStatus !== "CREATED") {
         this.getProgress({
           jobId: this.currentJob.jobId,
           message: this.$message
         });
         this.progressTimer = setInterval(() => {
+          console.log('h')
           this.getProgress({
             jobId: this.currentJob.jobId,
             message: this.$message
           });
-        }, 5000);
+        }, 30000);
       } else {
         this.updateDetailLoading(false);
       }
@@ -273,40 +277,42 @@ export default {
     },
     caseSecondaryTableShow(expanded, record) {
       // console.log(expanded, record, "----expanded, record");
-      if (expanded) {
+      if (expanded) { // record是展开那一项的所有信息
+        console.log('r', record)  
         this.getTestJobCaseExecutions({
           record,
           expanded,
           jobId: this.currentJob.jobId,
-          message: this.$message
+          message: this.$message,
+          isSeagull: this.currentJob.sut.type === this.seagullType
         });
-        if (this.currentJob.sut.name.toUpperCase() === 'DRA') {
-          this.caseChildlistTimer[record.index] = setInterval(() => {
-              this.getTestJobCaseExecutions({
-                record,
-                expanded,
-                jobId: this.currentJob.jobId,
-                message: this.$message
-              });
-            }, 5000);
-        } else {
-          if (
-          record.caseStatus !== "DONE" &&
-          record.caseStatus !== "FAILED" &&
-          record.caseStatus !== "STARTED"
-        ) {
-            this.caseChildlistTimer[record.index] = setInterval(() => {
-              this.getTestJobCaseExecutions({
-                record,
-                expanded,
-                jobId: this.currentJob.jobId,
-                message: this.$message
-              });
-            }, 5000);
-          }
-        }
+        // if (this.currentJob.sut.type === this.seagullType) { // 海鸥
+        //   this.caseChildlistTimer[record.index] = setInterval(() => {
+        //       this.getTestJobCaseExecutions({
+        //         record,
+        //         expanded,
+        //         jobId: this.currentJob.jobId,
+        //         message: this.$message
+        //       });
+        //     }, 5000);
+        // } else {
+        //   if (
+        //   record.caseStatus !== "DONE" &&
+        //   record.caseStatus !== "FAILED" &&
+        //   record.caseStatus !== "STARTED"
+        // ) {
+        //     this.caseChildlistTimer[record.index] = setInterval(() => {
+        //       this.getTestJobCaseExecutions({
+        //         record,
+        //         expanded,
+        //         jobId: this.currentJob.jobId,
+        //         message: this.$message
+        //       });
+        //     }, 5000);
+        //   }
+        // }
       } else {
-        if (this.currentJob.sut.name.toUpperCase() === 'DRA') {
+        if (this.currentJob.sut.type === this.seagullType) {
           clearInterval(this.caseChildlistTimer[record.index]);
         } else {
           if (

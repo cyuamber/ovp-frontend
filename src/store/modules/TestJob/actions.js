@@ -2,6 +2,7 @@ import moment from "moment";
 import API from "../../../const/apis";
 import util from "../../../utils/utils";
 import router from "../../../router/router";
+import { testJobDetailInstrumentColumns } from "../../../pages/TestJob/constants";
 import {
     axiospost,
     axiosget,
@@ -334,6 +335,7 @@ const actions = {
     getProgress({ commit }, { jobId, message }) {
         axiosget(API.testJobMgt.testJobProgress.replace(":jobId", jobId)).then(
             (res) => {
+                console.log(res)
                 commit(types.UPDATE_PROGRESS, {
                     percent: res.body.jobProgress,
                     status: res.body.jobStatus,
@@ -345,8 +347,8 @@ const actions = {
                 // 		}
                 // 	})
                 // });
-                commit(types.UPDATE_DETAIL_TEST_CASE, res.body.scheduleCases);
-                let doneCaseNum = 0,
+                commit(types.UPDATE_DETAIL_TEST_CASE, res.body.scheduleCases); // record！！！ 为了避免caseMgt没有了，先把它取出来再塞进去
+                let doneCaseNum = 0,        
                     failedCaseNum = 0;
                 if (
                     res.body.scheduleCases &&
@@ -380,9 +382,9 @@ const actions = {
             }
         );
     },
-    getTestJobCaseExecutions(
+    getTestJobCaseExecutions( // 用于testjob的detail页面子表格的数据获取
         { dispatch, commit },
-        { record, expanded, jobId, message }
+        { record, expanded, jobId, message, isSeagull}
     ) {
         dispatch("loading/tableLoading", true, { root: true });
         const obj = { jobId: jobId };
@@ -400,10 +402,52 @@ const actions = {
                         key: record.index,
                         expanded,
                     });
-                    commit(types.UPDATE_CASE_CHILD_TABLE_DATA, {
-                        testCaseChildData: res.body,
-                        record,
-                    });
+                    if (isSeagull) { // 如果是海鸥要做一些处理
+                        const data = res.body[0].content; // 返回的是一个仅有一项的数组
+                        let dataSource = [] // 处理完的表格对象数组
+                        for (let key in data) { // 对象中的每一个键值对就是表格里的每一行
+                            const newData = {}
+                            for (let val in data[key]) {
+                                const initDataList = data[key][val].split(',')
+                                let dataItem = {}
+                                initDataList.forEach((item) => {
+                                    dataItem[item.split('=')[0]] = item.split('=')[1]
+                                })
+                                newData[val] = dataItem
+                            }
+                            data[key] = newData
+                            let newItem = {}
+                            testJobDetailInstrumentColumns.forEach((item) => {
+                                if (item.source === 'key') {
+                                    newItem[item.dataIndex] = key
+                                } else if (item.source !== 'combined') {
+                                    newItem[item.dataIndex] = data[key][item.source][item.dataIndex]
+                                }
+                            })
+                            // 处理需要计算的
+                            console.log(newItem)
+                            testJobDetailInstrumentColumns.forEach((item) => {
+                                if (item.source === 'combined') {
+                                    const func = item.formula
+                                    const firstKey  = func.split('-')[0].trim()
+                                    const secondKey = func.split('-')[1].trim()
+                                    newItem[item.dataIndex] = newItem[firstKey] - newItem[secondKey]
+                                }
+                            })
+                            dataSource.push(newItem)
+                        }
+                        console.log(dataSource)
+                        commit(types.UPDATE_CASE_CHILD_TABLE_DATA, { // 结果赋值
+                            testCaseChildData: dataSource,
+                            record,
+                        });                       
+                    } else {
+                        console.log(res.body)
+                        commit(types.UPDATE_CASE_CHILD_TABLE_DATA, { // 结果赋值
+                            testCaseChildData: res.body,
+                            record,
+                        });
+                    }
                 } else {
                     message.info("No child data under this test case.");
                 }
