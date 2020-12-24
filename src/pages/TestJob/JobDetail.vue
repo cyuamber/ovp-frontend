@@ -219,7 +219,7 @@ export default {
             jobId: this.currentJob.jobId,
             message: this.$message
           });
-        }, 6000);
+        }, 30000);
       } else {
         this.updateDetailLoading(false);
       }
