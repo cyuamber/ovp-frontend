@@ -122,6 +122,12 @@ const mutations = {
   [types.UPDATE_DETAIL_TEST_CASE] (state, detailTestCase) {
     state.detailTestCase = detailTestCase.map((item, index) => {
       item.index = index;
+      let target = state.detailTestCase.find((val) => {
+        return val.index === index
+      })
+      if (target && target.caseMgt) {
+        item.caseMgt = JSON.parse(JSON.stringify(target.caseMgt))
+      }
       return item;
     });
   },

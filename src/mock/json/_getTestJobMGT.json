@@ -14,7 +14,7 @@
       "sut": {
         "id": 1,
         "name": "Nokia_vSPGW",
-        "type": 1,
+        "type": 101009,
         "vendor": null,
         "version": null,
         "createTime": null,
