@@ -408,35 +408,39 @@ const actions = {
                         for (let key in data) { // 对象中的每一个键值对就是表格里的每一行
                             const newData = {}
                             for (let val in data[key]) {
-                                const initDataList = data[key][val].split(',')
-                                let dataItem = {}
-                                initDataList.forEach((item) => {
-                                    dataItem[item.split('=')[0]] = item.split('=')[1]
-                                })
-                                newData[val] = dataItem
+                                if (data[key][val] !== 'none') {
+                                    const initDataList = data[key][val].split(',')
+                                    let dataItem = {}
+                                    initDataList.forEach((item) => {
+                                        dataItem[item.split('=')[0]] = item.split('=')[1]
+                                    })
+                                    newData[val] = dataItem
+                                }
                             }
                             data[key] = newData
                             let newItem = {}
-                            testJobDetailInstrumentColumns.forEach((item) => {
-                                if (item.source === 'key') {
-                                    newItem[item.dataIndex] = key
-                                } else if (item.source !== 'combined') {
-                                    newItem[item.dataIndex] = data[key][item.source][item.dataIndex]
-                                }
-                            })
-                            // 处理需要计算的
-                            console.log(newItem)
-                            testJobDetailInstrumentColumns.forEach((item) => {
-                                if (item.source === 'combined') {
-                                    const func = item.formula
-                                    const firstKey  = func.split('-')[0].trim()
-                                    const secondKey = func.split('-')[1].trim()
-                                    newItem[item.dataIndex] = newItem[firstKey] - newItem[secondKey]
-                                }
-                            })
-                            dataSource.push(newItem)
+                            if (data[key].server && data[key].server !== none && data[key].client && data[key].client !== 'none') { // server或client为none就不要这条数据
+                                testJobDetailInstrumentColumns.forEach((item) => {
+                                    if (item.source === 'key') {
+                                        newItem[item.dataIndex] = key
+                                    } else if (item.source !== 'combined') {
+                                        newItem[item.dataIndex] = data[key][item.source][item.dataIndex]
+                                    }
+                                })
+                                // 处理需要计算的
+                                console.log(newItem)
+                                testJobDetailInstrumentColumns.forEach((item) => {
+                                    if (item.source === 'combined') {
+                                        const func = item.formula
+                                        const firstKey  = func.split('-')[0].trim()
+                                        const secondKey = func.split('-')[1].trim()
+                                        newItem[item.dataIndex] = newItem[firstKey] - newItem[secondKey]
+                                    }
+                                })
+                                dataSource.push(newItem)
+                            }
                         }
-                        console.log(dataSource)
+                        console.log('dataSource', dataSource)
                         commit(types.UPDATE_CASE_CHILD_TABLE_DATA, { // 结果赋值
                             testCaseChildData: dataSource,
                             record,

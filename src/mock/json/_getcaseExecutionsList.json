@@ -5,12 +5,8 @@
             {
             "content": {
                 "test-seagull-pkg-1": {
-                    "server": "elapsed_time=00:06:04:635,real_instant_call_rate_s= 1.004,incoming_calls= 366,outgoing_calls= 0,successful_calls= 366,failed_calls= 0,msg_recv_s= 1.004,msg_sent_s= 1.004,",
-                    "client": "elapsed_time=00:06:04:346,real_instant_call_rate_s= 1.005,incoming_calls= 0,outgoing_calls= 366,successful_calls= 366,failed_calls= 0,msg_recv_s= 1.005,msg_sent_s= 1.005,"
-                    },
-                "test-seagull-pkg-2": {
-                    "server": "elapsed_time=00:06:04:635,real_instant_call_rate_s= 1.004,incoming_calls= 366,outgoing_calls= 0,successful_calls= 366,failed_calls= 0,msg_recv_s= 1.004,msg_sent_s= 1.004,",
-                    "client": "elapsed_time=00:06:04:346,real_instant_call_rate_s= 1.005,incoming_calls= 0,outgoing_calls= 366,successful_calls= 366,failed_calls= 0,msg_recv_s= 1.005,msg_sent_s= 1.005,"
+                    "server": "none",
+                    "client": "none"
                     }
               }
             }
