@@ -408,7 +408,7 @@ const actions = {
                         for (let key in data) { // 对象中的每一个键值对就是表格里的每一行
                             const newData = {}
                             for (let val in data[key]) {
-                                if (data[key][val] !== 'none') {
+                                if (data[key][val] !== 'none' && data[key][val] !== 'None' && data[key][val]) {
                                     const initDataList = data[key][val].split(',')
                                     let dataItem = {}
                                     initDataList.forEach((item) => {
@@ -419,7 +419,8 @@ const actions = {
                             }
                             data[key] = newData
                             let newItem = {}
-                            if (data[key].server && data[key].server !== none && data[key].client && data[key].client !== 'none') { // server或client为none就不要这条数据
+                            if (data[key].server && data[key].server !== 'none' && data[key].client && data[key].client !== 'none') { // server和client存在且不为none
+                                console.log('h')
                                 testJobDetailInstrumentColumns.forEach((item) => {
                                     if (item.source === 'key') {
                                         newItem[item.dataIndex] = key
@@ -428,16 +429,27 @@ const actions = {
                                     }
                                 })
                                 // 处理需要计算的
-                                console.log(newItem)
+                                let islegal = true
                                 testJobDetailInstrumentColumns.forEach((item) => {
                                     if (item.source === 'combined') {
                                         const func = item.formula
                                         const firstKey  = func.split('-')[0].trim()
                                         const secondKey = func.split('-')[1].trim()
                                         newItem[item.dataIndex] = newItem[firstKey] - newItem[secondKey]
+                                        if (isNaN(newItem[item.dataIndex])) { // 如果减出来的结果是非数字不可以
+                                            islegal = false
+                                        }
                                     }
                                 })
-                                dataSource.push(newItem)
+                                // 如果结果有undefined, 不push, ''可以
+                                for (let i in newItem) {
+                                    if (typeof newItem[i] === 'undefined' || newItem[i] === null || newItem[i] === 'none' || newItem[i] === 'None') {
+                                        islegal = false
+                                    }
+                                }
+                                if (islegal) {
+                                    dataSource.push(newItem)
+                                }
                             }
                         }
                         console.log('dataSource', dataSource)
