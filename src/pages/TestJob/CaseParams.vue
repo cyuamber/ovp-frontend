@@ -137,7 +137,6 @@ export default {
       if (val) { 
         this.count++;
         if (this.count > 1) { // 只有首次用的initialValue，后面每次打开都重新设置值
-          console.log('1')
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
             return item.visible !== false;
           });
@@ -155,7 +154,6 @@ export default {
           });
         }
       } else {
-        console.log('2')
         this.caseParams.forEach((item) => {
           this.form.setFieldsValue({
             [item.name]:
@@ -168,6 +166,7 @@ export default {
                 : this.strBool(item.value),
           });
         });
+        this.$emit('updateSingleCase', this.caseParamsData.id) // 告诉父组件该项不用初始值
       }
     },
     caseParamsData(val) { // 只有第一次监控到打开 
@@ -239,7 +238,6 @@ export default {
             }
           });
           this.updateTestCaseList({ spin: false, list: testCaseLists });
-          this.$emit('updateSingleCase', caseParameters.id) // 告诉父组件该项不用初始值
           this.setCaseParamsIsShow(false);
         }
       });
