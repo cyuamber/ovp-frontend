@@ -364,22 +364,15 @@ export default {
     }),
   },
   watch: {
-    // cheangeTestInstrument (val, oldVal) {
-    //   if (val.length < oldVal.length) { // 如果删除了
-    //     this.deleteItemIndex = []
-    //     for (let i = 0; i < oldVal.length; i++) {
-    //       if (val.indexOf(oldVal[i]) === -1) { // 不存在
-    //       console.log('no', oldVal[i])
-    //         this.deleteItemIndex.push(i)
-    //       }
-    //     }
-    //   } else {
-    //     this.deleteItemIndex = []
-    //   }
-    //   console.log('deleteindex', this.deleteItemIndex)
-    //   // 如果有初始值，且被删除了几项
-    //   console.log(this.testCaseStash)
-    // },
+    cheangeTestInstrument (val, oldVal) {
+      if (val.length < oldVal.length) { // 只要是删除过的都记录下来
+        for (let i = 0; i < oldVal.length; i++) {
+          if (val.indexOf(oldVal[i]) === -1) { // 不存在
+            this.deleteItemIndex.push(i)
+          }
+        }
+      }
+    },
     isShow(val) {
       if (val) {
         this.visible = this.isShow;
@@ -471,7 +464,7 @@ export default {
         this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
         // 最开始选择的testInstrument组合
         this.cheangeTestInstrument = this.initTestInstrument.code
-        this.oldInstrumentList = JSON.parse(JSON.stringify(this.initTestInstrument.code))
+        // this.oldInstrumentList = JSON.parse(JSON.stringify(this.initTestInstrument.code))
         // setTimeout()
         if (this.isEdit && this.count > 1) {
           this.form.setFieldsValue({
@@ -523,9 +516,9 @@ export default {
       "changeCaseCheckAll",
     ]),
     updateSingleCase (id) {
-      // 子组件修改后删除该项初始值
+      // 关闭子弹框后删除该项初始值
       this.testCaseStash = this.testCaseStash.filter((item) => {return item.id !== id})
-       console.log('update', this.testCaseStash)
+      this.deleteItemIndex = []
     },
     onClose() {
       this.visible = false;
@@ -573,7 +566,6 @@ export default {
           }
           let caseReqs = [];
           if (this.initcheckboxGroup.length > 0) {
-            // if (!isEdit) { // 创建时
               this.testCaseList.forEach((item) => {
                 if (this.initcheckboxGroup.includes(item.id)) {
                   caseReqs.push({
@@ -582,26 +574,6 @@ export default {
                   });
                 }
               });
-            // } else { // 编辑时
-            //   this.testJobSingleData.cases.map((item) => {
-            //     if (this.initcheckboxGroup.includes(item.id)) {
-            //       let index = this.initcheckboxGroup.indexOf(item.id);
-            //       caseReqs.push({
-            //         caseId: item.id.toString(),
-            //         parameters: item.parameters,
-            //       });
-            //       this.initcheckboxGroup.splice(index, 1);
-            //     }
-            //   });
-            //   this.testCaseList.forEach((item) => {
-            //     if (this.initcheckboxGroup.includes(item.id)) {
-            //       caseReqs.push({
-            //         caseId: item.id.toString(),
-            //         parameters: item.parameters,
-            //       });
-            //     }
-            //   });
-            // }
           }
           this.createrTestJobMGT({
             isEdit,
@@ -662,27 +634,27 @@ export default {
     },
     caseParamsEdit(caseData) {
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
-      console.log(JSON.parse(JSON.stringify(this.oldInstrumentList)), JSON.parse(JSON.stringify(this.cheangeTestInstrument)))
-      if (this.cheangeTestInstrument.length < this.oldInstrumentList.length) { // 如果删除了
-        this.deleteItemIndex = []
-        for (let i = 0; i < this.oldInstrumentList.length; i++) {
-          if (this.cheangeTestInstrument.indexOf(this.oldInstrumentList[i]) === -1) { // 不存在
-            this.deleteItemIndex.push(i) // 删除的项目
-          }
-        }
-      } else {
-        this.deleteItemIndex = []
-      }
-      this.oldInstrumentList = JSON.parse(JSON.stringify(this.cheangeTestInstrument)) // 重新给新的旧值
+      // console.log(JSON.parse(JSON.stringify(this.oldInstrumentList)), JSON.parse(JSON.stringify(this.cheangeTestInstrument)))
+      // if (this.cheangeTestInstrument.length < this.oldInstrumentList.length) { // 如果删除了
+      //   this.deleteItemIndex = []
+      //   for (let i = 0; i < this.oldInstrumentList.length; i++) {
+      //     if (this.cheangeTestInstrument.indexOf(this.oldInstrumentList[i]) === -1) { // 不存在
+      //       this.deleteItemIndex.push(i) // 删除的项目
+      //     }
+      //   }
+      // } else {
+      //   this.deleteItemIndex = []
+      // }
+      // this.oldInstrumentList = JSON.parse(JSON.stringify(this.cheangeTestInstrument)) // 重新给新的旧值
       if (this.isEdit) {
         console.log('test',  this.testCaseStash)
         this.testCaseStash.map((item) => {
-          if (item.id === caseData.id) { // 有初始值的case提取出来
+          if (item.id === caseData.id) { // 有初始值的case提取出来，只有第一次打开testCaseStash有该项的值，关闭时就删掉。后面打开不用初始值
             caseData.parameters = [].concat(JSON.parse(JSON.stringify(item.parameters)));
           }
         });
       }
-      if (this.deleteItemIndex.length !== 0) { // 有删除时
+      if (this.deleteItemIndex.length !== 0)  { // 有删除过
             caseData.parameters.forEach((val) => {
               if (val.name === 'instrument-ips' || val.name === 'caps' || val.name === 'number-calls') {
                 // 去除删掉的项目
