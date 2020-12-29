@@ -654,23 +654,6 @@ export default {
           }
         });
       }
-      if (this.deleteItemIndex.length !== 0)  { // 有删除过
-            caseData.parameters.forEach((val) => {
-              if (val.name === 'instrument-ips' || val.name === 'caps' || val.name === 'number-calls') {
-                // 去除删掉的项目
-                let valueList = val.value.split(';')
-                let newValueList = []
-                for (let i = 0; i < valueList.length; i ++) {
-                  if (this.deleteItemIndex.indexOf(i) === -1) { // 在删除项目中不存在
-                    newValueList.push(valueList[i])
-                  }
-                }
-                const newValue = newValueList.join(";")
-                val.value = newValue
-                val.defaultValue = newValue
-              }
-            })
-        }
       // 根据sutnametype获得地址, 直接覆盖
       if (this.selectedSUTNameType) {
         this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
@@ -691,6 +674,24 @@ export default {
         item.value === null? item.value = '': null
         item.defaultValue === null? item.defaultValue = '': null
       })
+      if (this.deleteItemIndex.length !== 0)  { // 有删除过
+            caseData.parameters.forEach((val) => {
+              if (val.name === 'instrument-ips' || val.name === 'caps' || val.name === 'number-calls') {
+                console.log(val)
+                // 去除删掉的项目
+                let valueList = val.value.split(';')
+                let newValueList = []
+                for (let i = 0; i < valueList.length; i ++) {
+                  if (this.deleteItemIndex.indexOf(i) === -1) { // 在删除项目中不存在
+                    newValueList.push(valueList[i])
+                  }
+                }
+                const newValue = newValueList.join(";")
+                val.value = newValue
+                val.defaultValue = newValue
+              }
+            })
+        }
       if ( // 海鸥情况下
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length > 0
