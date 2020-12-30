@@ -444,7 +444,7 @@ export default {
             ? this.testJobSingleData.mano.id
             : "",
         };
-        this.initTestInstrument = {
+        this.initTestInstrument = { 
           name: this.testJobSingleData.suites
             ? this.testJobSingleData.suites.map((item) => {
                 if (item.name && item.name !== null) {
@@ -452,7 +452,7 @@ export default {
                 }
               })
             : [],
-          code: this.testJobSingleData.suites
+          code:  this.testJobSingleData.suites
             ? this.testJobSingleData.suites.map((item) => {
                 if (item.id && item.id !== null) {
                   return item.id;
@@ -460,6 +460,14 @@ export default {
               })
             : [],
         };
+        if (this.testJobSingleData.cases.length > 0) { // 这里如果cases中有一个instrument-ids，就将其换为instrument-ids
+          let idItem = this.testJobSingleData.cases[0].parameters.find((item) => {
+            return item.name === 'instrument-ids'
+          })
+          if (typeof idItem !== 'undefined') {
+            this.initTestInstrument.code = idItem.value.split(';')
+          }
+        }
         this.selectedSUTNames = this.testJobSingleData.sut.flagName;
         this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
         // 最开始选择的testInstrument组合
@@ -516,8 +524,10 @@ export default {
       "changeCaseCheckAll",
     ]),
     updateSingleCase (id) {
+      if (this.isEdit) {
+        this.testCaseStash = this.testCaseStash.filter((item) => {return item.id !== id})
+      }
       // 关闭子弹框后删除该项初始值
-      this.testCaseStash = this.testCaseStash.filter((item) => {return item.id !== id})
       this.deleteItemIndex = []
     },
     onClose() {
@@ -575,6 +585,7 @@ export default {
                 }
               });
           }
+          console.log(caseReqs)
           this.createrTestJobMGT({
             isEdit,
             values,
@@ -677,7 +688,6 @@ export default {
       if (this.deleteItemIndex.length !== 0)  { // 有删除过
             caseData.parameters.forEach((val) => {
               if (val.name === 'instrument-ips' || val.name === 'caps' || val.name === 'number-calls') {
-                console.log(val)
                 // 去除删掉的项目
                 let valueList = val.value.split(';')
                 let newValueList = []
@@ -698,6 +708,10 @@ export default {
       ) {
         if (caseData.parameters.length > 0) {
           caseData.parameters.map((items) => {
+            if (items.name === 'instrument-ids') {
+                items.value = this.cheangeTestInstrument.join(';')
+                items.defaultValue = this.cheangeTestInstrument.join(';')
+              }
             if (items.name === "caps" || items.name === "number-calls") {
               if (
                 // 空或者数量小于界面所选testInstrument,代表新增了,少多少加多少行
@@ -815,6 +829,7 @@ export default {
         });
       } 
       this.updateCaseParamsData(caseData);
+      console.log('dra', caseData)
       this.setCaseParamsIsShow(true);
     },
     onChangeTestInstrument(value) {
@@ -833,7 +848,6 @@ export default {
       //   );
       // }
       this.cheangeTestInstrument = value
-      console.log(this.cheangeTestInstrument)
       // if (this.cheangeTestInstrument < this.oldChangeInstrument) { // 如果删除了
       //   this.deleteItemIndex = []
       //   for (let i = 0; i < this.oldChangeInstrument.length; i++) {

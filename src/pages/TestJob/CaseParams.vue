@@ -141,36 +141,23 @@ export default {
             return item.visible !== false;
           });
           this.caseParams.forEach((item) => {
-            this.form.setFieldsValue({
-              [item.name]:
-                this.isEdit === false && item.type !== "bool"
-                  ? item.defaultValue
-                  : this.isEdit === false && item.type === "bool"
-                  ? this.strBool(item.defaultValue)
-                  : this.isEdit === true && item.type !== "bool"
-                  ? item.value
-                  : this.strBool(item.value),
-            });
+            if (item.name === 'instrument-ips' || item.name === 'caps' || item.name === 'number-calls') {
+              const itemList = item.value.split(';') // 目前不用defaultValue
+              for (let i = 0; i < itemList.length; i ++) {
+                this.form.setFieldsValue({
+                  [item.name + i + this.caseParamsData.id]: itemList[i]
+                })
+              }
+            } else {
+              this.form.setFieldsValue({
+                [item.name]: item.value
+              })
+            }
           });
         }
-      } else {
-        this.caseParams.forEach((item) => {
-          this.form.setFieldsValue({
-            [item.name]:
-              this.isEdit === false && item.type !== "bool"
-                ? item.defaultValue
-                : this.isEdit === false && item.type === "bool"
-                ? this.strBool(item.defaultValue)
-                : this.isEdit === true && item.type !== "bool"
-                ? item.value
-                : this.strBool(item.value),
-          });
-        });
-        this.$emit('updateSingleCase', this.caseParamsData.id) // 告诉父组件该项不用初始值
-      }
+      } 
     },
     caseParamsData(val) { // 只有第一次监控到打开 
-      console.log('change')
       this.caseParams = val.parameters.filter((item) => {
         return item.visible !== false;
       });
@@ -179,13 +166,29 @@ export default {
   methods: {
     ...mapMutations("testJob", ["setCaseParamsIsShow", "updateTestCaseList"]),
     handleCancel() {
+      // 将值恢复
+      this.caseParams = this.caseParamsData.parameters.filter((item) => {
+        return item.visible !== false;
+      });
+      this.caseParams.forEach((item) => {
+        if (item.name === 'instrument-ips' || item.name === 'caps' || item.name === 'number-calls') {
+          const itemList = item.value.split(';') // 目前不用defaultValue
+          for (let i = 0; i < itemList.length; i ++) {
+            this.form.setFieldsValue({
+              [item.name + i + this.caseParamsData.id]: itemList[i]
+            })
+          }
+        } else {
+          this.form.setFieldsValue({
+            [item.name]: item.value
+          })
+        }
+      });
       this.setCaseParamsIsShow(false);
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
-        console.log(values)
         if (!error) {
-          // console.log(values, this.caseParamsData,'---values')
           let caseParameters = this.caseParamsData;
           let testCaseLists = this.testCaseList;
           let DRAValues = {
@@ -219,7 +222,7 @@ export default {
               if (DRAValues[item.name] !== undefined) {
                 item.value = DRAValues[item.name];
                 item.defaultValue = DRAValues[item.name];
-              } else { // 其他
+              } else if (values[item.name] !== undefined ) { // 其他
                 item.value = values[item.name]
                 item.defaultValue = values[item.name]
               }
@@ -238,6 +241,7 @@ export default {
             }
           });
           this.updateTestCaseList({ spin: false, list: testCaseLists });
+          this.$emit('updateSingleCase', this.caseParamsData.id) // 告诉父组件该项不用初始值
           this.setCaseParamsIsShow(false);
         }
       });
