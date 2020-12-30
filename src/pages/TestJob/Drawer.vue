@@ -379,7 +379,8 @@ export default {
       }
     },
     visible(val) {
-      if (!val) {
+      if (!val) { // 关闭的时候
+        console.log('close')
         this.clean();
         this.selectedSUTType = "";
         this.selectedSUTNameId = "";
@@ -393,6 +394,7 @@ export default {
         });
       } else {
         this.count++;
+        this.deleteItemIndex = [] // 一打开得清空删除表，否则就保留了上次关闭modal时候清空instrument选项框时候的删除表
       }
       if (this.isEdit) {
         this.title = "Edit Test Job";
@@ -585,7 +587,6 @@ export default {
                 }
               });
           }
-          console.log(caseReqs)
           this.createrTestJobMGT({
             isEdit,
             values,
@@ -658,13 +659,13 @@ export default {
       // }
       // this.oldInstrumentList = JSON.parse(JSON.stringify(this.cheangeTestInstrument)) // 重新给新的旧值
       if (this.isEdit) {
-        console.log('test',  this.testCaseStash)
         this.testCaseStash.map((item) => {
           if (item.id === caseData.id) { // 有初始值的case提取出来，只有第一次打开testCaseStash有该项的值，关闭时就删掉。后面打开不用初始值
-            caseData.parameters = [].concat(JSON.parse(JSON.stringify(item.parameters)));
+            caseData.parameters = JSON.parse(JSON.stringify(item.parameters));
           }
         });
       }
+      console.log(1, JSON.parse(JSON.stringify(caseData)))
       // 根据sutnametype获得地址, 直接覆盖
       if (this.selectedSUTNameType) {
         this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
@@ -727,7 +728,6 @@ export default {
                   items.defaultValue = items.defaultValue + ";";
                   items.value = items.value + ";";
                 }
-                // console.log('新增，默认少了')
               } 
               // else if ( // 不是空或者比界面所选的多，用部分初始值
               //   ((items.defaultValue !== "" || items.value !== "") &&
@@ -829,7 +829,6 @@ export default {
         });
       } 
       this.updateCaseParamsData(caseData);
-      console.log('dra', caseData)
       this.setCaseParamsIsShow(true);
     },
     onChangeTestInstrument(value) {
