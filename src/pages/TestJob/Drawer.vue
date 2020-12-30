@@ -403,7 +403,6 @@ export default {
       }
     },
     testJobSingleData(val) {
-      console.log('init change')
       this.testCaseStash = val.cases // 用来暂存cases初始信息的，此处获得初始cases
       // 初始值
       if (Object.keys(val).length > 0) {
@@ -464,19 +463,16 @@ export default {
             : [],
         };
         if (this.testJobSingleData.cases.length > 0) { // 这里如果cases中有一个instrument-ids，就将其换为instrument-ids
-          console.log('replace')
           let idItem = this.testJobSingleData.cases[0].parameters.find((item) => {
             return item.name === 'instrument-ids'
           })
           if (typeof idItem !== 'undefined') {
             this.initTestInstrument.code = idItem.value.split(';')
-            console.log(JSON.parse(JSON.stringify(this.initTestInstrument.code)))
           }
         }
         this.selectedSUTNames = this.testJobSingleData.sut.flagName;
         this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
         // 最开始选择的testInstrument组合
-        console.log(JSON.parse(JSON.stringify(this.initTestInstrument.code)))
         this.cheangeTestInstrument = this.initTestInstrument.code
         // this.oldInstrumentList = JSON.parse(JSON.stringify(this.initTestInstrument.code))
         // setTimeout()
