@@ -380,7 +380,6 @@ export default {
     },
     visible(val) {
       if (!val) { // 关闭的时候
-        console.log('close')
         this.clean();
         this.selectedSUTType = "";
         this.selectedSUTNameId = "";
@@ -393,6 +392,7 @@ export default {
           });
         });
       } else {
+        // 打开的时候
         this.count++;
         this.deleteItemIndex = [] // 一打开得清空删除表，否则就保留了上次关闭modal时候清空instrument选项框时候的删除表
       }
@@ -492,11 +492,7 @@ export default {
             TestMANOENV: this.testJobSingleData.mano
               ? this.testJobSingleData.mano.name
               : "",
-            TestInstrument: this.testJobSingleData.suites
-              ? this.testJobSingleData.suites.map((item) => {
-                  return item.id;
-                })
-              : [],
+            TestInstrument: this.initTestInstrument.code? this.initTestInstrument.code: []
           });
         }
       }
@@ -665,7 +661,6 @@ export default {
           }
         });
       }
-      console.log(1, JSON.parse(JSON.stringify(caseData)))
       // 根据sutnametype获得地址, 直接覆盖
       if (this.selectedSUTNameType) {
         this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
