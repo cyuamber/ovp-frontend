@@ -380,7 +380,6 @@ export default {
     },
     visible(val) {
       if (!val) { // 关闭的时候
-        console.log('close')
         this.clean();
         this.selectedSUTType = "";
         this.selectedSUTNameId = "";
@@ -393,6 +392,7 @@ export default {
           });
         });
       } else {
+        // 打开的时候
         this.count++;
         this.deleteItemIndex = [] // 一打开得清空删除表，否则就保留了上次关闭modal时候清空instrument选项框时候的删除表
       }
@@ -403,6 +403,7 @@ export default {
       }
     },
     testJobSingleData(val) {
+      console.log('init change')
       this.testCaseStash = val.cases // 用来暂存cases初始信息的，此处获得初始cases
       // 初始值
       if (Object.keys(val).length > 0) {
@@ -463,16 +464,19 @@ export default {
             : [],
         };
         if (this.testJobSingleData.cases.length > 0) { // 这里如果cases中有一个instrument-ids，就将其换为instrument-ids
+          console.log('replace')
           let idItem = this.testJobSingleData.cases[0].parameters.find((item) => {
             return item.name === 'instrument-ids'
           })
           if (typeof idItem !== 'undefined') {
             this.initTestInstrument.code = idItem.value.split(';')
+            console.log(JSON.parse(JSON.stringify(this.initTestInstrument.code)))
           }
         }
         this.selectedSUTNames = this.testJobSingleData.sut.flagName;
         this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
         // 最开始选择的testInstrument组合
+        console.log(JSON.parse(JSON.stringify(this.initTestInstrument.code)))
         this.cheangeTestInstrument = this.initTestInstrument.code
         // this.oldInstrumentList = JSON.parse(JSON.stringify(this.initTestInstrument.code))
         // setTimeout()
@@ -492,11 +496,7 @@ export default {
             TestMANOENV: this.testJobSingleData.mano
               ? this.testJobSingleData.mano.name
               : "",
-            TestInstrument: this.testJobSingleData.suites
-              ? this.testJobSingleData.suites.map((item) => {
-                  return item.id;
-                })
-              : [],
+            TestInstrument: this.initTestInstrument.code? this.initTestInstrument.code: []
           });
         }
       }
@@ -665,7 +665,6 @@ export default {
           }
         });
       }
-      console.log(1, JSON.parse(JSON.stringify(caseData)))
       // 根据sutnametype获得地址, 直接覆盖
       if (this.selectedSUTNameType) {
         this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
