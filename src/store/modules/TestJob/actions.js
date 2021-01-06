@@ -402,28 +402,30 @@ const actions = {
                         expanded,
                     });
                     if (isSeagull) { // 如果是海鸥要做一些处理
-                        const data = JSON.parse(res.body); // 返回的是对象字符串
                         let dataSource = [] // 处理完的表格对象数组
-                        for (let key in data) { // 对象中的每一个键值对就是表格里的每一行
-                            if ( key!=='total' ) {
-                                let newItem = {}
-                                testJobDetailInstrumentColumns.forEach((item) => {
-                                    if (item.source === 'key') {
-                                        newItem[item.dataIndex] = key
-                                    } else {
-                                        newItem[item.dataIndex] = data[key][item.dataIndex]
+                        if (res.body !== null && res.body) {
+                            const data = JSON.parse(res.body); // 返回的是对象字符串
+                            for (let key in data) { // 对象中的每一个键值对就是表格里的每一行
+                                if ( key!=='total' ) {
+                                    let newItem = {}
+                                    testJobDetailInstrumentColumns.forEach((item) => {
+                                        if (item.source === 'key') {
+                                            newItem[item.dataIndex] = key
+                                        } else {
+                                            newItem[item.dataIndex] = data[key][item.dataIndex]
+                                        }
+                                    })
+                                        // 处理需要计算的
+                                    let islegal = true
+                                    // 如果结果有undefined, 不push, ''可以
+                                    for (let i in newItem) {
+                                        if (typeof newItem[i] === 'undefined' || newItem[i] === null || newItem[i] === 'none' || newItem[i] === 'None') {
+                                            islegal = false
+                                        }
                                     }
-                                })
-                                    // 处理需要计算的
-                                let islegal = true
-                                // 如果结果有undefined, 不push, ''可以
-                                for (let i in newItem) {
-                                    if (typeof newItem[i] === 'undefined' || newItem[i] === null || newItem[i] === 'none' || newItem[i] === 'None') {
-                                        islegal = false
+                                    if (islegal) {
+                                        dataSource.push(newItem)
                                     }
-                                }
-                                if (islegal) {
-                                    dataSource.push(newItem)
                                 }
                             }
                         }
