@@ -143,29 +143,23 @@ export const testJobDetailInstrumentColumns = [
     },
     {
         title: "Call Rate",
-        dataIndex: "real_instant_call_rate_s",
-        source: "server",
+        dataIndex: "call_rate",
     },
     {
         title: "Elapsed Time",
         dataIndex: "elapsed_time",
-        source: "server",
     },
     {
         title: "Outgoing Calls",
         dataIndex: "outgoing_calls",
-        source: "client",
     },
     {
         title: "Incoming Calls",
         dataIndex: "incoming_calls",
-        source: "server"
     },
     {
         title: "Failed Calls",
         dataIndex: "failed_calls",
-        source: "combined",
-        formula: "outgoing_calls - incoming_calls",
         width: 150,
     },
 ];

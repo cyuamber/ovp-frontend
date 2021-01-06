@@ -335,7 +335,6 @@ const actions = {
     getProgress({ commit }, { jobId, message }) {
         axiosget(API.testJobMgt.testJobProgress.replace(":jobId", jobId)).then(
             (res) => {
-                console.log(res)
                 commit(types.UPDATE_PROGRESS, {
                     percent: res.body.jobProgress,
                     status: res.body.jobStatus,
@@ -403,44 +402,20 @@ const actions = {
                         expanded,
                     });
                     if (isSeagull) { // 如果是海鸥要做一些处理
-                        const data = res.body[0].content; // 返回的是一个仅有一项的数组
+                        const data = JSON.parse(res.body); // 返回的是对象字符串
                         let dataSource = [] // 处理完的表格对象数组
                         for (let key in data) { // 对象中的每一个键值对就是表格里的每一行
-                            const newData = {}
-                            for (let val in data[key]) {
-                                if (data[key][val] !== 'none' && data[key][val] !== 'None' && data[key][val]) {
-                                    const initDataList = data[key][val].split(',')
-                                    let dataItem = {}
-                                    initDataList.forEach((item) => {
-                                        dataItem[item.split('=')[0]] = item.split('=')[1]
-                                    })
-                                    newData[val] = dataItem
-                                }
-                            }
-                            data[key] = newData
-                            let newItem = {}
-                            if (data[key].server && data[key].server !== 'none' && data[key].client && data[key].client !== 'none') { // server和client存在且不为none
-                                console.log('h')
+                            if ( key!=='total' ) {
+                                let newItem = {}
                                 testJobDetailInstrumentColumns.forEach((item) => {
                                     if (item.source === 'key') {
                                         newItem[item.dataIndex] = key
-                                    } else if (item.source !== 'combined') {
-                                        newItem[item.dataIndex] = data[key][item.source][item.dataIndex]
+                                    } else {
+                                        newItem[item.dataIndex] = data[key][item.dataIndex]
                                     }
                                 })
-                                // 处理需要计算的
+                                    // 处理需要计算的
                                 let islegal = true
-                                testJobDetailInstrumentColumns.forEach((item) => {
-                                    if (item.source === 'combined') {
-                                        const func = item.formula
-                                        const firstKey  = func.split('-')[0].trim()
-                                        const secondKey = func.split('-')[1].trim()
-                                        newItem[item.dataIndex] = newItem[firstKey] - newItem[secondKey]
-                                        if (isNaN(newItem[item.dataIndex])) { // 如果减出来的结果是非数字不可以
-                                            islegal = false
-                                        }
-                                    }
-                                })
                                 // 如果结果有undefined, 不push, ''可以
                                 for (let i in newItem) {
                                     if (typeof newItem[i] === 'undefined' || newItem[i] === null || newItem[i] === 'none' || newItem[i] === 'None') {
@@ -452,13 +427,11 @@ const actions = {
                                 }
                             }
                         }
-                        console.log('dataSource', dataSource)
                         commit(types.UPDATE_CASE_CHILD_TABLE_DATA, { // 结果赋值
                             testCaseChildData: dataSource,
                             record,
                         });                       
                     } else {
-                        console.log(res.body)
                         commit(types.UPDATE_CASE_CHILD_TABLE_DATA, { // 结果赋值
                             testCaseChildData: res.body,
                             record,
