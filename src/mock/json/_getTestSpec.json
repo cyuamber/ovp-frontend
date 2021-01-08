@@ -3,16 +3,16 @@
   "message": "OK",
   "body": [
     {
-      "id": "4444444444444444444",
-      "name": "FW-SPEC",
+      "id": "536655682784018432",
+      "name": "vnf-validation",
       "version": "V1.0",
       "sutType": 1,
       "subSutType": 101,
-      "publishOrg": "CMCC",
-      "publishTime": 1573516800000,
+      "publishOrg": "123",
+      "publishTime":"2020-12-16",
       "sutTypeCH": {
         "code": 1,
-        "dictLabel": "FW",
+        "dictLabel": "VNF",
         "dictValue": "1",
         "status": "\u0000",
         "remark": null,
@@ -29,16 +29,16 @@
       },
       "caseId":[4]
     },{
-      "id": "888888889654323124235",
-      "name": "MME-SPEC",
+      "id": "536284729122045952",
+      "name": "Seagull_Spec",
       "version": "V1.0",
       "sutType": 2,
       "subSutType": 102,
-      "publishOrg": "CMCC",
-      "publishTime": 1569945600000,
+      "publishOrg": "12345678",
+      "publishTime":"2020-12-15",
       "sutTypeCH": {
         "code": "2",
-        "dictLabel": "MME",
+        "dictLabel": "VNF",
         "dictValue": "1",
         "status": "\u0000",
         "remark": null,
@@ -53,59 +53,8 @@
         "remark": null,
         "lang": null
       }
-    },{
-      "id": "3232333333333333333333",
-      "name": "PCRF-SPEC",
-      "version": "V1.0",
-      "sutType": 3,
-      "subSutType": 103,
-      "publishOrg": "CMCC",
-      "publishTime": 1564675200000,
-      "sutTypeCH": {
-        "code": "3",
-        "dictLabel": "PCRF",
-        "dictValue": "1",
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      },
-      "subSutTypeCH": {
-        "code": "103",
-        "dictLabel": "SPGW",
-        "dictValue": "1",
-        "dictParentCode": null,
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      }
-    },{
-      "id": "121324342353464",
-      "name": "FW-SPEC",
-      "version": "V1.0",
-      "sutType": 101001,
-      "subSutType": 4,
-      "publishOrg": "CMCC",
-      "publishTime": 1570752000000,
-      "sutTypeCH": {
-        "code": "101001",
-        "dictLabel": "FW",
-        "dictValue": "1",
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      },
-      "subSutTypeCH": {
-        "code": "4",
-        "dictLabel": "FW",
-        "dictValue": "1",
-        "dictParentCode": null,
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      },
-      "caseId":[7]
     }
   ],
-  "total": 1,
+  "total": 2,
   "pageTotal": 1
 }

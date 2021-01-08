@@ -67,5 +67,18 @@
     "ghooks": {
       "commit-msg": "validate-commit-msg"
     }
-  }
+  },
+  "description": "This project is the frontend part of OVP project.",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyuamber/ovp-frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cyuamber/ovp-frontend/issues"
+  },
+  "homepage": "https://github.com/cyuamber/ovp-frontend#readme"
 }

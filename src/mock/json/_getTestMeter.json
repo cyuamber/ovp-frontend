@@ -2,19 +2,19 @@
   "code": 200,
   "message": "OK",
   "body": [{
-    "id": "33323234343434343434343",
-    "name": "STVc-FW",
-    "vendor": "Spirent",
-    "version": "V1.0",
+    "id": "538806913493188608",
+    "name": "Demo-STCv",
+    "vendor": "Lehner - Kuhlman",
+    "version": "73038",
     "type": 1,
-    "createTime": 1573516800000,
+    "createTime": "2020-12-22",
     "updateTime": null,
     "fileName": "test.casr",
     "fileAliasName": "fakefilename01.casr",
     "flag": 0,
     "typeCH": {
       "code": "2",
-      "dictLabel": "FW",
+      "dictLabel": "MME",
       "dictValue": "1",
       "dictParentCode": null,
       "status": "\u0000",
@@ -32,19 +32,19 @@
       "password": null
     }
   }, {
-    "id": "656565423131314364563",
-    "name": "STVc-DNS",
-    "vendor": "Spirent",
+    "id": "538803078754287616",
+    "name": "test001",
+    "vendor": "Swift - Klein",
     "version": "V1.0",
     "type": 2,
-    "createTime": 1570492800000,
+    "createTime":"2020-12-22",
     "updateTime": null,
     "fileName": "file name.yaml",
     "fileAliasName": "fakefilename02.yaml",
     "flag": 0,
     "typeCH": {
       "code": "2",
-      "dictLabel": "DNS",
+      "dictLabel": "MME",
       "dictValue": "1",
       "dictParentCode": null,
       "status": "\u0000",
@@ -64,19 +64,19 @@
     }
   },
   {
-    "id": "556565423131314364563",
-    "name": "STVc-DNS2",
-    "vendor": "Spirent",
+    "id": "538801870027177984",
+    "name": "test-upload1",
+    "vendor": "Swift - Klein  ",
     "version": "V1.0",
     "type": 2,
-    "createTime": 1570492800000,
+    "createTime":"2020-12-22",
     "updateTime": null,
     "fileName": "file name.yaml",
     "fileAliasName": "fakefilename02.yaml",
     "flag": 0,
     "typeCH": {
       "code": "2",
-      "dictLabel": "DNS",
+      "dictLabel": "Seagull",
       "dictValue": "1",
       "dictParentCode": null,
       "status": "\u0000",
@@ -94,7 +94,104 @@
       "password": null,
       "address": "22.22.2.1"
     }
-  }],
+  },
+  {
+    "id": "537443281953964032",
+    "name": "test-upload",
+    "vendor": "Spirent",
+    "version": "73038",
+    "type": 2,
+    "createTime":"2020-12-18",
+    "updateTime": null,
+    "fileName": "file name.yaml",
+    "fileAliasName": "fakefilename02.yaml",
+    "flag": 0,
+    "typeCH": {
+      "code": "2",
+      "dictLabel": "MME",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "instrumentMgs": {
+      "createTime": null,
+      "updateTime": null,
+      "id": 4,
+      "name": null,
+      "vendor": null,
+      "address": null,
+      "username": null,
+      "password": null,
+      "address": "22.22.2.1"
+    }
+  },
+  {
+    "id": "537157148569321472",
+    "name": "Vnf Seagull",
+    "vendor": "huawei",
+    "version": "v1.0",
+    "type": 2,
+    "createTime":"2020-12-18",
+    "updateTime": null,
+    "fileName": "file name.yaml",
+    "fileAliasName": "fakefilename02.yaml",
+    "flag": 0,
+    "typeCH": {
+      "code": "2",
+      "dictLabel": "Seagull",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "instrumentMgs": {
+      "createTime": null,
+      "updateTime": null,
+      "id": 4,
+      "name": null,
+      "vendor": null,
+      "address": null,
+      "username": null,
+      "password": null,
+      "address": "22.22.2.1"
+    }
+  },
+  {
+    "id": "536259913287548928",
+    "name": "VNF Test",
+    "vendor": "Spirent",
+    "version": "v1.0",
+    "type": 2,
+    "createTime":"2020-12-15",
+    "updateTime": null,
+    "fileName": "file name.yaml",
+    "fileAliasName": "fakefilename02.yaml",
+    "flag": 0,
+    "typeCH": {
+      "code": "2",
+      "dictLabel": "MME",
+      "dictValue": "1",
+      "dictParentCode": null,
+      "status": "\u0000",
+      "remark": null,
+      "lang": null
+    },
+    "instrumentMgs": {
+      "createTime": null,
+      "updateTime": null,
+      "id": 4,
+      "name": null,
+      "vendor": null,
+      "address": null,
+      "username": null,
+      "password": null,
+      "address": "22.22.2.1"
+    }
+  }
+],
   "total": 2,
   "pageTotal": 1
 }

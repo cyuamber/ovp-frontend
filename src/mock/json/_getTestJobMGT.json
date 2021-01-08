@@ -4,16 +4,16 @@
   "body": [
     {
       "id": 1,
-      "jobId": 392392180810989600,
-      "jobName": "job1",
+      "jobId": 541418604785647616,
+      "jobName": "222",
       "jobStatus": "DONE",
       "jobProgress": 100,
-      "remark": "job1 test",
+      "remark": "2222",
       "executionStartTime": "2019-11-15 10:41:10",
-      "createTime": "2019-11-14",
+      "createTime": "2020-12-29",
       "sut": {
         "id": 1,
-        "name": "Nokia_vSPGW",
+        "name": "test-vnf",
         "type": 101009,
         "vendor": null,
         "version": null,
@@ -25,7 +25,7 @@
       },
       "spec": {
         "id": 1,
-        "name": "spec1",
+        "name": "Seagull_Spec",
         "version": null,
         "vnfType": 1,
         "publishOrg": null,
@@ -54,18 +54,18 @@
       ]
     },
     {
-      "id": 2,
-      "jobId": 12345678912346987,
-      "jobName": "job2",
-      "jobStatus": "DONE",
+      "id": 1,
+      "jobId": 541605689802964992,
+      "jobName": "test2",
+      "jobStatus": "UPDATED",
       "jobProgress": 100,
-      "remark": "job1 test",
+      "remark": "test2",
       "executionStartTime": "2019-11-15 10:41:10",
-      "createTime": "2019-11-14",
+      "createTime": "2020-12-30",
       "sut": {
-        "id": 0,
-        "name": "DRA",
-        "type": 0,
+        "id": 1,
+        "name": "test-vnf",
+        "type": 101009,
         "vendor": null,
         "version": null,
         "createTime": null,
@@ -76,7 +76,160 @@
       },
       "spec": {
         "id": 1,
-        "name": "spec1",
+        "name": "Seagull_Spec",
+        "version": null,
+        "vnfType": 1,
+        "publishOrg": null,
+        "publishTime": null,
+        "caseMgt": null,
+        "vnfTypeCH": null,
+        "sutTypeCH": null
+      },
+      "cases": [
+        {
+          "id": 66666,
+          "number": 1,
+          "name": "case66666",
+          "description": null,
+          "version": "1",
+          "status": "DONE"
+        },
+        {
+          "id": 66668,
+          "number": 2,
+          "name": "case66668",
+          "description": null,
+          "version": "2",
+          "status": "STARTED"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "jobId": 541607272443887616,
+      "jobName": "test3",
+      "jobStatus": "UPDATED",
+      "jobProgress": 100,
+      "remark": "test3",
+      "executionStartTime": "2019-11-15 10:41:10",
+      "createTime": "2020-12-30",
+      "sut": {
+        "id": 1,
+        "name": "test-vnf",
+        "type": 101009,
+        "vendor": null,
+        "version": null,
+        "createTime": null,
+        "updateTime": null,
+        "flag": 1,
+        "fileName": null,
+        "typeCH": null
+      },
+      "spec": {
+        "id": 1,
+        "name": "Seagull_Spec",
+        "version": null,
+        "vnfType": 1,
+        "publishOrg": null,
+        "publishTime": null,
+        "caseMgt": null,
+        "vnfTypeCH": null,
+        "sutTypeCH": null
+      },
+      "cases": [
+        {
+          "id": 66666,
+          "number": 1,
+          "name": "case66666",
+          "description": null,
+          "version": "1",
+          "status": "DONE"
+        },
+        {
+          "id": 66668,
+          "number": 2,
+          "name": "case66668",
+          "description": null,
+          "version": "2",
+          "status": "STARTED"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "jobId": 541644506194853888,
+      "jobName": "test44",
+      "jobStatus": "CREATED",
+      "jobProgress": 100,
+      "remark": "test",
+      "executionStartTime": "2019-11-15 10:41:10",
+      "createTime": "2020-12-30",
+      "sut": {
+        "id": 1,
+        "name": "ovp-open",
+        "type": 101009,
+        "vendor": null,
+        "version": null,
+        "createTime": null,
+        "updateTime": null,
+        "flag": 1,
+        "fileName": null,
+        "typeCH": null
+      },
+      "spec": {
+        "id": 1,
+        "name": "vnf-validation",
+        "version": null,
+        "vnfType": 1,
+        "publishOrg": null,
+        "publishTime": null,
+        "caseMgt": null,
+        "vnfTypeCH": null,
+        "sutTypeCH": null
+      },
+      "cases": [
+        {
+          "id": 66666,
+          "number": 1,
+          "name": "case66666",
+          "description": null,
+          "version": "1",
+          "status": "DONE"
+        },
+        {
+          "id": 66668,
+          "number": 2,
+          "name": "case66668",
+          "description": null,
+          "version": "2",
+          "status": "STARTED"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "jobId":541682560666255360,
+      "jobName": "test-vnf",
+      "jobStatus": "DONE",
+      "jobProgress": 100,
+      "remark": "job1 test",
+      "executionStartTime": "2019-11-15 10:41:10",
+      "createTime": "2020-12-30",
+      "sut": {
+        "id": 1,
+        "name": "test-seagull-task",
+        "type": 101009,
+        "vendor": null,
+        "version": null,
+        "createTime": null,
+        "updateTime": null,
+        "flag": 1,
+        "fileName": null,
+        "typeCH": null
+      },
+      "spec": {
+        "id": 1,
+        "name": "Seagull_Spec",
         "version": null,
         "vnfType": 1,
         "publishOrg": null,
@@ -105,6 +258,6 @@
       ]
     }
   ],
-  "total": 1,
+  "total": 5,
   "pageTotal": 1
 }

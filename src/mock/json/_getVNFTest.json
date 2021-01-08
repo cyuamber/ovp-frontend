@@ -3,72 +3,72 @@
   "message": "OK",
   "body": [
     {
-      "id": "980853523423542523523",
-      "name": "Huawei_vMME",
+      "id": "538824467154550784",
+      "name": "test-sut",
       "type":1,
       "typeCH":{
         "code": 1,
-        "dictLabel": "MME",
+        "dictLabel": "SPGW",
         "dictValue": "MME",
         "dictParentCode": null,
         "status": "\u0000",
         "remark": null,
         "lang": null
       },
-      "vendor": "Huawei",
-      "createTime": 1570838400000,
+      "vendor": "ZTE",
+      "createTime": "2020-12-22",
       "updateTime": null,
       "flag": 101,
       "fileName": null,
       "address": "192.168.0.1:8080"
     },
     {
-      "id": "3142342342345241313",
-      "name": "ZTE_vPCRF",
+      "id": "537156306525044736",
+      "name": "test-vnf-1",
       "type":2,
       "typeCH":{
         "code": 2,
-        "dictLabel": "PCRF",
+        "dictLabel": "Seagull",
         "dictValue": "PCRF",
         "dictParentCode": null,
         "status": "\u0000",
         "remark": null,
         "lang": null
       },
-      "vendor": "ZTE",
-      "createTime": 1568160000000,
+      "vendor": "huawei",
+      "createTime":"2020-12-17",
       "updateTime": null,
       "flag": 101,
       "fileName": null,
       "address": "192.168.0.1:8080"
     },
     {
-      "id": "876859345241231314354364",
-      "name": "ZTE_vPCRF",
+      "id": "536657933741146112",
+      "name": "ovp-open",
       "type":3,
       "typeCH":{
         "code": 3,
-        "dictLabel": "PCRF",
+        "dictLabel": "OVPCommon",
         "dictValue": "PCRF",
         "dictParentCode": null,
         "status": "\u0000",
         "remark": null,
         "lang": null
       },
-      "vendor": "ZTE",
-      "createTime": 1572566400000,
+      "vendor": "ONAP",
+      "createTime":"2020-12-16",
       "updateTime": null,
       "flag": 101,
       "fileName": null,
       "address": "192.168.0.1:8080"
     },
     {
-      "id": "98085352342353234523",
-      "name": "ZTE_vPCRF",
+      "id": "536279860776615936",
+      "name": "test-vnf",
       "type":4,
       "typeCH":{
         "code": 4,
-        "dictLabel": "PCRF",
+        "dictLabel": "Seagull",
         "dictValue": "PCRF",
         "dictParentCode": null,
         "status": "\u0000",
@@ -76,33 +76,13 @@
         "lang": null
       },
       "vendor": "ZTE",
-      "createTime": 1568160000000,
-      "updateTime": null,
-      "flag": 101,
-      "fileName": null,
-      "address": "192.168.0.1:8080"
-    },
-    {
-      "id": "777777777777777799999",
-      "name": "ZTE_vPCRF",
-      "type":5,
-      "typeCH":{
-        "code": 5,
-        "dictLabel": "PCRF",
-        "dictValue": "PCRF",
-        "dictParentCode": null,
-        "status": "\u0000",
-        "remark": null,
-        "lang": null
-      },
-      "vendor": "ZTE",
-      "createTime": 1564704000000 ,
+      "createTime":"2020-12-15",
       "updateTime": null,
       "flag": 101,
       "fileName": null,
       "address": "192.168.0.1:8080"
     }
   ],
-  "total": 5,
+  "total": 4,
   "pageTotal": 1
 }
