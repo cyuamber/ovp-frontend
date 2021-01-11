@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    :title="(isEdit ? 'Edit ': 'Register ') + currentTab"
+    :title="(isEdit ? 'Edit ' : 'Register ') + currentTab"
     :visible="visible"
     :footer="null"
     @cancel="handleCancel"
@@ -10,30 +10,60 @@
       <a-form :form="form" @submit="handleSubmit">
         <div v-if="currentTab === 'VIM ENV'">
           <a-form-item
-            v-for="(item,i) in VIMForm"
+            v-for="(item, i) in VIMForm"
             :key="i"
             :label="item.title"
             :label-col="{ span: 8 }"
-            :wrapper-col="{ span: (item.title === 'Cloud Type' || item.title === 'Cloud Region ID')? 8:12 }"
+            :wrapper-col="{
+              span:
+                item.title === 'Cloud Type' || item.title === 'Cloud Region ID'
+                  ? 8
+                  : 12
+            }"
           >
             <a-input
               v-if="item.title !== 'Cloud Type' && item.title !== 'Password'"
-              v-decorator="[item.key, { rules: [{ required: item.key !== 'sslCacert'?true:false, message: item.title +' is required' }], initialValue: initValues[item.key] }]"
+              v-decorator="[
+                item.key,
+                {
+                  rules: [
+                    {
+                      required: item.key !== 'sslCacert' ? true : false,
+                      message: item.title + ' is required'
+                    }
+                  ],
+                  initialValue: initValues[item.key]
+                }
+              ]"
             />
             <a-input-password
               v-if="item.title === 'Password'"
               type="password"
-              v-decorator="[item.key, { rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] }]"
+              v-decorator="[
+                item.key,
+                {
+                  rules: [
+                    { required: true, message: item.title + ' is required' }
+                  ],
+                  initialValue: initValues[item.key]
+                }
+              ]"
             ></a-input-password>
 
             <a-select
               v-if="item.title === 'Cloud Type'"
-              v-decorator="[item.key,{ rules: [{ required: true }], initialValue: initCloudType.name}]"
-              :disabled="cloudTypeOptions.length ===0"
+              v-decorator="[
+                item.key,
+                {
+                  rules: [{ required: true }],
+                  initialValue: initCloudType.name
+                }
+              ]"
+              :disabled="cloudTypeOptions.length === 0"
               class="select"
               :getPopupContainer="
                 triggerNode => {
-                  return triggerNode.parentNode || document.body;
+                  return triggerNode.parentNode || document.body
                 }
               "
             >
@@ -41,26 +71,50 @@
                 v-for="type in cloudTypeOptions"
                 :key="type.code"
                 :value="type.code"
-              >{{type.dictLabel}}</a-select-option>
+                >{{ type.dictLabel }}</a-select-option
+              >
             </a-select>
 
-            <a-spin :spinning="cloudTypeOptions.length ===0" v-if="item.title === 'Cloud Type'">
-              <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+            <a-spin
+              :spinning="cloudTypeOptions.length === 0"
+              v-if="item.title === 'Cloud Type'"
+            >
+              <a-icon
+                slot="indicator"
+                type="loading-3-quarters"
+                size="small"
+                spin
+              />
               <!-- :todo  loading-->
             </a-spin>
           </a-form-item>
         </div>
         <div v-else-if="currentTab === 'VNFM ENV'">
           <a-form-item
-            v-for="(item,i) in VNFMForm"
+            v-for="(item, i) in VNFMForm"
             :key="i"
             :label="item.title"
             :label-col="{ span: 8 }"
-            :wrapper-col="{ span: 12}"
+            :wrapper-col="{ span: 12 }"
           >
             <a-input
               v-if="item.title !== 'Password'"
-              v-decorator="[item.key, { rules: [{ required: (item.title !== 'Certificate URL' && item.title !== 'User Name') ? true:false, message: item.title +' is required' }], initialValue: initValues[item.key] }]"
+              v-decorator="[
+                item.key,
+                {
+                  rules: [
+                    {
+                      required:
+                        item.title !== 'Certificate URL' &&
+                        item.title !== 'User Name'
+                          ? true
+                          : false,
+                      message: item.title + ' is required'
+                    }
+                  ],
+                  initialValue: initValues[item.key]
+                }
+              ]"
             />
             <a-input-password
               v-if="item.title === 'Password'"
@@ -71,25 +125,39 @@
         </div>
         <div v-else-if="currentTab === 'MANO ENV'">
           <a-form-item
-            v-for="(item,i) in MANOForm"
+            v-for="(item, i) in MANOForm"
             :key="i"
             :label="item.title"
             :label-col="{ span: 8 }"
-            :wrapper-col="{ span: item.title === 'MANO Type'? 8:12 }"
+            :wrapper-col="{ span: item.title === 'MANO Type' ? 8 : 12 }"
           >
             <a-input
               v-if="item.title !== 'MANO Type'"
-              v-decorator="[item.key, { rules: [{ required: true, message: item.title +' is required' }], initialValue: initValues[item.key] }]"
+              v-decorator="[
+                item.key,
+                {
+                  rules: [
+                    { required: true, message: item.title + ' is required' }
+                  ],
+                  initialValue: initValues[item.key]
+                }
+              ]"
             />
             <a-select
               v-if="item.title === 'MANO Type'"
-              v-decorator="[item.key,{ rules: [{ required: true }], initialValue: initCloudType.name}]"
-              :disabled="cloudTypeOptions.length ===0"
+              v-decorator="[
+                item.key,
+                {
+                  rules: [{ required: true }],
+                  initialValue: initCloudType.name
+                }
+              ]"
+              :disabled="cloudTypeOptions.length === 0"
               class="select"
               @change="handleMANOTypeChange"
               :getPopupContainer="
                 triggerNode => {
-                  return triggerNode.parentNode || document.body;
+                  return triggerNode.parentNode || document.body
                 }
               "
             >
@@ -97,11 +165,20 @@
                 v-for="type in cloudTypeOptions"
                 :key="type.dictValue"
                 :value="type.dictValue"
-              >{{type.dictLabel}}</a-select-option>
+                >{{ type.dictLabel }}</a-select-option
+              >
             </a-select>
 
-            <a-spin :spinning="cloudTypeOptions.length ===0" v-if="item.title === 'MANO Type'">
-              <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+            <a-spin
+              :spinning="cloudTypeOptions.length === 0"
+              v-if="item.title === 'MANO Type'"
+            >
+              <a-icon
+                slot="indicator"
+                type="loading-3-quarters"
+                size="small"
+                spin
+              />
             </a-spin>
           </a-form-item>
           <div v-if="onapProfilesShow">
@@ -117,18 +194,26 @@
               </a-button>
             </a-form-item>
             <a-form-item
-              v-for="(item,i) in MANOONAPForm"
+              v-for="(item, i) in MANOONAPForm"
               :key="i"
               :label="item.key"
               :label-col="{ span: 8 }"
               :wrapper-col="{ span: 12 }"
             >
               <a-input
-                v-decorator="[item.value, { rules: [{ required: true, message: item.title +' is required' }], initialValue: initOnapDefaultProfiles[item.value] }]"
+                v-decorator="[
+                  item.value,
+                  {
+                    rules: [
+                      { required: true, message: item.title + ' is required' }
+                    ],
+                    initialValue: initOnapDefaultProfiles[item.value]
+                  }
+                ]"
               />
             </a-form-item>
             <a-table
-              v-if="onapProfileDataSource.length>0"
+              v-if="onapProfileDataSource.length > 0"
               :columns="columns"
               :dataSource="onapProfileDataSource"
               rowKey="customParamsNumber"
@@ -137,22 +222,27 @@
               :pagination="false"
               class="onap-profile-table"
             >
-              <span slot="key" slot-scope="key,record">
+              <span slot="key" slot-scope="key, record">
                 <a-input
                   class="equipment-input"
                   v-model="record.key"
-                  @change="(() => onChangeSelectInput(record.key,record,'key'))"
+                  @change="() => onChangeSelectInput(record.key, record, 'key')"
                 />:
               </span>
-              <span slot="value" slot-scope="value,record">
+              <span slot="value" slot-scope="value, record">
                 <a-input
                   class="equipment-input"
                   v-model="record.value"
-                  @change="(() => onChangeSelectInput(record.value,record,'value'))"
+                  @change="
+                    () => onChangeSelectInput(record.value, record, 'value')
+                  "
                 />
               </span>
-              <span slot="action" slot-scope="action,record">
-                <a-icon type="minus-circle" @click="(() => handleDeleteONAPProfile(record))" />
+              <span slot="action" slot-scope="action, record">
+                <a-icon
+                  type="minus-circle"
+                  @click="() => handleDeleteONAPProfile(record)"
+                />
               </span>
             </a-table>
           </div>
@@ -450,7 +540,7 @@ export default {
 };
 </script>
 
-<style lang="less" >
+<style lang="less">
 .select {
   width: 70%;
   margin-right: 10%;

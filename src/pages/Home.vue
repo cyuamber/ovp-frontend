@@ -10,20 +10,20 @@
 
 <script>
 export default {
-  name: "Home",
+  name: 'Home',
   methods: {
     turntopage() {
       this.$router.push({
-        path: "/dashboard"
-      });
+        path: '/dashboard'
+      })
     },
     turntologin() {
       this.$router.push({
-        path: "/login"
-      });
+        path: '/login'
+      })
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .homepage {

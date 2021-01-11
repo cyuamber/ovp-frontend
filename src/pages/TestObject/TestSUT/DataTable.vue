@@ -30,81 +30,81 @@
 </template>
 
 <script>
-import { TestSUTColumns } from "./constant";
-import { mapState, mapActions, mapMutations } from "vuex";
+import { TestSUTColumns } from './constant'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
-  name: "DataTable",
+  name: 'DataTable',
   data() {
     return {
-      currentPage: "TestSUT",
-      columns: TestSUTColumns,
-    };
+      currentPage: 'TestSUT',
+      columns: TestSUTColumns
+    }
   },
   computed: {
     ...mapState({
-      tableData: (state) => state.testSUT.tableData,
-      pagination: (state) => state.testSUT.pagination,
-      VNFTest: (state) => state.testSUT.VNFTest,
-      tableLoading: (state) => state.loading.tableLoading,
-    }),
+      tableData: state => state.testSUT.tableData,
+      pagination: state => state.testSUT.pagination,
+      VNFTest: state => state.testSUT.VNFTest,
+      tableLoading: state => state.loading.tableLoading
+    })
   },
 
   methods: {
-    ...mapActions("testSUT", ["setParams", "deleteVNFTest", "downloadFile"]),
-    ...mapMutations("testSUT", [
-      "updateVisible",
-      "updateEdit",
-      "setFilterItem",
-      "updateVNFTest",
+    ...mapActions('testSUT', ['setParams', 'deleteVNFTest', 'downloadFile']),
+    ...mapMutations('testSUT', [
+      'updateVisible',
+      'updateEdit',
+      'setFilterItem',
+      'updateVNFTest'
     ]),
 
     showEditOrDeleteModal(item, VNFTest) {
-      if (item === "Edit") {
-        this.updateEdit(true);
-        this.updateVNFTest(VNFTest);
-        this.updateVisible(true);
-      } else if (item === "Delete")
-        this.showConfirm(item, "Are you sure delete this task?", VNFTest);
+      if (item === 'Edit') {
+        this.updateEdit(true)
+        this.updateVNFTest(VNFTest)
+        this.updateVisible(true)
+      } else if (item === 'Delete')
+        this.showConfirm(item, 'Are you sure delete this task?', VNFTest)
       else {
         if (VNFTest.fileName) {
           this.$confirm({
-            title: "Are you sure download this Spec?",
-            content: "fileName: " + VNFTest.fileName,
-            okText: "Yes",
-            cancelText: "No",
+            title: 'Are you sure download this Spec?',
+            content: 'fileName: ' + VNFTest.fileName,
+            okText: 'Yes',
+            cancelText: 'No',
             onOk: () => {
               this.downloadFile({
                 fileName: VNFTest.fileName,
-                fileAliasName: VNFTest.fileAliasName,
-              });
-            },
-          });
+                fileAliasName: VNFTest.fileAliasName
+              })
+            }
+          })
         } else {
-          this.$message.warning("There's no file for this package");
+          this.$message.warning("There's no file for this package")
         }
       }
     },
     showConfirm(item, title, VNFTest) {
       this.$confirm({
         title,
-        content: "Are you sure to delete this package?",
-        okText: "Yes",
-        okType: "danger",
-        cancelText: "No",
+        content: 'Are you sure to delete this package?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
         onOk: () => {
           this.deleteVNFTest({
-            id: VNFTest.id,
-          });
-        },
-      });
+            id: VNFTest.id
+          })
+        }
+      })
     },
     pageChange(pageObj) {
-      this.setFilterItem({ pageObj });
-      this.setParams(true);
-    },
-  },
-};
+      this.setFilterItem({ pageObj })
+      this.setParams(true)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -113,6 +113,5 @@ export default {
     padding: 0 8px;
     border-radius: 12px;
   }
-}
-</style>>
-
+}</style
+>>

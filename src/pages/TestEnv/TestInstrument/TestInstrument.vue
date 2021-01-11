@@ -8,14 +8,13 @@
 </template>
 
 <script>
-
-import Loading from "../../../components/Loading/Loading";
-import RigisterCreateOrEdit from "./TestInsrigisterOrEdit";
-import Toolbar from "./Toolbar";
-import DataTable from "./DataTable";
-import { mapState, mapActions, mapMutations } from "vuex";
+import Loading from '../../../components/Loading/Loading'
+import RigisterCreateOrEdit from './TestInsrigisterOrEdit'
+import Toolbar from './Toolbar'
+import DataTable from './DataTable'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
-  name: "TestInstrument",
+  name: 'TestInstrument',
   components: {
     DataTable,
     RigisterCreateOrEdit,
@@ -25,9 +24,9 @@ export default {
   data() {
     return {
       isVisibleEditModel: false,
-      createTime: "",
-      keyword: ""
-    };
+      createTime: '',
+      keyword: ''
+    }
   },
   computed: {
     ...mapState({
@@ -40,28 +39,26 @@ export default {
     })
   },
   mounted() {
-    this.initTestInsTable();
+    this.initTestInsTable()
   },
   methods: {
-    ...mapMutations("searching", ["setKeyword"]),
-    ...mapMutations("datePicker", ["setDateTime"]),
-    ...mapActions("TestInstrument", [
-      "getTableData",
-      "getPagination",
-      "clearPagination",
-      "deleteMeterSys"
+    ...mapMutations('searching', ['setKeyword']),
+    ...mapMutations('datePicker', ['setDateTime']),
+    ...mapActions('TestInstrument', [
+      'getTableData',
+      'getPagination',
+      'clearPagination',
+      'deleteMeterSys'
     ]),
     initTestInsTable() {
-      this.getTableData({});
-    },
+      this.getTableData({})
+    }
   },
-  beforeDestroy(){
-      this.setKeyword("");
-      this.setDateTime("")
+  beforeDestroy() {
+    this.setKeyword('')
+    this.setDateTime('')
   }
-};
+}
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

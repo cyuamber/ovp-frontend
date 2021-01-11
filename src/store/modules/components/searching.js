@@ -1,16 +1,16 @@
 const state = {
-    keyword: "",
-};
+  keyword: ''
+}
 const mutations = {
-    setKeyword(state, keyword) {
-        state.keyword = keyword;
-    },
-};
-const actions = {};
+  setKeyword(state, keyword) {
+    state.keyword = keyword
+  }
+}
+const actions = {}
 
 export default {
-    state,
-    mutations,
-    actions,
-    namespaced: true,
-};
+  state,
+  mutations,
+  actions,
+  namespaced: true
+}

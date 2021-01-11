@@ -1,112 +1,141 @@
 <template>
-  <a-modal v-bind:title="title" :visible="visible" :footer="null" @cancel="handleCancel">
+  <a-modal
+    v-bind:title="title"
+    :visible="visible"
+    :footer="null"
+    @cancel="handleCancel"
+  >
     <template>
       <a-form :form="form" @submit="handleSubmit">
-        <a-form-item label="Name" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+        <a-form-item
+          label="Name"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
           <a-input
             v-decorator="[
-                            'Name',
-                            {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: ' Name is required',
-                                    },
-                                ],
-                                initialValue: testSpecSingleData.name,
-                            },
-                        ]"
+              'Name',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: ' Name is required'
+                  }
+                ],
+                initialValue: testSpecSingleData.name
+              }
+            ]"
           />
         </a-form-item>
-        <a-form-item label="Version" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+        <a-form-item
+          label="Version"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
           <a-input
             v-decorator="[
-                            'Version',
-                            {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: ' Version is required',
-                                    },
-                                ],
-                                initialValue: testSpecSingleData.version,
-                            },
-                        ]"
+              'Version',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: ' Version is required'
+                  }
+                ],
+                initialValue: testSpecSingleData.version
+              }
+            ]"
           />
         </a-form-item>
-        <a-form-item label="SUT Type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+        <a-form-item
+          label="SUT Type"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 11 }"
+        >
           <a-select
             class="select"
             v-decorator="[
-                            'SUTType',
-                            {
-                                rules: [{ required: true }],
-                                initialValue: initSUTTypeValue,
-                            },
-                        ]"
+              'SUTType',
+              {
+                rules: [{ required: true }],
+                initialValue: initSUTTypeValue
+              }
+            ]"
             @change="handleSelectSUTChange"
             :getPopupContainer="
-                triggerNode => {
-                  return triggerNode.parentNode || document.body;
-                }
-              "
+              triggerNode => {
+                return triggerNode.parentNode || document.body
+              }
+            "
           >
             <a-select-option
               v-for="type of SUTOptions"
               :key="type.code"
               :value="type.code"
-            >{{ type.dictLabel }}</a-select-option>
+              >{{ type.dictLabel }}</a-select-option
+            >
           </a-select>
         </a-form-item>
-        <a-form-item label="Sub SUT type" :label-col="{ span: 7 }" :wrapper-col="{ span: 11 }">
+        <a-form-item
+          label="Sub SUT type"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 11 }"
+        >
           <a-select
             class="select"
             v-decorator="[
-                            'subSutType',
-                            {
-                                rules: [{ required: true }],
-                                initialValue: initVNFtypeValue,
-                            },
-                        ]"
+              'subSutType',
+              {
+                rules: [{ required: true }],
+                initialValue: initVNFtypeValue
+              }
+            ]"
             @change="handleSelectSubSUTTypeChange"
             @dropdownVisibleChange="dropdownVisibleChange"
             style="width: 150px"
             :getPopupContainer="
-                triggerNode => {
-                  return triggerNode.parentNode || document.body;
-                }
-              "
+              triggerNode => {
+                return triggerNode.parentNode || document.body
+              }
+            "
           >
             <a-select-option
               v-for="type in VNFOptions"
               :key="type.code"
               :value="type.code"
-            >{{ type.dictLabel }}</a-select-option>
+              >{{ type.dictLabel }}</a-select-option
+            >
           </a-select>
           <a-spin :spinning="spin">
-            <a-icon slot="indicator" type="loading-3-quarters" size="small" spin />
+            <a-icon
+              slot="indicator"
+              type="loading-3-quarters"
+              size="small"
+              spin
+            />
           </a-spin>
         </a-form-item>
         <a-form-item v-if="testCaseList.length > 0">
           <h3 class="form__checkboxtitle--size">
             <span>*</span>Test Case List:
-            <a-checkbox @change="onCheckAllChange" :checked="testCaseCheckAll">Check all</a-checkbox>
+            <a-checkbox @change="onCheckAllChange" :checked="testCaseCheckAll"
+              >Check all</a-checkbox
+            >
           </h3>
           <a-checkbox-group
             class="form__checkboxgroup--margin"
             v-decorator="[
-                            'checkboxGroup',
-                            {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message:
-                                            'At least one test case to choose',
-                                    },
-                                ],
-                                initialValue: initcheckboxGroup,
-                            },
-                        ]"
+              'checkboxGroup',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: 'At least one test case to choose'
+                  }
+                ],
+                initialValue: initcheckboxGroup
+              }
+            ]"
             @change="checkboxGrouponChange"
           >
             <a-list
@@ -123,34 +152,34 @@
               >
                 <a-checkbox
                   :value="item.id"
-                  :checked="
-                                        initcheckboxGroup.includes(item.id)
-                                    "
+                  :checked="initcheckboxGroup.includes(item.id)"
                   class="form__checkbox--size"
                 />
                 <span :title="item.description">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
-                  item.name
-                  }}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ item.name }}
                 </span>
               </a-list-item>
             </a-list>
           </a-checkbox-group>
         </a-form-item>
-        <a-form-item label="Publish ORG" :label-col="{ span: 7 }" :wrapper-col="{ span: 12 }">
+        <a-form-item
+          label="Publish ORG"
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 12 }"
+        >
           <a-input
             v-decorator="[
-                            'PublishORG',
-                            {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: ' PublishORG is required',
-                                    },
-                                ],
-                                initialValue: testSpecSingleData.publishOrg,
-                            },
-                        ]"
+              'PublishORG',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: ' PublishORG is required'
+                  }
+                ],
+                initialValue: testSpecSingleData.publishOrg
+              }
+            ]"
           />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 12, offset: 10 }">
@@ -210,7 +239,7 @@ export default {
                       PublishORG: this.testSpecSingleData.publishOrg
                   });
                   this.initSUTTypeValue = this.testSpecSingleData.sutTypeCH.dictLabel;
-                  this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;                
+                  this.initVNFtypeValue = this.testSpecSingleData.subSutTypeCH.dictLabel;
                 }, 100);
               } else if (!this.isEdit) {
                   setTimeout(() => {

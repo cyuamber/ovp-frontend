@@ -4,8 +4,7 @@
 
 <script>
 export default {
-  name: "Footer"
-};
+  name: 'Footer'
+}
 </script>
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

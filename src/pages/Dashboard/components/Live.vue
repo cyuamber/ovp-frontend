@@ -4,11 +4,11 @@
   </div>
 </template>
 <script>
-import { Chart } from "highcharts-vue";
-import { mapState } from "vuex";
-import Highcharts from "highcharts";
+import { Chart } from 'highcharts-vue'
+import { mapState } from 'vuex'
+import Highcharts from 'highcharts'
 export default {
-  name: "Star",
+  name: 'Star',
   components: {
     starchart: Chart
   },
@@ -20,7 +20,7 @@ export default {
   watch: {
     liveData: {
       handler: function(val) {
-        this.initLive(val);
+        this.initLive(val)
       },
       deep: true
     }
@@ -29,7 +29,7 @@ export default {
     return {
       chartOptions: {
         chart: {
-          type: "spline",
+          type: 'spline',
           animation: Highcharts.svg, // don't animate in old IE
           marginRight: 10
         },
@@ -39,10 +39,10 @@ export default {
         },
 
         title: {
-          text: "Live Test Job Case Amount"
+          text: 'Live Test Job Case Amount'
         },
         xAxis: {
-          type: "datetime",
+          type: 'datetime',
           tickPixelInterval: 100
         },
         yAxis: {
@@ -53,7 +53,7 @@ export default {
             {
               value: 0,
               width: 1,
-              color: "#808080"
+              color: '#808080'
             }
           ]
         },
@@ -61,8 +61,8 @@ export default {
           enabled: false
         },
         tooltip: {
-          headerFormat: "<b>{series.name}: {point.y:f}</b><br/>",
-          pointFormat: "{point.x:%Y-%m-%d %H:%M:%S}<br/>"
+          headerFormat: '<b>{series.name}: {point.y:f}</b><br/>',
+          pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>'
         },
         legend: {
           enabled: false
@@ -72,31 +72,31 @@ export default {
         },
         series: [
           {
-            name: "Test Job Case",
+            name: 'Test Job Case',
             data: (function() {
               // generate an array of random data
               var data = [],
-                time = new Date().getTime();
+                time = new Date().getTime()
 
               for (var i = -10; i <= 0; i += 1) {
                 data.push({
                   x: time + i * 5000,
                   y: 0
-                });
+                })
               }
-              return data;
+              return data
             })()
           }
         ]
       }
-    };
+    }
   },
   methods: {
     initLive(val) {
-      this.chartOptions.series[0].data.push([val.x, val.y]);
+      this.chartOptions.series[0].data.push([val.x, val.y])
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

@@ -24,12 +24,11 @@
                   {
                     required: true,
                     message:
-                      (currentTab === 101 ? 'VNF' : 'PNF') +
-                      ' Name is required',
-                  },
+                      (currentTab === 101 ? 'VNF' : 'PNF') + ' Name is required'
+                  }
                 ],
-                initialValue: SuiteSingleData.name,
-              },
+                initialValue: SuiteSingleData.name
+              }
             ]"
           />
         </a-form-item>
@@ -49,12 +48,11 @@
                   {
                     required: true,
                     message:
-                      (currentTab === 101 ? 'VNF' : 'PNF') +
-                      ' Type is required',
-                  },
+                      (currentTab === 101 ? 'VNF' : 'PNF') + ' Type is required'
+                  }
                 ],
-                initialValue: initNVFTypeValue,
-              },
+                initialValue: initNVFTypeValue
+              }
             ]"
           >
             <a-select-option
@@ -87,11 +85,11 @@
                     required: true,
                     message:
                       (currentTab === 101 ? 'VNF' : 'PNF') +
-                      ' Vendor is required',
-                  },
+                      ' Vendor is required'
+                  }
                 ],
-                initialValue: SuiteSingleData.vendor,
-              },
+                initialValue: SuiteSingleData.vendor
+              }
             ]"
           />
         </a-form-item>
@@ -109,11 +107,11 @@
                     required: true,
                     message:
                       (currentTab === 101 ? 'VNF' : 'PNF') +
-                      ' Version is required',
-                  },
+                      ' Version is required'
+                  }
                 ],
-                initialValue: SuiteSingleData.version,
-              },
+                initialValue: SuiteSingleData.version
+              }
             ]"
           />
         </a-form-item>
@@ -131,7 +129,7 @@
             name="file"
             v-decorator="[
               'upload',
-              { valuePropName: 'fileList', getValueFromEvent: normFile },
+              { valuePropName: 'fileList', getValueFromEvent: normFile }
             ]"
           >
             <p class="ant-upload-text form__upload-text--font-size">
@@ -167,10 +165,10 @@
               'manage',
               {
                 rules: [
-                  { required: true, message: 'Manage System is required' },
+                  { required: true, message: 'Manage System is required' }
                 ],
-                initialValue: initManageSystemValue,
-              },
+                initialValue: initManageSystemValue
+              }
             ]"
           >
             <a-select-option
@@ -192,44 +190,44 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
-import { axiosCancelToken } from "../../../utils/http";
-import util from "../../../utils/utils";
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { axiosCancelToken } from '../../../utils/http'
+import util from '../../../utils/utils'
 
 export default {
-  props: ["isEdit"],
+  props: ['isEdit'],
   data() {
     return {
       form: this.$form.createForm(this),
       spin: false,
       count: 0,
       disabled: false,
-      uploadAliasFilename: "",
+      uploadAliasFilename: '',
       initNVFTypeValue: null,
       initManageSystemValue: null,
       editUploadtextShow: true,
-      currentFilename: "",
-    };
+      currentFilename: ''
+    }
   },
   mounted() {
-    this.getSystemOptions();
+    this.getSystemOptions()
   },
   computed: {
     ...mapState({
-      VNFOptions: (state) => state.VnfpnfSuite.VNFOptions,
-      SystemOptions: (state) => state.VnfpnfSuite.SystemOptions,
-      SuiteSingleData: (state) => state.VnfpnfSuite.SuiteSingleData,
-      currentTab: (state) => state.VnfpnfSuite.currentTab,
-      visible: (state) => state.VnfpnfSuite.visible,
-    }),
+      VNFOptions: state => state.VnfpnfSuite.VNFOptions,
+      SystemOptions: state => state.VnfpnfSuite.SystemOptions,
+      SuiteSingleData: state => state.VnfpnfSuite.SuiteSingleData,
+      currentTab: state => state.VnfpnfSuite.currentTab,
+      visible: state => state.VnfpnfSuite.visible
+    })
   },
   watch: {
     visible(val) {
       if (val) {
         if (!this.isEdit) {
-          this.editUploadtextShow = false;
+          this.editUploadtextShow = false
         } else {
-          this.editUploadtextShow = true;
+          this.editUploadtextShow = true
         }
         if (this.isEdit) {
           setTimeout(() => {
@@ -238,109 +236,109 @@ export default {
               XNFType: this.SuiteSingleData.typeCH.code.toString(),
               XNFVendor: this.SuiteSingleData.vendor,
               Version: this.SuiteSingleData.version,
-              manage: this.SuiteSingleData.instrumentMgs.id,
-            });
-          }, 100);
+              manage: this.SuiteSingleData.instrumentMgs.id
+            })
+          }, 100)
         } else if (this.VNFOptions.length !== 0 && !this.isEdit) {
           // 创建时有option可选则
           setTimeout(() => {
-            this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code });
-          }, 100);
+            this.form.setFieldsValue({ XNFType: this.VNFOptions[0].code })
+          }, 100)
         } else {
           setTimeout(() => {
-            this.form.setFieldsValue({ XNFType: "" });
-          }, 100);
+            this.form.setFieldsValue({ XNFType: '' })
+          }, 100)
         }
       } else {
-        this.updateVNFTest({});
+        this.updateVNFTest({})
         this.form.setFieldsValue({
-          XNFName: "",
-          XNFType: "",
-          XNFVendor: "",
-          Version: "",
-        });
+          XNFName: '',
+          XNFType: '',
+          XNFVendor: '',
+          Version: ''
+        })
       }
     },
     VNFOptions(val) {
       if (val.length) {
-        this.spin = false;
+        this.spin = false
       }
       if (val.length !== 0 && !this.isEdit) {
-        this.initNVFTypeValue = Number(val[0].code);
+        this.initNVFTypeValue = Number(val[0].code)
       }
     },
     SystemOptions(val) {
       if (val.length && !this.isEdit) {
-        this.initManageSystemValue = val[0].id;
+        this.initManageSystemValue = val[0].id
       }
     },
     SuiteSingleData(val) {
       if (Object.keys(val).length > 0) {
-        this.initNVFTypeValue = val.type;
+        this.initNVFTypeValue = val.type
         this.currentFilename = val.fileName
           ? util.seperateStr(val.fileName)
-          : val.fileName;
-        this.uploadAliasFilename = val.fileName;
-        this.initManageSystemValue = val.instrumentMgs.id;
-        this.spin = false;
+          : val.fileName
+        this.uploadAliasFilename = val.fileName
+        this.initManageSystemValue = val.instrumentMgs.id
+        this.spin = false
       }
     },
     currentTab() {
-      this.initNVFTypeValue = null;
-    },
+      this.initNVFTypeValue = null
+    }
   },
   methods: {
-    ...mapActions("VnfpnfSuite", [
-      "getSystemOptions",
-      "clearOptions",
-      "uploadVNFFile",
-      "createOrEditTestMeter",
+    ...mapActions('VnfpnfSuite', [
+      'getSystemOptions',
+      'clearOptions',
+      'uploadVNFFile',
+      'createOrEditTestMeter'
     ]),
-    ...mapMutations("VnfpnfSuite", [
-      "updateVNFTest",
-      "updateVisible",
-      "updateVNFOptions",
+    ...mapMutations('VnfpnfSuite', [
+      'updateVNFTest',
+      'updateVisible',
+      'updateVNFOptions'
     ]),
     handleChange(info) {
-      this.editUploadtextShow = false;
-      if (info.file.response && typeof info.file.response === "object") {
-        const filename = info.file.response.body.filename;
-        this.uploadAliasFilename = filename ? filename : "";
+      this.editUploadtextShow = false
+      if (info.file.response && typeof info.file.response === 'object') {
+        const filename = info.file.response.body.filename
+        this.uploadAliasFilename = filename ? filename : ''
       } else {
-        this.uploadAliasFilename = "";
+        this.uploadAliasFilename = ''
       }
     },
     normFile(e) {
       if (Array.isArray(e)) {
-        return e;
+        return e
       }
       if (e.fileList.length > 1) {
-        e.fileList.splice(0, e.fileList.length - 1);
+        e.fileList.splice(0, e.fileList.length - 1)
       }
-      return e && e.fileList;
+      return e && e.fileList
     },
     handleRemove() {
       if (this.disabled) {
-        axiosCancelToken("/portal/business/files/upload").then((res) => {
+        axiosCancelToken('/portal/business/files/upload').then(res => {
           if (res.code === 200) {
-            this.disabled = false;
-            this.$message.success("Cancel successfully.");
+            this.disabled = false
+            this.$message.success('Cancel successfully.')
           } else {
-            this.$message.error("Cancel failed.");
+            this.$message.error('Cancel failed.')
           }
-        });
+        })
       }
     },
 
     handleCancel() {
-      this.updateVisible(false);
+      this.updateVisible(false)
       if (!this.disabled) {
-        this.handleRemove();
+        this.handleRemove()
       }
-      this.form.resetFields();
+      this.form.resetFields()
     },
     handleSubmit(e) {
-      e.preventDefault();
+      e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
           // const formData = new FormData();
@@ -350,9 +348,9 @@ export default {
             type: values.XNFType,
             vendor: values.XNFVendor,
             version: values.Version,
-            fileName: this.uploadAliasFilename,
-          };
-          console.log(data);
+            fileName: this.uploadAliasFilename
+          }
+          console.log(data)
           // if (!data.fileName) {
           //   this.$message.error("Upload file error. Please upload again!");
           //   return;
@@ -371,32 +369,32 @@ export default {
           //   }
           // }
           if (this.currentTab === 101) {
-            Object.assign(data, { instrumentMgsId: values.manage });
+            Object.assign(data, { instrumentMgsId: values.manage })
           }
           // console.log(data, "===>params");
-          if (this.isEdit) data.id = this.SuiteSingleData.id;
-          this.submitFormData(data);
+          if (this.isEdit) data.id = this.SuiteSingleData.id
+          this.submitFormData(data)
         }
-      });
+      })
     },
     submitFormData(data) {
       this.createOrEditTestMeter({
         isEdit: this.isEdit,
         data,
-        message: this.$message.success("Sumbit successfully"),
+        message: this.$message.success('Sumbit successfully')
       }).then(
         () => {
-          this.updateVisible(false);
-          this.form.resetFields();
-          this.updateVNFTest({});
+          this.updateVisible(false)
+          this.form.resetFields()
+          this.updateVNFTest({})
         },
         () => {
-          this.updateVisible(false);
+          this.updateVisible(false)
         }
-      );
-    },
-  },
-};
+      )
+    }
+  }
+}
 </script>
 
 <style scoped>
