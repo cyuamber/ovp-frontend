@@ -14,10 +14,10 @@
   </div>
 </template>
 <script>
-import { Chart } from "highcharts-vue";
-import { mapState } from "vuex";
+import { Chart } from 'highcharts-vue'
+import { mapState } from 'vuex'
 export default {
-  name: "Doughnut",
+  name: 'Doughnut',
   components: {
     doughnutchart: Chart
   },
@@ -31,17 +31,17 @@ export default {
   watch: {
     SUTAmountData(val) {
       if (val) {
-        this.initSUTAmount();
+        this.initSUTAmount()
       }
     },
     jobAmountData(val) {
       if (val) {
-        this.initjobAmount();
+        this.initjobAmount()
       }
     },
     testEnvAmountData(val) {
       if (val) {
-        this.initTestEnvAmount();
+        this.initTestEnvAmount()
       }
     }
   },
@@ -52,34 +52,34 @@ export default {
           plotBackgroundColor: null,
           plotBorderWidth: null,
           plotShadow: false,
-          type: "pie"
+          type: 'pie'
         },
         title: {
-          text: "SUT Amount"
+          text: 'SUT Amount'
         },
         credits: {
           enabled: false
         },
         legend: {
-          align: "center",
-          verticalAlign: "top",
+          align: 'center',
+          verticalAlign: 'top',
           borderWidth: 0
         },
         tooltip: {
           pointFormat:
-            "Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}"
+            'Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}'
         },
         plotOptions: {
           pie: {
             allowPointSelect: true,
-            cursor: "pointer",
+            cursor: 'pointer',
             dataLabels: {
               enabled: true,
-              format: "<b>{point.name}</b>: {point.y:1f}<br>",
+              format: '<b>{point.name}</b>: {point.y:1f}<br>',
               distance: -45,
               filter: {
-                property: "percentage",
-                operator: ">",
+                property: 'percentage',
+                operator: '>',
                 value: 4
               }
             },
@@ -88,11 +88,11 @@ export default {
         },
         series: [
           {
-            name: "SUT Amount",
+            name: 'SUT Amount',
             data: this.SUTAmountData
           }
         ]
-      };
+      }
     },
     initjobAmount() {
       this.chartJobs = {
@@ -100,35 +100,35 @@ export default {
           plotBackgroundColor: null,
           plotBorderWidth: null,
           plotShadow: false,
-          type: "pie"
+          type: 'pie'
         },
         title: {
-          text: "Jobs Amount"
+          text: 'Jobs Amount'
         },
         credits: {
           enabled: false
         },
         tooltip: {
           pointFormat:
-            "Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}"
+            'Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}'
         },
         legend: {
-          align: "center",
-          verticalAlign: "top",
+          align: 'center',
+          verticalAlign: 'top',
           borderWidth: 0
         },
         plotOptions: {
           pie: {
             allowPointSelect: true,
             showInLegend: true,
-            cursor: "pointer",
+            cursor: 'pointer',
             dataLabels: {
               enabled: true,
-              format: "<b>{point.name}</b>: {point.y:1f}<br>",
+              format: '<b>{point.name}</b>: {point.y:1f}<br>',
               distance: -45,
               filter: {
-                property: "percentage",
-                operator: ">",
+                property: 'percentage',
+                operator: '>',
                 value: 4
               }
             }
@@ -136,12 +136,12 @@ export default {
         },
         series: [
           {
-            name: "Jobs Amount",
+            name: 'Jobs Amount',
             allowPointSelect: true,
             data: this.jobAmountData
           }
         ]
-      };
+      }
     },
     initTestEnvAmount() {
       this.chartEnv = {
@@ -149,35 +149,35 @@ export default {
           plotBackgroundColor: null,
           plotBorderWidth: null,
           plotShadow: false,
-          type: "pie"
+          type: 'pie'
         },
         title: {
-          text: "Test ENV Amount"
+          text: 'Test ENV Amount'
         },
         credits: {
           enabled: false
         },
         tooltip: {
           pointFormat:
-            "Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}"
+            'Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}'
         },
         legend: {
-          align: "center",
-          verticalAlign: "top",
+          align: 'center',
+          verticalAlign: 'top',
           borderWidth: 0
         },
         plotOptions: {
           pie: {
             allowPointSelect: true,
             showInLegend: true,
-            cursor: "pointer",
+            cursor: 'pointer',
             dataLabels: {
               enabled: true,
-              format: "<b>{point.name}</b>: {point.y:1f}<br>",
+              format: '<b>{point.name}</b>: {point.y:1f}<br>',
               distance: -45,
               filter: {
-                property: "percentage",
-                operator: ">",
+                property: 'percentage',
+                operator: '>',
                 value: 4
               }
             }
@@ -185,11 +185,11 @@ export default {
         },
         series: [
           {
-            name: "Test ENV Amount",
+            name: 'Test ENV Amount',
             data: this.testEnvAmountData
           }
         ]
-      };
+      }
     }
   },
   data() {
@@ -197,9 +197,9 @@ export default {
       chartSut: {},
       chartJobs: {},
       chartEnv: {}
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

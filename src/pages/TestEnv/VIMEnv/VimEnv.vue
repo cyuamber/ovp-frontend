@@ -11,18 +11,18 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
-import Loading from "../../../components/Loading/Loading";
-import CreateOrEditModal from "./CreateOrEditModal";
-import DataTable from "./DataTable";
-import Toolbar from "./Toolbar";
+import { mapState, mapActions, mapMutations } from 'vuex'
+import Loading from '../../../components/Loading/Loading'
+import CreateOrEditModal from './CreateOrEditModal'
+import DataTable from './DataTable'
+import Toolbar from './Toolbar'
 
 export default {
-  name: "VimEnv",
+  name: 'VimEnv',
   data() {
     return {
-      tabs: ["VIM ENV", "VNFM ENV", "MANO ENV"],
-    };
+      tabs: ['VIM ENV', 'VNFM ENV', 'MANO ENV']
+    }
   },
   computed: {
     ...mapState({
@@ -38,35 +38,35 @@ export default {
     DataTable
   },
   mounted() {
-    this.initVimEnvTable();
+    this.initVimEnvTable()
   },
   destroyed() {
-    this.changeTab("VIM ENV");
+    this.changeTab('VIM ENV')
   },
   methods: {
-    ...mapActions("testENV", [
-      "getTableData",
-      "getCloudTypeOptions",
-      "getMANOTypeOptions"
+    ...mapActions('testENV', [
+      'getTableData',
+      'getCloudTypeOptions',
+      'getMANOTypeOptions'
     ]),
-    ...mapMutations("testENV", ["changeTab"]),
-    ...mapMutations("datePicker", ["setDateTime"]),
-    ...mapMutations("searching", ["setKeyword"]),
+    ...mapMutations('testENV', ['changeTab']),
+    ...mapMutations('datePicker', ['setDateTime']),
+    ...mapMutations('searching', ['setKeyword']),
     initVimEnvTable() {
-      this.getCloudTypeOptions();
-      let paramsObj = {};
-      this.getTableData({ paramsObj, isFilter: false });
+      this.getCloudTypeOptions()
+      let paramsObj = {}
+      this.getTableData({ paramsObj, isFilter: false })
     },
     handleTabsChange(key) {
-      this.changeTab(key);
-      this.setKeyword("");
-      this.setDateTime("");
-      let paramsObj = {};
-      this.getTableData({ paramsObj, isFilter: false });
-      if (key === "MANO ENV") {
-        this.getMANOTypeOptions();
+      this.changeTab(key)
+      this.setKeyword('')
+      this.setDateTime('')
+      let paramsObj = {}
+      this.getTableData({ paramsObj, isFilter: false })
+      if (key === 'MANO ENV') {
+        this.getMANOTypeOptions()
       }
     }
   }
-};
+}
 </script>

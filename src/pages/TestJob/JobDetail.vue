@@ -29,24 +29,33 @@
               <a-col :span="9">
                 <!-- <h2 class="job-detail__info-title">Test Job Info</h2> -->
                 <div
-                  v-for="(item,index) in infoList"
+                  v-for="(item, index) in infoList"
                   :key="index"
                   class="job-detail__item-container"
                 >
-                  <p class="job-detail__item-title">{{item.title}}:</p>
+                  <p class="job-detail__item-title">{{ item.title }}:</p>
                   <p class="job-detail__item-text">
-                    {{item.title !== 'SUT Name' && item.title !== 'Test Speciflcation'?currentJob[item.dataIndex]:(item.title === 'SUT Name'?currentJob.sut.name:currentJob.spec.name)}}
+                    {{
+                      item.title !== 'SUT Name' &&
+                      item.title !== 'Test Speciflcation'
+                        ? currentJob[item.dataIndex]
+                        : item.title === 'SUT Name'
+                        ? currentJob.sut.name
+                        : currentJob.spec.name
+                    }}
                     <span
                       v-if="item.title === 'SUT Name' && statusText === 'DONE'"
                     >
                       <a-divider type="vertical" />
-                      <a-button type="link" size="small" @click="jumpToUpload">Upload SUT</a-button>
+                      <a-button type="link" size="small" @click="jumpToUpload"
+                        >Upload SUT</a-button
+                      >
                     </span>
                   </p>
                 </div>
                 <div class="job-detail__item-container">
                   <p class="job-detail__item-title">Test Job Status:</p>
-                  <p class="job-detail__item-text">{{this.statusText}}</p>
+                  <p class="job-detail__item-text">{{ this.statusText }}</p>
                 </div>
               </a-col>
               <a-col :span="10" :offset="2">
@@ -60,10 +69,10 @@
             <a-card-grid style="width: 100%" :hoverable="false">
               <h2>Test Job Detail</h2>
               <div class="job-detail__test-env">
-                <p>{{currentJob.remark}}</p>
+                <p>{{ currentJob.remark }}</p>
               </div>
             </a-card-grid>
-            <div v-if="detailTestCase.length >0">
+            <div v-if="detailTestCase.length > 0">
               <a-table
                 class="detailtestcase-table"
                 :columns="columns"
@@ -74,10 +83,10 @@
                 :expandedRowKeys="expandedRowKeys"
                 @expand="caseSecondaryTableShow"
               >
-                <span slot="caseStatus" slot-scope="caseStatus,record">
+                <span slot="caseStatus" slot-scope="caseStatus, record">
                   <a-tooltip placement="top">
                     <template slot="title">
-                      <span>{{caseStatus}}</span>
+                      <span>{{ caseStatus }}</span>
                     </template>
                     <span
                       @click="pasteReason(record)"
@@ -91,13 +100,21 @@
                   slot-scope="record"
                   slot="expandedRowRender"
                   :loading="tableLoading"
-                  :columns="currentJob.sut.type !== seagullType? innerColumns : testJobDetaiInnerlInstrumentColumns"
+                  :columns="
+                    currentJob.sut.type !== seagullType
+                      ? innerColumns
+                      : testJobDetaiInnerlInstrumentColumns
+                  "
                   :dataSource="record.caseMgt"
                   rowKey="executionId"
                   size="default"
                 >
-                  <span slot="status" slot-scope="status" v-if="currentJob.sut.type !== seagullType">
-                    {{status}}
+                  <span
+                    slot="status"
+                    slot-scope="status"
+                    v-if="currentJob.sut.type !== seagullType"
+                  >
+                    {{ status }}
                     <!--<a-tooltip placement="top">-->
                     <!--<template slot="title">-->
                     <!--<span>{{status}}</span>-->
@@ -116,33 +133,33 @@
 </template>
 
 <script>
-import testCasePie from "./testCasePie";
-import Loading from "../../components/Loading/Loading";
+import testCasePie from './testCasePie'
+import Loading from '../../components/Loading/Loading'
 import {
   testJobColumns,
   testJobDetailCaseListColumns,
   testJobDetailCaseChildColumns,
   testJobDetailInstrumentColumns
-} from "./constants";
-import { mapState, mapMutations, mapActions } from "vuex";
+} from './constants'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
-  name: "JobDetail",
+  name: 'JobDetail',
   components: { testCasePie, Loading },
   data() {
     return {
       columns: testJobDetailCaseListColumns,
       innerColumns: testJobDetailCaseChildColumns,
       testJobDetaiInnerlInstrumentColumns: testJobDetailInstrumentColumns, // 2020.12.01 新增的子表格配置项
-      statusColor: "",
-      stompClient: "",
-      timer: "",
-      progressTimer: "",
+      statusColor: '',
+      stompClient: '',
+      timer: '',
+      progressTimer: '',
       caseChildlistTimer: [],
-      progressStatus: "normal",
-      sutvalidLind: "http://192.168.235.14:8080/onapui/vnfmarket",
+      progressStatus: 'normal',
+      sutvalidLind: 'http://192.168.235.14:8080/onapui/vnfmarket',
       seagullType: 101009,
       seagullSubData: []
-    };
+    }
   },
   computed: {
     ...mapState({
@@ -156,136 +173,137 @@ export default {
       expandedRowKeys: state => state.testJob.expandedRowKeys
     }),
     infoList() {
-      let list = [];
+      let list = []
       testJobColumns.forEach(item => {
-        if (item.title !== "Status" && item.title !== "Action") {
-          list.push(item);
+        if (item.title !== 'Status' && item.title !== 'Action') {
+          list.push(item)
         }
-      });
-      return list;
+      })
+      return list
     },
     currentJob() {
       console.log(JSON.parse(this.$route.query.detail).sut.type)
-      return JSON.parse(this.$route.query.detail);
+      return JSON.parse(this.$route.query.detail)
     }
   },
   watch: {
     percent(val) {
       if (val === 100) {
-        clearInterval(this.progressTimer);
+        clearInterval(this.progressTimer)
       }
       this.progressStatus =
-        val === undefined || val === null || val !== 100 ? "normal" : "success";
+        val === undefined || val === null || val !== 100 ? 'normal' : 'success'
     }
   },
   created() {
-    this.changeComponent(true);
+    this.changeComponent(true)
     if (!this.$store.state.router.breadcrumbArr.length) {
-      this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
-      this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+      this.$store.commit('setCurrentMenu', ['Test Job MGT'])
+      this.$store.commit('setBreadcrumb', ['Test Job MGT'])
     }
   },
   mounted() {
-    this.initJobDetail();
+    this.initJobDetail()
   },
   methods: {
-    ...mapActions("testJob", [
-      "getProgress",
-      "getTestFail",
-      "getTestJobCaseExecutions",
-      "jobVNFCsarsUplaod"
+    ...mapActions('testJob', [
+      'getProgress',
+      'getTestFail',
+      'getTestJobCaseExecutions',
+      'jobVNFCsarsUplaod'
     ]),
-    ...mapMutations("testJob", [
-      "changeComponent",
-      "updateProgress",
-      "updateExecutionStartTime",
-      "updateDetailTestCase",
-      "updateTestCasePieData",
-      "updateDetailLoading",
-      "updateFailDetail",
-      "updateExpandedRowKeys",
-      "clearexpandedRowKeys"
+    ...mapMutations('testJob', [
+      'changeComponent',
+      'updateProgress',
+      'updateExecutionStartTime',
+      'updateDetailTestCase',
+      'updateTestCasePieData',
+      'updateDetailLoading',
+      'updateFailDetail',
+      'updateExpandedRowKeys',
+      'clearexpandedRowKeys'
     ]),
     initJobDetail() {
       console.log('hello')
-      if (this.currentJob.jobStatus !== "CREATED") {
+      if (this.currentJob.jobStatus !== 'CREATED') {
         this.getProgress({
           jobId: this.currentJob.jobId,
           message: this.$message
-        });
+        })
         this.progressTimer = setInterval(() => {
           console.log('h')
           this.getProgress({
             jobId: this.currentJob.jobId,
             message: this.$message
-          });
-        }, 30000);
+          })
+        }, 30000)
       } else {
-        this.updateDetailLoading(false);
+        this.updateDetailLoading(false)
       }
     },
     handleBack() {
-      clearInterval(this.progressTimer);
+      clearInterval(this.progressTimer)
       this.caseChildlistTimer.map(item => {
-        clearInterval(item);
-      });
-      this.clearexpandedRowKeys();
-      this.updateExecutionStartTime("");
-      this.updateDetailLoading(true);
-      this.changeComponent(false);
-      this.updateDetailTestCase([]);
+        clearInterval(item)
+      })
+      this.clearexpandedRowKeys()
+      this.updateExecutionStartTime('')
+      this.updateDetailLoading(true)
+      this.changeComponent(false)
+      this.updateDetailTestCase([])
       this.updateTestCasePieData([
-        { name: "DONE", y: 0, color: "#cae76e" },
-        { name: "FAILED", y: 0, color: "#e94e75" }
-      ]);
+        { name: 'DONE', y: 0, color: '#cae76e' },
+        { name: 'FAILED', y: 0, color: '#e94e75' }
+      ])
       this.updateProgress({
         percent: 0,
-        status: ""
-      });
-      this.$router.push("/testjobmgt");
+        status: ''
+      })
+      this.$router.push('/testjobmgt')
     },
     getCaseStatusStyle(status) {
       let color =
-        status === "STARTED"
-          ? "#979797"
-          : status === "RUNNING" || status === "in-progress"
-          ? "#F5A623"
-          : status === "CREATED"
-          ? "#78E5D7"
-          : status === "DONE" || status === "completed"
-          ? "#7ED321"
-          : "#D0021B";
+        status === 'STARTED'
+          ? '#979797'
+          : status === 'RUNNING' || status === 'in-progress'
+          ? '#F5A623'
+          : status === 'CREATED'
+          ? '#78E5D7'
+          : status === 'DONE' || status === 'completed'
+          ? '#7ED321'
+          : '#D0021B'
       return {
         backgroundColor: color,
-        cursor: "pointer"
-      };
+        cursor: 'pointer'
+      }
     },
     pasteReason(item) {
-      this.getTestFail(item);
-      this.$message.success(this.$t("T.Failed Reason"));
+      this.getTestFail(item)
+      this.$message.success(this.$t('T.Failed Reason'))
     },
     handleRefresh() {
-      this.getProgress({ jobId: this.currentJob.jobId });
+      this.getProgress({ jobId: this.currentJob.jobId })
     },
     jumpToUpload() {
       this.jobVNFCsarsUplaod({
         jobId: this.currentJob.jobId,
         sutvalidLind: this.sutvalidLind,
         confirm: this.$confirm
-      });
+      })
       // window.open(this.sutvalidLind, "_blank");
     },
     caseSecondaryTableShow(expanded, record) {
       // console.log(expanded, record, "----expanded, record");
-      if (expanded) { // record是展开那一项的所有信息
-        console.log('r', record)  
+      if (expanded) {
+        // record是展开那一项的所有信息
+        console.log('r', record)
         this.getTestJobCaseExecutions({
           record,
           expanded,
           jobId: this.currentJob.jobId,
           message: this.$message,
           isSeagull: this.currentJob.sut.type === this.seagullType
-        });
+        })
         // if (this.currentJob.sut.type === this.seagullType) { // 海鸥
         //   this.caseChildlistTimer[record.index] = setInterval(() => {
         //       this.getTestJobCaseExecutions({
@@ -313,45 +331,45 @@ export default {
         // }
       } else {
         if (this.currentJob.sut.type === this.seagullType) {
-          clearInterval(this.caseChildlistTimer[record.index]);
+          clearInterval(this.caseChildlistTimer[record.index])
         } else {
           if (
-              record.caseStatus !== "DONE" &&
-              record.caseStatus !== "FAILED" &&
-              record.caseStatus !== "STARTED"
-            ) {
-              clearInterval(this.caseChildlistTimer[record.index]);
+            record.caseStatus !== 'DONE' &&
+            record.caseStatus !== 'FAILED' &&
+            record.caseStatus !== 'STARTED'
+          ) {
+            clearInterval(this.caseChildlistTimer[record.index])
           }
         }
         this.updateExpandedRowKeys({
           key: record.index,
           expanded
-        });
+        })
       }
     }
   },
   beforeDestroy: function() {
-    clearInterval(this.progressTimer);
+    clearInterval(this.progressTimer)
     this.caseChildlistTimer.map(item => {
-      clearInterval(item);
-    });
-    this.clearexpandedRowKeys();
-    this.updateExecutionStartTime("");
-    this.changeComponent(false);
-    this.updateDetailTestCase([]);
+      clearInterval(item)
+    })
+    this.clearexpandedRowKeys()
+    this.updateExecutionStartTime('')
+    this.changeComponent(false)
+    this.updateDetailTestCase([])
     this.updateTestCasePieData([
-      { name: "DONE", y: 0, color: "#cae76e" },
-      { name: "FAILED", y: 0, color: "#e94e75" }
-    ]);
+      { name: 'DONE', y: 0, color: '#cae76e' },
+      { name: 'FAILED', y: 0, color: '#e94e75' }
+    ])
     this.updateProgress({
       percent: 0,
-      status: ""
-    });
+      status: ''
+    })
   }
-};
+}
 </script>
 
-<style lang="less" >
+<style lang="less">
 .job-detail {
   .job-detail__back-btn {
     display: inline-block;

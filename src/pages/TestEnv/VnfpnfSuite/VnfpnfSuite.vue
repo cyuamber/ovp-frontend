@@ -2,7 +2,11 @@
   <div class="test-ins__container">
     <Loading :loadingMessage="loadingMessage" />
     <a-tabs @change="handleTabsChanges">
-      <a-tab-pane v-for="tab in tabs" :key="tab.val" :tab="tab.key"></a-tab-pane>
+      <a-tab-pane
+        v-for="tab in tabs"
+        :key="tab.val"
+        :tab="tab.key"
+      ></a-tab-pane>
     </a-tabs>
     <Toolbar />
     <DataTable />
@@ -11,15 +15,15 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
-import { PackageMGTTabs } from "./constant";
-import Toolbar from "./Toolbar";
-import DataTable from "./DataTable";
-import xNFCreateOrEdit from "./VnfpnfCreateOrEdit";
-import Loading from "../../../components/Loading/Loading";
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { PackageMGTTabs } from './constant'
+import Toolbar from './Toolbar'
+import DataTable from './DataTable'
+import xNFCreateOrEdit from './VnfpnfCreateOrEdit'
+import Loading from '../../../components/Loading/Loading'
 
 export default {
-  name: "VnfpnfSuite",
+  name: 'VnfpnfSuite',
   components: {
     DataTable,
     Toolbar,
@@ -30,8 +34,8 @@ export default {
     return {
       PackageMGTTabs,
       tabs: PackageMGTTabs,
-      currentPage: "VNF/PNFSuiteMGT"
-    };
+      currentPage: 'VNF/PNFSuiteMGT'
+    }
   },
   computed: {
     ...mapState({
@@ -47,32 +51,31 @@ export default {
   watch: {
     currentTab(val) {
       if (val) {
-        this.getVNFOptions();
+        this.getVNFOptions()
       }
     }
   },
   mounted() {
-    this.initVnfPnfSuiteTable();
+    this.initVnfPnfSuiteTable()
   },
   methods: {
-    ...mapActions("VnfpnfSuite", ["getTableData", "getVNFOptions"]),
-    ...mapMutations("VnfpnfSuite", ["changeTab"]),
-    ...mapMutations("searching", ["setKeyword"]),
-      ...mapMutations("datePicker", ["setDateTime"]),
-      initVnfPnfSuiteTable() {
-      this.getVNFOptions();
-      this.getTableData({});
+    ...mapActions('VnfpnfSuite', ['getTableData', 'getVNFOptions']),
+    ...mapMutations('VnfpnfSuite', ['changeTab']),
+    ...mapMutations('searching', ['setKeyword']),
+    ...mapMutations('datePicker', ['setDateTime']),
+    initVnfPnfSuiteTable() {
+      this.getVNFOptions()
+      this.getTableData({})
     },
     handleTabsChanges(key) {
-      this.setKeyword("");
-      this.setDateTime("");
-      this.changeTab(key);
-      this.getTableData({});
+      this.setKeyword('')
+      this.setDateTime('')
+      this.changeTab(key)
+      this.getTableData({})
     }
   },
   destroyed() {
-    this.changeTab(101);
+    this.changeTab(101)
   }
-};
+}
 </script>
-

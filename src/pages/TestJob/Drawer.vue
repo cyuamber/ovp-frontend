@@ -22,8 +22,8 @@
             keyList[i],
             {
               rules: [{ required: true, message: item + ' is required' }],
-              initialValue: testJobSingleData.jobName,
-            },
+              initialValue: testJobSingleData.jobName
+            }
           ]"
         />
         <a-textarea
@@ -32,8 +32,8 @@
             keyList[i],
             {
               rules: [{ required: true, message: item + ' is required' }],
-              initialValue: testJobSingleData.remark,
-            },
+              initialValue: testJobSingleData.remark
+            }
           ]"
           :auto-size="{ minRows: 3, maxRows: 10 }"
         />
@@ -41,13 +41,13 @@
           v-else-if="item === 'SUT Type'"
           v-decorator="[
             keyList[i],
-            { rules: [{ required: true }], initialValue: initSUTType.name },
+            { rules: [{ required: true }], initialValue: initSUTType.name }
           ]"
-          @select="(key) => selectSUTType(key)"
+          @select="key => selectSUTType(key)"
           class="form__select--width"
           :getPopupContainer="
-            (triggerNode) => {
-              return triggerNode.parentNode || document.body;
+            triggerNode => {
+              return triggerNode.parentNode || document.body
             }
           "
         >
@@ -64,13 +64,13 @@
           class="form__select--width"
           v-decorator="[
             keyList[i],
-            { rules: [{ required: true }], initialValue: initSUTName.name },
+            { rules: [{ required: true }], initialValue: initSUTName.name }
           ]"
           :title="!getSUTNames ? 'Please select SUT Type first' : ''"
-          @select="(key) => selectSUTName(key)"
+          @select="key => selectSUTName(key)"
           :getPopupContainer="
-            (triggerNode) => {
-              return triggerNode.parentNode || document.body;
+            triggerNode => {
+              return triggerNode.parentNode || document.body
             }
           "
         >
@@ -89,10 +89,10 @@
             keyList[i],
             {
               rules: [{ required: true }],
-              initialValue: initSpecification.name,
-            },
+              initialValue: initSpecification.name
+            }
           ]"
-          @select="(key) => selectSpecification(key)"
+          @select="key => selectSpecification(key)"
           :title="
             !getSUTNames
               ? 'Please select SUT Type and SUT Name first'
@@ -101,8 +101,8 @@
               : ''
           "
           :getPopupContainer="
-            (triggerNode) => {
-              return triggerNode.parentNode || document.body;
+            triggerNode => {
+              return triggerNode.parentNode || document.body
             }
           "
         >
@@ -119,8 +119,8 @@
           v-decorator="[keyList[i], { initialValue: initTestVNFMENV.name }]"
           class="form__select--width"
           :getPopupContainer="
-            (triggerNode) => {
-              return triggerNode.parentNode || document.body;
+            triggerNode => {
+              return triggerNode.parentNode || document.body
             }
           "
         >
@@ -136,8 +136,8 @@
           v-decorator="[keyList[i], { initialValue: initTestVIMENV.name }]"
           class="form__select--width"
           :getPopupContainer="
-            (triggerNode) => {
-              return triggerNode.parentNode || document.body;
+            triggerNode => {
+              return triggerNode.parentNode || document.body
             }
           "
         >
@@ -153,8 +153,8 @@
           v-decorator="[keyList[i], { initialValue: initMANOENV.name }]"
           class="form__select--width"
           :getPopupContainer="
-            (triggerNode) => {
-              return triggerNode.parentNode || document.body;
+            triggerNode => {
+              return triggerNode.parentNode || document.body
             }
           "
         >
@@ -174,8 +174,8 @@
           style="width: 200px"
           @change="onChangeTestInstrument"
           :getPopupContainer="
-            (triggerNode) => {
-              return triggerNode.parentNode || document.body;
+            triggerNode => {
+              return triggerNode.parentNode || document.body
             }
           "
         >
@@ -225,11 +225,11 @@
                   rules: [
                     {
                       required: true,
-                      message: 'At least one test case to choose',
-                    },
+                      message: 'At least one test case to choose'
+                    }
                   ],
-                  initialValue: initcheckboxGroup,
-                },
+                  initialValue: initcheckboxGroup
+                }
               ]"
               @change="onChange"
             >
@@ -257,7 +257,7 @@
                   <a-icon
                     v-if="
                       initcheckboxGroup.includes(item.id) &&
-                      cheangeTestInstrument.length > 0
+                        cheangeTestInstrument.length > 0
                     "
                     type="unordered-list"
                     class="form__info-cursor"
@@ -266,7 +266,7 @@
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <CaseParams :isEdit="isEdit" @updateSingleCase = "updateSingleCase"/>
+            <CaseParams :isEdit="isEdit" @updateSingleCase="updateSingleCase" />
           </a-form-item>
         </div>
       </a-spin>
@@ -281,93 +281,95 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
-import { formList } from "./constants";
-import CaseParams from "./CaseParams";
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { formList } from './constants'
+import CaseParams from './CaseParams'
 export default {
-  props: ["isShow", "isEdit"],
+  props: ['isShow', 'isEdit'],
   components: { CaseParams },
   data() {
     return {
       visible: this.isShow,
-      title: "Create Test Job",
+      title: 'Create Test Job',
       formList,
       keyList: [],
       form: this.$form.createForm(this),
-      selectedSUTType: "",
-      selectedSUTNameId: "",
-      selectedSUTNameType: "",
-      selectedSUTNames: "",
-      selectedSUTNameAdress: "",
-      selectedSpecification: "",
-      oldInstrumentList:[],
+      selectedSUTType: '',
+      selectedSUTNameId: '',
+      selectedSUTNameType: '',
+      selectedSUTNames: '',
+      selectedSUTNameAdress: '',
+      selectedSpecification: '',
+      oldInstrumentList: [],
       testCaseStash: [], // test cases列表的初始值暂存
       deleteItemIndex: [],
       initSUTType: {
         name: null,
-        code: null,
+        code: null
       },
       initSUTName: {
         name: null,
-        code: null,
+        code: null
       },
       initSpecification: {
         name: null,
-        code: null,
+        code: null
       },
       initTestVIMENV: {
         name: null,
-        code: null,
+        code: null
       },
       initTestVNFMENV: {
         name: null,
-        code: null,
+        code: null
       },
       initMANOENV: {
         name: null,
-        code: null,
+        code: null
       },
       initTestInstrument: {
         name: [],
-        code: [],
+        code: []
       },
       cheangeTestInstrument: [],
       count: 0,
       caseListPagination: {
-        onChange: (page) => {
-          console.log(page);
+        onChange: page => {
+          console.log(page)
         },
         pageSize: 5,
-        size: "small",
-        showLessItems: true,
-      },
-    };
+        size: 'small',
+        showLessItems: true
+      }
+    }
   },
   computed: {
     ...mapState({
-      SUTTypeList: (store) => store.testJob.SUTTypeList,
-      SUTNameList: (store) => store.testJob.SUTNameList,
-      VNFMOption: (store) => store.testJob.VNFMOption,
-      VIMOption: (store) => store.testJob.VIMOption,
-      MANOOption: (store) => store.testJob.MANOOption,
-      TestInstrumentOption: (store) => store.testJob.TestInstrumentOption,
-      nameSpin: (store) => store.testJob.nameSpin,
-      getSUTNames: (store) => store.testJob.getSUTName,
-      specificationSpin: (store) => store.testJob.specificationSpin,
-      getSpecifications: (store) => store.testJob.getSpecification,
-      specificationList: (store) => store.testJob.specificationList,
-      testCaseSpin: (store) => store.testJob.testCaseSpin,
-      testCaseList: (store) => store.testJob.testCaseList,
-      testJobSingleData: (state) => state.testJob.testJobSingleData,
-      testCaseCheckAll: (state) => state.testJob.testCaseCheckAll,
-      initcheckboxGroup: (state) => state.testJob.initcheckboxGroup,
-    }),
+      SUTTypeList: store => store.testJob.SUTTypeList,
+      SUTNameList: store => store.testJob.SUTNameList,
+      VNFMOption: store => store.testJob.VNFMOption,
+      VIMOption: store => store.testJob.VIMOption,
+      MANOOption: store => store.testJob.MANOOption,
+      TestInstrumentOption: store => store.testJob.TestInstrumentOption,
+      nameSpin: store => store.testJob.nameSpin,
+      getSUTNames: store => store.testJob.getSUTName,
+      specificationSpin: store => store.testJob.specificationSpin,
+      getSpecifications: store => store.testJob.getSpecification,
+      specificationList: store => store.testJob.specificationList,
+      testCaseSpin: store => store.testJob.testCaseSpin,
+      testCaseList: store => store.testJob.testCaseList,
+      testJobSingleData: state => state.testJob.testJobSingleData,
+      testCaseCheckAll: state => state.testJob.testCaseCheckAll,
+      initcheckboxGroup: state => state.testJob.initcheckboxGroup
+    })
   },
   watch: {
-    cheangeTestInstrument (val, oldVal) {
-      if (val.length < oldVal.length) { // 只要是删除过的都记录下来
+    cheangeTestInstrument(val, oldVal) {
+      if (val.length < oldVal.length) {
+        // 只要是删除过的都记录下来
         for (let i = 0; i < oldVal.length; i++) {
-          if (val.indexOf(oldVal[i]) === -1) { // 不存在
+          if (val.indexOf(oldVal[i]) === -1) {
+            // 不存在
             this.deleteItemIndex.push(i)
           }
         }
@@ -375,31 +377,32 @@ export default {
     },
     isShow(val) {
       if (val) {
-        this.visible = this.isShow;
+        this.visible = this.isShow
       }
     },
     visible(val) {
-      if (!val) { // 关闭的时候
-        this.clean();
-        this.selectedSUTType = "";
-        this.selectedSUTNameId = "";
-        this.selectedSUTNameAdress = "";
-        this.selectedSpecification = "";
-        this.cheangeTestInstrument = [];
-        this.keyList.forEach((item) => {
+      if (!val) {
+        // 关闭的时候
+        this.clean()
+        this.selectedSUTType = ''
+        this.selectedSUTNameId = ''
+        this.selectedSUTNameAdress = ''
+        this.selectedSpecification = ''
+        this.cheangeTestInstrument = []
+        this.keyList.forEach(item => {
           this.form.setFieldsValue({
-            [item]: item !== "TestInstrument" ? "" : [],
-          });
-        });
+            [item]: item !== 'TestInstrument' ? '' : []
+          })
+        })
       } else {
         // 打开的时候
-        this.count++;
+        this.count++
         this.deleteItemIndex = [] // 一打开得清空删除表，否则就保留了上次关闭modal时候清空instrument选项框时候的删除表
       }
       if (this.isEdit) {
-        this.title = "Edit Test Job";
+        this.title = 'Edit Test Job'
       } else {
-        this.title = "Create Test Job";
+        this.title = 'Create Test Job'
       }
     },
     testJobSingleData(val) {
@@ -409,69 +412,70 @@ export default {
         this.selectedSUTNameType = val.spec.subSutType
         this.initSUTType = {
           name: this.testJobSingleData.sut.flagName,
-          code: this.testJobSingleData.sut.flag,
-        };
+          code: this.testJobSingleData.sut.flag
+        }
         // 根据初始的suttype获取sutname列表, 根据出事sutname找到其在列表中对应的address
         this.getSUTName({
           SUTType: this.initSUTType.code,
-          message: this.$message,
-        });
+          message: this.$message
+        })
         this.initSUTName = {
           name: this.testJobSingleData.sut.name,
-          code: this.testJobSingleData.sut.id,
-        };
+          code: this.testJobSingleData.sut.id
+        }
         this.initSpecification = {
           name: this.testJobSingleData.spec.name,
-          code: this.testJobSingleData.spec.id,
-        };
+          code: this.testJobSingleData.spec.id
+        }
         this.initTestVIMENV = {
           name: this.testJobSingleData.vim
             ? this.testJobSingleData.vim.cloudOwner
-            : "",
-          code: this.testJobSingleData.vim ? this.testJobSingleData.vim.id : "",
-        };
+            : '',
+          code: this.testJobSingleData.vim ? this.testJobSingleData.vim.id : ''
+        }
         this.initTestVNFMENV = {
           name: this.testJobSingleData.vnfm
             ? this.testJobSingleData.vnfm.name
-            : "",
+            : '',
           code: this.testJobSingleData.vnfm
             ? this.testJobSingleData.vnfm.id
-            : "",
-        };
+            : ''
+        }
         this.initMANOENV = {
           name: this.testJobSingleData.mano
             ? this.testJobSingleData.mano.name
-            : "",
+            : '',
           code: this.testJobSingleData.mano
             ? this.testJobSingleData.mano.id
-            : "",
-        };
-        this.initTestInstrument = { 
+            : ''
+        }
+        this.initTestInstrument = {
           name: this.testJobSingleData.suites
-            ? this.testJobSingleData.suites.map((item) => {
+            ? this.testJobSingleData.suites.map(item => {
                 if (item.name && item.name !== null) {
-                  return item.name;
+                  return item.name
                 }
               })
             : [],
-          code:  this.testJobSingleData.suites
-            ? this.testJobSingleData.suites.map((item) => {
+          code: this.testJobSingleData.suites
+            ? this.testJobSingleData.suites.map(item => {
                 if (item.id && item.id !== null) {
-                  return item.id;
+                  return item.id
                 }
               })
-            : [],
-        };
-        if (this.testJobSingleData.cases.length > 0) { // 这里如果cases中有一个instrument-ids，就将其换为instrument-ids
-          let idItem = this.testJobSingleData.cases[0].parameters.find((item) => {
+            : []
+        }
+        if (this.testJobSingleData.cases.length > 0) {
+          // 这里如果cases中有一个instrument-ids，就将其换为instrument-ids
+          let idItem = this.testJobSingleData.cases[0].parameters.find(item => {
             return item.name === 'instrument-ids'
           })
           if (typeof idItem !== 'undefined') {
             this.initTestInstrument.code = idItem.value.split(';')
           }
         }
-        this.selectedSUTNames = this.testJobSingleData.sut.flagName;
-        this.selectedSUTNameAdress = this.testJobSingleData.sut.address;
+        this.selectedSUTNames = this.testJobSingleData.sut.flagName
+        this.selectedSUTNameAdress = this.testJobSingleData.sut.address
         // 最开始选择的testInstrument组合
         this.cheangeTestInstrument = this.initTestInstrument.code
         // this.oldInstrumentList = JSON.parse(JSON.stringify(this.initTestInstrument.code))
@@ -485,160 +489,166 @@ export default {
             TestSpecification: this.testJobSingleData.spec.name,
             TestVIMENV: this.testJobSingleData.vim
               ? this.testJobSingleData.vim.cloudOwner
-              : "",
+              : '',
             TestVNFMENV: this.testJobSingleData.vnfm
               ? this.testJobSingleData.vnfm.name
-              : "",
+              : '',
             TestMANOENV: this.testJobSingleData.mano
               ? this.testJobSingleData.mano.name
-              : "",
-            TestInstrument: this.initTestInstrument.code? this.initTestInstrument.code: []
-          });
+              : '',
+            TestInstrument: this.initTestInstrument.code
+              ? this.initTestInstrument.code
+              : []
+          })
         }
       }
-    },
+    }
   },
   created() {
-    this.keyList = this.formList.map((item) => {
-      item = item.replace(" ", "").replace(" ", "");
-      return item;
-    });
+    this.keyList = this.formList.map(item => {
+      item = item.replace(' ', '').replace(' ', '')
+      return item
+    })
   },
   mounted() {},
   methods: {
-    ...mapActions("testJob", [
-      "createrTestJobMGT",
-      "getSUTName",
-      "getSpecification",
-      "getTestCase",
-      "getEditTestJob",
+    ...mapActions('testJob', [
+      'createrTestJobMGT',
+      'getSUTName',
+      'getSpecification',
+      'getTestCase',
+      'getEditTestJob'
     ]),
-    ...mapMutations("testJob", [
-      "clean",
-      "setIsShow",
-      "updateInitcheckboxGroup",
-      "setCaseParamsIsShow",
-      "updateCaseParamsData",
-      "changeCaseCheckAll",
+    ...mapMutations('testJob', [
+      'clean',
+      'setIsShow',
+      'updateInitcheckboxGroup',
+      'setCaseParamsIsShow',
+      'updateCaseParamsData',
+      'changeCaseCheckAll'
     ]),
-    updateSingleCase (id) {
+    updateSingleCase(id) {
       if (this.isEdit) {
-        this.testCaseStash = this.testCaseStash.filter((item) => {return item.id !== id})
+        this.testCaseStash = this.testCaseStash.filter(item => {
+          return item.id !== id
+        })
       }
       // 关闭子弹框后删除该项初始值
       this.deleteItemIndex = []
     },
     onClose() {
-      this.visible = false;
-      this.setIsShow(false);
+      this.visible = false
+      this.setIsShow(false)
     },
-    onCheckAllChange(e) { // 全选
-      this.changeCaseCheckAll(e.target.checked);
+    onCheckAllChange(e) {
+      // 全选
+      this.changeCaseCheckAll(e.target.checked)
       let caseCheckedList = !e.target.checked
         ? []
-        : this.testCaseList.map((item) => {
-            return item.id;
-          }); // 选了全部后
-      this.updateInitcheckboxGroup(caseCheckedList);
-      this.form.setFieldsValue({'checkboxGroup': caseCheckedList})
+        : this.testCaseList.map(item => {
+            return item.id
+          }) // 选了全部后
+      this.updateInitcheckboxGroup(caseCheckedList)
+      this.form.setFieldsValue({ checkboxGroup: caseCheckedList })
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
-          let { isEdit } = this;
+          let { isEdit } = this
           if (isEdit) {
             values.SUTName =
               values.SUTName === this.initSUTName.name
-                ? this.initSUTName.name + "+" + this.initSUTName.code
-                : values.SUTName;
+                ? this.initSUTName.name + '+' + this.initSUTName.code
+                : values.SUTName
             values.TestSpecification =
               values.TestSpecification === this.initSpecification.name
                 ? this.initSpecification.code
-                : values.TestSpecification;
+                : values.TestSpecification
             values.TestVIMENV =
               values.TestVIMENV === this.initTestVIMENV.name
                 ? this.initTestVIMENV.code
-                : values.TestVIMENV;
+                : values.TestVIMENV
             values.TestVNFMENV =
               values.TestVNFMENV === this.initTestVNFMENV.name
                 ? this.initTestVNFMENV.code
-                : values.TestVNFMENV;
+                : values.TestVNFMENV
             values.TestMANOENV =
               values.TestMANOENV === this.initMANOENV.name
                 ? this.initMANOENV.code
-                : values.TestMANOENV;
+                : values.TestMANOENV
             values.TestInstrument =
               values.TestInstrument === this.initTestInstrument.name
                 ? this.initTestInstrument.code
-                : values.TestInstrument;
+                : values.TestInstrument
           }
-          let caseReqs = [];
+          let caseReqs = []
           if (this.initcheckboxGroup.length > 0) {
-              this.testCaseList.forEach((item) => {
-                if (this.initcheckboxGroup.includes(item.id)) {
-                  caseReqs.push({
-                    caseId: item.id.toString(),
-                    parameters: item.parameters,
-                  });
-                }
-              });
+            this.testCaseList.forEach(item => {
+              if (this.initcheckboxGroup.includes(item.id)) {
+                caseReqs.push({
+                  caseId: item.id.toString(),
+                  parameters: item.parameters
+                })
+              }
+            })
           }
           this.createrTestJobMGT({
             isEdit,
             values,
             caseReqs,
-            message: this.$message,
-          });
-          this.visible = false;
-          this.setIsShow(false);
+            message: this.$message
+          })
+          this.visible = false
+          this.setIsShow(false)
         }
-      });
+      })
     },
     selectSUTType(key) {
-      if (key === this.selectedSUTType) return;
-      this.selectedSUTType = key;
-      this.selectedSUTNameId = "";
-      this.selectedSpecification = "";
+      if (key === this.selectedSUTType) return
+      this.selectedSUTType = key
+      this.selectedSUTNameId = ''
+      this.selectedSpecification = ''
       this.getSUTName({
         SUTType: key,
-        message: this.$message,
-      });
-      this.form.setFieldsValue({ SUTName: "", TestSpecification: "" });
-      this.selectedSUTNames = this.SUTTypeList.find((item) => {
-        return item.code === key;
-      }).dictLabel;
+        message: this.$message
+      })
+      this.form.setFieldsValue({ SUTName: '', TestSpecification: '' })
+      this.selectedSUTNames = this.SUTTypeList.find(item => {
+        return item.code === key
+      }).dictLabel
     },
     selectSUTName(key) {
       // if (key === this.selectedSUTName) return;
-      this.selectedSUTNameId = key.split("+")[1];
+      this.selectedSUTNameId = key.split('+')[1]
       // 选择了才有，如果没选用默认值
-      this.selectedSUTNameType = Number(key.split("+")[0]);
-      this.selectedSpecification = "";
+      this.selectedSUTNameType = Number(key.split('+')[0])
+      this.selectedSpecification = ''
       this.getSpecification({
-        SUTName: key.split("+")[0],
-        message: this.$message,
-      });
-      this.form.setFieldsValue({ TestSpecification: "" });
+        SUTName: key.split('+')[0],
+        message: this.$message
+      })
+      this.form.setFieldsValue({ TestSpecification: '' })
       // 选择了才有，如果没选用默认值
       // this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
       //   return Number(item.type) === Number(key.split("+")[0]);
       // }).address;
     },
     selectSpecification(key) {
-      if (key === this.selectedSpecification) return;
-      this.selectedSpecification = key;
+      if (key === this.selectedSpecification) return
+      this.selectedSpecification = key
       let obj = {
         specId: key,
-        sutId: this.selectedSUTNameId,
-      };
+        sutId: this.selectedSUTNameId
+      }
       this.getTestCase({
         obj,
-        message: this.$message,
-      });
+        message: this.$message
+      })
     },
-    onChange(e) { // 改变checkbox时
-      this.updateInitcheckboxGroup(e);
-      this.changeCaseCheckAll(e.length === this.testCaseList.length); // boolean值
+    onChange(e) {
+      // 改变checkbox时
+      this.updateInitcheckboxGroup(e)
+      this.changeCaseCheckAll(e.length === this.testCaseList.length) // boolean值
     },
     caseParamsEdit(caseData) {
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
@@ -655,75 +665,86 @@ export default {
       // }
       // this.oldInstrumentList = JSON.parse(JSON.stringify(this.cheangeTestInstrument)) // 重新给新的旧值
       if (this.isEdit) {
-        this.testCaseStash.map((item) => {
-          if (item.id === caseData.id) { // 有初始值的case提取出来，只有第一次打开testCaseStash有该项的值，关闭时就删掉。后面打开不用初始值
-            caseData.parameters = JSON.parse(JSON.stringify(item.parameters));
+        this.testCaseStash.map(item => {
+          if (item.id === caseData.id) {
+            // 有初始值的case提取出来，只有第一次打开testCaseStash有该项的值，关闭时就删掉。后面打开不用初始值
+            caseData.parameters = JSON.parse(JSON.stringify(item.parameters))
           }
-        });
+        })
       }
       // 根据sutnametype获得地址, 直接覆盖
       if (this.selectedSUTNameType) {
-        this.selectedSUTNameAdress = this.SUTNameList.find((item) => {
-          return Number(item.type) === Number(this.selectedSUTNameType);
-        }).address;
+        this.selectedSUTNameAdress = this.SUTNameList.find(item => {
+          return Number(item.type) === Number(this.selectedSUTNameType)
+        }).address
       }
       let hasvisible =
         caseData.parameters && caseData.parameters.length > 0
-          ? caseData.parameters.map((item) => {
-              return item.visible;
+          ? caseData.parameters.map(item => {
+              return item.visible
             })
-          : [];
+          : []
       if (hasvisible.indexOf(true) < 0) {
-        this.$message.info("This testCase has no editable parameters.");
-        return false;
+        this.$message.info('This testCase has no editable parameters.')
+        return false
       }
-      caseData.parameters.forEach((item) => { // 把null都换成空字符串
-        item.value === null? item.value = '': null
-        item.defaultValue === null? item.defaultValue = '': null
+      caseData.parameters.forEach(item => {
+        // 把null都换成空字符串
+        item.value === null ? (item.value = '') : null
+        item.defaultValue === null ? (item.defaultValue = '') : null
       })
-      if (this.deleteItemIndex.length !== 0)  { // 有删除过
-            caseData.parameters.forEach((val) => {
-              if (val.name === 'instrument-ips' || val.name === 'caps' || val.name === 'number-calls') {
-                // 去除删掉的项目
-                let valueList = val.value.split(';')
-                let newValueList = []
-                for (let i = 0; i < valueList.length; i ++) {
-                  if (this.deleteItemIndex.indexOf(i) === -1) { // 在删除项目中不存在
-                    newValueList.push(valueList[i])
-                  }
-                }
-                const newValue = newValueList.join(";")
-                val.value = newValue
-                val.defaultValue = newValue
+      if (this.deleteItemIndex.length !== 0) {
+        // 有删除过
+        caseData.parameters.forEach(val => {
+          if (
+            val.name === 'instrument-ips' ||
+            val.name === 'caps' ||
+            val.name === 'number-calls'
+          ) {
+            // 去除删掉的项目
+            let valueList = val.value.split(';')
+            let newValueList = []
+            for (let i = 0; i < valueList.length; i++) {
+              if (this.deleteItemIndex.indexOf(i) === -1) {
+                // 在删除项目中不存在
+                newValueList.push(valueList[i])
               }
-            })
-        }
-      if ( // 海鸥情况下
+            }
+            const newValue = newValueList.join(';')
+            val.value = newValue
+            val.defaultValue = newValue
+          }
+        })
+      }
+      if (
+        // 海鸥情况下
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length > 0
       ) {
         if (caseData.parameters.length > 0) {
-          caseData.parameters.map((items) => {
+          caseData.parameters.map(items => {
             if (items.name === 'instrument-ids') {
-                items.value = this.cheangeTestInstrument.join(';')
-                items.defaultValue = this.cheangeTestInstrument.join(';')
-              }
-            if (items.name === "caps" || items.name === "number-calls") {
+              items.value = this.cheangeTestInstrument.join(';')
+              items.defaultValue = this.cheangeTestInstrument.join(';')
+            }
+            if (items.name === 'caps' || items.name === 'number-calls') {
               if (
                 // 空或者数量小于界面所选testInstrument,代表新增了,少多少加多少行
-                items.defaultValue === "" ||
-                items.value === "" ||
-                items.defaultValue.split(";").length <
+                items.defaultValue === '' ||
+                items.value === '' ||
+                items.defaultValue.split(';').length <
                   this.cheangeTestInstrument.length ||
-                items.value.split(";").length <
+                items.value.split(';').length <
                   this.cheangeTestInstrument.length
               ) {
-                const diff = this.cheangeTestInstrument.length - items.value.split(';').length
+                const diff =
+                  this.cheangeTestInstrument.length -
+                  items.value.split(';').length
                 for (let i = 0; i < diff; i++) {
-                  items.defaultValue = items.defaultValue + ";";
-                  items.value = items.value + ";";
+                  items.defaultValue = items.defaultValue + ';'
+                  items.value = items.value + ';'
                 }
-              } 
+              }
               // else if ( // 不是空或者比界面所选的多，用部分初始值
               //   ((items.defaultValue !== "" || items.value !== "") &&
               //     items.defaultValue.split(";").length >
@@ -742,27 +763,44 @@ export default {
               //     .join(";");
               // }
             }
-            if (items.name === "instrument-ips") {
+            if (items.name === 'instrument-ips') {
               // 取出选择的instrument的address, 按照select框内选择的顺序排列
               let instrumentAddress = []
-              this.cheangeTestInstrument.forEach((item) => {
-                this.TestInstrumentOption.forEach((val) => {
+              this.cheangeTestInstrument.forEach(item => {
+                this.TestInstrumentOption.forEach(val => {
                   if (val.id === item) {
                     instrumentAddress.push(val.instrumentMgs.address)
                   }
                 })
               })
-              if ( // 如果初始值是空, 直接按页面选择的来
-                items.defaultValue === "" ||
-                items.value === "") {
-                  items.defaultValue = instrumentAddress.join(";")
-                  items.value = instrumentAddress.join(";")
-                } else if ( // 少于界面选择的, 新增项按页面选择的来
-                items.defaultValue.split(";").length < instrumentAddress.length ||
-                items.value.split(";").length < instrumentAddress.length) {
-                  items.defaultValue = `${items.defaultValue};${instrumentAddress.slice(items.defaultValue.split(';').length, instrumentAddress.length).join(";")}` ;
-                  items.value = `${items.value};${instrumentAddress.slice(items.value.split(';').length, instrumentAddress.length).join(";")}` ;
-                } 
+              if (
+                // 如果初始值是空, 直接按页面选择的来
+                items.defaultValue === '' ||
+                items.value === ''
+              ) {
+                items.defaultValue = instrumentAddress.join(';')
+                items.value = instrumentAddress.join(';')
+              } else if (
+                // 少于界面选择的, 新增项按页面选择的来
+                items.defaultValue.split(';').length <
+                  instrumentAddress.length ||
+                items.value.split(';').length < instrumentAddress.length
+              ) {
+                items.defaultValue = `${
+                  items.defaultValue
+                };${instrumentAddress
+                  .slice(
+                    items.defaultValue.split(';').length,
+                    instrumentAddress.length
+                  )
+                  .join(';')}`
+                items.value = `${items.value};${instrumentAddress
+                  .slice(
+                    items.value.split(';').length,
+                    instrumentAddress.length
+                  )
+                  .join(';')}`
+              }
               //   else if ( // 不是空或多于页面选择的, 按部分初始值
               //   ((items.defaultValue !== "" || items.value !== "") &&
               //     items.defaultValue.split(";").length >
@@ -780,51 +818,55 @@ export default {
               //       .join(";");
               // }
             }
-            if (items.name === "sutaddress") {  // 只有海鸥有这个参数
+            if (items.name === 'sutaddress') {
+              // 只有海鸥有这个参数
               items.value = this.selectedSUTNameAdress
               items.defaultValue = this.selectedSUTNameAdress
             }
-          });
-          caseData.parameters.map((items) => {  
+          })
+          caseData.parameters.map(items => {
             if (
-              (items.name === "caps" || items.name === "instrument-ips" || items.name === "number-calls") &&
-              (items.defaultValue!==null && items.value!==null) &&
-              (items.defaultValue.split(";").length >
+              (items.name === 'caps' ||
+                items.name === 'instrument-ips' ||
+                items.name === 'number-calls') &&
+              items.defaultValue !== null &&
+              items.value !== null &&
+              (items.defaultValue.split(';').length >
                 this.cheangeTestInstrument.length ||
-                items.value.split(";").length >
+                items.value.split(';').length >
                   this.cheangeTestInstrument.length)
             ) {
               items.defaultValue =
-                items.defaultValue.charAt(items.defaultValue.length - 1) === ";"
+                items.defaultValue.charAt(items.defaultValue.length - 1) === ';'
                   ? items.defaultValue.substring(
                       0,
                       items.defaultValue.length - 1
                     )
-                  : items.defaultValue;
+                  : items.defaultValue
               items.value =
-                items.value.charAt(items.value.length - 1) === ";"
+                items.value.charAt(items.value.length - 1) === ';'
                   ? items.value.substring(0, items.value.length - 1)
-                  : items.value;
+                  : items.value
             }
-          });
+          })
         }
       } else if (
         this.selectedSUTNameType === 101009 &&
         this.cheangeTestInstrument.length === 0
       ) {
-        caseData.parameters.map((items) => {
+        caseData.parameters.map(items => {
           if (
-            items.name === "instrument-ips" ||
-            items.name === "caps" ||
-            items.name === "number-calls"
+            items.name === 'instrument-ips' ||
+            items.name === 'caps' ||
+            items.name === 'number-calls'
           ) {
-            items.defaultValue = "";
-            items.value = "";
+            items.defaultValue = ''
+            items.value = ''
           }
-        });
-      } 
-      this.updateCaseParamsData(caseData);
-      this.setCaseParamsIsShow(true);
+        })
+      }
+      this.updateCaseParamsData(caseData)
+      this.setCaseParamsIsShow(true)
     },
     onChangeTestInstrument(value) {
       // console.log(value)
@@ -864,9 +906,9 @@ export default {
       // }
       // // this.TestInstrumentOption
       // console.log(value ,i,  this.testCaseStash)
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scope>
@@ -922,4 +964,3 @@ export default {
   }
 }
 </style>
-

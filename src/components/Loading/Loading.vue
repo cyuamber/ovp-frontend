@@ -21,7 +21,12 @@
           fill="#eeeeee"
         >
           Open
-          <animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite" />
+          <animate
+            attributeName="opacity"
+            values="0;1;0"
+            dur="1.8s"
+            repeatCount="indefinite"
+          />
         </text>
         <text
           x="10"
@@ -32,7 +37,12 @@
           fill="#eeeeee"
         >
           Verification
-          <animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite" />
+          <animate
+            attributeName="opacity"
+            values="0;1;0"
+            dur="1.8s"
+            repeatCount="indefinite"
+          />
         </text>
         <text
           x="14"
@@ -43,7 +53,12 @@
           fill="#eeeeee"
         >
           Platform
-          <animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite" />
+          <animate
+            attributeName="opacity"
+            values="0;1;0"
+            dur="1.8s"
+            repeatCount="indefinite"
+          />
         </text>
         <path
           fill="#373a42"
@@ -104,16 +119,16 @@
 </template>
 <script>
 export default {
-  name: "Loading",
-  props: ["loadingMessage"],
+  name: 'Loading',
+  props: ['loadingMessage'],
   watch: {
     loadingMessage(currentState) {
-      this.showLoading = currentState.showAll;
-      this.toastOpen = currentState.toastOpen;
-      this.messageType = currentState.type;
-      this.toastMessage = currentState.toast;
+      this.showLoading = currentState.showAll
+      this.toastOpen = currentState.toastOpen
+      this.messageType = currentState.type
+      this.toastMessage = currentState.toast
       if (!currentState.show) {
-        this.hideLoading();
+        this.hideLoading()
       }
     }
   },
@@ -121,42 +136,42 @@ export default {
     return {
       showLoading: false,
       toastOpen: true,
-      messageType: "", //success, error, warn
-      toastMessage: "" //shown message when toast disappear
-    };
+      messageType: '', //success, error, warn
+      toastMessage: '' //shown message when toast disappear
+    }
   },
   methods: {
     hideLoading() {
       setTimeout(
         () => {
-          this.showLoading = false;
+          this.showLoading = false
           if (
             this.messageType &&
             this.messageType.length !== 0 &&
             this.toastOpen
           ) {
-            this.showMessage(this.messageType);
+            this.showMessage(this.messageType)
           }
         },
         this.showLoading ? 1000 : 300
-      );
+      )
     },
     showMessage(type) {
       let toastMsg = this.toastMessage.toast
         ? this.toastMessage.toast
-        : this.toastMessage;
-      if (type === "success") {
-        this.$message.success(toastMsg);
+        : this.toastMessage
+      if (type === 'success') {
+        this.$message.success(toastMsg)
       }
-      if (type === "error" || type === "failed") {
-        this.$message.error(toastMsg);
+      if (type === 'error' || type === 'failed') {
+        this.$message.error(toastMsg)
       }
-      if (type === "warn") {
-        this.$message.warning(toastMsg);
+      if (type === 'warn') {
+        this.$message.warning(toastMsg)
       }
     }
   }
-};
+}
 </script>
 <style scoped src="./Loading.css"></style>
 <style lang="less" scoped>

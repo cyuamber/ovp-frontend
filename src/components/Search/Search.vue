@@ -13,15 +13,15 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
-      keyword: "",
-      url: "",
-      key: "",
-      event: ""
-    };
+      keyword: '',
+      url: '',
+      key: '',
+      event: ''
+    }
   },
   computed: {
     ...mapState({
@@ -30,20 +30,20 @@ export default {
   },
   watch: {
     searchKeyword(val) {
-      this.keyword = val;
+      this.keyword = val
     }
   },
   methods: {
-    ...mapMutations("searching", ["setKeyword"]),
+    ...mapMutations('searching', ['setKeyword']),
     setSearchWord(e) {
-      this.setKeyword(e.target.value);
+      this.setKeyword(e.target.value)
     },
     searchTypeID() {
-        this.$emit("searchInput", this.keyword.trim(), true);
+      this.$emit('searchInput', this.keyword.trim(), true)
     }
   },
   mounted() {}
-};
+}
 </script>
 
 <style lang="less" scoped>
