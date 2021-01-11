@@ -404,7 +404,16 @@ const actions = {
                     if (isSeagull) { // 如果是海鸥要做一些处理
                         let dataSource = [] // 处理完的表格对象数组
                         if (res.body !== null && res.body) {
-                            const data = JSON.parse(res.body); // 返回的是对象字符串
+                            let data
+                            if(typeof(res.body)=='string'){
+                                 data=JSON.parse(res.body)
+                            }else{
+                                data=res.body
+                            }
+                            console.log(typeof(res.body))
+                            //  const data =res.body;
+                             // 返回的是对象字符串
+                            console.log(data)
                             for (let key in data) { // 对象中的每一个键值对就是表格里的每一行
                                 if ( key!=='total' ) {
                                     let newItem = {}

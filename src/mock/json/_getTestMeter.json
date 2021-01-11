@@ -2,7 +2,7 @@
   "code": 200,
   "message": "OK",
   "body": [{
-    "id": "538806913493188608",
+    "id": "1",
     "name": "Demo-STCv",
     "vendor": "Lehner - Kuhlman",
     "version": "73038",
@@ -32,7 +32,7 @@
       "password": null
     }
   }, {
-    "id": "538803078754287616",
+    "id": "2",
     "name": "test001",
     "vendor": "Swift - Klein",
     "version": "V1.0",
@@ -64,7 +64,7 @@
     }
   },
   {
-    "id": "538801870027177984",
+    "id": "3",
     "name": "test-upload1",
     "vendor": "Swift - Klein  ",
     "version": "V1.0",
@@ -96,7 +96,7 @@
     }
   },
   {
-    "id": "537443281953964032",
+    "id": "4",
     "name": "test-upload",
     "vendor": "Spirent",
     "version": "73038",
@@ -128,7 +128,7 @@
     }
   },
   {
-    "id": "537157148569321472",
+    "id": "5",
     "name": "Vnf Seagull",
     "vendor": "huawei",
     "version": "v1.0",
@@ -160,7 +160,7 @@
     }
   },
   {
-    "id": "536259913287548928",
+    "id": "6",
     "name": "VNF Test",
     "vendor": "Spirent",
     "version": "v1.0",
