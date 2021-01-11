@@ -1,24 +1,26 @@
 <template>
   <div class="top">
-    <a-button type="primary" @click="createOrEditPackage">Create {{packageName}} TT</a-button>
-    <Search class="search" @searchInput="VNFSuiteSearch"/>
-    <DatePicker class="calendar" @changeDate="changeDate"/>
+    <a-button type="primary" @click="createOrEditPackage"
+      >Create {{ packageName }} TT</a-button
+    >
+    <Search class="search" @searchInput="VNFSuiteSearch" />
+    <DatePicker class="calendar" @changeDate="changeDate" />
   </div>
 </template>
 
 <script>
-import Search from "../../../components/Search/Search";
-import { PackageMGTTabs } from "./constant";
-import { mapState, mapActions, mapMutations } from "vuex";
-import DatePicker from "../../../components/DatePicker/DatePicker";
+import Search from '../../../components/Search/Search'
+import { PackageMGTTabs } from './constant'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import DatePicker from '../../../components/DatePicker/DatePicker'
 export default {
-  name: "Toolbar",
+  name: 'Toolbar',
   components: { Search, DatePicker },
   data() {
     return {
-      currentPage: "VNF/PNFSuiteMGT",
-      createTime: ""
-    };
+      currentPage: 'VNF/PNFSuiteMGT',
+      createTime: ''
+    }
   },
   computed: {
     ...mapState({
@@ -27,28 +29,28 @@ export default {
       selectDateTime: state => state.datePicker.selectDateTime
     }),
     packageName: function() {
-      return PackageMGTTabs.filter(item => item.val === this.currentTab)[0].key;
+      return PackageMGTTabs.filter(item => item.val === this.currentTab)[0].key
     }
   },
 
   methods: {
-    ...mapActions("VnfpnfSuite", ["getTableData", "clearPagination"]),
-    ...mapMutations("VnfpnfSuite", [
-      "updateVisible",
-      "updateEdit",
-      "updateVNFTest"
+    ...mapActions('VnfpnfSuite', ['getTableData', 'clearPagination']),
+    ...mapMutations('VnfpnfSuite', [
+      'updateVisible',
+      'updateEdit',
+      'updateVNFTest'
     ]),
 
     createOrEditPackage() {
-      this.updateVisible(true);
-      this.updateEdit(false);
-      this.updateVNFTest({});
+      this.updateVisible(true)
+      this.updateEdit(false)
+      this.updateVNFTest({})
     },
     // Filter by creating time
     changeDate() {
-        this.createTime = this.selectDateTime;
-        this.keyword = this.searchKeyword;
-        this.VNFSuiteSearch();
+      this.createTime = this.selectDateTime
+      this.keyword = this.searchKeyword
+      this.VNFSuiteSearch()
     },
     VNFSuiteSearch() {
       let obj = Object.assign(
@@ -58,12 +60,12 @@ export default {
           name: this.searchKeyword,
           createTime: this.createTime
         }
-      );
-      this.clearPagination();
-      this.getTableData(obj);
+      )
+      this.clearPagination()
+      this.getTableData(obj)
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

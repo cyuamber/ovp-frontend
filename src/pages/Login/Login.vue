@@ -8,18 +8,18 @@
 
 <script>
 export default {
-  name: "Login",
+  name: 'Login',
   methods: {
     turntopage() {
       this.$router.push({
-        path: "/dashboard"
-      });
+        path: '/dashboard'
+      })
     },
     login() {
-      console.log("Login");
+      console.log('Login')
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .login {

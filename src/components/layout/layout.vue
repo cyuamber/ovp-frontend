@@ -19,45 +19,45 @@
   </a-layout>
 </template>
 <script>
-import Header from "./header";
-import Siderbar from "./sidebar";
+import Header from './header'
+import Siderbar from './sidebar'
 // import Footer from "./footer";
 
 const siderStyle = {
-  background: "#ffffff",
-  overflow: "auto",
-  height: "100vh",
-  width: "250px",
-  maxWidth: "250px",
-  position: "fixed",
+  background: '#ffffff',
+  overflow: 'auto',
+  height: '100vh',
+  width: '250px',
+  maxWidth: '250px',
+  position: 'fixed',
   left: 0,
   zIndex: 100,
-  borderRight: "1px solid rgb(232, 232, 232)"
-};
+  borderRight: '1px solid rgb(232, 232, 232)'
+}
 const layoutStyle = {
   layoutStyle__container: {
-    marginLeft: "250px"
+    marginLeft: '250px'
   },
   layoutStyle__header: {
-    background: "#fff",
+    background: '#fff',
     padding: 0
   },
   layoutStyle__content: {
-    marginTop: "2px",
-    overflow: "initial"
+    marginTop: '2px',
+    overflow: 'initial'
   },
   content__contentDiv: {
-    padding: "24px",
-    background: "#fff",
-    minHeight: "80vh"
+    padding: '24px',
+    background: '#fff',
+    minHeight: '80vh'
   },
   layoutStyle__footer: {
-    textAlign: "center",
-    paddingTop: "0px"
+    textAlign: 'center',
+    paddingTop: '0px'
   }
-};
+}
 export default {
-  name: "Layout",
+  name: 'Layout',
   components: {
     Header: Header,
     Siderbar: Siderbar
@@ -67,13 +67,12 @@ export default {
     return {
       siderStyle,
       layoutStyle
-    };
+    }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 #components-layout-demo-fixed-sider {
   background: rgba(255, 255, 255, 0.2);
-}
-</style>>
-
+}</style
+>>

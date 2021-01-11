@@ -15,10 +15,10 @@
   </div>
 </template>
 <script>
-import { Chart } from "highcharts-vue";
-import { mapState } from "vuex";
+import { Chart } from 'highcharts-vue'
+import { mapState } from 'vuex'
 export default {
-  name: "Circles",
+  name: 'Circles',
   components: {
     circleschart: Chart
   },
@@ -30,14 +30,14 @@ export default {
   watch: {
     testJobCirclesData(val) {
       if (val) {
-        this.initcircles();
+        this.initcircles()
       }
     }
   },
   data() {
     return {
       chartOPtions: {}
-    };
+    }
   },
   methods: {
     initcircles() {
@@ -48,50 +48,50 @@ export default {
           plotShadow: false
         },
         title: {
-          text: "Test job",
-          align: "center",
-          verticalAlign: "middle",
+          text: 'Test job',
+          align: 'center',
+          verticalAlign: 'middle',
           y: 60
         },
         credits: {
           enabled: false
         },
         tooltip: {
-          pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
         plotOptions: {
           pie: {
             allowPointSelect: true,
-            cursor: "pointer",
+            cursor: 'pointer',
             dataLabels: {
               enabled: true,
-              format: "<b>{point.name}</b>: {point.y:1f} ",
+              format: '<b>{point.name}</b>: {point.y:1f} ',
               distance: 50,
               style: {
-                color: "#333333",
+                color: '#333333',
                 fontSize: 14,
-                fontFamily:'微软雅黑'
+                fontFamily: '微软雅黑'
               }
             },
             startAngle: -90,
             endAngle: 90,
-            center: ["50%", "75%"],
-            size: "110%"
+            center: ['50%', '75%'],
+            size: '110%'
           }
         },
         series: [
           {
-            type: "pie",
-            name: "Browser share",
+            type: 'pie',
+            name: 'Browser share',
             colorByPoint: true,
-            innerSize: "50%",
+            innerSize: '50%',
             data: this.testJobCirclesData
           }
         ]
-      };
+      }
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

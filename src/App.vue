@@ -9,10 +9,10 @@
 <script>
 export default {
   mounted() {
-    document.getElementById("app").style.display = "block";
-    document.getElementById("appLoading").style.display = "none";
+    document.getElementById('app').style.display = 'block'
+    document.getElementById('appLoading').style.display = 'none'
   }
-};
+}
 </script>
 
 <style>
@@ -20,7 +20,7 @@ export default {
   display: none;
   height: 100vh;
   min-width: 1024px;
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

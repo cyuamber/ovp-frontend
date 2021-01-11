@@ -1,13 +1,17 @@
 <template>
   <div class="testCasePie">
-    <doughnutchart id="chart-jobs" class="pie" :options="chartJobs"></doughnutchart>
+    <doughnutchart
+      id="chart-jobs"
+      class="pie"
+      :options="chartJobs"
+    ></doughnutchart>
   </div>
 </template>
 <script>
-import { Chart } from "highcharts-vue";
-import { mapState } from "vuex";
+import { Chart } from 'highcharts-vue'
+import { mapState } from 'vuex'
 export default {
-  name: "testCasePie",
+  name: 'testCasePie',
   components: {
     doughnutchart: Chart
   },
@@ -19,10 +23,10 @@ export default {
   data() {
     return {
       chartJobs: {}
-    };
+    }
   },
   mounted() {
-    this.initTestCasePie();
+    this.initTestCasePie()
   },
   methods: {
     initTestCasePie() {
@@ -31,11 +35,11 @@ export default {
           plotBackgroundColor: null,
           plotBorderWidth: null,
           plotShadow: false,
-          type: "pie"
+          type: 'pie'
         },
         title: {
-          text: "Test Case",
-          style: { color: "#000", opacity: 0.6 },
+          text: 'Test Case',
+          style: { color: '#000', opacity: 0.6 },
           floating: true,
           y: 220
         },
@@ -44,25 +48,25 @@ export default {
         },
         tooltip: {
           pointFormat:
-            "Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}</b>"
+            'Percent: <b>{point.percentage:.1f}%</b><br/>Total: <b>{point.y:1f}</b>'
         },
         legend: {
-          align: "center",
-          verticalAlign: "top",
+          align: 'center',
+          verticalAlign: 'top',
           borderWidth: 0
         },
         plotOptions: {
           pie: {
             allowPointSelect: true,
             showInLegend: true,
-            cursor: "pointer",
+            cursor: 'pointer',
             dataLabels: {
               enabled: true,
-              format: "<b>{point.name}</b>: {point.y:1f}<br>",
+              format: '<b>{point.name}</b>: {point.y:1f}<br>',
               distance: -45,
               filter: {
-                property: "percentage",
-                operator: ">",
+                property: 'percentage',
+                operator: '>',
                 value: 4
               }
             }
@@ -70,14 +74,14 @@ export default {
         },
         series: [
           {
-            name: "Test Case",
+            name: 'Test Case',
             data: this.testCasePieData
           }
         ]
-      };
+      }
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

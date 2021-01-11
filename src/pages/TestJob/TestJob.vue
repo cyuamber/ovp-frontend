@@ -42,229 +42,229 @@
 </template>
 
 <script>
-import Toolbar from "./Toolbar";
-import { testJobColumns, jobOptions } from "./constants";
-import Loading from "../../components/Loading/Loading";
-import Drawer from "./Drawer";
-import { mapState, mapActions, mapMutations } from "vuex";
+import Toolbar from './Toolbar'
+import { testJobColumns, jobOptions } from './constants'
+import Loading from '../../components/Loading/Loading'
+import Drawer from './Drawer'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
-  name: "TestJob",
+  name: 'TestJob',
   data() {
     return {
       columns: testJobColumns,
       loading: false,
-      tableQueryTimer: "",
+      tableQueryTimer: '',
       isEdit: false,
-      actionColors: jobOptions,
-    };
+      actionColors: jobOptions
+    }
   },
   computed: {
     ...mapState({
-      isShow: (state) => state.testJob.isShow,
-      loadingMessage: (state) => state.loading.loadingMessage,
-      tableData: (state) => state.testJob.tableData,
-      pagination: (state) => state.testJob.pagination,
-      tableLoading: (state) => state.loading.tableLoading,
-      testJobSingleData: (state) => state.testJob.testJobSingleData,
-      lang: (state) => state.router.lang,
-    }),
+      isShow: state => state.testJob.isShow,
+      loadingMessage: state => state.loading.loadingMessage,
+      tableData: state => state.testJob.tableData,
+      pagination: state => state.testJob.pagination,
+      tableLoading: state => state.loading.tableLoading,
+      testJobSingleData: state => state.testJob.testJobSingleData,
+      lang: state => state.router.lang
+    })
   },
   components: { Drawer, Loading, Toolbar },
   created() {
-    if (window.location.href.includes("?")) {
-      let JumpStatus = window.location.href.split("?")[1].split("=")[1];
-      this.updateDashboardJumpStatus(JumpStatus);
+    if (window.location.href.includes('?')) {
+      let JumpStatus = window.location.href.split('?')[1].split('=')[1]
+      this.updateDashboardJumpStatus(JumpStatus)
     }
   },
   mounted() {
-    this.initTestJobTable();
+    this.initTestJobTable()
   },
   methods: {
-    ...mapActions("testJob", [
-      "getTableData",
-      "runTestJobMGT",
-      "delete",
-      "download",
-      "stopJop",
-      "getSUTType",
-      "getVNFMOption",
-      "getVIMOption",
-      "getMANOOption",
-      "getTestInstrumentOption",
-      "getEditTestJob",
+    ...mapActions('testJob', [
+      'getTableData',
+      'runTestJobMGT',
+      'delete',
+      'download',
+      'stopJop',
+      'getSUTType',
+      'getVNFMOption',
+      'getVIMOption',
+      'getMANOOption',
+      'getTestInstrumentOption',
+      'getEditTestJob'
     ]),
-    ...mapMutations("testJob", [
-      "setIsShow",
-      "setFilter",
-      "updateDashboardJumpStatus",
-      "clearSearchKeyword",
+    ...mapMutations('testJob', [
+      'setIsShow',
+      'setFilter',
+      'updateDashboardJumpStatus',
+      'clearSearchKeyword'
     ]),
-    ...mapMutations("datePicker", ["setDateTime"]),
+    ...mapMutations('datePicker', ['setDateTime']),
     initTestJobTable() {
-      this.getTableData({ bool: false });
+      this.getTableData({ bool: false })
       // this.tableQueryTimer = setInterval(() => {
       //   this.getTableData({bool:false,loading:false});
       // }, 5000);
     },
     handleActions(action, data) {
-      if (action === "Start") this.handleStart(data);
-      else if (action === "Edit") this.handleEdit(data);
-      else if (action === "Delete") this.handleDelete(data);
-      else if (action === "More") this.handleOpenDetail(data);
-      else if (action === "Download") this.handleDownload(data);
-      else if (action === "Stop") this.handleStop(data);
+      if (action === 'Start') this.handleStart(data)
+      else if (action === 'Edit') this.handleEdit(data)
+      else if (action === 'Delete') this.handleDelete(data)
+      else if (action === 'More') this.handleOpenDetail(data)
+      else if (action === 'Download') this.handleDownload(data)
+      else if (action === 'Stop') this.handleStop(data)
     },
     toolbarChangeIsEdit(isEdit) {
-      this.isEdit = isEdit;
+      this.isEdit = isEdit
     },
     handleStart(data) {
-      data.currentAction = "Start";
-      this.$store.commit("setCurrentMenu", ["Test Job MGT"]);
-      this.$store.commit("setBreadcrumb", ["Test Job MGT"]);
+      data.currentAction = 'Start'
+      this.$store.commit('setCurrentMenu', ['Test Job MGT'])
+      this.$store.commit('setBreadcrumb', ['Test Job MGT'])
       this.$confirm({
-        title: "Are you sure start this task?",
-        okText: "Yes",
-        okType: "danger",
-        cancelText: "No",
+        title: 'Are you sure start this task?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
         onOk: () => {
           this.runTestJobMGT({
-            data,
-          });
+            data
+          })
         },
-        onCancel() {},
-      });
+        onCancel() {}
+      })
     },
     handleEdit(data) {
-      this.isEdit = true;
-      this.setIsShow(true);
+      this.isEdit = true
+      this.setIsShow(true)
       this.getEditTestJob({
-        data,
-      });
+        data
+      })
       this.getSUTType({
-        message: this.$message,
-      });
+        message: this.$message
+      })
       this.getVNFMOption({
-        message: this.$message,
-      });
+        message: this.$message
+      })
       this.getVIMOption({
-        message: this.$message,
-      });
+        message: this.$message
+      })
       this.getMANOOption({
-        message: this.$message,
-      });
+        message: this.$message
+      })
       this.getTestInstrumentOption({
-        message: this.$message,
-      });
+        message: this.$message
+      })
     },
     handleDelete(data) {
       this.$confirm({
-        title: "Are you sure delete this task?",
-        okText: "Yes",
-        okType: "danger",
-        cancelText: "No",
+        title: 'Are you sure delete this task?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
         onOk: () => {
           this.delete({
-            data,
-          });
+            data
+          })
         },
-        onCancel() {},
-      });
+        onCancel() {}
+      })
     },
     handleDownload(data) {
       this.$confirm({
-        title: "Are you sure download this task?",
-        content: "jobId: " + data.jobId,
-        okText: "Yes",
-        okType: "danger",
-        cancelText: "No",
+        title: 'Are you sure download this task?',
+        content: 'jobId: ' + data.jobId,
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
         onOk: () => {
-          this.download({ jobId: data.jobId, lang: this.lang });
+          this.download({ jobId: data.jobId, lang: this.lang })
         },
-        onCancel() {},
-      });
+        onCancel() {}
+      })
     },
     handleOpenDetail(data) {
-      data.currentAction = "More";
+      data.currentAction = 'More'
       this.$router.push({
-        path: "/JobDetail",
+        path: '/JobDetail',
         query: {
-          detail: JSON.stringify(data),
-        },
-      });
+          detail: JSON.stringify(data)
+        }
+      })
       // this.$router.push({ name: "JobDetail", params: data });
     },
     handlePageChange(pageObj) {
-      this.setFilter({ pageObj });
-      this.getTableData({ bool: true });
+      this.setFilter({ pageObj })
+      this.getTableData({ bool: true })
     },
     handleStop(data) {
       // The analog call interface changes a single piece of data in a single table
       this.$confirm({
-        title: "Are you sure stop this task?",
-        okText: "Yes",
-        okType: "danger",
-        cancelText: "No",
+        title: 'Are you sure stop this task?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
         onOk: () => {
           this.stopJop({
-            data,
-          });
+            data
+          })
         },
-        onCancel() {},
-      });
+        onCancel() {}
+      })
     },
     getStatusTitle(status) {
       switch (status) {
-        case "CREATED":
-          status = "Waiting to execute";
-          break;
-        case "STARTED":
-          status = "Waiting to execute";
-          break;
-        case "RUNNING":
-          status = "Executing";
-          break;
-        case "DONE":
-          status = "Execution completed";
-          break;
-        case "FAILED":
-          status = "Execution failed";
-          break;
+        case 'CREATED':
+          status = 'Waiting to execute'
+          break
+        case 'STARTED':
+          status = 'Waiting to execute'
+          break
+        case 'RUNNING':
+          status = 'Executing'
+          break
+        case 'DONE':
+          status = 'Execution completed'
+          break
+        case 'FAILED':
+          status = 'Execution failed'
+          break
         default:
-          status = "";
-          break;
+          status = ''
+          break
       }
-      return status;
+      return status
     },
     getStatusStyle(status) {
-      let color = "#979797";
+      let color = '#979797'
       switch (status) {
-        case "RUNNING":
-          color = "#F5A623";
-          break;
-        case "CREATED":
-          color = "#78E5D7";
-          break;
-        case "UPDATED":
-          color = "#2db7f5";
-          break;
-        case "DONE":
-          color = "#7ED321";
-          break;
-        case "FAILED":
-          color = "#D0021B";
-          break;
+        case 'RUNNING':
+          color = '#F5A623'
+          break
+        case 'CREATED':
+          color = '#78E5D7'
+          break
+        case 'UPDATED':
+          color = '#2db7f5'
+          break
+        case 'DONE':
+          color = '#7ED321'
+          break
+        case 'FAILED':
+          color = '#D0021B'
+          break
         default:
-          break;
+          break
       }
-      return { backgroundColor: color };
-    },
+      return { backgroundColor: color }
+    }
   },
-  beforeDestroy: function () {
-    clearInterval(this.tableQueryTimer);
-    this.setDateTime("");
-  },
-};
+  beforeDestroy: function() {
+    clearInterval(this.tableQueryTimer)
+    this.setDateTime('')
+  }
+}
 </script>
 <style lang="less" scope>
 .test-job__container {

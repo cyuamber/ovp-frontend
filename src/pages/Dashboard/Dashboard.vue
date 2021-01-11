@@ -22,63 +22,63 @@
 </template>
 
 <script>
-import Circles from "./components/Circles";
-import Doughnut from "./components/Doughnut";
-import Lines from "./components/Lines";
-import Live from "./components/Live";
-import { mapActions } from "vuex";
+import Circles from './components/Circles'
+import Doughnut from './components/Doughnut'
+import Lines from './components/Lines'
+import Live from './components/Live'
+import { mapActions } from 'vuex'
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   components: { Circles, Doughnut, Lines, Live },
   data() {
     return {
-      liveChartsTimer: ""
-    };
+      liveChartsTimer: ''
+    }
   },
   mounted() {
-    this.initDashBoard();
+    this.initDashBoard()
   },
   methods: {
-    ...mapActions("dashBoard", [
-      "getLiveData",
-      "getLinesData",
-      "getTestJobCirclesData",
-      "getSUTAmountData",
-      "getJobAmountData",
-      "getTestEnvAmountData",
-      "clearData"
+    ...mapActions('dashBoard', [
+      'getLiveData',
+      'getLinesData',
+      'getTestJobCirclesData',
+      'getSUTAmountData',
+      'getJobAmountData',
+      'getTestEnvAmountData',
+      'clearData'
     ]),
     initDashBoard() {
-      this.clearData();
+      this.clearData()
       this.getLiveData({
         message: this.$message
-      });
+      })
       this.liveChartsTimer = setInterval(() => {
         this.getLiveData({
           message: this.$message
-        });
-      }, 10000);
+        })
+      }, 10000)
       this.getLinesData({
         message: this.$message
-      });
+      })
       this.getTestJobCirclesData({
         message: this.$message
-      });
+      })
       this.getSUTAmountData({
         message: this.$message
-      });
+      })
       this.getJobAmountData({
         message: this.$message
-      });
+      })
       this.getTestEnvAmountData({
         message: this.$message
-      });
+      })
     }
   },
   beforeDestroy: function() {
-    clearInterval(this.liveChartsTimer);
+    clearInterval(this.liveChartsTimer)
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .dashboard-block {

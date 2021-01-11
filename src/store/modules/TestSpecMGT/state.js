@@ -17,6 +17,6 @@ const state = {
   dropdownSpecIndex: 0,
   pagination: { current: 1, total: 0, pageSize: 10 },
   editStatus: false
-};
+}
 
-export default state;
+export default state

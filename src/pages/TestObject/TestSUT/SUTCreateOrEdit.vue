@@ -2,8 +2,8 @@
   <a-modal
     :title="
       (isEdit === true ? 'Edit ' : 'Create ') +
-      replaceCurrentTabValue(currentTab) +
-      ' SUT'
+        replaceCurrentTabValue(currentTab) +
+        ' SUT'
     "
     :visible="visible"
     :footer="null"
@@ -24,11 +24,11 @@
                   {
                     required: true,
                     message:
-                      replaceCurrentTabValue(currentTab) + ' Name is required',
-                  },
+                      replaceCurrentTabValue(currentTab) + ' Name is required'
+                  }
                 ],
-                initialValue: VNFTest.name,
-              },
+                initialValue: VNFTest.name
+              }
             ]"
           />
         </a-form-item>
@@ -41,14 +41,14 @@
             style="width: 150px"
             class="form__select"
             :getPopupContainer="
-              (triggerNoder) => {
-                return triggerNoder.parentNode || document.body;
+              triggerNoder => {
+                return triggerNoder.parentNode || document.body
               }
             "
             :disabled="spin"
             v-decorator="[
               'type',
-              { rules: [{ required: true }], initialValue: initNVFTypeValue },
+              { rules: [{ required: true }], initialValue: initNVFTypeValue }
             ]"
           >
             <a-select-option
@@ -77,8 +77,8 @@
               'vendor',
               {
                 rules: [{ required: true, message: 'Vendor is required' }],
-                initialValue: VNFTest.vendor,
-              },
+                initialValue: VNFTest.vendor
+              }
             ]"
           />
         </a-form-item>
@@ -92,8 +92,8 @@
               'version',
               {
                 rules: [{ required: true, message: 'Version is required' }],
-                initialValue: VNFTest.version,
-              },
+                initialValue: VNFTest.version
+              }
             ]"
           />
         </a-form-item>
@@ -110,7 +110,7 @@
             name="file"
             v-decorator="[
               'upload',
-              { valuePropName: 'fileList', getValueFromEvent: normFile },
+              { valuePropName: 'fileList', getValueFromEvent: normFile }
             ]"
           >
             <p class="ant-upload-text form__upload-text--font-size">
@@ -143,13 +143,13 @@
             :style="{
               display: 'inline-block',
               width: 'calc(70% - 12px)',
-              margin: '0 5px 0 0',
+              margin: '0 5px 0 0'
             }"
           >
             <a-input
               v-decorator="[
                 'ip',
-                { rules: [{ validator: checkIp }], initialValue: VNFTest.ip },
+                { rules: [{ validator: checkIp }], initialValue: VNFTest.ip }
               ]"
               @change="changeIp"
             />
@@ -159,7 +159,7 @@
             :style="{
               display: 'inline-block',
               width: 'calc(30% - 12px)',
-              margin: '0 0 0 5px ',
+              margin: '0 0 0 5px '
             }"
           >
             <a-input
@@ -167,8 +167,8 @@
                 'port',
                 {
                   rules: [{ required: true, message: 'Port is required' }],
-                  initialValue: VNFTest.port,
-                },
+                  initialValue: VNFTest.port
+                }
               ]"
               onkeyup="this.value=this.value.replace(/\D/g,'')"
             />

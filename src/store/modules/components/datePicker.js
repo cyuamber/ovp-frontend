@@ -1,16 +1,16 @@
 const state = {
-    selectDateTime: "",
-};
+  selectDateTime: ''
+}
 const mutations = {
-    setDateTime(state, selectDateTime) {
-        state.selectDateTime = selectDateTime;
-    },
-};
-const actions = {};
+  setDateTime(state, selectDateTime) {
+    state.selectDateTime = selectDateTime
+  }
+}
+const actions = {}
 
 export default {
-    state,
-    mutations,
-    actions,
-    namespaced: true,
-};
+  state,
+  mutations,
+  actions,
+  namespaced: true
+}

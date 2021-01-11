@@ -3,7 +3,11 @@
     <div class="layout-header__router">
       <a-breadcrumb separator="-">
         <a-breadcrumb-item>OVP</a-breadcrumb-item>
-        <a-breadcrumb-item v-for="(route,index) in breadcrumbArr" :key="index">{{$t(`T.${route}`)}}</a-breadcrumb-item>
+        <a-breadcrumb-item
+          v-for="(route, index) in breadcrumbArr"
+          :key="index"
+          >{{ $t(`T.${route}`) }}</a-breadcrumb-item
+        >
       </a-breadcrumb>
     </div>
     <div>
@@ -17,53 +21,57 @@
           <!-- <a-menu-divider /> -->
           <a-menu-item key="2">
             <a-icon type="mail" />
-            {{$t(`T.${'Change E-mail'}`)}}
+            {{ $t(`T.${'Change E-mail'}`) }}
           </a-menu-item>
           <a-menu-item key="3">
             <a-icon type="user" />
-            {{$t(`T.${'Change passport'}`)}}
+            {{ $t(`T.${'Change passport'}`) }}
           </a-menu-item>
           <a-menu-divider />
           <a-menu-item key="4">
             <a-icon type="logout" />
-            {{$t(`T.${'Log out'}`)}}
+            {{ $t(`T.${'Log out'}`) }}
           </a-menu-item>
         </a-menu>
         <a-button :style="headerbuttonStyle">
           <!-- <a-icon type="user" />{{$t('T.LOGIN')}} -->
           <a-icon type="user" />
-          {{userName}}
+          {{ userName }}
         </a-button>
       </a-dropdown>
-      <a-button :style="headerbuttonStyle" @click="(() => handleLangChange(lang))">{{$t('T.lang')}}</a-button>
+      <a-button
+        :style="headerbuttonStyle"
+        @click="() => handleLangChange(lang)"
+        >{{ $t('T.lang') }}</a-button
+      >
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 const headerbuttonStyle = {
-  height: "100%",
-  borderRadius: "0px",
-  borderTop: "0px",
-  borderBottom: "0px",
-  borderRight: "0px",
-  boxShadow: "none",
-  lineHeight: "4.6"
-};
+  height: '100%',
+  borderRadius: '0px',
+  borderTop: '0px',
+  borderBottom: '0px',
+  borderRight: '0px',
+  boxShadow: 'none',
+  lineHeight: '4.6'
+}
 export default {
-  name: "Header",
+  name: 'Header',
   data() {
     return {
-      userName: "Admin",
+      userName: 'Admin',
       headerbuttonStyle
-    };
+    }
   },
   mounted() {
-    this.$store.dispatch("getCurrentLanguage", {}).then(() => {
-      this.$i18n.locale = this.lang;
-    });
+    this.$store.dispatch('getCurrentLanguage', {}).then(() => {
+      this.$i18n.locale = this.lang
+    })
   },
   computed: {
     ...mapState({
@@ -73,19 +81,19 @@ export default {
   },
   watch: {
     lang(val) {
-      this.$i18n.locale = val;
+      this.$i18n.locale = val
     }
   },
   methods: {
     handleMenuClick(e) {
-      if (e.key === "1" || e.key === "4") {
-        this.gotoLogin();
+      if (e.key === '1' || e.key === '4') {
+        this.gotoLogin()
       }
     },
     gotoLogin() {
       this.$router.push({
-        path: "/login"
-      });
+        path: '/login'
+      })
     },
     // handleCreateTestJob() {
     //   if (this.$route.path !== "/testjobmgt") {
@@ -105,11 +113,11 @@ export default {
     //   });
     // },
     handleLangChange(val) {
-      let obj = { lang: val === "en_US" ? "zh_CN" : "en_US" };
-      this.$store.dispatch("getCurrentLanguage", obj);
+      let obj = { lang: val === 'en_US' ? 'zh_CN' : 'en_US' }
+      this.$store.dispatch('getCurrentLanguage', obj)
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .layout-header {

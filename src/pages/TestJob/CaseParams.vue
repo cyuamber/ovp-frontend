@@ -14,15 +14,17 @@
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 14 }"
           :class="{
-            checkboxgroup: item.visible === true && item.type === 'checkbox',
+            checkboxgroup: item.visible === true && item.type === 'checkbox'
           }"
         >
           <a-input
             :disabled="item.name === 'sutaddress'"
             v-if="
               item.visible === true &&
-              (item.type === 'string' || item.type === 'datetime') &&
-              (item.name !== 'instrument-ips') & (item.name !== 'caps') & (item.name !== 'number-calls')
+                (item.type === 'string' || item.type === 'datetime') &&
+                (item.name !== 'instrument-ips') &
+                  (item.name !== 'caps') &
+                  (item.name !== 'number-calls')
             "
             v-decorator="[
               item.name,
@@ -30,24 +32,26 @@
                 rules: [
                   {
                     required: item.isOptional,
-                    message: item.name + 'is required',
-                  },
+                    message: item.name + 'is required'
+                  }
                 ],
-                initialValue: !isEdit ? item.defaultValue : item.value,
-              },
+                initialValue: !isEdit ? item.defaultValue : item.value
+              }
             ]"
           />
           <div
             v-if="
               item.visible === true &&
-              item.type === 'string' &&
-              (item.name === 'instrument-ips' || item.name === 'caps' || item.name === 'number-calls')
+                item.type === 'string' &&
+                (item.name === 'instrument-ips' ||
+                  item.name === 'caps' ||
+                  item.name === 'number-calls')
             "
           >
             <!-- 这是一段神奇的代码，!isEdit后面是一大坨返回结果哦 -->
             <a-input
-              v-for="(items, index) in 
-              (typeof item.defaultValue !== 'undefined'|| typeof item.value !== 'undefined')
+              v-for="(items, index) in typeof item.defaultValue !==
+                'undefined' || typeof item.value !== 'undefined'
                 ? item.defaultValue.split(';') || item.value.split(';')
                 : []"
               :key="index"
@@ -56,16 +60,18 @@
               v-decorator="[
                 item.name === 'instrument-ips'
                   ? 'instrument-ips' + index + caseParamsData.id
-                  : (item.name === 'caps'? 'caps' + index + caseParamsData.id: 'number-calls' + index + caseParamsData.id),
+                  : item.name === 'caps'
+                  ? 'caps' + index + caseParamsData.id
+                  : 'number-calls' + index + caseParamsData.id,
                 {
                   rules: [
                     {
                       required: item.isOptional,
-                      message: item.name + 'is required',
-                    },
+                      message: item.name + 'is required'
+                    }
                   ],
-                  initialValue: items,
-                },
+                  initialValue: items
+                }
               ]"
             />
           </div>
@@ -78,21 +84,21 @@
                 rules: [
                   {
                     required: item.isOptional,
-                    message: item.name + 'is required',
-                  },
+                    message: item.name + 'is required'
+                  }
                 ],
                 initialValue:
                   isEdit === true
                     ? strBool(item.value)
-                    : strBool(item.defaultValue),
-              },
+                    : strBool(item.defaultValue)
+              }
             ]"
           />
           <a-checkbox-group
             v-if="item.visible === true && item.type === 'checkbox'"
             v-decorator="[
               item.name,
-              { initialValue: !isEdit ? item.defaultValue : item.value },
+              { initialValue: !isEdit ? item.defaultValue : item.value }
             ]"
           >
             <a-row>
@@ -134,7 +140,7 @@ export default {
   },
   watch: {
     caseParamsIsShow(val) {
-      if (val) { 
+      if (val) {
         this.count++;
         if (this.count > 1) { // 只有首次用的initialValue，后面每次打开都重新设置值
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
@@ -155,9 +161,9 @@ export default {
             }
           });
         }
-      } 
+      }
     },
-    caseParamsData(val) { // 只有第一次监控到打开 
+    caseParamsData(val) { // 只有第一次监控到打开
       this.caseParams = val.parameters.filter((item) => {
         return item.visible !== false;
       });

@@ -12,7 +12,7 @@ const state = {
   cloudTypeOptions: [],
   regionIdOptions: [],
   initValues: {},
-  editStatus: false,
+  editStatus: false
 }
 
 export default state
