@@ -16,6 +16,7 @@
         "lang": null
       },
       "vendor": "ZTE",
+      "version":"V28338",
       "createTime": "2020-12-22",
       "updateTime": null,
       "flag": 101,
@@ -36,6 +37,7 @@
         "lang": null
       },
       "vendor": "huawei",
+      "version":"v1.1",
       "createTime":"2020-12-17",
       "updateTime": null,
       "flag": 101,
@@ -56,6 +58,7 @@
         "lang": null
       },
       "vendor": "ONAP",
+      "version":"V68118",
       "createTime":"2020-12-16",
       "updateTime": null,
       "flag": 101,
@@ -76,6 +79,7 @@
         "lang": null
       },
       "vendor": "ZTE",
+      "version":"V91169",
       "createTime":"2020-12-15",
       "updateTime": null,
       "flag": 101,
