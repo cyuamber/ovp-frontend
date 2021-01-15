@@ -13,8 +13,6 @@
           :label="item.name"
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 14 }"
-          :validate-status="infoname === item.name ? status : ''"
-          :help="infoname === item.name ? help : ''"
           :class="{
             checkboxgroup: item.visible === true && item.type === 'checkbox'
           }"
@@ -26,7 +24,8 @@
                 (item.type === 'string' || item.type === 'datetime') &&
                 (item.name !== 'instrument-ips') &
                   (item.name !== 'caps') &
-                  (item.name !== 'number-calls')
+                  (item.name !== 'number-calls') &
+                  (item.name !== 'protocol')
             "
             v-decorator="[
               item.name,
@@ -47,7 +46,8 @@
                 item.type === 'string' &&
                 (item.name === 'instrument-ips' ||
                   item.name === 'caps' ||
-                  item.name === 'number-calls')
+                  item.name === 'number-calls' ||
+                  item.name === 'protocol')
             "
           >
             <!-- 这是一段神奇的代码，!isEdit后面是一大坨返回结果哦 -->
@@ -70,9 +70,6 @@
                     {
                       required: item.isOptional,
                       message: item.name + 'is required'
-                    },
-                    {
-                      validator: capsOptionFn
                     }
                   ],
                   initialValue: items
@@ -121,22 +118,18 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { mapState, mapMutations } from "vuex";
-
+import { mapState, mapMutations } from 'vuex'
 export default {
-  name: "CaseParams",
-  props: ["isEdit"],
+  name: 'CaseParams',
+  props: ['isEdit'],
   data() {
     return {
       form: this.$form.createForm(this),
-      title: this.isEdit ? "Edit Case Parameters" : "Add Case Parameters",
+      title: this.isEdit ? 'Edit Case Parameters' : 'Add Case Parameters',
       caseParams: [],
       count: 0,
       displayList: [],
-      infoname:'',
-      status:'',
-      help:''
-    };
+    }
   },
   computed: {
     ...mapState({
@@ -145,154 +138,159 @@ export default {
       caseParamsIsShow: (store) => store.testJob.caseParamsIsShow,
     }),
   },
-  mounted () {
-    console.log(this.caseParams,'caseParams')
-    console.log(this.form.getFieldsValue(['caps']))
-  },
+  mounted() {},
   watch: {
     caseParamsIsShow(val) {
       if (val) {
-        this.count++;
-        if (this.count > 1) { // 只有首次用的initialValue，后面每次打开都重新设置值
+        this.count++
+        if (this.count > 1) {
+          // 只有首次用的initialValue，后面每次打开都重新设置值
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
-            return item.visible !== false;
-          });
+            return item.visible !== false
+          })
           this.caseParams.forEach((item) => {
-            if (item.name === 'instrument-ips' || item.name === 'caps' || item.name === 'number-calls') {
+            if (
+              item.name === 'instrument-ips' ||
+              item.name === 'caps' ||
+              item.name === 'number-calls'||
+              item.name === 'protocol'
+            ) {
               const itemList = item.value.split(';') // 目前不用defaultValue
-              for (let i = 0; i < itemList.length; i ++) {
+              for (let i = 0; i < itemList.length; i++) {
                 this.form.setFieldsValue({
-                  [item.name + i + this.caseParamsData.id]: itemList[i]
+                  [item.name + i + this.caseParamsData.id]: itemList[i],
                 })
               }
             } else {
               this.form.setFieldsValue({
-                [item.name]: item.value
+                [item.name]: item.value,
               })
             }
-          });
+          })
         }
       }
-      setTimeout(() => {
-    console.log(this.caseParams);
-  },2000);
     },
-    caseParamsData(val) { // 只有第一次监控到打开
+    caseParamsData(val) {
+      // 只有第一次监控到打开
       this.caseParams = val.parameters.filter((item) => {
-        return item.visible !== false;
-      });
+        return item.visible !== false
+      })
     },
   },
   methods: {
-
-    ...mapMutations("testJob", ["setCaseParamsIsShow", "updateTestCaseList"]),
-     capsOptionFn (rule,value,ck) {
-      const capsData = this.caseParams.filter(item=>item.name==='caps')
-      const capslength = capsData[0].value.split(';').length
-      let valueArr = []
-      const { getFieldValue } = this.form
-      for(var i = 0;i<capslength;i++) {
-        valueArr.push(getFieldValue(`caps${i}${this.caseParamsData.id}`))
-      }
-      console.log(valueArr,'valueArr')
-      if (valueArr.indexOf('') > -1) {
-        this.infoname = capsData.name
-        this.status = 'error'
-        this.help = 'caps is required'
-        // return ck('caps is required')
-      }
-      ck()
-      // if(!value){
-      //   console.log(value)
-      //   return callback(new Error("请输入验证码"))
-      // }
-    },
+    ...mapMutations('testJob', ['setCaseParamsIsShow', 'updateTestCaseList']),
     handleCancel() {
       // 将值恢复
       this.caseParams = this.caseParamsData.parameters.filter((item) => {
-        return item.visible !== false;
-      });
+        return item.visible !== false
+      })
       this.caseParams.forEach((item) => {
-        if (item.name === 'instrument-ips' || item.name === 'caps' || item.name === 'number-calls') {
+        if (
+          item.name === 'instrument-ips' ||
+          item.name === 'caps' ||
+          item.name === 'number-calls'||
+          item.name === 'protocol'
+        ) {
           const itemList = item.value.split(';') // 目前不用defaultValue
-          for (let i = 0; i < itemList.length; i ++) {
+          for (let i = 0; i < itemList.length; i++) {
             this.form.setFieldsValue({
-              [item.name + i + this.caseParamsData.id]: itemList[i]
+              [item.name + i + this.caseParamsData.id]: itemList[i],
             })
           }
         } else {
           this.form.setFieldsValue({
-            [item.name]: item.value
+            [item.name]: item.value,
           })
         }
-      });
-      this.setCaseParamsIsShow(false);
+      })
+      this.setCaseParamsIsShow(false)
     },
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
-          let caseParameters = this.caseParamsData;
-          let testCaseLists = this.testCaseList;
+          let caseParameters = this.caseParamsData
+          let testCaseLists = this.testCaseList
           let DRAValues = {
-            'instrument-ips': "",
-            caps: "",
-            'number-calls': ""
-          };
-          if (Object.keys(values).indexOf("sutaddress") > -1) { // 是不是海鸥
+            'instrument-ips': '',
+            caps: '',
+            'number-calls': '',
+            'protocol':'',
+          }
+          if (Object.keys(values).indexOf('sutaddress') > -1) {
+            // 是不是海鸥
             Object.keys(values).map((items) => {
-              if (items.indexOf("instrument-ips") > -1) {
-                DRAValues['instrument-ips'] = DRAValues['instrument-ips'] + values[items] + ";";
-              } else if (items.indexOf("caps") > -1) {
-                DRAValues.caps = DRAValues.caps + values[items] + ";";
+              if (items.indexOf('instrument-ips') > -1) {
+                DRAValues['instrument-ips'] =
+                  DRAValues['instrument-ips'] + values[items] + ';'
+              } else if (items.indexOf('caps') > -1) {
+                DRAValues.caps = DRAValues.caps + values[items] + ';'
               } else if (items.indexOf('number-calls') > -1) {
-                DRAValues['number-calls'] = DRAValues['number-calls'] + values[items] + ";"
+                DRAValues['number-calls'] =
+                  DRAValues['number-calls'] + values[items] + ';'
               }
-            });
+            })
             DRAValues['instrument-ips'] =
-              DRAValues['instrument-ips'].charAt(DRAValues['instrument-ips'].length - 1) === ";"
-                ? DRAValues['instrument-ips'].substring(0, DRAValues['instrument-ips'].length - 1)
-                : DRAValues['instrument-ips'];
+              DRAValues['instrument-ips'].charAt(
+                DRAValues['instrument-ips'].length - 1
+              ) === ';'
+                ? DRAValues['instrument-ips'].substring(
+                    0,
+                    DRAValues['instrument-ips'].length - 1
+                  )
+                : DRAValues['instrument-ips']
             DRAValues.caps =
-              DRAValues.caps.charAt(DRAValues.caps.length - 1) === ";"
+              DRAValues.caps.charAt(DRAValues.caps.length - 1) === ';'
                 ? DRAValues.caps.substring(0, DRAValues.caps.length - 1)
                 : DRAValues.caps;
+
+                DRAValues.protocol =
+              DRAValues.protocol.charAt(DRAValues.protocol.length - 1) === ';'
+                ? DRAValues.protocol.substring(0, DRAValues.protocol.length - 1)
+                : DRAValues.protocol;
             DRAValues['number-calls'] =
-              DRAValues['number-calls'].charAt(DRAValues['number-calls'].length - 1) === ";"
-                ? DRAValues['number-calls'].substring(0, DRAValues['number-calls'].length - 1)
-                : DRAValues['number-calls'];
-            caseParameters.parameters.forEach((item) => { // caps和instrument
+              DRAValues['number-calls'].charAt(
+                DRAValues['number-calls'].length - 1
+              ) === ';'
+                ? DRAValues['number-calls'].substring(
+                    0,
+                    DRAValues['number-calls'].length - 1
+                  )
+                : DRAValues['number-calls']
+            caseParameters.parameters.forEach((item) => {
+              // caps和instrument
               if (DRAValues[item.name] !== undefined) {
-                item.value = DRAValues[item.name];
-                item.defaultValue = DRAValues[item.name];
-              } else if (values[item.name] !== undefined ) { // 其他
+                item.value = DRAValues[item.name]
+                item.defaultValue = DRAValues[item.name]
+              } else if (values[item.name] !== undefined) {
+                // 其他
                 item.value = values[item.name]
                 item.defaultValue = values[item.name]
               }
-            });
+            })
           } else {
             caseParameters.parameters.forEach((item) => {
               if (values[item.name] !== undefined) {
-                item.value = values[item.name];
+                item.value = values[item.name]
                 item.defaultValue = values[item.name]
               }
-            });
+            })
           }
           testCaseLists.map((item, index) => {
             if (item.id === caseParameters.id) {
-              testCaseLists.splice(index, 1, caseParameters);
+              testCaseLists.splice(index, 1, caseParameters)
             }
-          });
-          this.updateTestCaseList({ spin: false, list: testCaseLists });
+          })
+          this.updateTestCaseList({ spin: false, list: testCaseLists })
           this.$emit('updateSingleCase', this.caseParamsData.id) // 告诉父组件该项不用初始值
-          this.setCaseParamsIsShow(false);
+          this.setCaseParamsIsShow(false)
         }
-      });
+      })
     },
     strBool(val) {
-      return val === "true" ? true : false;
+      return val === 'true' ? true : false
     },
   },
-};
+}
 </script>
 <style lang="less">
 .checkboxgroup.ant-form-item {

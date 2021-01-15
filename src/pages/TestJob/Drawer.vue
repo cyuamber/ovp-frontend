@@ -592,6 +592,7 @@ export default {
               }
             })
           }
+          console.log(values)
           this.createrTestJobMGT({
             isEdit,
             values,
@@ -651,6 +652,7 @@ export default {
       this.changeCaseCheckAll(e.length === this.testCaseList.length) // boolean值
     },
     caseParamsEdit(caseData) {
+      console.log(caseData)
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       // console.log(JSON.parse(JSON.stringify(this.oldInstrumentList)), JSON.parse(JSON.stringify(this.cheangeTestInstrument)))
       // if (this.cheangeTestInstrument.length < this.oldInstrumentList.length) { // 如果删除了
@@ -699,7 +701,8 @@ export default {
           if (
             val.name === 'instrument-ips' ||
             val.name === 'caps' ||
-            val.name === 'number-calls'
+            val.name === 'number-calls' ||
+            val.name === 'protocol'
           ) {
             // 去除删掉的项目
             let valueList = val.value.split(';')
@@ -727,7 +730,11 @@ export default {
               items.value = this.cheangeTestInstrument.join(';')
               items.defaultValue = this.cheangeTestInstrument.join(';')
             }
-            if (items.name === 'caps' || items.name === 'number-calls') {
+            if (
+              items.name === 'caps' ||
+              items.name === 'number-calls' ||
+              items.name === 'protocol'
+            ) {
               if (
                 // 空或者数量小于界面所选testInstrument,代表新增了,少多少加多少行
                 items.defaultValue === '' ||
@@ -828,7 +835,8 @@ export default {
             if (
               (items.name === 'caps' ||
                 items.name === 'instrument-ips' ||
-                items.name === 'number-calls') &&
+                items.name === 'number-calls' ||
+                items.name === 'protocol') &&
               items.defaultValue !== null &&
               items.value !== null &&
               (items.defaultValue.split(';').length >
@@ -858,7 +866,8 @@ export default {
           if (
             items.name === 'instrument-ips' ||
             items.name === 'caps' ||
-            items.name === 'number-calls'
+            items.name === 'number-calls' ||
+            items.name === 'protocol'
           ) {
             items.defaultValue = ''
             items.value = ''
