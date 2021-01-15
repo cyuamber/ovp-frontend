@@ -13,6 +13,8 @@
           :label="item.name"
           :label-col="{ span: 8 }"
           :wrapper-col="{ span: 14 }"
+          :validate-status="infoname === item.name ? status : ''"
+          :help="infoname === item.name ? help : ''"
           :class="{
             checkboxgroup: item.visible === true && item.type === 'checkbox'
           }"
@@ -68,6 +70,9 @@
                     {
                       required: item.isOptional,
                       message: item.name + 'is required'
+                    },
+                    {
+                      validator: capsOptionFn
                     }
                   ],
                   initialValue: items
@@ -117,6 +122,7 @@
 
 <script type="text/ecmascript-6">
 import { mapState, mapMutations } from "vuex";
+
 export default {
   name: "CaseParams",
   props: ["isEdit"],
@@ -126,7 +132,10 @@ export default {
       title: this.isEdit ? "Edit Case Parameters" : "Add Case Parameters",
       caseParams: [],
       count: 0,
-      displayList: []
+      displayList: [],
+      infoname:'',
+      status:'',
+      help:''
     };
   },
   computed: {
@@ -137,6 +146,8 @@ export default {
     }),
   },
   mounted () {
+    console.log(this.caseParams,'caseParams')
+    console.log(this.form.getFieldsValue(['caps']))
   },
   watch: {
     caseParamsIsShow(val) {
@@ -162,6 +173,9 @@ export default {
           });
         }
       }
+      setTimeout(() => {
+    console.log(this.caseParams);
+  },2000);
     },
     caseParamsData(val) { // 只有第一次监控到打开
       this.caseParams = val.parameters.filter((item) => {
@@ -170,7 +184,29 @@ export default {
     },
   },
   methods: {
+
     ...mapMutations("testJob", ["setCaseParamsIsShow", "updateTestCaseList"]),
+     capsOptionFn (rule,value,ck) {
+      const capsData = this.caseParams.filter(item=>item.name==='caps')
+      const capslength = capsData[0].value.split(';').length
+      let valueArr = []
+      const { getFieldValue } = this.form
+      for(var i = 0;i<capslength;i++) {
+        valueArr.push(getFieldValue(`caps${i}${this.caseParamsData.id}`))
+      }
+      console.log(valueArr,'valueArr')
+      if (valueArr.indexOf('') > -1) {
+        this.infoname = capsData.name
+        this.status = 'error'
+        this.help = 'caps is required'
+        // return ck('caps is required')
+      }
+      ck()
+      // if(!value){
+      //   console.log(value)
+      //   return callback(new Error("请输入验证码"))
+      // }
+    },
     handleCancel() {
       // 将值恢复
       this.caseParams = this.caseParamsData.parameters.filter((item) => {

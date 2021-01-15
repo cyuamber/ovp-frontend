@@ -31,7 +31,7 @@ module.exports = {
   outputDir: 'dist',
   //配置代理
   devServer: {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 8080,
     disableHostCheck: true,
     https: false,
