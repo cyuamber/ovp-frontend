@@ -8,8 +8,9 @@
     "build": "vue-cli-service build",
     "watch": "vue-cli-service build --watch",
     "lint": "vue-cli-service lint",
+    "devmock": "npm run serve -- --mock",
     "mockconfig": "nodemon ./src/mock/server.js",
-    "mock": "npm run mockconfig | npm run start",
+    "mock": "npm run mockconfig | npm run devmock",
     "dll": "webpack -p --progress --config ./build/webpack.dll.conf.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
