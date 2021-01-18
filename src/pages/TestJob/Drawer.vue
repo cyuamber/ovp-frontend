@@ -692,16 +692,16 @@ export default {
       }
       //console.log(caseData)
       //模拟mock数据接口
-      const newObj = {
-        name: 'protocol',
-        value: 'adbs;dfdf',
-        description: 'Protocol of seagull case',
-        type: 'string',
-        defaultValue: 'adbs;dfdf',
-        isOptional: true,
-        visible: true
-      }
-      caseData.parameters.push(newObj)
+      // const newObj = {
+      //   name: 'protocol',
+      //   value: 'adbs;dfdf',
+      //   description: 'Protocol of seagull case',
+      //   type: 'string',
+      //   defaultValue: 'adbs;dfdf',
+      //   isOptional: true,
+      //   visible: true
+      // }
+      // caseData.parameters.push(newObj)
       caseData.parameters.forEach(item => {
         // 把null都换成空字符串
         item.value === null ? (item.value = '') : null
