@@ -60,11 +60,7 @@
               :disabled="item.name === 'instrument-ips' ? true : false"
               onkeyup="this.value=this.value.replace(/\D/g,'')"
               v-decorator="[
-                item.name === 'instrument-ips'
-                  ? 'instrument-ips' + index + caseParamsData.id
-                  : item.name === 'caps'
-                  ? 'caps' + index + caseParamsData.id
-                  : 'number-calls' + index + caseParamsData.id,
+                formParma[item.name] + index + caseParamsData.id,
                 {
                   rules: [
                     {
@@ -129,6 +125,10 @@ export default {
       caseParams: [],
       count: 0,
       displayList: [],
+     formParma:{ 'instrument-ips':'instrument-ips',
+                    'caps':'caps',
+                    'number-calls':'number-calls',
+                    'protocol':'protocol'}
     }
   },
   computed: {
@@ -148,6 +148,7 @@ export default {
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
             return item.visible !== false
           })
+          console.log(this.caseParams)
           this.caseParams.forEach((item) => {
             if (
               item.name === 'instrument-ips' ||
@@ -205,6 +206,7 @@ export default {
       })
       this.setCaseParamsIsShow(false)
     },
+
     handleSubmit() {
       this.form.validateFields((error, values) => {
         if (!error) {
@@ -216,9 +218,11 @@ export default {
             'number-calls': '',
             'protocol':'',
           }
+         // console.log(values)
           if (Object.keys(values).indexOf('sutaddress') > -1) {
             // 是不是海鸥
             Object.keys(values).map((items) => {
+              console.log(items)
               if (items.indexOf('instrument-ips') > -1) {
                 DRAValues['instrument-ips'] =
                   DRAValues['instrument-ips'] + values[items] + ';'
@@ -227,6 +231,9 @@ export default {
               } else if (items.indexOf('number-calls') > -1) {
                 DRAValues['number-calls'] =
                   DRAValues['number-calls'] + values[items] + ';'
+              } else if (items.indexOf('protocol') > -1) {
+                DRAValues['protocol'] =
+                  DRAValues['protocol'] + values[items] + ';'
               }
             })
             DRAValues['instrument-ips'] =
@@ -242,7 +249,7 @@ export default {
               DRAValues.caps.charAt(DRAValues.caps.length - 1) === ';'
                 ? DRAValues.caps.substring(0, DRAValues.caps.length - 1)
                 : DRAValues.caps;
-
+            // 新添加protocol 字段
                 DRAValues.protocol =
               DRAValues.protocol.charAt(DRAValues.protocol.length - 1) === ';'
                 ? DRAValues.protocol.substring(0, DRAValues.protocol.length - 1)
