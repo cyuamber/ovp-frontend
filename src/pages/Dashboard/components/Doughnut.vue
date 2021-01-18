@@ -36,6 +36,7 @@ export default {
     },
     jobAmountData(val) {
       if (val) {
+        this.addEvent()
         this.initjobAmount()
       }
     },
@@ -46,6 +47,18 @@ export default {
     }
   },
   methods: {
+    addEvent() {
+      this.jobAmountData.forEach(item => {
+        item.events = {
+          click: () => {
+            this.$router.push({
+              name: 'TestJob',
+              query: { status: item.jobAmountClickText }
+            })
+          }
+        }
+      })
+    },
     initSUTAmount() {
       this.chartSut = {
         chart: {

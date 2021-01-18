@@ -71,15 +71,7 @@ const mutations = {
           name: item === 'successcount' ? 'DONE' : 'FAILED',
           y: data[item],
           color: state.jobAmountColors[index],
-          events: {
-            click: () => {
-              window.location.href =
-                window.location.origin +
-                window.location.pathname +
-                '/#/testjobmgt?status=' +
-                state.jobAmountClickText[index]
-            }
-          }
+          jobAmountClickText: state.jobAmountClickText[index]
         })
       })
     } else state.jobAmountData = []
