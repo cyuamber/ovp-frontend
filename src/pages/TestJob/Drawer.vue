@@ -470,7 +470,11 @@ export default {
           let idItem = this.testJobSingleData.cases[0].parameters.find(item => {
             return item.name === 'instrument-ids'
           })
-          if (typeof idItem !== 'undefined') {
+          if (
+            typeof idItem !== 'undefined' &&
+            idItem.value !== null &&
+            idItem.value.indexOf(';')
+          ) {
             this.initTestInstrument.code = idItem.value.split(';')
           }
         }
