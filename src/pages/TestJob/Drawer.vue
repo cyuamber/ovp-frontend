@@ -592,7 +592,7 @@ export default {
               }
             })
           }
-          console.log(values)
+          // console.log(values)
           this.createrTestJobMGT({
             isEdit,
             values,
@@ -652,7 +652,7 @@ export default {
       this.changeCaseCheckAll(e.length === this.testCaseList.length) // boolean值
     },
     caseParamsEdit(caseData) {
-      console.log(caseData)
+      // console.log(caseData)
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       // console.log(JSON.parse(JSON.stringify(this.oldInstrumentList)), JSON.parse(JSON.stringify(this.cheangeTestInstrument)))
       // if (this.cheangeTestInstrument.length < this.oldInstrumentList.length) { // 如果删除了
@@ -690,6 +690,18 @@ export default {
         this.$message.info('This testCase has no editable parameters.')
         return false
       }
+      //console.log(caseData)
+      //模拟mock数据接口
+      const newObj = {
+        name: 'protocol',
+        value: 'adbs;dfdf',
+        description: 'Protocol of seagull case',
+        type: 'string',
+        defaultValue: 'adbs;dfdf',
+        isOptional: true,
+        visible: true
+      }
+      caseData.parameters.push(newObj)
       caseData.parameters.forEach(item => {
         // 把null都换成空字符串
         item.value === null ? (item.value = '') : null
