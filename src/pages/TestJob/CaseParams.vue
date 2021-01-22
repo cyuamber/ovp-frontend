@@ -287,6 +287,7 @@ export default {
               testCaseLists.splice(index, 1, caseParameters)
             }
           })
+          console.log('testCaseLists',testCaseLists)
           this.updateTestCaseList({ spin: false, list: testCaseLists })
           this.$emit('updateSingleCase', this.caseParamsData.id) // 告诉父组件该项不用初始值
           this.setCaseParamsIsShow(false)

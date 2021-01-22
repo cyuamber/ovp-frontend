@@ -60,8 +60,11 @@ const mutations = {
   [types.UPDATE_TEST_CASE_LIST](state, { spin, list }) {
     state.testCaseSpin = spin
     if (list) {
+      console.log('lis::', list)
+
       state.testCaseList = list
     }
+    console.log('status', state)
     state.testCaseCheckAll =
       state.initcheckboxGroup.length === state.testCaseList.length
   },

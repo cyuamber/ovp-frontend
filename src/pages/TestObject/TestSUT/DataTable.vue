@@ -113,5 +113,5 @@ export default {
     padding: 0 8px;
     border-radius: 12px;
   }
-}</style
->>
+}
+</style>

@@ -172,6 +172,12 @@ export default {
     padding: 0 8px;
     border-radius: 12px;
   }
+  .test-spec__tag {
+    line-height: 20px;
+    padding: 0 8px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
   .test-case__table {
     margin: auto;
     .test-case__showState {

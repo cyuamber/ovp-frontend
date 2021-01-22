@@ -266,7 +266,13 @@
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <CaseParams :isEdit="isEdit" @updateSingleCase="updateSingleCase" />
+            <!-- {{this.electedSUTNameType === 101009 ? -->
+            <CaseTableParams
+              :isEdit="isEdit"
+              @updateSingleCase="updateSingleCase"
+            />
+            <!-- <TestTab :isEdit="isEdit" @updateSingleCase="updateSingleCase" /> -->
+            <!-- }} -->
           </a-form-item>
         </div>
       </a-spin>
@@ -283,10 +289,14 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { formList } from './constants'
-import CaseParams from './CaseParams'
+import CaseTableParams from './CaseTableParams'
+//import TestTab from './TestTab'
+//import CaseParams from './CaseParams'
+// console.log(CaseParams)
 export default {
   props: ['isShow', 'isEdit'],
-  components: { CaseParams },
+  //components: { CaseParams },
+  components: { CaseTableParams },
   data() {
     return {
       visible: this.isShow,
@@ -690,22 +700,15 @@ export default {
         this.$message.info('This testCase has no editable parameters.')
         return false
       }
-      //console.log(caseData)
-      //模拟mock数据接口
-      const newObj = {
-        name: 'protocol',
-        value: 'adbs;dfdf',
-        description: 'Protocol of seagull case',
-        type: 'string',
-        defaultValue: 'adbs;dfdf',
-        isOptional: true,
-        visible: true
-      }
-      caseData.parameters.push(newObj)
       caseData.parameters.forEach(item => {
         // 把null都换成空字符串
         item.value === null ? (item.value = '') : null
         item.defaultValue === null ? (item.defaultValue = '') : null
+        if (item.name === 'protocol') {
+          if (item.id === null) {
+            item.id = ''
+          }
+        }
       })
       if (this.deleteItemIndex.length !== 0) {
         // 有删除过

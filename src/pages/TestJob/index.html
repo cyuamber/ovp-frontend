@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var param = {"parameters":[{"name":"config-json","value":"13,32","description":"Configuration file","type":"string","defaultValue":"12;34","isOptional":true,"visible":false},{"name":"instrument-ids","value":"546300391991099392;546300508152348672","description":"Auxiliary parameters, instrument vm ids of instrument","type":"string","defaultValue":"546300391991099392;546300508152348672","isOptional":true,"visible":false},{"name":"instrument-ips","value":"10.0.0.18;10.0.0.17","description":"Instrument vm ips of seagull","type":"string","defaultValue":"10.0.0.18;10.0.0.17;6;7","isOptional":true,"visible":true},{"name":"caps","value":"18;17","description":"Call rate of seagull case","type":"string","defaultValue":"18;17;3;87;9","isOptional":true,"visible":true},{"name":"number-calls","value":"18;17","description":"Number-calls of seagull case","type":"string","defaultValue":"18;1;9887;34","isOptional":false,"visible":true}]}
+    var json = param.parameters
+    var data = [
+      {
+        "key": 0,
+        "name": "Edrward 0",
+        "age": 32,
+        "address": "London Park no. 0"
+      },
+      {
+        "key": 1,
+        "name": "Edrward 1",
+        "age": 32,
+        "address": "London Park no. 1"
+      }]
+      var tabData = [],nameItem=[], nameArr,valObj={};
+      json.map((item,key)=>{
+        valObj[item.name] = item.defaultValue.split(';')
+        var defArr = item.defaultValue.split(';')
+        var name = item.name;     
+         nameItem.push(item.name)
+      })
+     var obj = {},rename,newData,data;
+      nameItem.map((val,idx)=>{
+       var  nameLen = nameItem.length,valLen = valObj[val].length;
+        if(valLen<nameLen){
+            var fillLen = nameLen-valLen,fillArr = Array.from({length:fillLen},()=> '--');
+            valObj[val] = [...valObj[val], ...fillArr]
+        }
+        if(!obj.val){
+           var configVal = valObj[val];        
+           obj[val]='--'
+           tabData.push(obj)       
+        } 
+       })
+      console.log(JSON.stringify(valObj))
+      console.log(nameItem)
+    //   console.log('data:',data)
+      var copytab = JSON.parse(JSON.stringify(tabData))
+     for(var n in valObj){    
+        copytab.map((ele,i)=>{    
+             switch(n){               
+                case 'config-json' :
+                case "instrument-ids":
+                case "instrument-ips":
+                case "caps":
+                case "number-calls":            
+                console.log(ele.hasOwnProperty(n),n)
+                console.log('elennnn',ele[n])
+                ele[n] =  valObj[n][i];
+                console.log('asas',valObj[n][i])
+                console.log('999',copytab)
+                 break;          
+           } 
+         })
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      setTimeout(()=>{
+      //  console.log(JSON.stringify(tabData))
+       console.log(tabData)
+       console.log(copytab)
+      },3000)
+    
+   
+  </script>
+</body>
+</html>
