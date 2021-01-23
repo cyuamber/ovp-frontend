@@ -270,8 +270,16 @@
             <CaseTableParams
               :isEdit="isEdit"
               @updateSingleCase="updateSingleCase"
+              v-if="
+                selectedSUTNameType === 101009 &&
+                  cheangeTestInstrument.length > 0
+              "
             />
-            <!-- <TestTab :isEdit="isEdit" @updateSingleCase="updateSingleCase" /> -->
+            <CaseParams
+              :isEdit="isEdit"
+              @updateSingleCase="updateSingleCase"
+              v-if="selectedSUTNameType !== 101009"
+            />
             <!-- }} -->
           </a-form-item>
         </div>
@@ -291,12 +299,12 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import { formList } from './constants'
 import CaseTableParams from './CaseTableParams'
 //import TestTab from './TestTab'
-//import CaseParams from './CaseParams'
+import CaseParams from './CaseParams'
 // console.log(CaseParams)
 export default {
   props: ['isShow', 'isEdit'],
   //components: { CaseParams },
-  components: { CaseTableParams },
+  components: { CaseTableParams, CaseParams },
   data() {
     return {
       visible: this.isShow,
@@ -481,6 +489,9 @@ export default {
             return item.name === 'instrument-ids'
           })
           if (typeof idItem !== 'undefined') {
+            if (idItem.value === null) {
+              idItem.value = ''
+            }
             this.initTestInstrument.code = idItem.value.split(';')
           }
         }
@@ -686,9 +697,10 @@ export default {
       }
       // 根据sutnametype获得地址, 直接覆盖
       if (this.selectedSUTNameType) {
-        this.selectedSUTNameAdress = this.SUTNameList.find(item => {
+        let list = this.SUTNameList.find(item => {
           return Number(item.type) === Number(this.selectedSUTNameType)
-        }).address
+        })
+        this.selectedSUTNameAdress = list ? list.address : ''
       }
       let hasvisible =
         caseData.parameters && caseData.parameters.length > 0

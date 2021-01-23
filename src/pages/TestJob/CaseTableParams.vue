@@ -59,6 +59,7 @@ export default {
   name: 'CaseTableParams',
   props: ['isEdit'],
   data() {
+    // this.initRanderFn()
     return {
       tabData:[],
       editingKey : '',
@@ -72,14 +73,17 @@ export default {
 
   },
   mounted(){
-    setTimeout(()=>{
+    //setTimeout(()=>{
+      // sessionStorage.setItem('tabdata', JSON.stringify(this.$store.state.testJob.caseParamsData))
       this.initRanderFn()
-    },2000)
-
+   // },1000)
   },
   computed: {
     ...mapState({
-      caseParamsData: (state) => state.testJob.caseParamsData,
+      caseParamsData: (state) => {
+         sessionStorage.setItem('tabdata', JSON.stringify(state.testJob.caseParamsData))
+        return state.testJob.caseParamsData
+      },
       testCaseList: (store) => store.testJob.testCaseList,
       caseParamsIsShow: (store) => store.testJob.caseParamsIsShow
     }),
@@ -121,23 +125,10 @@ export default {
         this.count++
         if (this.count > 1 && this.caseParamsData&&this.caseParamsData.parameters.length>0) { // 只有首次用的initialValue，后面每次打开都重新设置值
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
-             this.columnsData.push(item.name)
+           //  this.columnsData.push(item.name)
             return item.visible !== false;
           });
-          this.caseParams.forEach((item) => {
-            if (item.name === 'instrument-ips' || item.name === 'caps' || item.name === 'number-calls') {
-              const itemList = item.value.split(';') // 目前不用defaultValue
-              for (let i = 0; i < itemList.length; i ++) {
-                this.form.setFieldsValue({
-                  [item.name + i + this.caseParamsData.id]: itemList[i]
-                })
-              }
-            } else {
-              this.form.setFieldsValue({
-                [item.name]: item.value
-              })
-            }
-          })
+
         }
       }
 
@@ -164,18 +155,28 @@ export default {
 
     },
     initRanderFn(){
-        let caseParamsData = this.$store.state.testJob.caseParamsData;
+       // let caseParamsData = this.$store.state.testJob.caseParamsData;
     let caseParamsIsShow = this.$store.state.testJob.caseParamsIsShow
      let valObj = {}
-    if(caseParamsIsShow && caseParamsData.parameters.length>0){
-        let json = this.caseParamsData.parameters
+     let dataTab =  JSON.parse(sessionStorage.getItem('tabdata'))
+     let json;
+    if(caseParamsIsShow && dataTab.parameters.length>0 ){
+      if(this.caseParamsData.parameters.length<=0){
+        json = dataTab.parameters
+      }else{
+        json = this.caseParamsData.parameters
+      }
+
         let nameItem=[]
 
       json.map((item)=>{
+        if(item.defaultValue===null){
+          item.defaultValue = ''
+        }
         valObj[item.name] = item.defaultValue.split(';')
-       // if(item.visible){//如果是true的话展示列
-           nameItem.push(item.name)
-        //}
+        // if(item.visible){//如果是true的话展示列
+         nameItem.push(item.name)
+        // }
 
       })
      let obj = {};
@@ -217,25 +218,7 @@ export default {
       this.caseParams = this.caseParamsData.parameters.filter((item) => {
         return item.visible !== false
       })
-      this.caseParams.forEach((item) => {
-        if (
-          item.name === 'instrument-ips' ||
-          item.name === 'caps' ||
-          item.name === 'number-calls'||
-          item.name === 'protocol'
-        ) {
-         // const itemList = item.value.split(';') // 目前不用defaultValue
-          // for (let i = 0; i < itemList.length; i++) {
-          //   this.form.setFieldsValue({
-          //     [item.name + i + this.caseParamsData.id]: itemList[i],
-          //   })
-          // }
-        } else {
-          // this.form.setFieldsValue({
-          //   [item.name]: item.value,
-          // })
-        }
-      })
+      this.initRanderFn();
       this.setCaseParamsIsShow(false)
     },
     strBool(val) {
@@ -252,9 +235,16 @@ export default {
         this.tabData = newData
         this.caseData.map((item)=>{
             if(item.name==column){
+              if(item.defaultValue===null){
+                item.defaultValue = ''
+              }
+              if(item.value===null){
+                item.value=''
+              }
                valArr =  item.defaultValue.split(';')
                valArr.splice(key,1,value)
               item.defaultValue =valArr.join(';')
+              item.value = valArr.join(';')
             }
 
             return item;
