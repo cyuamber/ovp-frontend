@@ -26,7 +26,7 @@
               @change="e => handleChange(e.target.value, record.key, col)"
             />
             <template v-else>
-              {{ text }}
+              {{ text || '--' }}
             </template>
           </div>
         </template>
@@ -65,7 +65,6 @@ export default {
           let valObj = {}
           let tabDataArr=[];
          let dataTab =  JSON.parse(sessionStorage.getItem('tabdata'))
-         console.log('dataTab',dataTab)
             let json;
           if(caseParamsIsShow && dataTab.parameters.length>0 ){
              if(this.caseParams && this.caseParamsData.parameters.length<=0){
@@ -82,8 +81,6 @@ export default {
               }
               valObj[nameText] = item.defaultValue.split(';')
               if(item.visible){//如果是true的话展示列
-
-                //console.log('nameText',nameText)
                 nameItem.push(nameText)
               }
               if(item.isOptional){
@@ -91,10 +88,8 @@ export default {
               }
             })
           let obj = {};
-          console.log('nameItem',nameItem)
             nameItem.map((val)=>{
             let  nameLen = nameItem.length,valLen = valObj[val].length;
-            console.log(valLen,nameLen)
             if(!val.defaultValue){
               let fillArr = Array.from({length:nameLen},()=> '--');
                 valObj[val] = [...valObj[val], ...fillArr]
@@ -201,7 +196,6 @@ export default {
         this.count++
         if (this.count > 1 && this.caseParamsData&&this.caseParamsData.parameters.length>0) { // 只有首次用的initialValue，后面每次打开都重新设置值
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
-            // this.columnsData.push(item.name)
             return item.visible !== false;
           });
 
@@ -247,10 +241,8 @@ export default {
       const target = newData.filter(item => key === item.key)[0]
       if(!jsonParameters){
       let  jsonArr = [{"name":"config-json","value":"/opt/oclip/conf/tmp/e8e5ac66-5716-11eb-b64b-fa163e554a15.json","description":"Configuration file","type":"string","defaultValue":null,"isOptional":true,"visible":false},{"name":"instrument-ids","value":null,"description":"Auxiliary parameters, instrument vm ids of instrument","type":"string","defaultValue":null,"isOptional":true,"visible":false},{"name":"instrument-ips","value":null,"description":"Instrument vm ips of seagull","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"caps","value":null,"description":"Call rate of seagull case","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"number-calls","value":null,"description":"Number-calls of seagull case","type":"string","defaultValue":null,"isOptional":false,"visible":true},{"name":"sutaddress","value":null,"description":"Sut address for DRA","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"protocol","value":null,"description":"Protocol of seagull case","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"mode","value":null,"description":"Mode of seagull case","type":"string","defaultValue":null,"isOptional":true,"visible":false},{"name":"timeout","value":"60000","description":"timeout for command to complete the given task in milliseconds","type":"string","defaultValue":"60000","isOptional":true,"visible":true}]
-        // jsonParameters = JSON.parse(JSON.stringify(this.$store.state.testJob.caseParamsData.parameters));
         jsonParameters = JSON.parse(JSON.stringify(jsonArr));
       }
-    //  this.caseData = JSON.parse(JSON.stringify(this.$store.state.testJob.caseParamsData.parameters));
       if (target) {
         target[column] = value
 
@@ -288,16 +280,12 @@ export default {
       const newCacheData = [...this.cacheData]
       const target = newData.filter(item => key === item.key)[0]
       const targetCache = newCacheData.filter(item => key === item.key)[0]
-      console.log('optionalParam',optionalParam,target)
-      // const keysOption = Object.keys(optionalParam)
-      // for(let n in target){
         for(var i=0;i<optionalParam.length;i++){
          if(!target[optionalParam[i]]){
            this.$message.error(optionalParam[i]+' is required')
            return;
          }
         }
-      // }
       if (target && targetCache) {
         delete target.editable
         this.tabData = newData
