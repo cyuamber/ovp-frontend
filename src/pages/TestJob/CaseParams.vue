@@ -113,7 +113,7 @@
   </a-modal>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'CaseParams',
@@ -148,7 +148,6 @@ export default {
           this.caseParams = this.caseParamsData.parameters.filter((item) => {
             return item.visible !== false
           })
-          console.log(this.caseParams)
           this.caseParams.forEach((item) => {
             if (
               item.name === 'instrument-ips' ||
@@ -218,11 +217,9 @@ export default {
             'number-calls': '',
             'protocol':'',
           }
-         // console.log(values)
           if (Object.keys(values).indexOf('sutaddress') > -1) {
             // 是不是海鸥
             Object.keys(values).map((items) => {
-              console.log(items)
               if (items.indexOf('instrument-ips') > -1) {
                 DRAValues['instrument-ips'] =
                   DRAValues['instrument-ips'] + values[items] + ';'

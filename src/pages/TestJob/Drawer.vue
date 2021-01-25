@@ -266,7 +266,6 @@
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <!-- {{this.electedSUTNameType === 101009 ? -->
             <CaseTableParams
               :isEdit="isEdit"
               @updateSingleCase="updateSingleCase"
@@ -280,7 +279,6 @@
               @updateSingleCase="updateSingleCase"
               v-if="selectedSUTNameType !== 101009"
             />
-            <!-- }} -->
           </a-form-item>
         </div>
       </a-spin>
@@ -298,12 +296,9 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { formList } from './constants'
 import CaseTableParams from './CaseTableParams'
-//import TestTab from './TestTab'
 import CaseParams from './CaseParams'
-// console.log(CaseParams)
 export default {
   props: ['isShow', 'isEdit'],
-  //components: { CaseParams },
   components: { CaseTableParams, CaseParams },
   data() {
     return {

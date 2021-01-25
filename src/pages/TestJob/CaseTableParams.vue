@@ -3,6 +3,7 @@
     v-bind:title="title"
     :visible="caseParamsIsShow"
     :closable="false"
+    :width="750"
     @ok="handleSubmit"
     @cancel="handleCancel"
   >
@@ -53,7 +54,7 @@
   </a-modal>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import { mapState,mapMutations } from "vuex"
 let valArr,jsonParameters,optionalParam=[];
 export default {
@@ -62,13 +63,14 @@ export default {
   data() {
      this.init = () => {
           let caseParamsIsShow = this.$store.state.testJob.caseParamsIsShow
+          let caseParamsData = this.$store.state.testJob.caseParamsData
           let valObj = {}
           let tabDataArr=[];
          let dataTab =  JSON.parse(sessionStorage.getItem('tabdata'))
             let json;
           if(caseParamsIsShow && dataTab.parameters.length>0 ){
-             if(this.caseParams && this.caseParamsData.parameters.length<=0){
-                 json = this.caseParamsData.parameters
+             if(caseParamsData && caseParamsData.parameters.length>0){
+                 json = caseParamsData.parameters
               }else{
                  json = dataTab.parameters
               }
@@ -308,6 +310,7 @@ export default {
   }
 }
 </script>
+
 <style lang="less" scope>
 .editable-row-operations a {
   margin-right: 8px;
