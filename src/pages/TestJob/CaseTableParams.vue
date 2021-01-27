@@ -7,7 +7,7 @@
     @ok="handleSubmit"
     @cancel="handleCancel"
   >
-    <template>
+    <template v-if="isEdit">
       <a-table
         :columns="columnsTitle"
         :data-source="tabData"
@@ -16,6 +16,46 @@
       >
         <template
           v-for="col in columnsContentFn"
+          :slot="col"
+          slot-scope="text, record"
+        >
+          <div :key="col">
+            <a-input
+              v-if="record.editable"
+              style="margin: -5px 0"
+              :value="text || '--'"
+              :disabled="col == '*instrument-ips' || col == '*sutaddress'"
+              @change="e => handleChange(e.target.value, record.key, col)"
+            />
+            <template v-else>
+              {{ text || '--' }}
+            </template>
+          </div>
+        </template>
+        <template slot="operation" slot-scope="text, record">
+          <div class="editable-row-operations">
+            <span v-if="record.editable">
+              <a @click="() => save(record.key)">Save</a>
+              <a-popconfirm
+                title="Sure to cancel?"
+                @confirm="() => cancel(record.key)"
+              >
+                <a>Cancel</a>
+              </a-popconfirm>
+            </span>
+            <span v-else>
+              <a :disabled="editingKey !== ''" @click="() => edit(record.key)"
+                >Edit</a
+              >
+            </span>
+          </div>
+        </template>
+      </a-table>
+    </template>
+    <template v-else>
+      <a-table :columns="addCreatedColumns" :data-source="tabData" bordered>
+        <template
+          v-for="col in addCreatedContentFn"
           :slot="col"
           slot-scope="text, record"
         >
@@ -55,184 +95,284 @@
 </template>
 
 <script>
-import { mapState,mapMutations } from "vuex"
-let valArr,jsonParameters,optionalParam=[];
+import { mapState, mapMutations } from 'vuex'
+let valArr,
+  jsonParameters,
+  optionalParam = []
 export default {
   name: 'CaseTableParams',
-  props: ['isEdit'],
+  props: ['isEdit', 'instrument'],
   data() {
-     this.init = () => {
-          let caseParamsIsShow = this.$store.state.testJob.caseParamsIsShow
-          let caseParamsData = this.$store.state.testJob.caseParamsData
-          let valObj = {}
-          let tabDataArr=[];
-         let dataTab =  JSON.parse(sessionStorage.getItem('tabdata'))
-            let json;
-          if(caseParamsIsShow && dataTab.parameters.length>0 ){
-             if(caseParamsData && caseParamsData.parameters.length>0){
-                 json = caseParamsData.parameters
-              }else{
-                 json = dataTab.parameters
-              }
-              let nameItem=[]
+    this.init = () => {
+      let caseParamsIsShow = this.$store.state.testJob.caseParamsIsShow
+      let caseParamsData = this.$store.state.testJob.caseParamsData
+      let instrumentArr = this.$store.state.testJob.TestInstrumentOption
+      let instrumentJson = []
+      instrumentArr.map((item, key) => {
+        if (item.id === this.instrument[key]) {
+          instrumentJson.push(item.name)
+        }
+      })
+      let valObj = { 'test instrument': instrumentJson }
+      let tabDataArr = []
+      let dataTab = JSON.parse(sessionStorage.getItem('tabdata'))
+      let json
+      if (caseParamsIsShow && dataTab.parameters.length > 0) {
+        if (caseParamsData && caseParamsData.parameters.length > 0) {
+          json = caseParamsData.parameters
+        } else {
+          json = dataTab.parameters
+        }
+        let nameItem = ['test instrument']
 
-            json.map((item)=>{
-               const nameText = item.isOptional?'*'+item.name:item.name
-              if(item.defaultValue===null){
-                item.defaultValue = ''
-              }
-              valObj[nameText] = item.defaultValue.split(';')
-              if(item.visible){//如果是true的话展示列
-                nameItem.push(nameText)
-              }
-              if(item.isOptional){
-                optionalParam.push(nameText)
-              }
-            })
-          let obj = {};
-            nameItem.map((val)=>{
-            let  nameLen = nameItem.length,valLen = valObj[val].length;
-            if(!val.defaultValue){
-              let fillArr = Array.from({length:nameLen},()=> '--');
-                valObj[val] = [...valObj[val], ...fillArr]
-            }else if(valLen<nameLen){
-                  let fillLen = nameLen-valLen;
-                  let fillArr = Array.from({length:fillLen},()=> '--');
-                  valObj[val] = [...valObj[val], ...fillArr]
-              }
-              if(!obj.val){
-                obj[val]='--'
-                tabDataArr.push(obj)
-              }
-            })
-            var copytab = JSON.parse(JSON.stringify(tabDataArr))||[];
-            for(var n in valObj){
-                copytab.map((ele,i)=>{
-                    switch(n){
-                      case n:
-                        ele[n] =  valObj[n][i];
-                        ele["key"] = i;
-                        break;
-                  }
-                })
+        json.map(item => {
+          const nameText = item.isOptional ? '*' + item.name : item.name
+          if (item.defaultValue === null) {
+            item.defaultValue = ''
+          }
+          valObj[nameText] = item.defaultValue.split(';')
+          if (item.visible) {
+            //如果是true的话展示列
+            nameItem.push(nameText)
+          }
+          if (item.isOptional && item.visible) {
+            optionalParam.push(nameText)
+          }
+        })
+        let obj = {}
+        const instrument = this.instrument.length
+        nameItem.map(val => {
+          let fillArr = Array.from({ length: instrument }, () => '--')
+          valObj[val] = [...valObj[val], ...fillArr]
+          if (!obj.val) {
+            obj['test instrument'] = '--'
+            obj[val] = '--'
+            tabDataArr.push(obj)
+          }
+        })
+        tabDataArr = tabDataArr.slice(0, instrument)
+        var copytab = JSON.parse(JSON.stringify(tabDataArr)) || []
+        for (var n in valObj) {
+          copytab.map((ele, i) => {
+            switch (n) {
+              case n:
+                ele[n] = valObj[n][i]
+                ele['key'] = i
+                break
             }
-          }
-          this.tabData = copytab
-          if(copytab && copytab.length>0){
-             this.cacheData = copytab.map(item => ({ ...item }))
-          }
+          })
+        }
+      }
+      this.tabData = copytab
+      if (copytab && copytab.length > 0) {
+        this.cacheData = copytab.map(item => ({ ...item }))
+      }
 
-           return copytab
+      return copytab
     }
-   let data = this.init()||[];
+    this.addinit = () => {
+      let obj = {}
+      let tabDataArr = []
+      let instrumentArr = this.$store.state.testJob.TestInstrumentOption
+
+      if (instrumentArr) {
+        instrumentArr.map((item, key) => {
+          if (item.id === this.instrument[key]) {
+            obj['test instrument'] = item.name
+            obj[item] = '--'
+            obj['key'] = key
+            tabDataArr.push(obj)
+          }
+        })
+      }
+      this.cacheData = tabDataArr.map(item => ({ ...item }))
+      return tabDataArr
+    }
+
+    let data = this.isEdit ? this.init() || [] : this.addinit()
     return {
       tabData: data,
-      editingKey : '',
+      editingKey: '',
       count: 0,
-      cacheData:null,
-      caseData:[],
-      flag:false,
-      title: this.isEdit ? 'Edit Case Parameters' : 'Add Case Parameters',
+
+      cacheData: null,
+      caseData: [],
+      flag: false,
+      title: this.isEdit ? 'Edit Case Parameters' : 'Add Case Parameters'
     }
   },
-  created(){
+  created() {},
+  updated() {
+    let storage = window.sessionStorage
+    let lastname = JSON.parse(storage.getItem('tabdata'))
 
-  },
-  updated(){
-    let storage = window.sessionStorage;
-    let lastname = JSON.parse(storage.getItem("tabdata"));
-
-    if( lastname && lastname.parameters && lastname.parameters.length > 0){
-      if(!this.flag){
-          this.init()
-          this.flag = true
+    if (lastname && lastname.parameters && lastname.parameters.length > 0) {
+      if (!this.flag) {
+        this.init()
+        this.flag = true
       }
     }
   },
   computed: {
     ...mapState({
-      caseParamsData: (state) => {
-         sessionStorage.setItem('tabdata', JSON.stringify(state.testJob.caseParamsData))
+      caseParamsData: state => {
+        sessionStorage.setItem(
+          'tabdata',
+          JSON.stringify(state.testJob.caseParamsData)
+        )
         return state.testJob.caseParamsData
       },
-      testCaseList: (store) => store.testJob.testCaseList,
-      caseParamsIsShow: (store) => store.testJob.caseParamsIsShow
+      testCaseList: store => store.testJob.testCaseList,
+      caseParamsIsShow: store => store.testJob.caseParamsIsShow
     }),
-    columnsTitle() {
-      let columnsArr = []
+    //add create columns
+    addCreatedColumns() {
+      let columnsArr = [
+        {
+          title: 'test instrument',
+          dataIndex: 'test instrument',
+          scopedSlots: { customRender: 'test instrument' }
+        }
+      ]
       const onlyOperation = {
         title: 'operation',
         dataIndex: 'operation',
         scopedSlots: { customRender: 'operation' }
       }
-      if(this.caseParamsData.parameters){
-        this.caseParamsData.parameters.map((item,key)=>{
-          const nameText = item.isOptional?'*'+item.name:item.name
-          columnsArr.push({
-            title:nameText,
-            dataIndex: nameText,
-            key:key,
-            editable:false,
-            scopedSlots: { customRender: nameText }
-          })
+      let instrumentArr = this.$store.state.testJob.TestInstrumentOption
+      if (instrumentArr) {
+        instrumentArr.map((item, key) => {
+          if (item.id === this.instrument[key]) {
+            columnsArr.push({
+              title: item.name,
+              dataIndex: item.name,
+              key: key,
+              editable: false,
+              scopedSlots: { customRender: item.name }
+            })
+          }
         })
         columnsArr.push(onlyOperation)
-
+      }
+      return columnsArr
+    },
+    addCreatedContentFn() {
+      const columnsHead = ['test instrument']
+      let instrumentArr = this.$store.state.testJob.TestInstrumentOption
+      if (instrumentArr) {
+        instrumentArr.map((item, key) => {
+          if (item.id === this.instrument[key]) {
+            columnsHead.push(item.name)
+          }
+        })
+      }
+      return columnsHead
+    },
+    columnsTitle() {
+      let columnsArr = [
+        {
+          title: 'test instrument',
+          dataIndex: 'test instrument',
+          scopedSlots: { customRender: 'test instrument' }
+        }
+      ]
+      const onlyOperation = {
+        title: 'operation',
+        dataIndex: 'operation',
+        scopedSlots: { customRender: 'operation' }
+      }
+      if (this.caseParamsData.parameters) {
+        this.caseParamsData.parameters.map((item, key) => {
+          const nameText = item.isOptional ? '*' + item.name : item.name
+          if (item.visible) {
+            columnsArr.push({
+              title: nameText,
+              dataIndex: nameText,
+              key: key,
+              editable: false,
+              scopedSlots: { customRender: nameText }
+            })
+          }
+        })
+        columnsArr.push(onlyOperation)
       }
       return columnsArr
     },
     columnsContentFn() {
-      const columnsHead = []
-       if(this.caseParamsData.parameters){
-        this.caseParamsData.parameters.map((item)=>{
-          const nameText = item.isOptional?'*'+item.name:item.name
+      const columnsHead = ['test instrument']
+      if (this.caseParamsData.parameters) {
+        this.caseParamsData.parameters.map(item => {
+          const nameText = item.isOptional ? '*' + item.name : item.name
+          if (item.visible) {
             columnsHead.push(nameText)
+          }
         })
-       }
-        return columnsHead
-    },
+      }
+      return columnsHead
+    }
   },
   watch: {
     caseParamsIsShow(val) {
       if (val) {
         this.count++
-        if (this.count > 1 && this.caseParamsData&&this.caseParamsData.parameters.length>0) { // 只有首次用的initialValue，后面每次打开都重新设置值
-          this.caseParams = this.caseParamsData.parameters.filter((item) => {
-            return item.visible !== false;
-          });
-
+        if (
+          this.count > 1 &&
+          this.caseParamsData &&
+          this.caseParamsData.parameters.length > 0
+        ) {
+          // 只有首次用的initialValue，后面每次打开都重新设置值
+          this.caseParams = this.caseParamsData.parameters.filter(item => {
+            return item.visible !== false
+          })
         }
       }
-
     },
 
-    caseParamsData(val) { // 只有第一次监控到打开
-      this.caseParams = val.parameters.filter((item) => {
+    caseParamsData(val) {
+      // 只有第一次监控到打开
+      this.caseParams = val.parameters.filter(item => {
         return item.visible !== false
-      });
-    },
+      })
+    }
   },
 
   methods: {
-     ...mapMutations('testJob', ['setCaseParamsIsShow', 'updateTestCaseList']),
+    ...mapMutations('testJob', ['setCaseParamsIsShow', 'updateTestCaseList']),
     // 提交表单事件
     handleSubmit() {
-      if(this.$store.state.testJob.caseParamsData){
-          const reqData = [{...this.$store.state.testJob.caseParamsData,...{parameters:this.caseData}}]
-         this.updateTestCaseList({ spin: false, list: reqData})
-            this.$emit('updateSingleCase',this.$store.state.testJob.caseParamsData.id) // 告诉父组件该项不用初始值
-       this.setCaseParamsIsShow(false)
+      if (this.$store.state.testJob.caseParamsData && this.isEdit) {
+        const reqData = [
+          {
+            ...this.$store.state.testJob.caseParamsData,
+            ...{ parameters: this.caseData }
+          }
+        ]
+        for (var i = 0; i < optionalParam.length; i++) {
+          for (let j = 0; j < this.tabData.length; j++) {
+            const target = this.tabData[j]
+            if (!target[optionalParam[i]]) {
+              if (optionalParam[i] !== '*instrument-ips') {
+                this.$message.error(optionalParam[i] + ' is required')
+                return
+              }
+            }
+          }
+        }
+        this.updateTestCaseList({ spin: false, list: reqData })
       }
-
-
+      this.$emit(
+        'updateSingleCase',
+        this.$store.state.testJob.caseParamsData.id
+      ) // 告诉父组件该项不用初始值
+      this.setCaseParamsIsShow(false)
     },
     // 取消弹层的逻辑
-     handleCancel() {
+    handleCancel() {
       // 将值恢复
-      this.caseParams = this.caseParamsData.parameters.filter((item) => {
+      this.caseParams = this.caseParamsData.parameters.filter(item => {
         return item.visible !== false
       })
-      this.init();
+      this.init()
       this.setCaseParamsIsShow(false)
     },
     strBool(val) {
@@ -241,31 +381,31 @@ export default {
     handleChange(value, key, column) {
       const newData = [...this.tabData]
       const target = newData.filter(item => key === item.key)[0]
-      if(!jsonParameters){
-      let  jsonArr = [{"name":"config-json","value":"/opt/oclip/conf/tmp/e8e5ac66-5716-11eb-b64b-fa163e554a15.json","description":"Configuration file","type":"string","defaultValue":null,"isOptional":true,"visible":false},{"name":"instrument-ids","value":null,"description":"Auxiliary parameters, instrument vm ids of instrument","type":"string","defaultValue":null,"isOptional":true,"visible":false},{"name":"instrument-ips","value":null,"description":"Instrument vm ips of seagull","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"caps","value":null,"description":"Call rate of seagull case","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"number-calls","value":null,"description":"Number-calls of seagull case","type":"string","defaultValue":null,"isOptional":false,"visible":true},{"name":"sutaddress","value":null,"description":"Sut address for DRA","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"protocol","value":null,"description":"Protocol of seagull case","type":"string","defaultValue":null,"isOptional":true,"visible":true},{"name":"mode","value":null,"description":"Mode of seagull case","type":"string","defaultValue":null,"isOptional":true,"visible":false},{"name":"timeout","value":"60000","description":"timeout for command to complete the given task in milliseconds","type":"string","defaultValue":"60000","isOptional":true,"visible":true}]
-        jsonParameters = JSON.parse(JSON.stringify(jsonArr));
+      if (!jsonParameters && this.isEdit) {
+        let jsonArr = JSON.parse(sessionStorage.getItem('tabdata')).parameters
+        jsonParameters = JSON.parse(JSON.stringify(jsonArr))
       }
       if (target) {
         target[column] = value
-
         this.tabData = newData
-       jsonParameters.map((item)=>{
-            if(item.name==column){
-              if(item.defaultValue===null){
+        if (this.isEdit) {
+          jsonParameters.map(item => {
+            if (item.name == column) {
+              if (item.defaultValue === null) {
                 item.defaultValue = ''
               }
-              if(item.value===null){
+              if (item.value === null) {
                 item.value = ''
               }
-               valArr =  item.defaultValue.split(';')
-               valArr.splice(key,1,value)
-              item.defaultValue =valArr.join(';')
+              valArr = item.defaultValue.split(';')
+              valArr.splice(key, 1, value)
+              item.defaultValue = valArr.join(';')
               item.value = valArr.join(';')
             }
-
-            return item;
-        })
-       this.caseData = jsonParameters
+            return item
+          })
+          this.caseData = jsonParameters
+        }
       }
     },
     edit(key) {
@@ -274,7 +414,7 @@ export default {
       this.editingKey = key
       if (target) {
         target.editable = true
-           this.tabData = newData
+        this.tabData = newData
       }
     },
     save(key) {
@@ -282,18 +422,21 @@ export default {
       const newCacheData = [...this.cacheData]
       const target = newData.filter(item => key === item.key)[0]
       const targetCache = newCacheData.filter(item => key === item.key)[0]
-        for(var i=0;i<optionalParam.length;i++){
-         if(!target[optionalParam[i]]){
-           this.$message.error(optionalParam[i]+' is required')
-           return;
-         }
+      if (this.isEdit) {
+        for (var i = 0; i < optionalParam.length; i++) {
+          if (!target[optionalParam[i]]) {
+            if (optionalParam[i] !== '*instrument-ips') {
+              this.$message.error(optionalParam[i] + ' is required')
+              return
+            }
+          }
         }
+      }
       if (target && targetCache) {
         delete target.editable
         this.tabData = newData
         Object.assign(targetCache, target)
         this.cacheData = newCacheData
-
       }
       this.editingKey = ''
     },
@@ -302,7 +445,10 @@ export default {
       const target = newData.filter(item => key === item.key)[0]
       this.editingKey = ''
       if (target) {
-        Object.assign(target, this.cacheData.filter(item => key === item.key)[0])
+        Object.assign(
+          target,
+          this.cacheData.filter(item => key === item.key)[0]
+        )
         delete target.editable
         this.tabData = newData
       }

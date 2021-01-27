@@ -266,23 +266,21 @@
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <CaseTableParams
-              :isEdit="isEdit"
-              @updateSingleCase="updateSingleCase"
-              v-if="
-                selectedSUTNameType === 101009 &&
-                  cheangeTestInstrument.length > 0
-              "
-            />
-            <CaseParams
-              :isEdit="isEdit"
-              @updateSingleCase="updateSingleCase"
-              v-if="selectedSUTNameType !== 101009"
-            />
           </a-form-item>
         </div>
       </a-spin>
     </a-form>
+    <CaseTableParams
+      :isEdit="isEdit"
+      :instrument="cheangeTestInstrument"
+      @updateSingleCase="updateSingleCase"
+      v-if="selectedSUTNameType === 101009 && cheangeTestInstrument.length > 0"
+    />
+    <CaseParams
+      :isEdit="isEdit"
+      @updateSingleCase="updateSingleCase"
+      v-if="selectedSUTNameType !== 101009"
+    />
     <div class="footer">
       <a-button @click="onClose" size="large">Cancel</a-button>
       <a-button type="primary" size="large" @click="handleSubmit"
@@ -301,6 +299,7 @@ export default {
   props: ['isShow', 'isEdit'],
   components: { CaseTableParams, CaseParams },
   data() {
+    sessionStorage.setItem('instrument', JSON.stringify([]))
     return {
       visible: this.isShow,
       title: 'Create Test Job',
@@ -363,7 +362,13 @@ export default {
       VNFMOption: store => store.testJob.VNFMOption,
       VIMOption: store => store.testJob.VIMOption,
       MANOOption: store => store.testJob.MANOOption,
-      TestInstrumentOption: store => store.testJob.TestInstrumentOption,
+      TestInstrumentOption: store => {
+        sessionStorage.setItem(
+          'TestInstrumentOption',
+          JSON.stringify(store.testJob.TestInstrumentOption)
+        )
+        return store.testJob.TestInstrumentOption
+      },
       nameSpin: store => store.testJob.nameSpin,
       getSUTNames: store => store.testJob.getSUTName,
       specificationSpin: store => store.testJob.specificationSpin,
@@ -478,6 +483,10 @@ export default {
               })
             : []
         }
+        sessionStorage.setItem(
+          'instrument',
+          JSON.stringify(this.initTestInstrument.code)
+        )
         if (this.testJobSingleData.cases.length > 0) {
           // 这里如果cases中有一个instrument-ids，就将其换为instrument-ids
           let idItem = this.testJobSingleData.cases[0].parameters.find(item => {
@@ -668,7 +677,7 @@ export default {
       this.changeCaseCheckAll(e.length === this.testCaseList.length) // boolean值
     },
     caseParamsEdit(caseData) {
-      // console.log(caseData)
+      console.log('点击icon', caseData)
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       // console.log(JSON.parse(JSON.stringify(this.oldInstrumentList)), JSON.parse(JSON.stringify(this.cheangeTestInstrument)))
       // if (this.cheangeTestInstrument.length < this.oldInstrumentList.length) { // 如果删除了
@@ -682,6 +691,7 @@ export default {
       //   this.deleteItemIndex = []
       // }
       // this.oldInstrumentList = JSON.parse(JSON.stringify(this.cheangeTestInstrument)) // 重新给新的旧值
+      console.log('this.testCaseStash', this.testCaseStash)
       if (this.isEdit) {
         this.testCaseStash.map(item => {
           if (item.id === caseData.id) {
@@ -741,6 +751,7 @@ export default {
           }
         })
       }
+      // console.log('cheangeTestInstrument',this.cheangeTestInstrument)
       if (
         // 海鸥情况下
         this.selectedSUTNameType === 101009 &&
@@ -914,6 +925,8 @@ export default {
       //     }
       //   );
       // }
+      //console.log('vaue',value)
+      sessionStorage.setItem('instrument', JSON.stringify(value))
       this.cheangeTestInstrument = value
       // if (this.cheangeTestInstrument < this.oldChangeInstrument) { // 如果删除了
       //   this.deleteItemIndex = []

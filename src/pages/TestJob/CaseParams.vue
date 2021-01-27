@@ -125,18 +125,20 @@ export default {
       caseParams: [],
       count: 0,
       displayList: [],
-     formParma:{ 'instrument-ips':'instrument-ips',
-                    'caps':'caps',
-                    'number-calls':'number-calls',
-                    'protocol':'protocol'}
+      formParma: {
+        'instrument-ips': 'instrument-ips',
+        caps: 'caps',
+        'number-calls': 'number-calls',
+        protocol: 'protocol'
+      }
     }
   },
   computed: {
     ...mapState({
-      caseParamsData: (state) => state.testJob.caseParamsData,
-      testCaseList: (store) => store.testJob.testCaseList,
-      caseParamsIsShow: (store) => store.testJob.caseParamsIsShow,
-    }),
+      caseParamsData: state => state.testJob.caseParamsData,
+      testCaseList: store => store.testJob.testCaseList,
+      caseParamsIsShow: store => store.testJob.caseParamsIsShow
+    })
   },
   mounted() {},
   watch: {
@@ -145,25 +147,25 @@ export default {
         this.count++
         if (this.count > 1) {
           // 只有首次用的initialValue，后面每次打开都重新设置值
-          this.caseParams = this.caseParamsData.parameters.filter((item) => {
+          this.caseParams = this.caseParamsData.parameters.filter(item => {
             return item.visible !== false
           })
-          this.caseParams.forEach((item) => {
+          this.caseParams.forEach(item => {
             if (
               item.name === 'instrument-ips' ||
               item.name === 'caps' ||
-              item.name === 'number-calls'||
+              item.name === 'number-calls' ||
               item.name === 'protocol'
             ) {
               const itemList = item.value.split(';') // 目前不用defaultValue
               for (let i = 0; i < itemList.length; i++) {
                 this.form.setFieldsValue({
-                  [item.name + i + this.caseParamsData.id]: itemList[i],
+                  [item.name + i + this.caseParamsData.id]: itemList[i]
                 })
               }
             } else {
               this.form.setFieldsValue({
-                [item.name]: item.value,
+                [item.name]: item.value
               })
             }
           })
@@ -172,34 +174,34 @@ export default {
     },
     caseParamsData(val) {
       // 只有第一次监控到打开
-      this.caseParams = val.parameters.filter((item) => {
+      this.caseParams = val.parameters.filter(item => {
         return item.visible !== false
       })
-    },
+    }
   },
   methods: {
     ...mapMutations('testJob', ['setCaseParamsIsShow', 'updateTestCaseList']),
     handleCancel() {
       // 将值恢复
-      this.caseParams = this.caseParamsData.parameters.filter((item) => {
+      this.caseParams = this.caseParamsData.parameters.filter(item => {
         return item.visible !== false
       })
-      this.caseParams.forEach((item) => {
+      this.caseParams.forEach(item => {
         if (
           item.name === 'instrument-ips' ||
           item.name === 'caps' ||
-          item.name === 'number-calls'||
+          item.name === 'number-calls' ||
           item.name === 'protocol'
         ) {
           const itemList = item.value.split(';') // 目前不用defaultValue
           for (let i = 0; i < itemList.length; i++) {
             this.form.setFieldsValue({
-              [item.name + i + this.caseParamsData.id]: itemList[i],
+              [item.name + i + this.caseParamsData.id]: itemList[i]
             })
           }
         } else {
           this.form.setFieldsValue({
-            [item.name]: item.value,
+            [item.name]: item.value
           })
         }
       })
@@ -215,11 +217,11 @@ export default {
             'instrument-ips': '',
             caps: '',
             'number-calls': '',
-            'protocol':'',
+            protocol: ''
           }
           if (Object.keys(values).indexOf('sutaddress') > -1) {
             // 是不是海鸥
-            Object.keys(values).map((items) => {
+            Object.keys(values).map(items => {
               if (items.indexOf('instrument-ips') > -1) {
                 DRAValues['instrument-ips'] =
                   DRAValues['instrument-ips'] + values[items] + ';'
@@ -245,12 +247,12 @@ export default {
             DRAValues.caps =
               DRAValues.caps.charAt(DRAValues.caps.length - 1) === ';'
                 ? DRAValues.caps.substring(0, DRAValues.caps.length - 1)
-                : DRAValues.caps;
+                : DRAValues.caps
             // 新添加protocol 字段
-                DRAValues.protocol =
+            DRAValues.protocol =
               DRAValues.protocol.charAt(DRAValues.protocol.length - 1) === ';'
                 ? DRAValues.protocol.substring(0, DRAValues.protocol.length - 1)
-                : DRAValues.protocol;
+                : DRAValues.protocol
             DRAValues['number-calls'] =
               DRAValues['number-calls'].charAt(
                 DRAValues['number-calls'].length - 1
@@ -260,7 +262,7 @@ export default {
                     DRAValues['number-calls'].length - 1
                   )
                 : DRAValues['number-calls']
-            caseParameters.parameters.forEach((item) => {
+            caseParameters.parameters.forEach(item => {
               // caps和instrument
               if (DRAValues[item.name] !== undefined) {
                 item.value = DRAValues[item.name]
@@ -272,7 +274,7 @@ export default {
               }
             })
           } else {
-            caseParameters.parameters.forEach((item) => {
+            caseParameters.parameters.forEach(item => {
               if (values[item.name] !== undefined) {
                 item.value = values[item.name]
                 item.defaultValue = values[item.name]
@@ -284,7 +286,7 @@ export default {
               testCaseLists.splice(index, 1, caseParameters)
             }
           })
-          console.log('testCaseLists',testCaseLists)
+          console.log('testCaseLists', testCaseLists)
           this.updateTestCaseList({ spin: false, list: testCaseLists })
           this.$emit('updateSingleCase', this.caseParamsData.id) // 告诉父组件该项不用初始值
           this.setCaseParamsIsShow(false)
@@ -293,8 +295,8 @@ export default {
     },
     strBool(val) {
       return val === 'true' ? true : false
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="less">
