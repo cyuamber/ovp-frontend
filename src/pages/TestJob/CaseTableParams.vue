@@ -5,9 +5,9 @@
     :closable="false"
     :width="750"
     @ok="handleSubmit"
-    @cancel="handleCancel"
+    @cancel="handleAbolish"
   >
-    <template v-if="isEdit">
+    <template>
       <a-table
         :columns="columnsTitle"
         :data-source="tabData"
@@ -23,47 +23,8 @@
             <a-input
               v-if="record.editable"
               style="margin: -5px 0"
-              :value="text || '--'"
-              :disabled="col == '*instrument-ips' || col == '*sutaddress'"
-              @change="e => handleChange(e.target.value, record.key, col)"
-            />
-            <template v-else>
-              {{ text || '--' }}
-            </template>
-          </div>
-        </template>
-        <template slot="operation" slot-scope="text, record">
-          <div class="editable-row-operations">
-            <span v-if="record.editable">
-              <a @click="() => save(record.key)">Save</a>
-              <a-popconfirm
-                title="Sure to cancel?"
-                @confirm="() => cancel(record.key)"
-              >
-                <a>Cancel</a>
-              </a-popconfirm>
-            </span>
-            <span v-else>
-              <a :disabled="editingKey !== ''" @click="() => edit(record.key)"
-                >Edit</a
-              >
-            </span>
-          </div>
-        </template>
-      </a-table>
-    </template>
-    <template v-else>
-      <a-table :columns="addCreatedColumns" :data-source="tabData" bordered>
-        <template
-          v-for="col in addCreatedContentFn"
-          :slot="col"
-          slot-scope="text, record"
-        >
-          <div :key="col">
-            <a-input
-              v-if="record.editable"
-              style="margin: -5px 0"
               :value="text"
+              :disabled="col == '*instrument-ips' || col == '*sutaddress'"
               @change="e => handleChange(e.target.value, record.key, col)"
             />
             <template v-else>
@@ -105,24 +66,30 @@ export default {
   data() {
     this.init = () => {
       let caseParamsIsShow = this.$store.state.testJob.caseParamsIsShow
-      let caseParamsData = this.$store.state.testJob.caseParamsData
+      //let caseParamsData = this.$store.state.testJob.caseParamsData
       let instrumentArr = this.$store.state.testJob.TestInstrumentOption
       let instrumentJson = []
-      instrumentArr.map((item, key) => {
-        if (item.id === this.instrument[key]) {
-          instrumentJson.push(item.name)
-        }
-      })
+      if (instrumentArr) {
+        instrumentArr.map(item => {
+          this.instrument.map(val => {
+            if (item.id == val) {
+              instrumentJson.push(item.name)
+            }
+            return instrumentJson
+          })
+        })
+      }
+
       let valObj = { 'test instrument': instrumentJson }
       let tabDataArr = []
       let dataTab = JSON.parse(sessionStorage.getItem('tabdata'))
       let json
       if (caseParamsIsShow && dataTab.parameters.length > 0) {
-        if (caseParamsData && caseParamsData.parameters.length > 0) {
-          json = caseParamsData.parameters
-        } else {
-          json = dataTab.parameters
-        }
+        // if (caseParamsData && caseParamsData.parameters.length > 0) {
+        //   json = caseParamsData.parameters
+        // } else {
+        json = dataTab.parameters
+        //}
         let nameItem = ['test instrument']
 
         json.map(item => {
@@ -142,6 +109,7 @@ export default {
         let obj = {}
         const instrument = this.instrument.length
         nameItem.map(val => {
+          // let fillArr = Array.from({ length: instrument }, () => '--')
           let fillArr = Array.from({ length: instrument }, () => '--')
           valObj[val] = [...valObj[val], ...fillArr]
           if (!obj.val) {
@@ -152,12 +120,21 @@ export default {
         })
         tabDataArr = tabDataArr.slice(0, instrument)
         var copytab = JSON.parse(JSON.stringify(tabDataArr)) || []
+        let paramObj = {
+          '*instrument-ids': '*instrument-ids',
+          '*timeout': '*timeout',
+          '*sutaddress': '*sutaddress'
+        }
         for (var n in valObj) {
           copytab.map((ele, i) => {
             switch (n) {
               case n:
                 ele[n] = valObj[n][i]
                 ele['key'] = i
+
+                if (paramObj[n] == n) {
+                  ele[n] = valObj[n][0]
+                }
                 break
             }
           })
@@ -170,26 +147,8 @@ export default {
 
       return copytab
     }
-    this.addinit = () => {
-      let obj = {}
-      let tabDataArr = []
-      let instrumentArr = this.$store.state.testJob.TestInstrumentOption
 
-      if (instrumentArr) {
-        instrumentArr.map((item, key) => {
-          if (item.id === this.instrument[key]) {
-            obj['test instrument'] = item.name
-            obj[item] = '--'
-            obj['key'] = key
-            tabDataArr.push(obj)
-          }
-        })
-      }
-      this.cacheData = tabDataArr.map(item => ({ ...item }))
-      return tabDataArr
-    }
-
-    let data = this.isEdit ? this.init() || [] : this.addinit()
+    let data = this.init() || []
     return {
       tabData: data,
       editingKey: '',
@@ -202,17 +161,7 @@ export default {
     }
   },
   created() {},
-  updated() {
-    let storage = window.sessionStorage
-    let lastname = JSON.parse(storage.getItem('tabdata'))
 
-    if (lastname && lastname.parameters && lastname.parameters.length > 0) {
-      if (!this.flag) {
-        this.init()
-        this.flag = true
-      }
-    }
-  },
   computed: {
     ...mapState({
       caseParamsData: state => {
@@ -225,49 +174,6 @@ export default {
       testCaseList: store => store.testJob.testCaseList,
       caseParamsIsShow: store => store.testJob.caseParamsIsShow
     }),
-    //add create columns
-    addCreatedColumns() {
-      let columnsArr = [
-        {
-          title: 'test instrument',
-          dataIndex: 'test instrument',
-          scopedSlots: { customRender: 'test instrument' }
-        }
-      ]
-      const onlyOperation = {
-        title: 'operation',
-        dataIndex: 'operation',
-        scopedSlots: { customRender: 'operation' }
-      }
-      let instrumentArr = this.$store.state.testJob.TestInstrumentOption
-      if (instrumentArr) {
-        instrumentArr.map((item, key) => {
-          if (item.id === this.instrument[key]) {
-            columnsArr.push({
-              title: item.name,
-              dataIndex: item.name,
-              key: key,
-              editable: false,
-              scopedSlots: { customRender: item.name }
-            })
-          }
-        })
-        columnsArr.push(onlyOperation)
-      }
-      return columnsArr
-    },
-    addCreatedContentFn() {
-      const columnsHead = ['test instrument']
-      let instrumentArr = this.$store.state.testJob.TestInstrumentOption
-      if (instrumentArr) {
-        instrumentArr.map((item, key) => {
-          if (item.id === this.instrument[key]) {
-            columnsHead.push(item.name)
-          }
-        })
-      }
-      return columnsHead
-    },
     columnsTitle() {
       let columnsArr = [
         {
@@ -314,17 +220,11 @@ export default {
   watch: {
     caseParamsIsShow(val) {
       if (val) {
-        this.count++
-        if (
-          this.count > 1 &&
-          this.caseParamsData &&
-          this.caseParamsData.parameters.length > 0
-        ) {
-          // 只有首次用的initialValue，后面每次打开都重新设置值
-          this.caseParams = this.caseParamsData.parameters.filter(item => {
-            return item.visible !== false
-          })
-        }
+        this.init()
+      } else {
+        this.caseParamsData.parameters.map(item => {
+          item.editable = false
+        })
       }
     },
 
@@ -340,7 +240,7 @@ export default {
     ...mapMutations('testJob', ['setCaseParamsIsShow', 'updateTestCaseList']),
     // 提交表单事件
     handleSubmit() {
-      if (this.$store.state.testJob.caseParamsData && this.isEdit) {
+      if (this.$store.state.testJob.caseParamsData) {
         const reqData = [
           {
             ...this.$store.state.testJob.caseParamsData,
@@ -367,12 +267,17 @@ export default {
       this.setCaseParamsIsShow(false)
     },
     // 取消弹层的逻辑
-    handleCancel() {
+    handleAbolish() {
       // 将值恢复
       this.caseParams = this.caseParamsData.parameters.filter(item => {
         return item.visible !== false
       })
+      // if(this.isEidt){
       this.init()
+      // }else{
+      //   this.addinit()
+      // }
+      // this.init()
       this.setCaseParamsIsShow(false)
     },
     strBool(val) {
@@ -381,31 +286,42 @@ export default {
     handleChange(value, key, column) {
       const newData = [...this.tabData]
       const target = newData.filter(item => key === item.key)[0]
-      if (!jsonParameters && this.isEdit) {
+      if (!jsonParameters) {
         let jsonArr = JSON.parse(sessionStorage.getItem('tabdata')).parameters
         jsonParameters = JSON.parse(JSON.stringify(jsonArr))
       }
       if (target) {
         target[column] = value
-        this.tabData = newData
-        if (this.isEdit) {
-          jsonParameters.map(item => {
-            if (item.name == column) {
-              if (item.defaultValue === null) {
-                item.defaultValue = ''
-              }
-              if (item.value === null) {
-                item.value = ''
-              }
-              valArr = item.defaultValue.split(';')
-              valArr.splice(key, 1, value)
-              item.defaultValue = valArr.join(';')
-              item.value = valArr.join(';')
-            }
-            return item
+        if (column == '*timeout') {
+          newData.map(outItem => {
+            outItem['*timeout'] = value
           })
-          this.caseData = jsonParameters
         }
+        this.tabData = newData
+        //if (this.isEdit) {
+        jsonParameters.map(item => {
+          column = column.replace(/^[*]/g, '')
+          if (item.name == column) {
+            if (item.defaultValue === null) {
+              item.defaultValue = ''
+            }
+            if (item.value === null) {
+              item.value = ''
+            }
+            if (column == 'timeout') {
+              item.value = value
+              item.defaultValue = value
+            }
+            valArr = item.defaultValue.split(';')
+            valArr.splice(key, 1, value)
+            item.defaultValue = valArr.join(';')
+            item.value = valArr.join(';')
+          }
+
+          return item
+        })
+        this.caseData = jsonParameters
+        //}
       }
     },
     edit(key) {
@@ -422,16 +338,19 @@ export default {
       const newCacheData = [...this.cacheData]
       const target = newData.filter(item => key === item.key)[0]
       const targetCache = newCacheData.filter(item => key === item.key)[0]
-      if (this.isEdit) {
-        for (var i = 0; i < optionalParam.length; i++) {
-          if (!target[optionalParam[i]]) {
-            if (optionalParam[i] !== '*instrument-ips') {
-              this.$message.error(optionalParam[i] + ' is required')
-              return
-            }
+      // if (this.isEdit) {
+      for (var i = 0; i < optionalParam.length; i++) {
+        if (!target[optionalParam[i]]) {
+          if (
+            optionalParam[i] !== '*instrument-ips' ||
+            optionalParam[i] !== '*sutaddress'
+          ) {
+            this.$message.error(optionalParam[i] + ' is required')
+            return
           }
         }
       }
+      //  }
       if (target && targetCache) {
         delete target.editable
         this.tabData = newData

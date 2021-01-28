@@ -375,7 +375,18 @@ export default {
       getSpecifications: store => store.testJob.getSpecification,
       specificationList: store => store.testJob.specificationList,
       testCaseSpin: store => store.testJob.testCaseSpin,
-      testCaseList: store => store.testJob.testCaseList,
+      testCaseList: store => {
+        if (
+          store.testJob.testCaseList.length > 0 &&
+          store.testJob.testCaseList[0].parameters.length > 0
+        ) {
+          sessionStorage.setItem(
+            'tabdata',
+            JSON.stringify(store.testJob.testCaseList[0])
+          )
+        }
+        return store.testJob.testCaseList
+      },
       testJobSingleData: state => state.testJob.testJobSingleData,
       testCaseCheckAll: state => state.testJob.testCaseCheckAll,
       initcheckboxGroup: state => state.testJob.initcheckboxGroup
@@ -617,7 +628,6 @@ export default {
               }
             })
           }
-          // console.log(values)
           this.createrTestJobMGT({
             isEdit,
             values,
@@ -677,7 +687,6 @@ export default {
       this.changeCaseCheckAll(e.length === this.testCaseList.length) // boolean值
     },
     caseParamsEdit(caseData) {
-      console.log('点击icon', caseData)
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       // console.log(JSON.parse(JSON.stringify(this.oldInstrumentList)), JSON.parse(JSON.stringify(this.cheangeTestInstrument)))
       // if (this.cheangeTestInstrument.length < this.oldInstrumentList.length) { // 如果删除了
@@ -691,7 +700,6 @@ export default {
       //   this.deleteItemIndex = []
       // }
       // this.oldInstrumentList = JSON.parse(JSON.stringify(this.cheangeTestInstrument)) // 重新给新的旧值
-      console.log('this.testCaseStash', this.testCaseStash)
       if (this.isEdit) {
         this.testCaseStash.map(item => {
           if (item.id === caseData.id) {
@@ -751,7 +759,6 @@ export default {
           }
         })
       }
-      // console.log('cheangeTestInstrument',this.cheangeTestInstrument)
       if (
         // 海鸥情况下
         this.selectedSUTNameType === 101009 &&
@@ -792,7 +799,6 @@ export default {
               //   items.value.split(";").length >
               //     this.cheangeTestInstrument.length
               // ) {
-              //   //  console.log('删除，默认多了')
               //   items.defaultValue = items.defaultValue
               //     .split(";")
               //     .slice(0, this.cheangeTestInstrument.length)
@@ -911,7 +917,6 @@ export default {
       this.setCaseParamsIsShow(true)
     },
     onChangeTestInstrument(value) {
-      // console.log(value)
       // this.cheangeTestInstrument = this.TestInstrumentOption.map((item) => {
       //   if (value.indexOf(item.id) > -1) {
       //     return item.id ? item.id : "";
@@ -925,7 +930,6 @@ export default {
       //     }
       //   );
       // }
-      //console.log('vaue',value)
       sessionStorage.setItem('instrument', JSON.stringify(value))
       this.cheangeTestInstrument = value
       // if (this.cheangeTestInstrument < this.oldChangeInstrument) { // 如果删除了
@@ -938,7 +942,6 @@ export default {
       // } else {
       //   this.deleteItemIndex = []
       // }
-      // console.log('deleteindex', this.deleteItemIndex)
       // // 一旦change，就不要删除的那一项的初始值
       // if (this.isEdit && this.cheangeTestInstrument.length < this.testJobSingleData.suites.length) {
       //   let deleteItem = this.testJobSingleData.suites.filter((item) => {
@@ -946,10 +949,8 @@ export default {
       //   }) // 返回的是删掉的项目
       //   // 再按select选项里的顺序为其排序
       //   this.testCaseStash
-      //   console.log(deleteItem)
       // }
       // // this.TestInstrumentOption
-      // console.log(value ,i,  this.testCaseStash)
     }
   }
 }
