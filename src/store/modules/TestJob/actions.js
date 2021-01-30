@@ -367,7 +367,7 @@ const actions = {
     ).then(
       res => {
         dispatch('loading/tableLoading', false, { root: true })
-        if (res.body.length !== 0) {
+        if (res.body && res.body.length !== 0) {
           commit(types.UPDATE_EXPANDED_ROW_KEYS, {
             key: record.index,
             expanded

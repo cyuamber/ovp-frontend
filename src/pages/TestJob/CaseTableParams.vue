@@ -24,7 +24,11 @@
               v-if="record.editable"
               style="margin: -5px 0"
               :value="text"
-              :disabled="col == '*instrument-ips' || col == '*sutaddress'"
+              :disabled="
+                col == 'test instrument' ||
+                  col == '*instrument-ips' ||
+                  col == '*sutaddress'
+              "
               @change="e => handleChange(e.target.value, record.key, col)"
             />
             <template v-else>
@@ -72,7 +76,7 @@ export default {
       if (instrumentArr) {
         instrumentArr.map(item => {
           this.instrument.map(val => {
-            if (item.id == val) {
+            if (val == item.id) {
               instrumentJson.push(item.name)
             }
             return instrumentJson
@@ -83,12 +87,14 @@ export default {
       let valObj = { 'test instrument': instrumentJson }
       let tabDataArr = []
       let dataTab = JSON.parse(sessionStorage.getItem('tabdata'))
+
       let json
       if (caseParamsIsShow && dataTab.parameters.length > 0) {
         // if (caseParamsData && caseParamsData.parameters.length > 0) {
         //   json = caseParamsData.parameters
         // } else {
         json = dataTab.parameters
+        this.caseData = dataTab.parameters
         //}
         let nameItem = ['test instrument']
 
@@ -115,6 +121,7 @@ export default {
           if (!obj.val) {
             obj['test instrument'] = '--'
             obj[val] = '--'
+            obj['editable'] = false
             tabDataArr.push(obj)
           }
         })
@@ -131,7 +138,7 @@ export default {
               case n:
                 ele[n] = valObj[n][i]
                 ele['key'] = i
-
+                // ele["editable"] = false
                 if (paramObj[n] == n) {
                   ele[n] = valObj[n][0]
                 }
@@ -141,7 +148,7 @@ export default {
         }
       }
       this.tabData = copytab
-      if (copytab && copytab.length > 0) {
+      if (this.tabData && this.tabData.length > 0) {
         this.cacheData = copytab.map(item => ({ ...item }))
       }
 
@@ -222,9 +229,12 @@ export default {
       if (val) {
         this.init()
       } else {
-        this.caseParamsData.parameters.map(item => {
+        const newDateTab = [...this.tabData]
+        newDateTab.map(item => {
           item.editable = false
         })
+        this.tabData = newDateTab
+        this.editingKey = ''
       }
     },
 
@@ -291,8 +301,21 @@ export default {
         jsonParameters = JSON.parse(JSON.stringify(jsonArr))
       }
       if (target) {
+        const reg = /^[1-9]\d*$/
+        switch (column) {
+          case 'caps':
+          case 'timeout':
+          case 'number-calls':
+          case '*caps':
+          case '*timeout':
+          case '*number-calls':
+            if (!reg.test(value)) {
+              value = ''
+            }
+            break
+        }
         target[column] = value
-        if (column == '*timeout') {
+        if (column == 'timeout') {
           newData.map(outItem => {
             outItem['*timeout'] = value
           })
@@ -361,7 +384,9 @@ export default {
     },
     cancel(key) {
       const newData = [...this.tabData]
+      console.log('newData', newData, 'key', key)
       const target = newData.filter(item => key === item.key)[0]
+      console.log('target', target)
       this.editingKey = ''
       if (target) {
         Object.assign(

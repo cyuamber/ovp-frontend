@@ -385,6 +385,7 @@ export default {
             JSON.stringify(store.testJob.testCaseList[0])
           )
         }
+        console.log('d', store.testJob.testCaseList)
         return store.testJob.testCaseList
       },
       testJobSingleData: state => state.testJob.testJobSingleData,
@@ -687,6 +688,7 @@ export default {
       this.changeCaseCheckAll(e.length === this.testCaseList.length) // boolean值
     },
     caseParamsEdit(caseData) {
+      console.log('caseData', caseData)
       // 初始值源于打开modal的第一个数字请求 data.cases.parameters
       // console.log(JSON.parse(JSON.stringify(this.oldInstrumentList)), JSON.parse(JSON.stringify(this.cheangeTestInstrument)))
       // if (this.cheangeTestInstrument.length < this.oldInstrumentList.length) { // 如果删除了
@@ -715,12 +717,16 @@ export default {
         })
         this.selectedSUTNameAdress = list ? list.address : ''
       }
+      // const caseDataTab = caseData.parameters &&  caseData.parameters.length > 0 ? caseData:
+      // JSON.parse(sessionStorage.getItem('tabdata'));
+      // console.log('caseDataTab',caseDataTab)
       let hasvisible =
         caseData.parameters && caseData.parameters.length > 0
           ? caseData.parameters.map(item => {
               return item.visible
             })
           : []
+      console.log(hasvisible)
       if (hasvisible.indexOf(true) < 0) {
         this.$message.info('This testCase has no editable parameters.')
         return false
