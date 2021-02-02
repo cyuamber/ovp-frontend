@@ -29,6 +29,7 @@
                   col == '*instrument-ips' ||
                   col == '*sutaddress'
               "
+              @input="e => handleInputFn(e.target.value, record.key, col)"
               @change="e => handleChange(e.target.value, record.key, col)"
             />
             <template v-else>
@@ -293,6 +294,29 @@ export default {
     strBool(val) {
       return val === 'true' ? true : false
     },
+    handleInputFn(value, key, column) {
+      const newData = [...this.tabData]
+      const target = newData.filter(item => key === item.key)[0]
+      if (target) {
+        switch (column) {
+          case 'caps':
+          case 'timeout':
+          case 'number-calls':
+          case '*caps':
+          case '*timeout':
+          case '*number-calls':
+            if (/^0[^\d]*$/g.test(value)) {
+              value = value.replace(/^0[^\d]*$/g, '0')
+            } else {
+              value = value.replace(/^0|[^\d]*/g, '')
+            }
+
+            break
+        }
+        target[column] = value
+        this.tabData = newData
+      }
+    },
     handleChange(value, key, column) {
       const newData = [...this.tabData]
       const target = newData.filter(item => key === item.key)[0]
@@ -301,19 +325,6 @@ export default {
         jsonParameters = JSON.parse(JSON.stringify(jsonArr))
       }
       if (target) {
-        const reg = /^[1-9]\d*$/
-        switch (column) {
-          case 'caps':
-          case 'timeout':
-          case 'number-calls':
-          case '*caps':
-          case '*timeout':
-          case '*number-calls':
-            if (!reg.test(value)) {
-              value = ''
-            }
-            break
-        }
         target[column] = value
         if (column == 'timeout') {
           newData.map(outItem => {
@@ -384,9 +395,7 @@ export default {
     },
     cancel(key) {
       const newData = [...this.tabData]
-      console.log('newData', newData, 'key', key)
       const target = newData.filter(item => key === item.key)[0]
-      console.log('target', target)
       this.editingKey = ''
       if (target) {
         Object.assign(
