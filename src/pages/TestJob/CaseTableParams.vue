@@ -45,7 +45,7 @@
                 title="Sure to cancel?"
                 @confirm="() => cancel(record.key)"
               >
-                <a>Cancel</a>
+                <a @click="() => cancel(record.key)">Cancel</a>
               </a-popconfirm>
             </span>
             <span v-else>
@@ -161,7 +161,7 @@ export default {
       tabData: data,
       editingKey: '',
       count: 0,
-
+      oColumnsComment: {},
       cacheData: null,
       caseData: [],
       flag: false,
@@ -236,6 +236,7 @@ export default {
         })
         this.tabData = newDateTab
         this.editingKey = ''
+        this.oColumnsComment = {}
       }
     },
 
@@ -262,7 +263,10 @@ export default {
           for (let j = 0; j < this.tabData.length; j++) {
             const target = this.tabData[j]
             if (!target[optionalParam[i]]) {
-              if (optionalParam[i] !== '*instrument-ips') {
+              if (
+                optionalParam[i] !== '*instrument-ips' ||
+                optionalParam[i] !== '*sutaddress'
+              ) {
                 this.$message.error(optionalParam[i] + ' is required')
                 return
               }
@@ -326,10 +330,11 @@ export default {
       }
       if (target) {
         target[column] = value
-        if (column == 'timeout') {
-          newData.map(outItem => {
-            outItem['*timeout'] = value
-          })
+        if (column == '*timeout' || column == 'timeout') {
+          // newData.map(outItem => {
+          //   outItem['*timeout'] = value
+          // })
+          this.oColumnsComment[column] = value
         }
         this.tabData = newData
         //if (this.isEdit) {
@@ -368,6 +373,7 @@ export default {
       }
     },
     save(key) {
+      console.log('this.oColumnsComment', this.oColumnsComment)
       const newData = [...this.tabData]
       const newCacheData = [...this.cacheData]
       const target = newData.filter(item => key === item.key)[0]
@@ -387,6 +393,11 @@ export default {
       //  }
       if (target && targetCache) {
         delete target.editable
+        for (let j in this.oColumnsComment) {
+          newData.map(outItem => {
+            outItem[j] = this.oColumnsComment[j]
+          })
+        }
         this.tabData = newData
         Object.assign(targetCache, target)
         this.cacheData = newCacheData
