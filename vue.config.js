@@ -4,6 +4,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
     .BundleAnalyzerPlugin;
 const { ProgressPlugin } = require("webpack");
+const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
 
 const devProxy = ["/api"]; // proxy route
 let proEnv = require("./config/pro.env");
@@ -69,6 +70,24 @@ module.exports = {
         if (process.env.NODE_ENV === "production") {
             config.mode = "production";
             let optimization = {
+                plugins: [
+                    new webpack.DllReferencePlugin({
+                        context: process.cwd(),
+                        manifest: require("./public/vendor/vendor-manifest.json"),
+                    }),
+                    // 将 dll 注入到 生成的 html 模板中
+                    new AddAssetHtmlPlugin({
+                        // dll文件位置
+                        filepath: path.resolve(
+                            __dirname,
+                            "./public/vendor/*.js"
+                        ),
+                        // dll 引用路径
+                        publicPath: "./vendor",
+                        // dll最终输出的目录
+                        outputPath: "./vendor",
+                    }),
+                ],
                 minimizer: [
                     new UglifyPlugin({
                         sourceMap: true,
